@@ -952,34 +952,111 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
-        const CURRENT_APP_VERSION = "2026.07.28-v1.3";
-        const DEFAULT_UPDATE_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
+        const CURRENT_APP_VERSION = "2026.07.28-v1.4";
+        const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
+        const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
 
-        // Tự động kiểm tra bản cập nhật ngầm khi mở ứng dụng (nếu có Internet)
-        async function autoCheckUpdateOnStartup() {
-            if (!navigator.onLine) return; // Nếu đang Offline, bỏ qua để chạy mượt mà 100% không bị chờ
+        // Đăng ký Service Worker & Web App Manifest động giúp PWA chạy 100% Offline mượt mà
+        (function initPwaCapabilities() {
             try {
-                const updateUrl = localStorage.getItem('qtdnd_update_url') || DEFAULT_UPDATE_URL;
-                const response = await fetch(updateUrl + '?t=' + Date.now(), { cache: 'no-store' });
-                if (response.ok) {
-                    const newHtml = await response.text();
-                    if (newHtml && newHtml.length > 500) {
-                        const match = newHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
-                        const remoteVersion = match ? match[1] : null;
-                        if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
-                            showToast(`🎉 Đã phát hiện phiên bản mới (${remoteVersion}) trên GitHub! Đang nâng cấp tự động...`);
-                            setTimeout(() => {
-                                document.open();
-                                document.write(newHtml);
-                                document.close();
-                            }, 1500);
+                // 1. Nhúng Manifest động
+                const manifestObj = {
+                    name: "QTDND Yên Thọ - Bộ Công Cụ Nghiệp Vụ",
+                    short_name: "QTD Yên Thọ",
+                    description: "Ứng dụng hỗ trợ nghiệp vụ tín dụng, tiền gửi & VietQR QTDND Yên Thọ",
+                    start_url: "./",
+                    display: "standalone",
+                    background_color: "#065f46",
+                    theme_color: "#065f46",
+                    icons: [{
+                        src: "https://static.vecteezy.com/system/resources/thumbnails/033/126/728/small/3d-purple-illustration-icon-of-using-smartphone-for-multimedia-music-video-and-content-creator-with-hand-gesture-png.png",
+                        sizes: "192x192 512x512",
+                        type: "image/png"
+                    }]
+                };
+                const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+                const manifestUrl = URL.createObjectURL(manifestBlob);
+                const manifestLink = document.getElementById('pwa-manifest');
+                if (manifestLink) manifestLink.href = manifestUrl;
+
+                // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
+                if ('serviceWorker' in navigator) {
+                    const swScript = `
+                        const CACHE_NAME = 'qtd-tools-cache-v1.4';
+                        self.addEventListener('install', e => {
+                            self.skipWaiting();
+                        });
+                        self.addEventListener('activate', e => {
+                            e.waitUntil(
+                                caches.keys().then(keys => Promise.all(
+                                    keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+                                ))
+                            );
+                            self.clients.claim();
+                        });
+                        self.addEventListener('fetch', e => {
+                            e.respondWith(
+                                caches.match(e.request).then(cached => {
+                                    return cached || fetch(e.request).then(res => {
+                                        if (res && res.status === 200 && e.request.method === 'GET') {
+                                            const resClone = res.clone();
+                                            caches.open(CACHE_NAME).then(c => c.put(e.request, resClone));
+                                        }
+                                        return res;
+                                    }).catch(() => caches.match('./'));
+                                })
+                            );
+                        });
+                    `;
+                    const swBlob = new Blob([swScript], { type: 'text/javascript' });
+                    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+                }
+            } catch (e) {}
+        })();
+
+        // Hàm thử fetch code HTML từ đường dẫn GitHub (với cơ chế Fallback Raw -> Pages)
+        async function fetchLatestHtmlFromGitHub() {
+            const customUrl = localStorage.getItem('qtdnd_update_url');
+            const urlsToTry = customUrl 
+                ? [customUrl, GITHUB_RAW_URL, GITHUB_PAGES_URL] 
+                : [GITHUB_RAW_URL, GITHUB_PAGES_URL];
+
+            for (const url of urlsToTry) {
+                try {
+                    const res = await fetch(url + '?t=' + Date.now(), { cache: 'no-store' });
+                    if (res.ok) {
+                        const html = await res.text();
+                        if (html && html.length > 500 && html.includes('CURRENT_APP_VERSION')) {
+                            return { success: true, html: html, urlUsed: url };
                         }
                     }
-                }
-            } catch (err) {
-                // Bỏ qua lỗi ngầm khi mạng chập chờn
+                } catch (err) {}
             }
+            return { success: false };
+        }
+
+        // Tự động kiểm tra bản cập nhật ngầm khi mở ứng dụng (nếu có mạng)
+        async function autoCheckUpdateOnStartup() {
+            if (!navigator.onLine) return; // Nếu đang Offline, bỏ qua để chạy mượt mà 100%
+            try {
+                const result = await fetchLatestHtmlFromGitHub();
+                if (result.success) {
+                    const match = result.html.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
+                    const remoteVersion = match ? match[1] : null;
+                    if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
+                        // Lưu bản mới vào LocalStorage để đảm bảo Offline lần sau vẫn mở đúng bản mới
+                        try { localStorage.setItem('qtdnd_cached_app_html', result.html); } catch(e) {}
+                        
+                        showToast(`🎉 Đã phát hiện phiên bản mới (${remoteVersion}) trên GitHub! Đang tự động nâng cấp...`);
+                        setTimeout(() => {
+                            document.open();
+                            document.write(result.html);
+                            document.close();
+                        }, 1500);
+                    }
+                }
+            } catch (err) {}
         }
 
         // Kiểm tra và cập nhật chủ động khi người dùng bấm nút "Cập Nhật"
@@ -989,35 +1066,31 @@
                 return;
             }
 
-            showToast("Đang kết nối kiểm tra bản cập nhật mới trên GitHub...");
-
-            let updateUrl = localStorage.getItem('qtdnd_update_url') || DEFAULT_UPDATE_URL;
+            showToast("Đang kết nối kiểm tra bản cập nhật mới từ GitHub (Raw/Pages)...");
 
             try {
-                const response = await fetch(updateUrl + '?t=' + Date.now(), { cache: 'no-store' });
-                if (response.ok) {
-                    const newHtml = await response.text();
-                    if (newHtml && newHtml.length > 500) {
-                        const match = newHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
-                        const remoteVersion = match ? match[1] : null;
-                        
-                        if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
-                            showToast(`🎉 Phát hiện bản mới (${remoteVersion})! Đang cập nhật...`);
-                            setTimeout(() => {
-                                document.open();
-                                document.write(newHtml);
-                                document.close();
-                            }, 1200);
-                            return;
-                        } else {
-                            showToast(`✅ Bạn đang sử dụng phiên bản mới nhất (${CURRENT_APP_VERSION})!`);
-                            return;
-                        }
+                const result = await fetchLatestHtmlFromGitHub();
+                if (result.success) {
+                    const match = result.html.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
+                    const remoteVersion = match ? match[1] : null;
+
+                    if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
+                        try { localStorage.setItem('qtdnd_cached_app_html', result.html); } catch(e) {}
+                        showToast(`🎉 Phát hiện bản nâng cấp (${remoteVersion})! Đang cập nhật...`);
+                        setTimeout(() => {
+                            document.open();
+                            document.write(result.html);
+                            document.close();
+                        }, 1200);
+                        return;
+                    } else {
+                        showToast(`✅ Bạn đang sử dụng phiên bản mới nhất (${CURRENT_APP_VERSION})!`);
+                        return;
                     }
                 }
-                showToast(`✅ Bạn đang sử dụng phiên bản mới nhất (${CURRENT_APP_VERSION})!`);
+                showToast("Không thể kết nối đến GitHub (Raw/Pages). Hãy kiểm tra lại Repo Public/Pages!");
             } catch (err) {
-                showToast("Không thể kết nối đến GitHub. Vui lòng kiểm tra lại mạng!");
+                showToast("Không thể kết nối đến GitHub. Vui lòng kiểm tra lại kết nối mạng!");
             }
         }
 
@@ -1337,12 +1410,22 @@
 
             if (!principalEl || !termEl || !rateEl || !demandRateEl || !withdrawAmountEl || !withdrawMonthEl) return;
 
-            const P = parseVND(principalEl.value);
-            const n = parseInt(termEl.value) || 12;
-            const rBase = parseFloat(rateEl.value) || 0;
-            const rDemand = parseFloat(demandRateEl.value) || 0;
-            const wAmount = parseVND(withdrawAmountEl.value);
-            const wMonth = parseInt(withdrawMonthEl.value) || 1;
+            let P = parseVND(principalEl.value);
+            let n = parseInt(termEl.value) || 12;
+            let rBase = parseFloat(rateEl.value) || 0;
+            let rDemand = parseFloat(demandRateEl.value) || 0;
+            let wAmount = parseVND(withdrawAmountEl.value);
+            let wMonth = parseInt(withdrawMonthEl.value) || 1;
+
+            // Ràng buộc an toàn dữ liệu
+            if (wAmount > P) {
+                wAmount = P;
+                withdrawAmountEl.value = formatVND(P);
+            }
+            if (wMonth > n) {
+                wMonth = n;
+                withdrawMonthEl.value = n;
+            }
 
             const remainAmount = Math.max(0, P - wAmount);
             const daysHeld = wMonth * 30;
