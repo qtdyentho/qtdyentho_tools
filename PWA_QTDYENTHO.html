@@ -280,6 +280,20 @@
                     </div>
                 </div>
 
+                <!-- Batch Rate Adjustment Toolbar -->
+                <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100">
+                    <span class="font-bold text-emerald-950 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        Điều chỉnh biểu lãi suất nhanh:
+                    </span>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <button onclick="adjustAllRates(0.1)" class="px-2.5 py-1 bg-white hover:bg-emerald-100 text-emerald-800 font-bold rounded-lg border border-emerald-300 transition shadow-sm">+0.1%/năm</button>
+                        <button onclick="adjustAllRates(0.2)" class="px-2.5 py-1 bg-white hover:bg-emerald-100 text-emerald-800 font-bold rounded-lg border border-emerald-300 transition shadow-sm">+0.2%/năm</button>
+                        <button onclick="adjustAllRates(-0.1)" class="px-2.5 py-1 bg-white hover:bg-emerald-100 text-amber-800 font-bold rounded-lg border border-amber-300 transition shadow-sm">-0.1%/năm</button>
+                        <button onclick="resetDefaultRates()" class="px-2.5 py-1 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow-sm">↺ Biểu Chuẩn QTD</button>
+                    </div>
+                </div>
+
                 <div class="overflow-x-auto mt-4 rounded-xl border border-slate-200">
                     <table class="w-full text-xs sm:text-sm text-left text-slate-600">
                         <thead class="text-xs text-white uppercase bg-emerald-900 border-b border-emerald-800">
@@ -867,41 +881,135 @@
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-6">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
-                        <span class="w-2.5 h-6 bg-slate-700 rounded-full inline-block"></span>
-                        Cơ Sở Toán Học & Công Thức Quy Đổi Lãi Suất Tiền Gửi / Lãi Vay
+                        <span class="w-2.5 h-6 bg-emerald-700 rounded-full inline-block"></span>
+                        Cơ Sở Toán Học & Giải Thích Chi Tiết Thông Số Công Thức
                     </h2>
+                    <p class="text-xs text-slate-500 mt-1">Bảng tổng hợp công thức quy đổi lãi suất tiền gửi, rút trước hạn Thông tư 04 và lập lịch trả nợ tiền vay tại Quỹ Tín dụng Nhân dân Yên Thọ.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-700">
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                        <h3 class="font-bold text-emerald-900 text-base">1. Lĩnh Lãi Hàng Tháng ($r_m$)</h3>
-                        <p>Quy đổi theo dòng tiền hiện giá PV tương đương:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                    <!-- 1. Lãi hàng tháng -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            1. Lĩnh Lãi Hàng Tháng ($r_m$)
+                        </h3>
+                        <p class="text-xs text-slate-600">Quy đổi lãi suất tương đương khi trả lãi định kỳ mỗi tháng:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
                             $$r_m = \frac{r}{1 + r \times \frac{n-1}{24}}$$
                         </div>
+                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
+                                <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi ($n \ge 1$).</li>
+                                <li><b>$r_m$</b>: Lãi suất quy đổi tương đương trả hàng tháng (%/năm).</li>
+                                <li><b>$24$</b>: Hằng số quy đổi chu kỳ kép ($2 \times 12$ tháng/năm).</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                        <h3 class="font-bold text-emerald-900 text-base">2. Lĩnh Lãi Trước ($r_{pre}$)</h3>
-                        <p>Khách hàng nhận ngay tiền lãi khi mở sổ tiết kiệm:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                    <!-- 2. Lãi trước -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            2. Lĩnh Lãi Trước ($r_{pre}$)
+                        </h3>
+                        <p class="text-xs text-slate-600">Trả toàn bộ tiền lãi ngay khi gửi ($t=0$):</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
                             $$r_{pre} = \frac{r}{1 + r \times \frac{n}{12}}$$
                         </div>
-                    </div>
-
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                        <h3 class="font-bold text-emerald-900 text-base">3. Lĩnh Lãi Hàng Quý ($r_q$)</h3>
-                        <p>Áp dụng cho các kỳ hạn $n \ge 3$ tháng:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
-                            $$r_q = \frac{r}{1 + r \times \frac{n-3}{24}}$$
+                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
+                                <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi.</li>
+                                <li><b>$r_{pre}$</b>: Lãi suất quy đổi tương đương lĩnh lãi trước (%/năm).</li>
+                                <li><b>$12$</b>: Tổng số tháng trong một năm.</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                        <h3 class="font-bold text-emerald-900 text-base">4. Gửi Góp Định Kỳ</h3>
-                        <p>Tiền lãi tích lũy khi gửi cố định $S$ vào đầu mỗi tháng:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                    <!-- 3. Lãi hàng quý -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            3. Lĩnh Lãi Hàng Quý ($r_q$)
+                        </h3>
+                        <p class="text-xs text-slate-600">Trả lãi định kỳ 3 tháng/lần (Áp dụng $n \ge 3$ tháng):</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
+                            $$r_q = \frac{r}{1 + r \times \frac{n-3}{24}}$$
+                        </div>
+                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
+                                <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi ($n \ge 3$).</li>
+                                <li><b>$r_q$</b>: Lãi suất quy đổi tương đương lĩnh lãi quý (%/năm).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 4. Gửi góp định kỳ -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            4. Gửi Góp Định Kỳ Hàng Tháng
+                        </h3>
+                        <p class="text-xs text-slate-600">Tiền lãi tích lũy khi gửi cố định $S$ vào đầu mỗi tháng:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
                             $$\text{Lãi} = S \times r \times \frac{n(n+1)}{24}$$
+                        </div>
+                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>$S$</b>: Số tiền gửi cố định đầu mỗi tháng ($S = P / n$).</li>
+                                <li><b>$r$</b>: Lãi suất tiền gửi góp (%/năm).</li>
+                                <li><b>$n$</b>: Tổng số tháng tích lũy.</li>
+                                <li><b>$\frac{n(n+1)}{24}$</b>: Hệ số tổng chuỗi tích lũy số tháng tính lãi.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 5. TT04 Rút trước hạn 1 phần -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-amber-900 text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+                            5. Rút Tiết Kiệm Trước Hạn 1 Phần (TT 04/2022)
+                        </h3>
+                        <p class="text-xs text-slate-600">Công thức phân tách lãi suất phần rút và phần giữ lại:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                            $$\text{Tổng Lãi} = P_{\text{rút}} \times r_{\text{kkh}} \times \frac{d}{365} + P_{\text{còn}} \times r_{\text{ck}} \times \frac{n}{12}$$
+                        </div>
+                        <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Giải thích thông số:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>$P_{\text{rút}}$</b>: Số tiền tiết kiệm thành viên rút trước hạn.</li>
+                                <li><b>$r_{\text{kkh}}$</b>: Lãi suất Không kỳ hạn (%/năm) áp dụng cho phần rút.</li>
+                                <li><b>$d$</b>: Số ngày thực tế từ lúc gửi đến khi rút trước hạn.</li>
+                                <li><b>$P_{\text{còn}}$</b>: Tiền gốc còn lại tiếp tục giữ nguyên kỳ hạn ($P - P_{\text{rút}}$).</li>
+                                <li><b>$r_{\text{ck}}$</b>: Lãi suất cam kết ban đầu trên sổ tiết kiệm (%/năm).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 6. Trả nợ cố định Annuity -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <h3 class="font-bold text-teal-900 text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                            6. Trả Nợ Cố Định Hàng Tháng (Annuity Loan)
+                        </h3>
+                        <p class="text-xs text-slate-600">Tổng tiền trả cố định hàng tháng (Gốc + Lãi dư nợ):</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                            $$\text{Trả Hàng Tháng} = P \times \frac{r_m (1 + r_m)^n}{(1 + r_m)^n - 1}$$
+                        </div>
+                        <div class="p-3 bg-teal-50/70 border border-teal-200/80 rounded-lg text-xs space-y-1">
+                            <p class="font-bold text-teal-950 border-b border-teal-200 pb-1">📌 Giải thích thông số:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>$P$</b>: Số tiền vay ban đầu (Dư nợ gốc ban đầu).</li>
+                                <li><b>$r_m$</b>: Lãi suất vay hàng tháng ($r_m = r_{\text{năm}} / 12$).</li>
+                                <li><b>$n$</b>: Tổng thời gian vay tính theo tháng.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -952,7 +1060,7 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
-        const CURRENT_APP_VERSION = "2026.07.28-v1.4";
+        const CURRENT_APP_VERSION = "2026.07.28-v1.5";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1142,7 +1250,46 @@
             18: 6.0, 24: 6.2, 36: 6.5
         };
 
-        let currentRates = { ...DEFAULT_RATES };
+        // Nạp biểu lãi suất lưu trong máy (nếu có)
+        function getInitialRates() {
+            try {
+                const saved = localStorage.getItem('qtdnd_custom_rates');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && typeof parsed === 'object') return { ...DEFAULT_RATES, ...parsed };
+                }
+            } catch(e) {}
+            return { ...DEFAULT_RATES };
+        }
+
+        let currentRates = getInitialRates();
+
+        // Helper: Save custom rates
+        function saveCustomRates() {
+            try {
+                localStorage.setItem('qtdnd_custom_rates', JSON.stringify(currentRates));
+            } catch(e) {}
+        }
+
+        // Tăng / Giảm hàng loạt tất cả lãi suất
+        function adjustAllRates(delta) {
+            TERMS.forEach(n => {
+                let r = (currentRates[n] || 0) + delta;
+                r = Math.max(0, Math.round(r * 10) / 10);
+                currentRates[n] = r;
+            });
+            saveCustomRates();
+            renderTable1();
+            showToast(`Đã điều chỉnh biểu lãi suất ${delta > 0 ? '+' : ''}${delta}%/năm!`);
+        }
+
+        // Khôi phục biểu lãi suất mặc định QTD Yên Thọ
+        function resetDefaultRates() {
+            currentRates = { ...DEFAULT_RATES };
+            try { localStorage.removeItem('qtdnd_custom_rates'); } catch(e) {}
+            renderTable1();
+            showToast("Đã khôi phục biểu lãi suất chuẩn QTD Yên Thọ!");
+        }
 
         // Helper: Round money to thousands
         function roundToThousand(val) {
@@ -1220,6 +1367,7 @@
         function updateSingleRate(term, val) {
             const rate = parseFloat(val) || 0;
             currentRates[term] = rate;
+            saveCustomRates();
             renderTable1();
         }
 
@@ -1244,6 +1392,9 @@
                 const interestQuarterly = (rQuarterly !== null) ? roundToThousand(P * (rQuarterly / 100) * (n / 12)) : null;
                 const interestInstallment = roundToThousand(calcInstallmentInterest(P, rEnd, n));
 
+                const diffMonthly = interestEnd - interestMonthly;
+                const diffPrepaid = interestEnd - interestPrepaid;
+
                 let colEnd, colMonthly, colPrepaid, colQuarterly, colInstallment;
 
                 if (viewMode === 'rates') {
@@ -1254,24 +1405,32 @@
                     colInstallment = `${rEnd.toFixed(2)} %/năm`;
                 } else if (viewMode === 'amount') {
                     colEnd = `${formatVND(interestEnd)} đ`;
-                    colMonthly = `${formatVND(interestMonthly)} đ`;
-                    colPrepaid = `${formatVND(interestPrepaid)} đ`;
+                    colMonthly = `${formatVND(interestMonthly)} đ<br><span class="text-[10px] text-amber-700 font-semibold">(-${formatVND(diffMonthly)} đ)</span>`;
+                    colPrepaid = `${formatVND(interestPrepaid)} đ<br><span class="text-[10px] text-amber-700 font-semibold">(-${formatVND(diffPrepaid)} đ)</span>`;
                     colQuarterly = (interestQuarterly !== null) ? `${formatVND(interestQuarterly)} đ` : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
                     colInstallment = `${formatVND(interestInstallment)} đ`;
                 } else {
                     colEnd = `<b>${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestEnd)} đ</span>`;
-                    colMonthly = `<b>${rMonthly.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestMonthly)} đ</span>`;
-                    colPrepaid = `<b>${rPrepaid.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestPrepaid)} đ</span>`;
+                    colMonthly = `<b>${rMonthly.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestMonthly)} đ</span><br><span class="text-[10px] text-amber-700 font-semibold">(-${formatVND(diffMonthly)} đ)</span>`;
+                    colPrepaid = `<b>${rPrepaid.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestPrepaid)} đ</span><br><span class="text-[10px] text-amber-700 font-semibold">(-${formatVND(diffPrepaid)} đ)</span>`;
                     colQuarterly = (rQuarterly !== null) 
                         ? `<b>${rQuarterly.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestQuarterly)} đ</span>` 
                         : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
                     colInstallment = `<b>${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestInstallment)} đ</span>`;
                 }
 
+                // Highlight key benchmark terms (6M, 12M, 24M)
+                const isKeyTerm = [6, 12, 24].includes(n);
+                const trClass = isKeyTerm 
+                    ? 'bg-emerald-50/40 hover:bg-emerald-100/50 transition border-b border-emerald-200' 
+                    : 'hover:bg-slate-50 transition border-b border-slate-200';
+
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 transition border-b border-slate-200';
+                tr.className = trClass;
                 tr.innerHTML = `
-                    <td class="py-3 px-4 font-bold text-center text-slate-800 bg-slate-50/80">${n} Tháng</td>
+                    <td class="py-3 px-4 font-bold text-center text-slate-800 ${isKeyTerm ? 'bg-emerald-100/70 text-emerald-950' : 'bg-slate-50/80'}">
+                        ${n} Tháng ${isKeyTerm ? '<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-600 ml-1"></span>' : ''}
+                    </td>
                     <td class="py-2 px-3 text-center bg-emerald-50/50">
                         <input type="number" step="0.1" value="${rEnd}" onchange="updateSingleRate(${n}, this.value)" 
                             class="w-20 px-2 py-1 text-center font-bold border border-emerald-300 rounded focus:ring-2 focus:ring-emerald-500 bg-white text-emerald-900">
