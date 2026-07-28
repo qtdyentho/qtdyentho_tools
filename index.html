@@ -184,15 +184,6 @@
                         <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Tải & Kiểm tra bản mới</div>
                     </div>
 
-                    <!-- Print Report Button -->
-                    <div class="relative group">
-                        <button onclick="printReport()" aria-label="In báo cáo" class="p-2 sm:px-3 sm:py-2 bg-emerald-700/80 hover:bg-emerald-600 text-white rounded-xl border border-emerald-500/50 transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-bold whitespace-nowrap transition-all duration-200">In Báo Cáo</span>
-                        </button>
-                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">In / Lưu bản PDF báo cáo</div>
-                    </div>
-
                     <!-- Export Excel Button -->
                     <div class="relative group">
                         <button onclick="exportToExcel()" aria-label="Xuất Excel" class="p-2 sm:px-3 sm:py-2 bg-teal-700/80 hover:bg-teal-600 text-white rounded-xl border border-teal-500/50 transition flex items-center justify-center gap-1.5 shadow-sm">
@@ -286,6 +277,34 @@
                                 <option value="rates">Chỉ xem Lãi suất (%/năm)</option>
                                 <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Action Toolbar for Savings Tables -->
+                <div class="mt-3 flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-slate-800">📊 Xuất Bảng Tiết Kiệm Độc Lập:</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Group 1: Xuất Biểu Ban Hành QTD -->
+                        <div class="inline-flex rounded-lg shadow-xs" role="group">
+                            <button onclick="exportPromulgatedSavingsToExcel()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-l-lg border border-emerald-800 flex items-center gap-1">
+                                <span>📊 Excel Biểu Ban Hành</span>
+                            </button>
+                            <button onclick="exportPromulgatedSavingsToPDF()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-r-lg border border-slate-900 flex items-center gap-1">
+                                <span>🖨️ PDF Biểu Ban Hành</span>
+                            </button>
+                        </div>
+
+                        <!-- Group 2: Xuất Quy Đổi Lý Thuyết -->
+                        <div class="inline-flex rounded-lg shadow-xs" role="group">
+                            <button onclick="exportTheoreticalSavingsToExcel()" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-l-lg border border-teal-800 flex items-center gap-1">
+                                <span>📊 Excel Quy Đổi Lý Thuyết</span>
+                            </button>
+                            <button onclick="exportTheoreticalSavingsToPDF()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-r-lg border border-slate-900 flex items-center gap-1">
+                                <span>🖨️ PDF Quy Đổi Lý Thuyết</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1407,7 +1426,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v3.0";
+                    const thisVersion = "2026.07.28-v3.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1417,7 +1436,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v3.0";
+        const CURRENT_APP_VERSION = "2026.07.28-v3.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1458,7 +1477,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v3.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v3.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -2755,6 +2774,328 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // Helper: Collect Savings Export Data for both tables
+        function getSavingsExportData() {
+            const P = getPrincipal();
+            const todayStr = new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            const list = TERMS.map(n => {
+                const rEnd = currentRates[n] || 0;
+                const rMonthly = calcMonthlyRate(rEnd, n);
+                const rPrepaid = calcPrepaidRate(rEnd, n);
+                const rQuarterly = calcQuarterlyRate(rEnd, n);
+
+                const rMonthlyProm = (promulgatedRates[n] && promulgatedRates[n].monthly !== undefined)
+                    ? promulgatedRates[n].monthly
+                    : (Math.floor(rMonthly * 20) / 20);
+
+                const rPrepaidProm = (promulgatedRates[n] && promulgatedRates[n].prepaid !== undefined)
+                    ? promulgatedRates[n].prepaid
+                    : (Math.floor(rPrepaid * 20) / 20);
+
+                const rQuarterlyProm = (rQuarterly !== null)
+                    ? ((promulgatedRates[n] && promulgatedRates[n].quarterly !== undefined)
+                        ? promulgatedRates[n].quarterly
+                        : (Math.floor(rQuarterly * 20) / 20))
+                    : null;
+
+                const interestEnd = roundToThousand(P * (rEnd / 100) * (n / 12));
+                const interestMonthly = roundToThousand(P * (rMonthly / 100) * (n / 12));
+                const interestPrepaid = roundToThousand(P * (rPrepaid / 100) * (n / 12));
+                const interestQuarterly = (rQuarterly !== null) ? roundToThousand(P * (rQuarterly / 100) * (n / 12)) : null;
+                const interestInstallment = roundToThousand(calcInstallmentInterest(P, rEnd, n));
+
+                const interestMonthlyProm = roundToThousand(P * (rMonthlyProm / 100) * (n / 12));
+                const interestPrepaidProm = roundToThousand(P * (rPrepaidProm / 100) * (n / 12));
+                const interestQuarterlyProm = (rQuarterlyProm !== null) ? roundToThousand(P * (rQuarterlyProm / 100) * (n / 12)) : null;
+
+                return {
+                    n, rEnd, interestEnd,
+                    rMonthly, interestMonthly,
+                    rPrepaid, interestPrepaid,
+                    rQuarterly, interestQuarterly,
+                    rMonthlyProm, interestMonthlyProm,
+                    rPrepaidProm, interestPrepaidProm,
+                    rQuarterlyProm, interestQuarterlyProm,
+                    interestInstallment
+                };
+            });
+
+            return { P, todayStr, list };
+        }
+
+        // Export Bảng 1: Biểu Lãi Suất Quy Đổi Lý Thuyết sang Excel
+        function exportTheoreticalSavingsToExcel() {
+            const data = getSavingsExportData();
+            let rowsHtml = '';
+            data.list.forEach(d => {
+                const qStr = d.rQuarterly !== null ? `${d.rQuarterly.toFixed(2)}% (${formatVND(d.interestQuarterly)} đ)` : 'K.Áp dụng';
+                rowsHtml += `
+                    <tr>
+                        <td style="text-align: center; font-weight: bold; border: 1px solid #94a3b8;">Kỳ hạn ${d.n} Tháng</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8; font-weight: bold; color: #047857;">${d.rEnd.toFixed(2)}% (${formatVND(d.interestEnd)} đ)</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${d.rMonthly.toFixed(2)}% (${formatVND(d.interestMonthly)} đ)</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${d.rPrepaid.toFixed(2)}% (${formatVND(d.interestPrepaid)} đ)</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${qStr}</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${d.rEnd.toFixed(2)}% (${formatVND(d.interestInstallment)} đ)</td>
+                    </tr>
+                `;
+            });
+
+            const excelHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="utf-8"></head>
+                <body>
+                    <table>
+                        <tr><td colspan="6" style="font-size: 14px; font-weight: bold; color: #047857; text-align: center;">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</td></tr>
+                        <tr><td colspan="6" style="font-size: 16px; font-weight: bold; color: #0f172a; text-align: center;">BẢNG QUY ĐỔI LÃI SUẤT TIẾT KIỆM LÝ THUYẾT & LÃI DỰ KIẾN</td></tr>
+                        <tr><td colspan="6"></td></tr>
+                        <tr><td colspan="3">Số tiền gửi giả định: <b>${formatVND(data.P)} VNĐ</b></td><td colspan="3">Ngày lập bảng: <b>${data.todayStr}</b></td></tr>
+                        <tr><td colspan="6"></td></tr>
+                        <tr style="background-color: #047857; color: #ffffff; font-weight: bold; text-align: center;">
+                            <th style="border: 1px solid #94a3b8;">Kỳ Hạn</th>
+                            <th style="border: 1px solid #94a3b8;">Lãi Cuối Kỳ (%/năm & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Lĩnh Lãi Hàng Tháng (Trần % & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Lĩnh Lãi Trước (Trần % & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Lĩnh Lãi Hàng Quý (Trần % & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Gửi Góp Định Kỳ (% & Lãi Lũy Kế)</th>
+                        </tr>
+                        ${rowsHtml}
+                    </table>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(['\uFEFF' + excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Quy_Doi_Lai_Suat_Ly_Thuyet_${Date.now()}.xls`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Export Bảng 1: Biểu Lãi Suất Quy Đổi Lý Thuyết sang PDF
+        function exportTheoreticalSavingsToPDF() {
+            const data = getSavingsExportData();
+            let rowsHtml = '';
+            data.list.forEach(d => {
+                const qStr = d.rQuarterly !== null ? `${d.rQuarterly.toFixed(2)}%<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestQuarterly)} đ</span>` : 'K.Áp dụng';
+                rowsHtml += `
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">Kỳ hạn ${d.n} Tháng</td>
+                        <td style="text-align: center; font-weight: bold; color: #047857;">${d.rEnd.toFixed(2)}%<br><span style="font-size: 10px; color: #047857;">${formatVND(d.interestEnd)} đ</span></td>
+                        <td style="text-align: center;">${d.rMonthly.toFixed(2)}%<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestMonthly)} đ</span></td>
+                        <td style="text-align: center;">${d.rPrepaid.toFixed(2)}%<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestPrepaid)} đ</span></td>
+                        <td style="text-align: center;">${qStr}</td>
+                        <td style="text-align: center;">${d.rEnd.toFixed(2)}%<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestInstallment)} đ</span></td>
+                    </tr>
+                `;
+            });
+
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) return;
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Bảng Quy Đổi Lãi Suất Lý Thuyết - QTDND Yên Thọ</title>
+                    <style>
+                        @page { size: A4; margin: 15mm; }
+                        body { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: #1e293b; line-height: 1.4; margin: 0; padding: 10px; }
+                        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #047857; padding-bottom: 10px; }
+                        .unit-title { font-size: 13px; font-weight: bold; text-transform: uppercase; color: #047857; }
+                        .doc-title { font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 5px; color: #0f172a; }
+                        .sub-title { font-size: 11px; font-style: italic; color: #475569; }
+                        .info-box { margin: 15px 0; padding: 10px; background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }
+                        th, td { border: 1px solid #94a3b8; padding: 6px; text-align: center; }
+                        th { background-color: #047857; color: white; font-weight: bold; text-transform: uppercase; font-size: 10px; }
+                        .signature-section { margin-top: 35px; display: flex; justify-content: space-between; text-align: center; font-size: 12px; page-break-inside: avoid; }
+                        .sig-box { width: 30%; }
+                        .sig-title { font-weight: bold; text-transform: uppercase; margin-bottom: 50px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="unit-title">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</div>
+                        <div class="doc-title">BẢNG QUY ĐỔI LÃI SUẤT TIẾT KIỆM LÝ THUYẾT & LÃI DỰ KIẾN</div>
+                        <div class="sub-title">Bảng tham chiếu tỷ lệ quy đổi toán học chuẩn ngân hàng và số tiền sinh lời giả định</div>
+                    </div>
+                    <div class="info-box">
+                        <div><strong>Số tiền gửi giả định:</strong> ${formatVND(data.P)} VNĐ &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Ngày lập bảng:</strong> ${data.todayStr}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kỳ Hạn</th>
+                                <th>Lãi Cuối Kỳ (%/năm)</th>
+                                <th>Lĩnh Lãi Hàng Tháng (Trần %)</th>
+                                <th>Lĩnh Lãi Trước (Trần %)</th>
+                                <th>Lĩnh Lãi Hàng Quý (Trần %)</th>
+                                <th>Gửi Góp Định Kỳ (% & Lãi)</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                    <div class="signature-section">
+                        <div class="sig-box"><div class="sig-title">NGƯỜI LẬP BẢNG</div><div>(Ký & ghi rõ họ tên)</div></div>
+                        <div class="sig-box"><div class="sig-title">KIỂM SOÁT VIÊN</div><div>(Ký & ghi rõ họ tên)</div></div>
+                        <div class="sig-box"><div class="sig-title">BAN GIÁM ĐỐC</div><div>(Dấu & chữ ký)</div></div>
+                    </div>
+                    <script>window.onload = function() { window.print(); };</script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // Export Bảng 2: Biểu Lãi Suất Ban Hành QTDND Yên Thọ sang Excel
+        function exportPromulgatedSavingsToExcel() {
+            const data = getSavingsExportData();
+            let rowsHtml = '';
+            data.list.forEach(d => {
+                const diffM = (d.rMonthly - d.rMonthlyProm).toFixed(2);
+                const diffP = (d.rPrepaid - d.rPrepaidProm).toFixed(2);
+                const statusM = d.rMonthlyProm <= d.rMonthly ? `An toan (-${diffM}%)` : `Vuot tran (+${(d.rMonthlyProm - d.rMonthly).toFixed(2)}%)`;
+                const statusP = d.rPrepaidProm <= d.rPrepaid ? `An toan (-${diffP}%)` : `Vuot tran (+${(d.rPrepaidProm - d.rPrepaid).toFixed(2)}%)`;
+
+                const qStr = d.rQuarterlyProm !== null ? `${d.rQuarterlyProm.toFixed(2)}% (${formatVND(d.interestQuarterlyProm)} đ)` : 'K.Áp dụng';
+                rowsHtml += `
+                    <tr>
+                        <td style="text-align: center; font-weight: bold; border: 1px solid #94a3b8;">Kỳ hạn ${d.n} Tháng</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8; font-weight: bold; color: #047857;">${d.rEnd.toFixed(2)}% (${formatVND(d.interestEnd)} đ)</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${d.rMonthlyProm.toFixed(2)}% [${statusM}] (${formatVND(d.interestMonthlyProm)} đ)</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${d.rPrepaidProm.toFixed(2)}% [${statusP}] (${formatVND(d.interestPrepaidProm)} đ)</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${qStr}</td>
+                        <td style="text-align: center; border: 1px solid #94a3b8;">${d.rEnd.toFixed(2)}% (${formatVND(d.interestInstallment)} đ)</td>
+                    </tr>
+                `;
+            });
+
+            const excelHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="utf-8"></head>
+                <body>
+                    <table>
+                        <tr><td colspan="6" style="font-size: 14px; font-weight: bold; color: #047857; text-align: center;">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</td></tr>
+                        <tr><td colspan="6" style="font-size: 16px; font-weight: bold; color: #0f172a; text-align: center;">BIỂU LÃI SUẤT HUY ĐỘNG TIỀN GỬI TIẾT KIỆM BAN HÀNH CHÍNH THỨC</td></tr>
+                        <tr><td colspan="6"></td></tr>
+                        <tr><td colspan="3">Số tiền gửi áp dụng mẫu: <b>${formatVND(data.P)} VNĐ</b></td><td colspan="3">Ngày ban hành / lập: <b>${data.todayStr}</b></td></tr>
+                        <tr><td colspan="6"></td></tr>
+                        <tr style="background-color: #047857; color: #ffffff; font-weight: bold; text-align: center;">
+                            <th style="border: 1px solid #94a3b8;">Kỳ Hạn</th>
+                            <th style="border: 1px solid #94a3b8;">Lãi Cuối Kỳ (%/năm & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Lĩnh Lãi Hàng Tháng (Lãi % & Trạng Thái & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Lĩnh Lãi Trước (Lãi % & Trạng Thái & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Lĩnh Lãi Hàng Quý (Lãi % & Lãi)</th>
+                            <th style="border: 1px solid #94a3b8;">Gửi Góp Định Kỳ (% & Lãi)</th>
+                        </tr>
+                        ${rowsHtml}
+                    </table>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(['\uFEFF' + excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Bieu_Lai_Suat_Ban_Hanh_QTD_${Date.now()}.xls`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Export Bảng 2: Biểu Lãi Suất Ban Hành QTDND Yên Thọ sang PDF
+        function exportPromulgatedSavingsToPDF() {
+            const data = getSavingsExportData();
+            let rowsHtml = '';
+            data.list.forEach(d => {
+                const diffM = (d.rMonthly - d.rMonthlyProm).toFixed(2);
+                const diffP = (d.rPrepaid - d.rPrepaidProm).toFixed(2);
+                const badgeM = d.rMonthlyProm <= d.rMonthly 
+                    ? `<span style="color: #047857; font-weight: bold;">[✅ -${diffM}%]</span>` 
+                    : `<span style="color: #b45309; font-weight: bold;">[⚠️ +${(d.rMonthlyProm - d.rMonthly).toFixed(2)}%]</span>`;
+                const badgeP = d.rPrepaidProm <= d.rPrepaid 
+                    ? `<span style="color: #047857; font-weight: bold;">[✅ -${diffP}%]</span>` 
+                    : `<span style="color: #b45309; font-weight: bold;">[⚠️ +${(d.rPrepaidProm - d.rPrepaid).toFixed(2)}%]</span>`;
+
+                const qStr = d.rQuarterlyProm !== null ? `${d.rQuarterlyProm.toFixed(2)}%<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestQuarterlyProm)} đ</span>` : 'K.Áp dụng';
+                rowsHtml += `
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">Kỳ hạn ${d.n} Tháng</td>
+                        <td style="text-align: center; font-weight: bold; color: #047857;">${d.rEnd.toFixed(2)}%<br><span style="font-size: 10px; color: #047857;">${formatVND(d.interestEnd)} đ</span></td>
+                        <td style="text-align: center;">${d.rMonthlyProm.toFixed(2)}% ${badgeM}<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestMonthlyProm)} đ</span></td>
+                        <td style="text-align: center;">${d.rPrepaidProm.toFixed(2)}% ${badgeP}<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestPrepaidProm)} đ</span></td>
+                        <td style="text-align: center;">${qStr}</td>
+                        <td style="text-align: center;">${d.rEnd.toFixed(2)}%<br><span style="font-size: 10px; color: #475569;">${formatVND(d.interestInstallment)} đ</span></td>
+                    </tr>
+                `;
+            });
+
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) return;
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Biểu Lãi Suất Ban Hành Chính Thức - QTDND Yên Thọ</title>
+                    <style>
+                        @page { size: A4; margin: 15mm; }
+                        body { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: #1e293b; line-height: 1.4; margin: 0; padding: 10px; }
+                        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #047857; padding-bottom: 10px; }
+                        .unit-title { font-size: 13px; font-weight: bold; text-transform: uppercase; color: #047857; }
+                        .doc-title { font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 5px; color: #0f172a; }
+                        .sub-title { font-size: 11px; font-style: italic; color: #475569; }
+                        .info-box { margin: 15px 0; padding: 10px; background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }
+                        th, td { border: 1px solid #94a3b8; padding: 6px; text-align: center; }
+                        th { background-color: #047857; color: white; font-weight: bold; text-transform: uppercase; font-size: 10px; }
+                        .signature-section { margin-top: 35px; display: flex; justify-content: space-between; text-align: center; font-size: 12px; page-break-inside: avoid; }
+                        .sig-box { width: 30%; }
+                        .sig-title { font-weight: bold; text-transform: uppercase; margin-bottom: 50px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="unit-title">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</div>
+                        <div class="doc-title">BIỂU LÃI SUẤT HUY ĐỘNG TIỀN GỬI TIẾT KIỆM BAN HÀNH CHÍNH THỨC</div>
+                        <div class="sub-title">Biểu lãi suất áp dụng huy động tiền gửi thực tế tại Quỹ Tín dụng Nhân dân Yên Thọ</div>
+                    </div>
+                    <div class="info-box">
+                        <div><strong>Số tiền gửi mẫu:</strong> ${formatVND(data.P)} VNĐ &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Ngày áp dụng / lập:</strong> ${data.todayStr}</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kỳ Hạn</th>
+                                <th>Lãi Cuối Kỳ (%/năm)</th>
+                                <th>Lĩnh Lãi Hàng Tháng (Lãi Ban Hành)</th>
+                                <th>Lĩnh Lãi Trước (Lãi Ban Hành)</th>
+                                <th>Lĩnh Lãi Hàng Quý (Lãi Ban Hành)</th>
+                                <th>Gửi Góp Định Kỳ (%/năm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                    <div class="signature-section">
+                        <div class="sig-box"><div class="sig-title">NGƯỜI LẬP BẢNG</div><div>(Ký & ghi rõ họ tên)</div></div>
+                        <div class="sig-box"><div class="sig-title">KIỂM SOÁT VIÊN</div><div>(Ký & ghi rõ họ tên)</div></div>
+                        <div class="sig-box"><div class="sig-title">BAN GIÁM ĐỐC</div><div>(Dấu & chữ ký)</div></div>
+                    </div>
+                    <script>window.onload = function() { window.print(); };</script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         }
 
         // 1. QR LOAN PAYMENT LOGIC
