@@ -1101,7 +1101,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.3";
+                    const thisVersion = "2026.07.28-v2.4";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1111,7 +1111,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.3";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.4";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1142,7 +1142,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.3';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.4';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1535,7 +1535,7 @@
                         <div class="space-y-1">
                             <div class="text-[10px] text-slate-500 font-medium">Trần lý thuyết: <b class="text-slate-700">${rMonthly.toFixed(2)}%</b></div>
                             <div class="flex items-center justify-center gap-1">
-                                <input type="number" step="0.05" value="${rMonthlyProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'monthly', this.value)" 
+                                <input type="number" step="0.01" value="${rMonthlyProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'monthly', this.value)" 
                                     class="w-20 px-1.5 py-1 text-center font-extrabold border ${rMonthlyProm <= rMonthly ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-amber-500 bg-amber-50 text-amber-950'} rounded shadow-sm focus:ring-2 focus:ring-emerald-500">
                                 <span class="text-xs font-bold text-slate-600">%</span>
                             </div>
@@ -1553,7 +1553,7 @@
                         <div class="space-y-1">
                             <div class="text-[10px] text-slate-500 font-medium">Trần lý thuyết: <b class="text-slate-700">${rPrepaid.toFixed(2)}%</b></div>
                             <div class="flex items-center justify-center gap-1">
-                                <input type="number" step="0.05" value="${rPrepaidProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'prepaid', this.value)" 
+                                <input type="number" step="0.01" value="${rPrepaidProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'prepaid', this.value)" 
                                     class="w-20 px-1.5 py-1 text-center font-extrabold border ${rPrepaidProm <= rPrepaid ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-amber-500 bg-amber-50 text-amber-950'} rounded shadow-sm focus:ring-2 focus:ring-emerald-500">
                                 <span class="text-xs font-bold text-slate-600">%</span>
                             </div>
@@ -1571,7 +1571,7 @@
                         <div class="space-y-1">
                             <div class="text-[10px] text-slate-500 font-medium">Trần lý thuyết: <b class="text-slate-700">${rQuarterly.toFixed(2)}%</b></div>
                             <div class="flex items-center justify-center gap-1">
-                                <input type="number" step="0.05" value="${rQuarterlyProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'quarterly', this.value)" 
+                                <input type="number" step="0.01" value="${rQuarterlyProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'quarterly', this.value)" 
                                     class="w-20 px-1.5 py-1 text-center font-extrabold border ${rQuarterlyProm <= rQuarterly ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-amber-500 bg-amber-50 text-amber-950'} rounded shadow-sm focus:ring-2 focus:ring-emerald-500">
                                 <span class="text-xs font-bold text-slate-600">%</span>
                             </div>
