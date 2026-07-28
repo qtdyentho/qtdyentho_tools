@@ -1065,7 +1065,7 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
-        const CURRENT_APP_VERSION = "2026.07.28-v1.7";
+        const CURRENT_APP_VERSION = "2026.07.28-v1.8";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1335,7 +1335,7 @@
             str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
             str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
             str = str.replace(/Đ/g, "D");
-            return str.replace(/[^a-zA-Z0-9 ]/g, "").toUpperCase();
+            return str.replace(/[^a-zA-Z0-9 ]/g, " ").replace(/\s+/g, " ").trim().toUpperCase();
         }
 
         // Math Formulas
@@ -1909,8 +1909,16 @@
             if (cardMemoEl) cardMemoEl.textContent = memo;
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(finalAmount)} đ`;
 
-            const url = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}`;
-            if (codeImgEl) codeImgEl.src = url;
+            if (codeImgEl) {
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-compact2.png?amount=${finalAmount}&addInfo=${encodeURIComponent(memo)}`;
+                
+                codeImgEl.onerror = function() {
+                    this.onerror = null;
+                    this.src = fallbackUrl;
+                };
+                codeImgEl.src = primaryUrl;
+            }
         }
 
         // 2. QR SAVINGS DEPOSIT LOGIC
@@ -1946,8 +1954,16 @@
             if (cardMemoEl) cardMemoEl.textContent = memo;
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(amount)} đ`;
 
-            const url = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}`;
-            if (codeImgEl) codeImgEl.src = url;
+            if (codeImgEl) {
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
+                
+                codeImgEl.onerror = function() {
+                    this.onerror = null;
+                    this.src = fallbackUrl;
+                };
+                codeImgEl.src = primaryUrl;
+            }
         }
 
         function downloadQRImage(elementId) {
@@ -2010,6 +2026,9 @@
                 activeBtn.classList.add('subtab-active');
                 activeBtn.classList.remove('text-slate-500');
             }
+
+            if (qrId === 'qr-loan') calcQRPayment();
+            if (qrId === 'qr-sav') calcQRSavings();
         }
 
         // Tab Navigation
@@ -2040,6 +2059,11 @@
             if (activeMobBtn) {
                 activeMobBtn.classList.add('text-white', 'font-bold', 'bg-emerald-800/80');
                 activeMobBtn.classList.remove('text-emerald-200');
+            }
+
+            if (tabId === 'tabQR') {
+                calcQRPayment();
+                calcQRSavings();
             }
 
             if (tabId === 'tab4' && window.MathJax && window.MathJax.typesetPromise) {
