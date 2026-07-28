@@ -953,50 +953,71 @@
     <!-- JAVASCRIPT ENGINE -->
     <script>
         const CURRENT_APP_VERSION = "2026.07.28-v1.3";
+        const DEFAULT_UPDATE_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         let swRegistrationObj = null;
 
-        // Function to check and pull updates when online
+        // Tự động kiểm tra bản cập nhật ngầm khi mở ứng dụng (nếu có Internet)
+        async function autoCheckUpdateOnStartup() {
+            if (!navigator.onLine) return; // Nếu đang Offline, bỏ qua để chạy mượt mà 100% không bị chờ
+            try {
+                const updateUrl = localStorage.getItem('qtdnd_update_url') || DEFAULT_UPDATE_URL;
+                const response = await fetch(updateUrl + '?t=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const newHtml = await response.text();
+                    if (newHtml && newHtml.length > 500) {
+                        const match = newHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
+                        const remoteVersion = match ? match[1] : null;
+                        if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
+                            showToast(`🎉 Đã phát hiện phiên bản mới (${remoteVersion}) trên GitHub! Đang nâng cấp tự động...`);
+                            setTimeout(() => {
+                                document.open();
+                                document.write(newHtml);
+                                document.close();
+                            }, 1500);
+                        }
+                    }
+                }
+            } catch (err) {
+                // Bỏ qua lỗi ngầm khi mạng chập chờn
+            }
+        }
+
+        // Kiểm tra và cập nhật chủ động khi người dùng bấm nút "Cập Nhật"
         async function checkAppUpdate() {
             if (!navigator.onLine) {
                 showToast("Bạn đang ở chế độ Offline. Vui lòng kết nối Internet để kiểm tra bản cập nhật!");
                 return;
             }
 
-            showToast("Đang kết nối kiểm tra bản cập nhật mới...");
+            showToast("Đang kết nối kiểm tra bản cập nhật mới trên GitHub...");
 
-            let updateUrl = localStorage.getItem('qtdnd_update_url') || "";
-            
-            if (!updateUrl) {
-                const userUrl = prompt(
-                    "Nhập liên kết (URL) lưu trữ file index.html mới nhất để đồng bộ tự động (Ví dụ: Link GitHub Raw hoặc Server nội bộ):", 
-                    "https://raw.githubusercontent.com/qtdnd-yentho/app/main/index.html"
-                );
-                if (userUrl) {
-                    updateUrl = userUrl.trim();
-                    localStorage.setItem('qtdnd_update_url', updateUrl);
-                } else {
-                    showToast("Đã kiểm tra: Bạn đang sử dụng phiên bản mới nhất!");
-                    return;
-                }
-            }
+            let updateUrl = localStorage.getItem('qtdnd_update_url') || DEFAULT_UPDATE_URL;
 
             try {
                 const response = await fetch(updateUrl + '?t=' + Date.now(), { cache: 'no-store' });
                 if (response.ok) {
                     const newHtml = await response.text();
                     if (newHtml && newHtml.length > 500) {
-                        showToast("Đã tải thành công bản cập nhật mới! Đang khởi động lại...");
-                        setTimeout(() => {
-                            document.open();
-                            document.write(newHtml);
-                            document.close();
-                        }, 1200);
-                        return;
+                        const match = newHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
+                        const remoteVersion = match ? match[1] : null;
+                        
+                        if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
+                            showToast(`🎉 Phát hiện bản mới (${remoteVersion})! Đang cập nhật...`);
+                            setTimeout(() => {
+                                document.open();
+                                document.write(newHtml);
+                                document.close();
+                            }, 1200);
+                            return;
+                        } else {
+                            showToast(`✅ Bạn đang sử dụng phiên bản mới nhất (${CURRENT_APP_VERSION})!`);
+                            return;
+                        }
                     }
                 }
-                showToast("Bạn đang sử dụng phiên bản mới nhất!");
+                showToast(`✅ Bạn đang sử dụng phiên bản mới nhất (${CURRENT_APP_VERSION})!`);
             } catch (err) {
-                showToast("Ứng dụng đang ở phiên bản mới nhất hoặc URL chưa kết nối được!");
+                showToast("Không thể kết nối đến GitHub. Vui lòng kiểm tra lại mạng!");
             }
         }
 
@@ -1864,6 +1885,8 @@
             calcRepaymentSchedule();
             calcQRPayment();
             calcQRSavings();
+            // Tự động kiểm tra bản cập nhật ngầm khi mở app nếu máy có Internet
+            autoCheckUpdateOnStartup();
         };
     </script>
 </body>
