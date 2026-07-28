@@ -281,19 +281,10 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Chế độ hiển thị</label>
                             <select id="view-mode" onchange="renderTable1()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 bg-emerald-50 border-emerald-300 focus:ring-2 focus:ring-emerald-500">
-                                <option value="promulgated" selected>🏛️ Biểu Lãi Suất Ban Hành QTD (An toàn & Thực tế)</option>
-                                <option value="both">📐 Quy Đổi Lý Thuyết & Số Tiền</option>
+                                <option value="promulgated" selected>🏛️ Biểu Lãi Suất Ban Hành QTD (Nhập Tay Thực Tế)</option>
+                                <option value="both">📐 Quy Đổi Lý Thuyết & Số Tiền (Tham Chiếu Trần)</option>
                                 <option value="rates">Chỉ xem Lãi suất (%/năm)</option>
                                 <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Mức giảm an toàn QTD</label>
-                            <select id="promulgated-margin-select" onchange="renderTable1()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-white border-emerald-300 focus:ring-2 focus:ring-emerald-500">
-                                <option value="0.05" selected>-0.05%/năm (Chuẩn QTD)</option>
-                                <option value="0.10">-0.10%/năm (Tiết kiệm chi phí)</option>
-                                <option value="0.15">-0.15%/năm</option>
-                                <option value="0.00">0.00% (Bằng trần quy đổi)</option>
                             </select>
                         </div>
                     </div>
@@ -580,7 +571,22 @@
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Chọn Kỳ Hạn</label>
                                 <select id="select-term-detail" onchange="onDetailTermChange()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-emerald-50 focus:ring-2 focus:ring-emerald-500">
-                                    <!-- Populated dynamically -->
+                                    <option value="1">Kỳ hạn 1 tháng</option>
+                                    <option value="2">Kỳ hạn 2 tháng</option>
+                                    <option value="3">Kỳ hạn 3 tháng</option>
+                                    <option value="5">Kỳ hạn 5 tháng</option>
+                                    <option value="6">Kỳ hạn 6 tháng</option>
+                                    <option value="7">Kỳ hạn 7 tháng</option>
+                                    <option value="8">Kỳ hạn 8 tháng</option>
+                                    <option value="9">Kỳ hạn 9 tháng</option>
+                                    <option value="10">Kỳ hạn 10 tháng</option>
+                                    <option value="11">Kỳ hạn 11 tháng</option>
+                                    <option value="12" selected>Kỳ hạn 12 tháng</option>
+                                    <option value="13">Kỳ hạn 13 tháng</option>
+                                    <option value="15">Kỳ hạn 15 tháng</option>
+                                    <option value="18">Kỳ hạn 18 tháng</option>
+                                    <option value="24">Kỳ hạn 24 tháng</option>
+                                    <option value="36">Kỳ hạn 36 tháng</option>
                                 </select>
                             </div>
                             <div>
@@ -1095,7 +1101,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.2";
+                    const thisVersion = "2026.07.28-v2.3";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1105,7 +1111,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.2";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.3";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1136,7 +1142,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.2';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.3';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1444,6 +1450,29 @@
             return el ? (parseVND(el.value) || 100000000) : 100000000;
         }
 
+        function getInitialPromulgatedRates() {
+            try {
+                const saved = localStorage.getItem('qtdnd_promulgated_rates');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && typeof parsed === 'object') return parsed;
+                }
+            } catch(e) {}
+            return {};
+        }
+
+        let promulgatedRates = getInitialPromulgatedRates();
+
+        function updatePromulgatedRate(term, type, val) {
+            const rate = parseFloat(val) || 0;
+            if (!promulgatedRates[term]) promulgatedRates[term] = {};
+            promulgatedRates[term][type] = rate;
+            try {
+                localStorage.setItem('qtdnd_promulgated_rates', JSON.stringify(promulgatedRates));
+            } catch(e) {}
+            renderTable1();
+        }
+
         function updateSingleRate(term, val) {
             const rate = parseFloat(val) || 0;
             currentRates[term] = rate;
@@ -1455,10 +1484,8 @@
         function renderTable1() {
             const tbody = document.getElementById('rate-table-body');
             const viewModeEl = document.getElementById('view-mode');
-            const marginEl = document.getElementById('promulgated-margin-select');
             if (!tbody || !viewModeEl) return;
             const viewMode = viewModeEl.value;
-            const margin = parseFloat(marginEl ? marginEl.value : '0.05');
             const P = getPrincipal();
             tbody.innerHTML = '';
 
@@ -1468,10 +1495,20 @@
                 const rPrepaid = calcPrepaidRate(rEnd, n);
                 const rQuarterly = calcQuarterlyRate(rEnd, n);
 
-                // Lãi suất Ban hành Thực tế QTD: Làm tròn an toàn xuống mức tùy chỉnh margin (mặc định -0.05%)
-                const rMonthlyPromulgated = Math.max(0, Math.floor((rMonthly - margin) * 20) / 20);
-                const rPrepaidPromulgated = Math.max(0, Math.floor((rPrepaid - margin) * 20) / 20);
-                const rQuarterlyPromulgated = (rQuarterly !== null) ? Math.max(0, Math.floor((rQuarterly - margin) * 20) / 20) : null;
+                // Lãi suất Ban hành Thực tế QTD: Nhập tay trực tiếp hoặc mặc định làm tròn an toàn xuống 0.05%
+                const rMonthlyProm = (promulgatedRates[n] && promulgatedRates[n].monthly !== undefined)
+                    ? promulgatedRates[n].monthly
+                    : (Math.floor(rMonthly * 20) / 20);
+
+                const rPrepaidProm = (promulgatedRates[n] && promulgatedRates[n].prepaid !== undefined)
+                    ? promulgatedRates[n].prepaid
+                    : (Math.floor(rPrepaid * 20) / 20);
+
+                const rQuarterlyProm = (rQuarterly !== null)
+                    ? ((promulgatedRates[n] && promulgatedRates[n].quarterly !== undefined)
+                        ? promulgatedRates[n].quarterly
+                        : (Math.floor(rQuarterly * 20) / 20))
+                    : null;
 
                 const interestEnd = roundToThousand(P * (rEnd / 100) * (n / 12));
                 const interestMonthly = roundToThousand(P * (rMonthly / 100) * (n / 12));
@@ -1479,9 +1516,9 @@
                 const interestQuarterly = (rQuarterly !== null) ? roundToThousand(P * (rQuarterly / 100) * (n / 12)) : null;
                 const interestInstallment = roundToThousand(calcInstallmentInterest(P, rEnd, n));
 
-                const interestMonthlyPromulgated = roundToThousand(P * (rMonthlyPromulgated / 100) * (n / 12));
-                const interestPrepaidPromulgated = roundToThousand(P * (rPrepaidPromulgated / 100) * (n / 12));
-                const interestQuarterlyPromulgated = (rQuarterlyPromulgated !== null) ? roundToThousand(P * (rQuarterlyPromulgated / 100) * (n / 12)) : null;
+                const interestMonthlyProm = roundToThousand(P * (rMonthlyProm / 100) * (n / 12));
+                const interestPrepaidProm = roundToThousand(P * (rPrepaidProm / 100) * (n / 12));
+                const interestQuarterlyProm = (rQuarterlyProm !== null) ? roundToThousand(P * (rQuarterlyProm / 100) * (n / 12)) : null;
 
                 const diffMonthly = interestEnd - interestMonthly;
                 const diffPrepaid = interestEnd - interestPrepaid;
@@ -1489,18 +1526,64 @@
                 let colEnd, colMonthly, colPrepaid, colQuarterly, colInstallment;
 
                 if (viewMode === 'promulgated') {
-                    const diffM = (rMonthly - rMonthlyPromulgated).toFixed(2);
-                    const diffP = (rPrepaid - rPrepaidPromulgated).toFixed(2);
+                    colEnd = `<b class="text-emerald-950 text-base">${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestEnd)} đ</span>`;
 
-                    colEnd = `<b class="text-emerald-950">${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestEnd)} đ</span>`;
-                    
-                    colMonthly = `<b class="text-emerald-700 text-base">${rMonthlyPromulgated.toFixed(2)}%</b> <span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn (-${diffM}%)</span><br><span class="text-xs font-semibold text-slate-700">${formatVND(interestMonthlyPromulgated)} đ</span><br><span class="text-[10px] text-slate-400">Trần lý thuyết: ${rMonthly.toFixed(2)}%</span>`;
+                    const diffM = (rMonthly - rMonthlyProm).toFixed(2);
+                    const diffP = (rPrepaid - rPrepaidProm).toFixed(2);
 
-                    colPrepaid = `<b class="text-emerald-700 text-base">${rPrepaidPromulgated.toFixed(2)}%</b> <span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn (-${diffP}%)</span><br><span class="text-xs font-semibold text-slate-700">${formatVND(interestPrepaidPromulgated)} đ</span><br><span class="text-[10px] text-slate-400">Trần lý thuyết: ${rPrepaid.toFixed(2)}%</span>`;
+                    colMonthly = `
+                        <div class="space-y-1">
+                            <div class="text-[10px] text-slate-500 font-medium">Trần lý thuyết: <b class="text-slate-700">${rMonthly.toFixed(2)}%</b></div>
+                            <div class="flex items-center justify-center gap-1">
+                                <input type="number" step="0.05" value="${rMonthlyProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'monthly', this.value)" 
+                                    class="w-20 px-1.5 py-1 text-center font-extrabold border ${rMonthlyProm <= rMonthly ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-amber-500 bg-amber-50 text-amber-950'} rounded shadow-sm focus:ring-2 focus:ring-emerald-500">
+                                <span class="text-xs font-bold text-slate-600">%</span>
+                            </div>
+                            <div>
+                                ${rMonthlyProm <= rMonthly 
+                                    ? `<span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn (-${diffM}%)</span>`
+                                    : `<span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded">⚠️ Vượt trần (+${(rMonthlyProm - rMonthly).toFixed(2)}%)</span>`
+                                }
+                            </div>
+                            <div class="text-xs font-semibold text-slate-700">${formatVND(interestMonthlyProm)} đ</div>
+                        </div>
+                    `;
 
-                    colQuarterly = (rQuarterlyPromulgated !== null) 
-                        ? `<b class="text-emerald-700 text-base">${rQuarterlyPromulgated.toFixed(2)}%</b><br><span class="text-xs font-semibold text-slate-700">${formatVND(interestQuarterlyPromulgated)} đ</span><br><span class="text-[10px] text-slate-400">Trần lý thuyết: ${rQuarterly.toFixed(2)}%</span>` 
-                        : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
+                    colPrepaid = `
+                        <div class="space-y-1">
+                            <div class="text-[10px] text-slate-500 font-medium">Trần lý thuyết: <b class="text-slate-700">${rPrepaid.toFixed(2)}%</b></div>
+                            <div class="flex items-center justify-center gap-1">
+                                <input type="number" step="0.05" value="${rPrepaidProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'prepaid', this.value)" 
+                                    class="w-20 px-1.5 py-1 text-center font-extrabold border ${rPrepaidProm <= rPrepaid ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-amber-500 bg-amber-50 text-amber-950'} rounded shadow-sm focus:ring-2 focus:ring-emerald-500">
+                                <span class="text-xs font-bold text-slate-600">%</span>
+                            </div>
+                            <div>
+                                ${rPrepaidProm <= rPrepaid 
+                                    ? `<span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn (-${diffP}%)</span>`
+                                    : `<span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded">⚠️ Vượt trần (+${(rPrepaidProm - rPrepaid).toFixed(2)}%)</span>`
+                                }
+                            </div>
+                            <div class="text-xs font-semibold text-slate-700">${formatVND(interestPrepaidProm)} đ</div>
+                        </div>
+                    `;
+
+                    colQuarterly = (rQuarterlyProm !== null) ? `
+                        <div class="space-y-1">
+                            <div class="text-[10px] text-slate-500 font-medium">Trần lý thuyết: <b class="text-slate-700">${rQuarterly.toFixed(2)}%</b></div>
+                            <div class="flex items-center justify-center gap-1">
+                                <input type="number" step="0.05" value="${rQuarterlyProm.toFixed(2)}" onchange="updatePromulgatedRate(${n}, 'quarterly', this.value)" 
+                                    class="w-20 px-1.5 py-1 text-center font-extrabold border ${rQuarterlyProm <= rQuarterly ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-amber-500 bg-amber-50 text-amber-950'} rounded shadow-sm focus:ring-2 focus:ring-emerald-500">
+                                <span class="text-xs font-bold text-slate-600">%</span>
+                            </div>
+                            <div>
+                                ${rQuarterlyProm <= rQuarterly 
+                                    ? `<span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn</span>`
+                                    : `<span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-900 rounded">⚠️ Vượt trần</span>`
+                                }
+                            </div>
+                            <div class="text-xs font-semibold text-slate-700">${formatVND(interestQuarterlyProm)} đ</div>
+                        </div>
+                    ` : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
 
                     colInstallment = `<b>${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestInstallment)} đ</span>`;
                 } else if (viewMode === 'rates') {
@@ -1579,14 +1662,12 @@
         function initTermSelects() {
             const sel = document.getElementById('select-term-detail');
             if (!sel) return;
-            const currentVal = sel.value;
-            sel.innerHTML = '';
+            if (sel.options.length > 0) return; // Bảo lưu static HTML options
             TERMS.forEach(n => {
                 const opt = document.createElement('option');
                 opt.value = n;
                 opt.textContent = `Kỳ hạn ${n} tháng`;
-                if (currentVal && parseInt(currentVal) === n) opt.selected = true;
-                else if (!currentVal && n === 12) opt.selected = true;
+                if (n === 12) opt.selected = true;
                 sel.appendChild(opt);
             });
         }
