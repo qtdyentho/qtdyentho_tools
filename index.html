@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - Công cụ hỗ trợ công việc</title>
+    
+    <!-- PWA Primary Meta Tags -->
+    <meta name="theme-color" content="#065f46">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="QTDND Yên Thọ">
+    <meta name="application-name" content="QTDND Yên Thọ">
+
+    <!-- Dynamic PWA Manifest & App Icon Link -->
+    <link id="pwa-manifest" rel="manifest">
+    <link rel="apple-touch-icon" id="pwa-apple-icon">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- MathJax for rendering LaTeX math formulas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tab-active {
+            background-color: #065f46 !important;
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+        .subtab-active {
+            border-bottom: 3px solid #059669 !important;
+            color: #059669 !important;
+            font-weight: 700;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .shadow-lg, .shadow-md, .shadow-sm, .shadow-xl {
+                box-shadow: none !important;
+            }
+            .border {
+                border-color: #cbd5e1 !important;
+            }
+        }
+        .print-only {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-white pb-16 md:pb-0">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Universal PWA Installation Guide Modal -->
+    <div id="pwa-install-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-slate-800 space-y-4 shadow-2xl relative">
+            <button onclick="closePwaModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 p-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                <div class="p-2.5 bg-amber-500 text-amber-950 rounded-xl font-bold">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-base text-slate-900">Cài Đặt App Màn Hình Chính</h3>
+                    <p class="text-xs text-emerald-800 font-semibold">QTDND Yên Thọ • Hoạt động Offline 100%</p>
+                </div>
+            </div>
+
+            <!-- iOS Instructions -->
+            <div id="ios-guide" class="space-y-3 text-xs text-slate-600">
+                <p class="font-bold text-amber-900 bg-amber-50 p-2 rounded-lg border border-amber-200">📱 Hướng dẫn dành cho iPhone / iPad (Safari):</p>
+                <div class="flex items-start space-x-2.5">
+                    <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">1</span>
+                    <p>Bấm vào nút <b>Chia sẻ</b> (<svg class="w-4 h-4 inline text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>) ở thanh công cụ dưới cùng Safari.</p>
+                </div>
+                <div class="flex items-start space-x-2.5">
+                    <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">2</span>
+                    <p>Cuộn xuống chọn menu <b>"Thêm vào Màn hình chính"</b> (Add to Home Screen).</p>
+                </div>
+                <div class="flex items-start space-x-2.5">
+                    <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">3</span>
+                    <p>Xác nhận <b>"Thêm"</b> để cài ứng dụng lên màn hình chính điện thoại!</p>
+                </div>
+            </div>
+
+            <!-- Android & Desktop Instructions -->
+            <div id="android-guide" class="space-y-3 text-xs text-slate-600">
+                <p class="font-bold text-emerald-900 bg-emerald-50 p-2 rounded-lg border border-emerald-200">🤖 Hướng dẫn dành cho Android / Máy tính (Chrome, Edge, Cốc Cốc):</p>
+                <div class="flex items-start space-x-2.5">
+                    <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">1</span>
+                    <p>Nhấp vào biểu tượng <b>Tùy chọn 3 chấm (⋮)</b> ở góc trên bên phải trình duyệt.</p>
+                </div>
+                <div class="flex items-start space-x-2.5">
+                    <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">2</span>
+                    <p>Chọn dòng <b>"Cài đặt ứng dụng"</b> hoặc <b>"Thêm vào Màn hình chính"</b>.</p>
+                </div>
+                <div class="flex items-start space-x-2.5">
+                    <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">3</span>
+                    <p>Bấm <b>"Cài đặt"</b> để tạo lối tắt mở ứng dụng full màn hình không cần mạng!</p>
+                </div>
+            </div>
+
+            <button onclick="closePwaModal()" class="w-full py-2.5 bg-emerald-800 text-white font-bold rounded-xl text-xs hover:bg-emerald-700 transition shadow-md">Đã Hiểu - Đóng</button>
+        </div>
+    </div>
+
+    <header class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white shadow-lg sticky top-0 z-40 no-print">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-white/10 rounded-xl backdrop-blur-md border border-white/20 flex-shrink-0">
+                        <svg class="w-7 h-7 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9m4 0V5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight leading-tight uppercase text-emerald-100">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h1>
+                        <p class="text-xs text-emerald-200/90 font-medium flex items-center gap-2">
+                            <span>Công cụ hỗ trợ công việc nghiệp vụ tín dụng & tiền gửi</span>
+                            <span id="app-version-badge" class="px-2 py-0.5 bg-emerald-950/80 text-emerald-300 font-mono text-[10px] rounded-full border border-emerald-500/30">v2026.07.28</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 self-end md:self-auto flex-wrap gap-y-1">
+                    <!-- Prominent PWA Install Button -->
+                    <div class="relative group">
+                        <button id="pwa-install-btn" onclick="triggerPwaInstall()" aria-label="Cài đặt App" class="p-2 sm:px-3 sm:py-2 bg-amber-400 hover:bg-amber-300 text-amber-950 rounded-xl transition flex items-center justify-center gap-1.5 shadow-md ring-2 ring-amber-300/50">
+                            <svg class="w-5 h-5 text-amber-950 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-extrabold whitespace-nowrap transition-all duration-200">Cài Đặt App</span>
+                        </button>
+                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Cài đặt App màn hình chính</div>
+                    </div>
+
+                    <!-- Online Auto-Update Button -->
+                    <div class="relative group">
+                        <button id="pwa-update-btn" onclick="checkAppUpdate()" aria-label="Cập nhật" class="p-2 sm:px-3 sm:py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition flex items-center justify-center gap-1.5 shadow-md border border-blue-400/40">
+                            <svg class="w-5 h-5 text-blue-100 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-extrabold whitespace-nowrap transition-all duration-200">Cập Nhật</span>
+                        </button>
+                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Tải & Kiểm tra bản mới</div>
+                    </div>
+
+                    <!-- Print Report Button -->
+                    <div class="relative group">
+                        <button onclick="printReport()" aria-label="In báo cáo" class="p-2 sm:px-3 sm:py-2 bg-emerald-700/80 hover:bg-emerald-600 text-white rounded-xl border border-emerald-500/50 transition flex items-center justify-center gap-1.5 shadow-sm">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-bold whitespace-nowrap transition-all duration-200">In Báo Cáo</span>
+                        </button>
+                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">In / Lưu bản PDF báo cáo</div>
+                    </div>
+
+                    <!-- Export Excel Button -->
+                    <div class="relative group">
+                        <button onclick="exportToExcel()" aria-label="Xuất Excel" class="p-2 sm:px-3 sm:py-2 bg-teal-700/80 hover:bg-teal-600 text-white rounded-xl border border-teal-500/50 transition flex items-center justify-center gap-1.5 shadow-sm">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-bold whitespace-nowrap transition-all duration-200">Xuất Excel</span>
+                        </button>
+                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Xuất dữ liệu file .XLS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs Menu -->
+        <div class="bg-emerald-950 border-t border-emerald-700/50 hidden md:block">
+            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                <nav class="flex space-x-1 sm:space-x-2 text-xs sm:text-sm font-medium py-1.5 overflow-x-auto" aria-label="Tabs">
+                    <button onclick="switchTab('tab1')" id="nav-tab1" class="py-2 px-3.5 rounded-lg text-emerald-100 tab-active transition whitespace-nowrap flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        <span>Lãi suất</span>
+                    </button>
+                    <button onclick="switchTab('tabTools')" id="nav-tabTools" class="py-2 px-3.5 rounded-lg text-emerald-200 hover:text-white transition whitespace-nowrap flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                        <span>Công cụ ▾</span>
+                    </button>
+                    <button onclick="switchTab('tabQR')" id="nav-tabQR" class="py-2 px-3.5 rounded-lg text-emerald-200 hover:text-white transition whitespace-nowrap flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                        <span>Tạo QR ▾</span>
+                    </button>
+                    <button onclick="switchTab('tab4')" id="nav-tab4" class="py-2 px-3.5 rounded-lg text-emerald-200 hover:text-white transition whitespace-nowrap flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <span>Tài liệu</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-emerald-800/80 z-50 px-1 py-1 flex justify-around items-center text-[10px] font-medium text-emerald-200 no-print shadow-2xl">
+        <button onclick="switchTab('tab1')" id="mob-nav-tab1" class="flex flex-col items-center py-1.5 px-2 rounded-lg transition text-white font-bold bg-emerald-800/80">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            <span>Lãi suất</span>
+        </button>
+        <button onclick="switchTab('tabTools')" id="mob-nav-tabTools" class="flex flex-col items-center py-1.5 px-2 rounded-lg transition">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+            <span>Công cụ</span>
+        </button>
+        <button onclick="switchTab('tabQR')" id="mob-nav-tabQR" class="flex flex-col items-center py-1.5 px-2 rounded-lg transition">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+            <span>Tạo QR</span>
+        </button>
+        <button onclick="switchTab('tab4')" id="mob-nav-tab4" class="flex flex-col items-center py-1.5 px-2 rounded-lg transition">
+            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Tài liệu</span>
+        </button>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full">
+
+        <!-- ==================== TAB 1: QUY ĐỔI LÃI SUẤT ==================== -->
+        <div id="tab1" class="tab-content space-y-6">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 no-print">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-6 bg-emerald-600 rounded-full inline-block"></span>
+                            Bảng Quy Đổi Lãi Suất Tiết Kiệm Tự Động
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Nhập lãi suất cuối kỳ cố định (%/năm) để tự động quy đổi sang các phương thức trả lãi tương đương.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi giả định (VNĐ)</label>
+                            <input type="text" id="principal-input" value="100.000.000" oninput="formatVNDInput(this); renderTable1();" 
+                                class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-bold text-emerald-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none w-40 sm:w-48 text-right bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Chế độ hiển thị</label>
+                            <select id="view-mode" onchange="renderTable1()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 focus:ring-2 focus:ring-emerald-500">
+                                <option value="rates">Chỉ xem Lãi suất (%/năm)</option>
+                                <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
+                                <option value="both" selected>Xem Cả Lãi suất & Số tiền</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto mt-4 rounded-xl border border-slate-200">
+                    <table class="w-full text-xs sm:text-sm text-left text-slate-600">
+                        <thead class="text-xs text-white uppercase bg-emerald-900 border-b border-emerald-800">
+                            <tr>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold">Kỳ hạn</th>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold bg-emerald-800">Lãi Cuối Kỳ (%/năm)</th>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold">Lĩnh Lãi Hàng Tháng</th>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold">Lĩnh Lãi Trước</th>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold">Lĩnh Lãi Hàng Quý</th>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold">Gửi Góp Định Kỳ</th>
+                                <th scope="col" class="py-3 px-3 sm:px-4 text-center font-bold no-print">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rate-table-body" class="divide-y divide-slate-200 bg-white">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB TOOLS: MENU CÔNG CỤ (Tiết kiệm / Tiền vay / Dòng tiền / Rút trước hạn) ==================== -->
+        <div id="tabTools" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
+                <!-- Subtab Selector with Simplified Titles -->
+                <div class="flex border-b border-slate-200 mb-6 overflow-x-auto">
+                    <button onclick="switchSubTab('tool-sav')" id="subtab-tool-sav" class="py-2.5 px-4 font-bold text-sm subtab-active transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span>Tiết kiệm</span>
+                    </button>
+                    <button onclick="switchSubTab('tool-loan')" id="subtab-tool-loan" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Tiền vay</span>
+                    </button>
+                    <button onclick="switchSubTab('tool-cashflow')" id="subtab-tool-cashflow" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 002-2h2a2 2 0 002 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 002-2h2a2 2 0 002 2v14a2 2 0 002 2h2a2 2 0 002-2z"></path></svg>
+                        <span>Dòng tiền</span>
+                    </button>
+                    <button onclick="switchSubTab('tool-tt04')" id="subtab-tool-tt04" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <span>Rút trước hạn</span>
+                    </button>
+                </div>
+
+                <!-- SUBTAB 1: TIẾT KIỆM -->
+                <div id="tool-sav" class="subtab-content space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Tool 1: Single deposit -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-emerald-900 text-sm mb-3">1. Tiết Kiệm Gửi 1 Lần</h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                        <input type="text" id="sav1-amount" value="50.000.000" oninput="formatVNDInput(this); calcSavingsTool1();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Kỳ hạn (tháng)</label>
+                                        <input type="number" id="sav1-term" value="12" onchange="calcSavingsTool1()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Lãi suất (%/năm)</label>
+                                        <input type="number" step="0.1" id="sav1-rate" value="5.6" onchange="calcSavingsTool1()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-emerald-800">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-emerald-50/50 p-2.5 rounded-lg">
+                                <span class="text-[11px] text-slate-500">Tiền lãi dự kiến:</span>
+                                <p id="sav1-res-interest" class="font-extrabold text-emerald-800 text-base">2.800.000 đ</p>
+                                <span class="text-[11px] text-slate-500">Tổng gốc & Lãi:</span>
+                                <p id="sav1-res-total" class="font-bold text-slate-800 text-xs">52.800.000 đ</p>
+                            </div>
+                        </div>
+
+                        <!-- Tool 2: Periodic Installment -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-teal-900 text-sm mb-3">2. Gửi Góp Định Kỳ (Tháng/Quý)</h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Định kỳ gửi</label>
+                                        <select id="sav2-freq" onchange="calcSavingsTool2()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                            <option value="month">Gửi góp hàng tháng</option>
+                                            <option value="quarter">Gửi góp hàng quý</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi mỗi kỳ (VNĐ)</label>
+                                        <input type="text" id="sav2-amount" value="5.000.000" oninput="formatVNDInput(this); calcSavingsTool2();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Tổng tháng gửi</label>
+                                            <input type="number" id="sav2-term" value="12" onchange="calcSavingsTool2()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi suất (%/năm)</label>
+                                            <input type="number" step="0.1" id="sav2-rate" value="6.0" onchange="calcSavingsTool2()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-teal-800">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-teal-50/50 p-2.5 rounded-lg">
+                                <span class="text-[11px] text-slate-500">Tổng gốc tích lũy:</span>
+                                <p id="sav2-res-principal" class="font-bold text-slate-800 text-xs">60.000.000 đ</p>
+                                <span class="text-[11px] text-slate-500">Tổng lãi nhận được:</span>
+                                <p id="sav2-res-interest" class="font-extrabold text-teal-800 text-base">1.950.000 đ</p>
+                                <span class="text-[11px] text-slate-500">Tổng tiền cuối kỳ:</span>
+                                <p id="sav2-res-total" class="font-bold text-slate-800 text-xs">61.950.000 đ</p>
+                            </div>
+                        </div>
+
+                        <!-- Tool 3: Goal Savings -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-indigo-900 text-sm mb-3">3. Tiết Kiệm Mục Tiêu</h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền mục tiêu cần có (VNĐ)</label>
+                                        <input type="text" id="sav3-goal" value="200.000.000" oninput="formatVNDInput(this); calcSavingsGoal();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-indigo-900">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Thời gian tích lũy (tháng)</label>
+                                        <input type="number" id="sav3-term" value="24" onchange="calcSavingsGoal()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Lãi suất gửi góp (%/năm)</label>
+                                        <input type="number" step="0.1" id="sav3-rate" value="6.2" onchange="calcSavingsGoal()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-indigo-800">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-indigo-50/50 p-2.5 rounded-lg">
+                                <span class="text-[11px] text-slate-500">Cần gửi mỗi tháng:</span>
+                                <p id="sav3-res-monthly" class="font-extrabold text-indigo-900 text-base">7.828.000 đ/tháng</p>
+                                <span class="text-[11px] text-slate-500">Lãi sinh ra giúp KH đạt mục tiêu:</span>
+                                <p id="sav3-res-interest-bonus" class="font-bold text-emerald-700 text-xs">12.128.000 đ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBTAB 2: TIỀN VAY -->
+                <div id="tool-loan" class="subtab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Left 5 cols: Borrowing Power Estimator -->
+                        <div class="lg:col-span-5 bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200 space-y-4">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                1. Ước Tính Hạn Mức Khoản VAY Tối Đa
+                            </h3>
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block font-medium text-slate-600 mb-1">Thu nhập ròng hàng tháng (VNĐ)</label>
+                                    <input type="text" id="loan-est-income" value="25.000.000" oninput="formatVNDInput(this); calcLoanEstimate();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-slate-600 mb-1">Chi phí sinh hoạt & trả nợ khác (VNĐ)</label>
+                                    <input type="text" id="loan-est-expense" value="10.000.000" oninput="formatVNDInput(this); calcLoanEstimate();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Thời gian vay (Tháng)</label>
+                                        <input type="number" id="loan-est-term" value="60" onchange="calcLoanEstimate()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Lãi suất vay (%/năm)</label>
+                                        <input type="number" step="0.1" id="loan-est-rate" value="9.5" onchange="calcLoanEstimate()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-slate-600 mb-1">Tỷ lệ trả nợ tối đa / Thu nhập ròng còn lại (%)</label>
+                                    <input type="number" id="loan-est-dti" value="70" onchange="calcLoanEstimate()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                </div>
+                            </div>
+
+                            <div class="bg-emerald-900 text-white p-4 rounded-xl space-y-1">
+                                <span class="text-[11px] text-emerald-200">Hạn Mức Tiền Vay Tối Đa Phê Duyệt Dự Kiến:</span>
+                                <div id="loan-est-max-amount" class="text-2xl font-extrabold text-emerald-300">540.000.000 VNĐ</div>
+                                <p class="text-[10px] text-emerald-200/80 mt-1">Năng lực trả nợ tối đa: <span id="loan-est-max-monthly" class="font-bold text-white">10.500.000 đ/tháng</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Right 7 cols: Repayment Schedule Generator -->
+                        <div class="lg:col-span-7 space-y-4">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">2. Lập Lịch Trả Nợ Chi Tiết Khoản Vay</h3>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-medium text-slate-600 mb-1">Số tiền vay (VNĐ)</label>
+                                    <input type="text" id="loan-sched-amount" value="300.000.000" oninput="formatVNDInput(this); calcRepaymentSchedule();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-slate-600 mb-1">Thời hạn vay (tháng)</label>
+                                    <input type="number" id="loan-sched-term" value="12" onchange="calcRepaymentSchedule()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-slate-600 mb-1">Lãi suất vay (%/năm)</label>
+                                    <input type="number" step="0.1" id="loan-sched-rate" value="9.0" onchange="calcRepaymentSchedule()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-emerald-800">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Phương thức trả nợ</label>
+                                <select id="loan-sched-method" onchange="calcRepaymentSchedule()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 bg-slate-50">
+                                    <option value="interest_only">Lãi hàng tháng, Gốc cuối kỳ</option>
+                                    <option value="reducing_month" selected>Gốc chia đều, Lãi dư nợ giảm dần (Hàng Tháng)</option>
+                                    <option value="reducing_quarter">Gốc chia đều, Lãi dư nợ giảm dần (Hàng Quý)</option>
+                                    <option value="annuity_month">Trả đều cố định Gốc + Lãi (Annuity Hàng Tháng)</option>
+                                </select>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="grid grid-cols-3 gap-2 bg-slate-100 p-3 rounded-lg text-center text-xs">
+                                <div>
+                                    <span class="text-slate-500">Tổng Gốc:</span>
+                                    <p id="loan-res-total-p" class="font-bold text-slate-800">300.000.000 đ</p>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500">Tổng Lãi Phải Trả:</span>
+                                    <p id="loan-res-total-i" class="font-extrabold text-amber-800">14.625.000 đ</p>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500">Tổng Gốc + Lãi:</span>
+                                    <p id="loan-res-total-all" class="font-bold text-emerald-800">314.625.000 đ</p>
+                                </div>
+                            </div>
+
+                            <!-- Schedule Table -->
+                            <div class="max-h-60 overflow-y-auto border border-slate-200 rounded-lg">
+                                <table class="w-full text-[11px] text-left text-slate-600">
+                                    <thead class="text-[10px] text-slate-700 uppercase bg-slate-200 sticky top-0">
+                                        <tr>
+                                            <th class="py-2 px-2 text-center">Kỳ</th>
+                                            <th class="py-2 px-2 text-right">Dư Nợ Đầu</th>
+                                            <th class="py-2 px-2 text-right">Tiền Gốc</th>
+                                            <th class="py-2 px-2 text-right">Tiền Lãi</th>
+                                            <th class="py-2 px-2 text-right">Tổng Trả</th>
+                                            <th class="py-2 px-2 text-right">Dư Nợ Cuối</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="loan-schedule-tbody" class="divide-y divide-slate-200 bg-white">
+                                        <!-- Schedule rows populated via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBTAB 3: DÒNG TIỀN -->
+                <div id="tool-cashflow" class="subtab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
+                                <span class="w-2.5 h-6 bg-teal-600 rounded-full inline-block"></span>
+                                So Sánh & Chi Tiết Dòng Tiền Theo Kỳ Hạn
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Phân tích chi tiết lịch trả tiền và hiệu quả sử dụng vốn của thành viên.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                <input type="text" id="detail-principal-input" value="100.000.000" oninput="formatVNDInput(this); renderTab2Detail();" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-emerald-50 focus:ring-2 focus:ring-emerald-500 w-36 sm:w-44 text-right">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Chọn Kỳ Hạn</label>
+                                <select id="select-term-detail" onchange="renderTab2Detail()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-emerald-50 focus:ring-2 focus:ring-emerald-500">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Term Overview Metrics Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                            <span class="text-xs text-slate-500 font-medium">Số tiền gửi ban đầu</span>
+                            <div id="detail-principal" class="text-xl font-extrabold text-slate-800 mt-1">100.000.000 đ</div>
+                        </div>
+                        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                            <span class="text-xs text-emerald-700 font-medium">Lãi suất gốc (Cuối kỳ)</span>
+                            <div id="detail-base-rate" class="text-xl font-extrabold text-emerald-800 mt-1">6,00 %/năm</div>
+                        </div>
+                        <div class="p-4 bg-teal-50 border border-teal-200 rounded-xl">
+                            <span class="text-xs text-teal-700 font-medium">Kỳ hạn được chọn</span>
+                            <div id="detail-term-badge" class="text-xl font-extrabold text-teal-900 mt-1">12 Tháng</div>
+                        </div>
+                    </div>
+
+                    <div id="detail-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Cards rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- SUBTAB 4: RÚT TRƯỚC HẠN -->
+                <div id="tool-tt04" class="subtab-content hidden space-y-6">
+                    <div class="pb-4 border-b border-slate-100">
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-6 bg-amber-600 rounded-full inline-block"></span>
+                            Mô Phỏng Rút Tiết Kiệm Trước Hạn Một Phần (Thông tư 04/2022/TT-NHNN)
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Theo Thông tư 04/2022/TT-NHNN, phần tiền gửi rút trước hạn áp dụng lãi suất không kỳ hạn, phần tiền gửi còn lại tiếp tục hưởng lãi suất cam kết ban đầu.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+                        <!-- Form inputs -->
+                        <div class="lg:col-span-5 space-y-4 bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Thông tin khoản tiền gửi</h3>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi ban đầu (VNĐ)</label>
+                                <input type="text" id="tt04-principal" value="100.000.000" oninput="formatVNDInput(this); calculatePartialWithdrawal();" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kỳ hạn gửi (tháng)</label>
+                                    <input type="number" id="tt04-term" value="12" onchange="calculatePartialWithdrawal()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Lãi suất cam kết (%/năm)</label>
+                                    <input type="number" step="0.1" id="tt04-rate" value="6.0" onchange="calculatePartialWithdrawal()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-emerald-800 focus:ring-2 focus:ring-emerald-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Lãi suất Không Kỳ Hạn hiện hành (%/năm)</label>
+                                <input type="number" step="0.05" id="tt04-demand-rate" value="0.3" onchange="calculatePartialWithdrawal()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-amber-800 focus:ring-2 focus:ring-amber-500">
+                            </div>
+
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 pt-2">Thông tin rút trước hạn</h3>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền rút trước hạn (VNĐ)</label>
+                                <input type="text" id="tt04-withdraw-amount" value="30.000.000" oninput="formatVNDInput(this); calculatePartialWithdrawal();" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-amber-900 focus:ring-2 focus:ring-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Thời điểm rút (Cuối tháng thứ)</label>
+                                <input type="number" id="tt04-withdraw-month" value="6" min="1" max="36" onchange="calculatePartialWithdrawal()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                        </div>
+
+                        <!-- Simulation Result -->
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-4">
+                                <h4 class="font-bold text-amber-900 text-sm flex items-center justify-between">
+                                    <span>1. Phần Tiền Rút Trước Hạn</span>
+                                    <span class="text-xs px-2 py-0.5 bg-amber-200 text-amber-900 rounded font-semibold">Lãi suất Không kỳ hạn</span>
+                                </h4>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3 text-xs">
+                                    <div><span class="text-slate-500">Gốc rút:</span> <p id="tt04-res-w-amount" class="font-bold text-slate-800">30.000.000 đ</p></div>
+                                    <div><span class="text-slate-500">Thời gian gửi:</span> <p id="tt04-res-w-time" class="font-bold text-slate-800">6 tháng (180 ngày)</p></div>
+                                    <div><span class="text-slate-500">Lãi suất áp dụng:</span> <p id="tt04-res-w-rate" class="font-bold text-amber-800">0.30 %/năm</p></div>
+                                    <div class="col-span-2"><span class="text-slate-500">Lãi thực nhận:</span> <p id="tt04-res-w-interest" class="font-bold text-amber-900 text-sm">44.000 đ</p></div>
+                                    <div><span class="text-slate-500">Tổng thu tại tháng <span id="tt04-lbl-m1">6</span>:</span> <p id="tt04-res-w-total" class="font-bold text-emerald-800 text-sm">30.044.000 đ</p></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-4">
+                                <h4 class="font-bold text-emerald-900 text-sm flex items-center justify-between">
+                                    <span>2. Phần Tiền Gốc Còn Lại Duy Trì Đến Hạn</span>
+                                    <span class="text-xs px-2 py-0.5 bg-emerald-200 text-emerald-900 rounded font-semibold">Giữ nguyên Lãi suất 6,0%</span>
+                                </h4>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3 text-xs">
+                                    <div><span class="text-slate-500">Gốc duy trì:</span> <p id="tt04-res-r-amount" class="font-bold text-slate-800">70.000.000 đ</p></div>
+                                    <div><span class="text-slate-500">Kỳ hạn trọn vẹn:</span> <p id="tt04-res-r-time" class="font-bold text-slate-800">12 tháng</p></div>
+                                    <div><span class="text-slate-500">Lãi suất giữ nguyên:</span> <p id="tt04-res-r-rate" class="font-bold text-emerald-800">6.00 %/năm</p></div>
+                                    <div class="col-span-2"><span class="text-slate-500">Lãi nhận khi đáo hạn:</span> <p id="tt04-res-r-interest" class="font-bold text-emerald-900 text-sm">4.200.000 đ</p></div>
+                                    <div><span class="text-slate-500">Tổng thu tại tháng <span id="tt04-lbl-m2">12</span>:</span> <p id="tt04-res-r-total" class="font-bold text-emerald-800 text-sm">74.200.000 đ</p></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-900 text-white rounded-xl p-4 shadow-md">
+                                <h4 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Tổng Kết Hiệu Quả Nghiệp Vụ TT04</h4>
+                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-2 pt-2 border-t border-slate-800">
+                                    <div>
+                                        <span class="text-xs text-slate-400">Tổng Lãi Nhận Được (Cả 2 phần):</span>
+                                        <p id="tt04-res-total-interest" class="text-xl font-extrabold text-emerald-400">4.244.000 VNĐ</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs text-slate-400">So với rút 100% ở tháng <span id="tt04-lbl-m3">6</span>:</span>
+                                        <p id="tt04-res-full-withdraw" class="text-xs text-amber-300 font-bold">148.000 đ</p>
+                                        <p class="text-xs text-emerald-300 font-bold">Tiết kiệm cho KH: <span id="tt04-res-saved">+4.096.000 VNĐ</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB QR: TẠO MÃ QR THANH TOÁN (SEPAY) ==================== -->
+        <div id="tabQR" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
+                <!-- QR Subtab Selector with Simplified Titles -->
+                <div class="flex border-b border-slate-200 mb-6">
+                    <button onclick="switchQRTab('qr-loan')" id="subtab-qr-loan" class="py-2.5 px-4 font-bold text-sm subtab-active transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                        <span>QR Tiền vay</span>
+                    </button>
+                    <button onclick="switchQRTab('qr-sav')" id="subtab-qr-sav" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span>QR Tiết kiệm</span>
+                    </button>
+                </div>
+
+                <!-- SUBTAB QR TIỀN VAY -->
+                <div id="qr-loan" class="qr-subtab-content space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Inputs Left (7 Cols) -->
+                        <div class="lg:col-span-7 space-y-4">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Thông tin tính toán khoản trả nợ tín dụng</h3>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Họ và tên khách hàng</label>
+                                    <input type="text" id="qr-loan-name" value="NGUYEN VAN A" oninput="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Số Hợp đồng tín dụng (HĐTD)</label>
+                                    <input type="text" id="qr-loan-contract" value="123/2026/HDTD" oninput="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-emerald-800">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Dư nợ vay tính lãi (VNĐ)</label>
+                                    <input type="text" id="qr-loan-amount" value="100.000.000" oninput="formatVNDInput(this); calcQRPayment();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Lãi suất vay (%/năm)</label>
+                                    <input type="number" step="0.1" id="qr-loan-rate" value="9.0" onchange="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-emerald-800">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Số ngày tính lãi</label>
+                                    <input type="number" id="qr-loan-days" value="30" onchange="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Số tiền trả Gốc kỳ này (Nếu có)</label>
+                                    <input type="text" id="qr-principal-pay" value="5.000.000" oninput="formatVNDInput(this); calcQRPayment();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Tiền Lãi phát sinh (Làm tròn nghìn)</label>
+                                    <div id="qr-calc-interest" class="w-full px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg font-bold text-amber-900 text-sm">740.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                                <label class="block font-bold text-emerald-900 text-xs mb-1">Tổng Số Tiền Chuyển Khoản Mã QR (Có thể sửa thực tế)</label>
+                                <input type="text" id="qr-final-amount" value="5.740.000" oninput="formatVNDInput(this); updateQRImageOnly();" class="w-full px-3 py-2 border-2 border-emerald-500 rounded-lg font-extrabold text-emerald-900 text-base bg-white">
+                            </div>
+
+                            <div>
+                                <label class="block font-semibold text-slate-600 text-xs mb-1">Nội dung chuyển khoản chuẩn hóa tự động (Tiếng Việt Không Dấu)</label>
+                                <textarea id="qr-memo-text" readonly rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-xs bg-slate-100 font-bold text-slate-700"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền (Mặc Định Cố Định)</label>
+                                <input type="text" id="qr-acc-number" value="3800001234567899" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                            </div>
+                        </div>
+
+                        <!-- Display QR Code & Share Controls Right (5 Cols) -->
+                        <div class="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
+                            <div class="text-center space-y-1">
+                                <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR SePay Auto-Gen</span>
+                                <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
+                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span id="qr-disp-acc">3800001234567899</span></p>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-emerald-500">
+                                <img id="qr-code-img" src="" alt="Mã QR Thanh Toán SePay" class="w-56 h-56 object-contain">
+                            </div>
+
+                            <div class="w-full bg-slate-800 p-3 rounded-xl text-xs space-y-1 text-slate-300">
+                                <div class="flex justify-between"><span>Số tiền:</span> <span id="qr-card-amount" class="font-bold text-emerald-400">5.740.000 đ</span></div>
+                                <div class="flex justify-between"><span>Nội dung:</span> <span id="qr-card-memo" class="font-bold text-slate-100 truncate max-w-[200px]">...</span></div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 w-full">
+                                <button onclick="downloadQRImage('qr-code-img')" class="py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    <span>Tải Mã QR</span>
+                                </button>
+                                <button onclick="shareQRImage('qr-code-img')" class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                    <span>Chia Sẻ Mã</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBTAB QR TIỀN GỬI TIẾT KIỆM -->
+                <div id="qr-sav" class="qr-subtab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Inputs Left (7 Cols) -->
+                        <div class="lg:col-span-7 space-y-4">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Thông tin đăng ký gửi tiền tiết kiệm</h3>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Họ và tên thành viên gửi</label>
+                                    <input type="text" id="qr-sav-name" value="TRAN THI B" oninput="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Số CCCD / CMND</label>
+                                    <input type="text" id="qr-sav-cccd" value="030098001234" oninput="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                            </div>
+
+                            <div class="text-xs">
+                                <label class="block font-semibold text-slate-600 mb-1">Địa chỉ đăng ký</label>
+                                <input type="text" id="qr-sav-address" value="YEN THO DONG TRIEU QUANG NINH" oninput="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                    <input type="text" id="qr-sav-amount" value="50.000.000" oninput="formatVNDInput(this); calcQRSavings();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-extrabold text-emerald-900">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Kỳ hạn gửi (Tháng)</label>
+                                    <input type="number" id="qr-sav-term" value="12" onchange="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Hình thức trả lãi</label>
+                                    <select id="qr-sav-type" onchange="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800 bg-slate-50">
+                                        <option value="LAI CUOI KY" selected>Lãi Cuối Kỳ</option>
+                                        <option value="LAI TRUOC">Lãi Trước</option>
+                                        <option value="LAI HANG THANG">Lãi Hàng Tháng</option>
+                                        <option value="LAI HANG QUY">Lãi Hàng Quý</option>
+                                        <option value="GUI GOP THANG">Gửi Góp Hàng Tháng</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block font-semibold text-slate-600 text-xs mb-1">Nội dung gửi tiền chuẩn hóa tự động</label>
+                                <textarea id="qr-sav-memo-text" readonly rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-xs bg-slate-100 font-bold text-slate-700"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền (Mặc Định Cố Định)</label>
+                                <input type="text" value="3800001234567899" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                            </div>
+                        </div>
+
+                        <!-- Display QR Code & Share Controls Right (5 Cols) -->
+                        <div class="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
+                            <div class="text-center space-y-1">
+                                <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR Savings Deposit</span>
+                                <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
+                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800001234567899</span></p>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-blue-500">
+                                <img id="qr-sav-code-img" src="" alt="Mã QR Gửi Tiết Kiệm SePay" class="w-56 h-56 object-contain">
+                            </div>
+
+                            <div class="w-full bg-slate-800 p-3 rounded-xl text-xs space-y-1 text-slate-300">
+                                <div class="flex justify-between"><span>Số tiền gửi:</span> <span id="qr-sav-card-amount" class="font-bold text-blue-400">50.000.000 đ</span></div>
+                                <div class="flex justify-between"><span>Nội dung:</span> <span id="qr-sav-card-memo" class="font-bold text-slate-100 truncate max-w-[200px]">...</span></div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 w-full">
+                                <button onclick="downloadQRImage('qr-sav-code-img')" class="py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    <span>Tải Mã QR</span>
+                                </button>
+                                <button onclick="shareQRImage('qr-sav-code-img')" class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                    <span>Chia Sẻ Mã</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 4: TÀI LIỆU & CÔNG THỨC ==================== -->
+        <div id="tab4" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <span class="w-2.5 h-6 bg-slate-700 rounded-full inline-block"></span>
+                        Cơ Sở Toán Học & Công Thức Quy Đổi Lãi Suất Tiền Gửi / Lãi Vay
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-700">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h3 class="font-bold text-emerald-900 text-base">1. Lĩnh Lãi Hàng Tháng ($r_m$)</h3>
+                        <p>Quy đổi theo dòng tiền hiện giá PV tương đương:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                            $$r_m = \frac{r}{1 + r \times \frac{n-1}{24}}$$
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h3 class="font-bold text-emerald-900 text-base">2. Lĩnh Lãi Trước ($r_{pre}$)</h3>
+                        <p>Khách hàng nhận ngay tiền lãi khi mở sổ tiết kiệm:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                            $$r_{pre} = \frac{r}{1 + r \times \frac{n}{12}}$$
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h3 class="font-bold text-emerald-900 text-base">3. Lĩnh Lãi Hàng Quý ($r_q$)</h3>
+                        <p>Áp dụng cho các kỳ hạn $n \ge 3$ tháng:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                            $$r_q = \frac{r}{1 + r \times \frac{n-3}{24}}$$
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h3 class="font-bold text-emerald-900 text-base">4. Gửi Góp Định Kỳ</h3>
+                        <p>Tiền lãi tích lũy khi gửi cố định $S$ vào đầu mỗi tháng:</p>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800">
+                            $$\text{Lãi} = S \times r \times \frac{n(n+1)}{24}$$
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRINT ONLY OFFICIAL REPORT BLOCK -->
+        <div class="print-only p-8 bg-white space-y-6">
+            <div class="flex justify-between items-start border-b-2 border-slate-800 pb-4">
+                <div>
+                    <h2 class="font-extrabold text-lg uppercase">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h2>
+                    <p class="text-xs">Đông Triều - Quảng Ninh | ĐT: (0203) 3800 123</p>
+                </div>
+                <div class="text-right">
+                    <h3 class="font-bold text-sm uppercase">BẢNG TỔNG HỢP NGHỊỆP VỤ & PHIẾU TÍNH LÃI</h3>
+                    <p class="text-xs italic">Ngày lập: <span id="print-date">25/07/2026</span></p>
+                </div>
+            </div>
+
+            <div class="space-y-2 text-xs">
+                <p><b>Đơn vị tính toán:</b> Quỹ Tín dụng Nhân dân Yên Thọ</p>
+                <p><b>Số tài khoản thụ hưởng cố định:</b> 3800001234567899 (Ngân hàng Hợp tác xã VietNam - COOPBANK)</p>
+            </div>
+
+            <div class="mt-8 pt-8 grid grid-cols-3 gap-4 text-center text-xs font-bold">
+                <div>
+                    <p>NGƯỜI LẬP BẢNG</p>
+                    <p class="mt-16 font-normal text-slate-500">(Ký, ghi rõ họ tên)</p>
+                </div>
+                <div>
+                    <p>KIỂM SOÁT VIÊN</p>
+                    <p class="mt-16 font-normal text-slate-500">(Ký, ghi rõ họ tên)</p>
+                </div>
+                <div>
+                    <p>BAN GIÁM ĐỐC / TRƯỞNG ĐƠN VỊ</p>
+                    <p class="mt-16 font-normal text-slate-500">(Ký tên, đóng dấu)</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-semibold text-slate-300">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ © 2026</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        const CURRENT_APP_VERSION = "2026.07.28-v1.3";
+        let swRegistrationObj = null;
+
+        // Function to check and pull updates when online
+        async function checkAppUpdate() {
+            if (!navigator.onLine) {
+                showToast("Bạn đang ở chế độ Offline. Vui lòng kết nối Internet để kiểm tra bản cập nhật!");
+                return;
+            }
+
+            showToast("Đang kết nối kiểm tra bản cập nhật mới...");
+
+            let updateUrl = localStorage.getItem('qtdnd_update_url') || "";
+            
+            if (!updateUrl) {
+                const userUrl = prompt(
+                    "Nhập liên kết (URL) lưu trữ file index.html mới nhất để đồng bộ tự động (Ví dụ: Link GitHub Raw hoặc Server nội bộ):", 
+                    "https://raw.githubusercontent.com/qtdnd-yentho/app/main/index.html"
+                );
+                if (userUrl) {
+                    updateUrl = userUrl.trim();
+                    localStorage.setItem('qtdnd_update_url', updateUrl);
+                } else {
+                    showToast("Đã kiểm tra: Bạn đang sử dụng phiên bản mới nhất!");
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(updateUrl + '?t=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const newHtml = await response.text();
+                    if (newHtml && newHtml.length > 500) {
+                        showToast("Đã tải thành công bản cập nhật mới! Đang khởi động lại...");
+                        setTimeout(() => {
+                            document.open();
+                            document.write(newHtml);
+                            document.close();
+                        }, 1200);
+                        return;
+                    }
+                }
+                showToast("Bạn đang sử dụng phiên bản mới nhất!");
+            } catch (err) {
+                showToast("Ứng dụng đang ở phiên bản mới nhất hoặc URL chưa kết nối được!");
+            }
+        }
+
+        // PWA Install Prompt Handler
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function triggerPwaInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast("Đã cài đặt ứng dụng PWA thành công!");
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                const iosGuide = document.getElementById('ios-guide');
+                const androidGuide = document.getElementById('android-guide');
+
+                if (isIos) {
+                    if (iosGuide) iosGuide.classList.remove('hidden');
+                    if (androidGuide) androidGuide.classList.add('hidden');
+                } else {
+                    if (iosGuide) iosGuide.classList.add('hidden');
+                    if (androidGuide) androidGuide.classList.remove('hidden');
+                }
+
+                const modal = document.getElementById('pwa-install-modal');
+                if (modal) modal.classList.remove('hidden');
+            }
+        }
+
+        function closePwaModal() {
+            const modal = document.getElementById('pwa-install-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // ---------------- BUSINESS LOGIC ENGINE ----------------
+        const FIXED_ACC_NUMBER = "3800001234567899";
+        const TERMS = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 18, 24, 36];
+        const DEFAULT_RATES = {
+            1: 3.2, 2: 3.2, 3: 3.5, 5: 3.8, 6: 4.8, 7: 4.9, 8: 5.0,
+            9: 5.1, 10: 5.2, 11: 5.3, 12: 5.6, 13: 5.7, 15: 5.8,
+            18: 6.0, 24: 6.2, 36: 6.5
+        };
+
+        let currentRates = { ...DEFAULT_RATES };
+
+        // Helper: Round money to thousands
+        function roundToThousand(val) {
+            if (isNaN(val) || val === null) return 0;
+            return Math.round(val / 1000) * 1000;
+        }
+
+        // Helper: Format VND
+        function formatVND(num) {
+            if (isNaN(num) || num === null) return "0";
+            return Math.round(num).toLocaleString('vi-VN');
+        }
+
+        function parseVND(str) {
+            if (!str) return 0;
+            return parseFloat(String(str).replace(/\./g, '').replace(/,/g, '')) || 0;
+        }
+
+        function formatVNDInput(input) {
+            if (!input) return;
+            const val = parseVND(input.value);
+            input.value = formatVND(val);
+        }
+
+        function removeVietnameseTones(str) {
+            if (!str) return "";
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            return str.replace(/[^a-zA-Z0-9 ]/g, "").toUpperCase();
+        }
+
+        // Math Formulas
+        function calcMonthlyRate(r, n) {
+            const rDec = r / 100;
+            const rmDec = rDec / (1 + (rDec * (n - 1)) / 24);
+            return rmDec * 100;
+        }
+
+        function calcPrepaidRate(r, n) {
+            const rDec = r / 100;
+            const rPreDec = rDec / (1 + (rDec * n) / 12);
+            return rPreDec * 100;
+        }
+
+        function calcQuarterlyRate(r, n) {
+            if (n < 3) return null;
+            const rDec = r / 100;
+            const rqDec = rDec / (1 + (rDec * (n - 3)) / 24);
+            return rqDec * 100;
+        }
+
+        function calcInstallmentInterest(principal, r, n) {
+            const S = principal / n;
+            const rDec = r / 100;
+            return roundToThousand(S * rDec * ((n * (n + 1)) / 24));
+        }
+
+        function getPrincipal() {
+            const el = document.getElementById('principal-input');
+            return el ? (parseVND(el.value) || 100000000) : 100000000;
+        }
+
+        function updateSingleRate(term, val) {
+            const rate = parseFloat(val) || 0;
+            currentRates[term] = rate;
+            renderTable1();
+        }
+
+        // Tab 1 Render
+        function renderTable1() {
+            const tbody = document.getElementById('rate-table-body');
+            const viewModeEl = document.getElementById('view-mode');
+            if (!tbody || !viewModeEl) return;
+            const viewMode = viewModeEl.value;
+            const P = getPrincipal();
+            tbody.innerHTML = '';
+
+            TERMS.forEach(n => {
+                const rEnd = currentRates[n] || 0;
+                const rMonthly = calcMonthlyRate(rEnd, n);
+                const rPrepaid = calcPrepaidRate(rEnd, n);
+                const rQuarterly = calcQuarterlyRate(rEnd, n);
+
+                const interestEnd = roundToThousand(P * (rEnd / 100) * (n / 12));
+                const interestMonthly = roundToThousand(P * (rMonthly / 100) * (n / 12));
+                const interestPrepaid = roundToThousand(P * (rPrepaid / 100) * (n / 12));
+                const interestQuarterly = (rQuarterly !== null) ? roundToThousand(P * (rQuarterly / 100) * (n / 12)) : null;
+                const interestInstallment = roundToThousand(calcInstallmentInterest(P, rEnd, n));
+
+                let colEnd, colMonthly, colPrepaid, colQuarterly, colInstallment;
+
+                if (viewMode === 'rates') {
+                    colEnd = `${rEnd.toFixed(2)} %/năm`;
+                    colMonthly = `${rMonthly.toFixed(2)} %/năm`;
+                    colPrepaid = `${rPrepaid.toFixed(2)} %/năm`;
+                    colQuarterly = (rQuarterly !== null) ? `${rQuarterly.toFixed(2)} %/năm` : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
+                    colInstallment = `${rEnd.toFixed(2)} %/năm`;
+                } else if (viewMode === 'amount') {
+                    colEnd = `${formatVND(interestEnd)} đ`;
+                    colMonthly = `${formatVND(interestMonthly)} đ`;
+                    colPrepaid = `${formatVND(interestPrepaid)} đ`;
+                    colQuarterly = (interestQuarterly !== null) ? `${formatVND(interestQuarterly)} đ` : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
+                    colInstallment = `${formatVND(interestInstallment)} đ`;
+                } else {
+                    colEnd = `<b>${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestEnd)} đ</span>`;
+                    colMonthly = `<b>${rMonthly.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestMonthly)} đ</span>`;
+                    colPrepaid = `<b>${rPrepaid.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestPrepaid)} đ</span>`;
+                    colQuarterly = (rQuarterly !== null) 
+                        ? `<b>${rQuarterly.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestQuarterly)} đ</span>` 
+                        : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
+                    colInstallment = `<b>${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestInstallment)} đ</span>`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition border-b border-slate-200';
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-bold text-center text-slate-800 bg-slate-50/80">${n} Tháng</td>
+                    <td class="py-2 px-3 text-center bg-emerald-50/50">
+                        <input type="number" step="0.1" value="${rEnd}" onchange="updateSingleRate(${n}, this.value)" 
+                            class="w-20 px-2 py-1 text-center font-bold border border-emerald-300 rounded focus:ring-2 focus:ring-emerald-500 bg-white text-emerald-900">
+                    </td>
+                    <td class="py-3 px-4 text-center">${colMonthly}</td>
+                    <td class="py-3 px-4 text-center">${colPrepaid}</td>
+                    <td class="py-3 px-4 text-center">${colQuarterly}</td>
+                    <td class="py-3 px-4 text-center">${colInstallment}</td>
+                    <td class="py-3 px-4 text-center no-print">
+                        <button onclick="selectTermAndDetail(${n})" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded text-xs font-semibold transition">
+                            Xem Dòng Tiền ➔
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function selectTermAndDetail(n) {
+            const sel = document.getElementById('select-term-detail');
+            if (sel) sel.value = n;
+            switchTab('tabTools');
+            switchSubTab('tool-cashflow');
+            renderTab2Detail();
+        }
+
+        function initTermSelects() {
+            const sel = document.getElementById('select-term-detail');
+            if (!sel) return;
+            sel.innerHTML = '';
+            TERMS.forEach(n => {
+                const opt = document.createElement('option');
+                opt.value = n;
+                opt.textContent = `Kỳ hạn ${n} tháng`;
+                if (n === 12) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        }
+
+        // Tab 2 Detail Render
+        function renderTab2Detail() {
+            const sel = document.getElementById('select-term-detail');
+            if (!sel) return;
+            const n = parseInt(sel.value) || 12;
+            const principalInput = document.getElementById('detail-principal-input');
+            const P = principalInput ? (parseVND(principalInput.value) || 100000000) : getPrincipal();
+            const rEnd = currentRates[n] || 0;
+            
+            const baseRateEl = document.getElementById('detail-base-rate');
+            const principalEl = document.getElementById('detail-principal');
+            const termBadgeEl = document.getElementById('detail-term-badge');
+            if (baseRateEl) baseRateEl.textContent = `${rEnd.toFixed(2)} %/năm`;
+            if (principalEl) principalEl.textContent = `${formatVND(P)} đ`;
+            if (termBadgeEl) termBadgeEl.textContent = `Kỳ hạn ${n} Tháng`;
+
+            const rMonthly = calcMonthlyRate(rEnd, n);
+            const rPrepaid = calcPrepaidRate(rEnd, n);
+            const rQuarterly = calcQuarterlyRate(rEnd, n);
+
+            const iEnd = roundToThousand(P * (rEnd / 100) * (n / 12));
+            const iMonthly = roundToThousand(P * (rMonthly / 100) * (n / 12));
+            const iPrepaid = roundToThousand(P * (rPrepaid / 100) * (n / 12));
+            const iQuarterly = (rQuarterly !== null) ? roundToThousand(P * (rQuarterly / 100) * (n / 12)) : null;
+            const iInstallment = roundToThousand(calcInstallmentInterest(P, rEnd, n));
+
+            const container = document.getElementById('detail-cards-container');
+            if (!container) return;
+            container.innerHTML = `
+                <!-- 1. Trả Lãi Cuối Kỳ -->
+                <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] uppercase font-bold rounded">1. Cuối kỳ</span>
+                    <h3 class="font-bold text-slate-800 text-sm">Trả Lãi Cuối Kỳ</h3>
+                    <p class="text-xs text-slate-500">Lãi suất: <b class="text-emerald-800">${rEnd.toFixed(2)} %/năm</b></p>
+                    <p class="text-xs text-slate-500">Tổng lãi nhận: <b class="text-slate-800 text-sm">${formatVND(iEnd)} đ</b></p>
+                    <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600">
+                        <b>Dòng tiền:</b> Nhận trọn vẹn gốc & lãi khi hết kỳ hạn (${n} tháng).
+                    </div>
+                </div>
+
+                <!-- 2. Lĩnh Lãi Trước -->
+                <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] uppercase font-bold rounded">2. Lãi Trước</span>
+                    <h3 class="font-bold text-slate-800 text-sm">Lĩnh Lãi Trước</h3>
+                    <p class="text-xs text-slate-500">Lãi suất quy đổi: <b class="text-blue-800">${rPrepaid.toFixed(2)} %/năm</b></p>
+                    <p class="text-xs text-slate-500">Tổng lãi nhận ngay: <b class="text-slate-800 text-sm">${formatVND(iPrepaid)} đ</b></p>
+                    <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600">
+                        <b>Dòng tiền:</b> Nhận ngay ${formatVND(iPrepaid)} đ lúc gửi. Đáo hạn nhận gốc ${formatVND(P)} đ.
+                    </div>
+                </div>
+
+                <!-- 3. Lĩnh Lãi Hàng Tháng -->
+                <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+                    <span class="px-2 py-0.5 bg-teal-100 text-teal-800 text-[10px] uppercase font-bold rounded">3. Hàng Tháng</span>
+                    <h3 class="font-bold text-slate-800 text-sm">Lĩnh Lãi Hàng Tháng</h3>
+                    <p class="text-xs text-slate-500">Lãi suất quy đổi: <b class="text-teal-800">${rMonthly.toFixed(2)} %/năm</b></p>
+                    <p class="text-xs text-slate-500">Mỗi tháng nhận: <b class="text-slate-800 text-sm">${formatVND(roundToThousand(iMonthly / n))} đ</b></p>
+                    <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600">
+                        <b>Dòng tiền:</b> Thu tiền lãi định kỳ ${n} lần trong chu kỳ gửi.
+                    </div>
+                </div>
+
+                <!-- 4. Lĩnh Lãi Hàng Quý -->
+                <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 text-[10px] uppercase font-bold rounded">4. Hàng Quý</span>
+                    <h3 class="font-bold text-slate-800 text-sm">Lĩnh Lãi Hàng Quý</h3>
+                    ${(rQuarterly !== null) ? `
+                        <p class="text-xs text-slate-500">Lãi suất quy đổi: <b class="text-purple-800">${rQuarterly.toFixed(2)} %/năm</b></p>
+                        <p class="text-xs text-slate-500">Mỗi quý nhận: <b class="text-slate-800 text-sm">${formatVND(roundToThousand(iQuarterly / (n / 3)))} đ</b></p>
+                        <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600">
+                            <b>Dòng tiền:</b> Nhận tiền lãi 3 tháng 1 lần (${Math.floor(n/3)} quý).
+                        </div>
+                    ` : `<p class="text-xs text-slate-400 italic">Không áp dụng cho kỳ hạn dưới 3 tháng.</p>`}
+                </div>
+
+                <!-- 5. Gửi Góp Định Kỳ -->
+                <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] uppercase font-bold rounded">5. Gửi Góp</span>
+                    <h3 class="font-bold text-slate-800 text-sm">Gửi Góp Định Kỳ Hàng Tháng</h3>
+                    <p class="text-xs text-slate-500">Mỗi tháng gửi vào: <b class="text-slate-800">${formatVND(roundToThousand(P / n))} đ</b></p>
+                    <p class="text-xs text-slate-500">Tổng lãi thu về: <b class="text-amber-900 text-sm">${formatVND(iInstallment)} đ</b></p>
+                    <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-600">
+                        <b>Dòng tiền:</b> Tích lũy đều đặn từng tháng để đạt tổng gốc ${formatVND(P)} đ.
+                    </div>
+                </div>
+            `;
+        }
+
+        // Tab 3 TT04 Partial Withdrawal
+        function calculatePartialWithdrawal() {
+            const principalEl = document.getElementById('tt04-principal');
+            const termEl = document.getElementById('tt04-term');
+            const rateEl = document.getElementById('tt04-rate');
+            const demandRateEl = document.getElementById('tt04-demand-rate');
+            const withdrawAmountEl = document.getElementById('tt04-withdraw-amount');
+            const withdrawMonthEl = document.getElementById('tt04-withdraw-month');
+
+            if (!principalEl || !termEl || !rateEl || !demandRateEl || !withdrawAmountEl || !withdrawMonthEl) return;
+
+            const P = parseVND(principalEl.value);
+            const n = parseInt(termEl.value) || 12;
+            const rBase = parseFloat(rateEl.value) || 0;
+            const rDemand = parseFloat(demandRateEl.value) || 0;
+            const wAmount = parseVND(withdrawAmountEl.value);
+            const wMonth = parseInt(withdrawMonthEl.value) || 1;
+
+            const remainAmount = Math.max(0, P - wAmount);
+            const daysHeld = wMonth * 30;
+
+            const interestW = roundToThousand(wAmount * (rDemand / 100) * (daysHeld / 365));
+            const totalW = wAmount + interestW;
+
+            const interestR = roundToThousand(remainAmount * (rBase / 100) * (n / 12));
+            const totalR = remainAmount + interestR;
+
+            const totalInterestCombined = interestW + interestR;
+            const interestIfFullWithdrawAtMonth = roundToThousand(P * (rDemand / 100) * (daysHeld / 365));
+            const savedInterest = totalInterestCombined - interestIfFullWithdrawAtMonth;
+
+            const setTxt = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            };
+
+            setTxt('tt04-res-w-amount', `${formatVND(wAmount)} đ`);
+            setTxt('tt04-res-w-time', `${wMonth} tháng (${daysHeld} ngày)`);
+            setTxt('tt04-res-w-rate', `${rDemand.toFixed(2)} %/năm`);
+            setTxt('tt04-res-w-interest', `${formatVND(interestW)} đ`);
+            setTxt('tt04-res-w-total', `${formatVND(totalW)} đ`);
+            setTxt('tt04-lbl-m1', wMonth);
+
+            setTxt('tt04-res-r-amount', `${formatVND(remainAmount)} đ`);
+            setTxt('tt04-res-r-time', `${n} tháng`);
+            setTxt('tt04-res-r-rate', `${rBase.toFixed(2)} %/năm`);
+            setTxt('tt04-res-r-interest', `${formatVND(interestR)} đ`);
+            setTxt('tt04-res-r-total', `${formatVND(totalR)} đ`);
+            setTxt('tt04-lbl-m2', n);
+
+            setTxt('tt04-res-total-interest', `${formatVND(totalInterestCombined)} VNĐ`);
+            setTxt('tt04-lbl-m3', wMonth);
+            setTxt('tt04-res-full-withdraw', `${formatVND(interestIfFullWithdrawAtMonth)} đ`);
+            setTxt('tt04-res-saved', `+${formatVND(savedInterest)} VNĐ`);
+        }
+
+        // TAB SAVINGS TOOLS LOGIC
+        function calcSavingsTool1() {
+            const amountEl = document.getElementById('sav1-amount');
+            const termEl = document.getElementById('sav1-term');
+            const rateEl = document.getElementById('sav1-rate');
+            if (!amountEl || !termEl || !rateEl) return;
+
+            const P = parseVND(amountEl.value);
+            const n = parseInt(termEl.value) || 12;
+            const r = parseFloat(rateEl.value) || 0;
+
+            const interest = roundToThousand(P * (r / 100) * (n / 12));
+            const total = P + interest;
+
+            const resInterestEl = document.getElementById('sav1-res-interest');
+            const resTotalEl = document.getElementById('sav1-res-total');
+            if (resInterestEl) resInterestEl.textContent = `${formatVND(interest)} đ`;
+            if (resTotalEl) resTotalEl.textContent = `${formatVND(total)} đ`;
+        }
+
+        function calcSavingsTool2() {
+            const freqEl = document.getElementById('sav2-freq');
+            const amountEl = document.getElementById('sav2-amount');
+            const termEl = document.getElementById('sav2-term');
+            const rateEl = document.getElementById('sav2-rate');
+            if (!freqEl || !amountEl || !termEl || !rateEl) return;
+
+            const freq = freqEl.value;
+            const S = parseVND(amountEl.value);
+            const totalMonths = parseInt(termEl.value) || 12;
+            const r = parseFloat(rateEl.value) || 0;
+
+            let totalPrincipal = 0;
+            let totalInterest = 0;
+
+            if (freq === 'month') {
+                totalPrincipal = S * totalMonths;
+                totalInterest = roundToThousand(S * (r / 100) * ((totalMonths * (totalMonths + 1)) / 24));
+            } else {
+                const numQuarters = Math.floor(totalMonths / 3);
+                totalPrincipal = S * numQuarters;
+                totalInterest = roundToThousand(S * (r / 100) * ((numQuarters * (numQuarters + 1)) / 8));
+            }
+
+            const setTxt = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            };
+
+            setTxt('sav2-res-principal', `${formatVND(totalPrincipal)} đ`);
+            setTxt('sav2-res-interest', `${formatVND(totalInterest)} đ`);
+            setTxt('sav2-res-total', `${formatVND(totalPrincipal + totalInterest)} đ`);
+        }
+
+        function calcSavingsGoal() {
+            const goalEl = document.getElementById('sav3-goal');
+            const termEl = document.getElementById('sav3-term');
+            const rateEl = document.getElementById('sav3-rate');
+            if (!goalEl || !termEl || !rateEl) return;
+
+            const Goal = parseVND(goalEl.value);
+            const n = parseInt(termEl.value) || 24;
+            const r = parseFloat(rateEl.value) || 0;
+
+            const S = roundToThousand(Goal / (n + (r / 100) * ((n * (n + 1)) / 24)));
+            const totalPrincipal = S * n;
+            const interestBonus = Goal - totalPrincipal;
+
+            const resMonthlyEl = document.getElementById('sav3-res-monthly');
+            const resBonusEl = document.getElementById('sav3-res-interest-bonus');
+            if (resMonthlyEl) resMonthlyEl.textContent = `${formatVND(S)} đ/tháng`;
+            if (resBonusEl) resBonusEl.textContent = `${formatVND(interestBonus)} đ`;
+        }
+
+        // TAB LOAN TOOLS LOGIC
+        function calcLoanEstimate() {
+            const incomeEl = document.getElementById('loan-est-income');
+            const expenseEl = document.getElementById('loan-est-expense');
+            const termEl = document.getElementById('loan-est-term');
+            const rateEl = document.getElementById('loan-est-rate');
+            const dtiEl = document.getElementById('loan-est-dti');
+            if (!incomeEl || !expenseEl || !termEl || !rateEl || !dtiEl) return;
+
+            const income = parseVND(incomeEl.value);
+            const expense = parseVND(expenseEl.value);
+            const term = parseInt(termEl.value) || 60;
+            const rate = parseFloat(rateEl.value) || 0;
+            const dti = parseFloat(dtiEl.value) || 70;
+
+            const netDisposable = Math.max(0, income - expense);
+            const maxMonthlyPayment = roundToThousand(netDisposable * (dti / 100));
+
+            const rm = (rate / 100) / 12;
+            let maxLoan = 0;
+            if (rm > 0) {
+                maxLoan = roundToThousand(maxMonthlyPayment * (1 - Math.pow(1 + rm, -term)) / rm);
+            } else {
+                maxLoan = maxMonthlyPayment * term;
+            }
+
+            const maxAmountEl = document.getElementById('loan-est-max-amount');
+            const maxMonthlyEl = document.getElementById('loan-est-max-monthly');
+            if (maxAmountEl) maxAmountEl.textContent = `${formatVND(maxLoan)} VNĐ`;
+            if (maxMonthlyEl) maxMonthlyEl.textContent = `${formatVND(maxMonthlyPayment)} đ/tháng`;
+        }
+
+        function calcRepaymentSchedule() {
+            const amountEl = document.getElementById('loan-sched-amount');
+            const termEl = document.getElementById('loan-sched-term');
+            const rateEl = document.getElementById('loan-sched-rate');
+            const methodEl = document.getElementById('loan-sched-method');
+            const tbody = document.getElementById('loan-schedule-tbody');
+
+            if (!amountEl || !termEl || !rateEl || !methodEl || !tbody) return;
+
+            const P = parseVND(amountEl.value);
+            const n = parseInt(termEl.value) || 12;
+            const rate = parseFloat(rateEl.value) || 0;
+            const method = methodEl.value;
+
+            tbody.innerHTML = '';
+
+            let totalInterest = 0;
+            let balance = P;
+            const rm = (rate / 100) / 12;
+
+            if (method === 'interest_only') {
+                const iMonthly = roundToThousand(P * rm);
+                for (let k = 1; k <= n; k++) {
+                    const principalPaid = (k === n) ? P : 0;
+                    const endBalance = (k === n) ? 0 : P;
+                    totalInterest += iMonthly;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    tr.innerHTML = `
+                        <td class="py-1.5 px-2 text-center font-bold">${k}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(P)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(principalPaid)}</td>
+                        <td class="py-1.5 px-2 text-right text-amber-800 font-semibold">${formatVND(iMonthly)}</td>
+                        <td class="py-1.5 px-2 text-right font-bold text-emerald-900">${formatVND(principalPaid + iMonthly)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(endBalance)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            } else if (method === 'reducing_month') {
+                const pMonthly = roundToThousand(P / n);
+                for (let k = 1; k <= n; k++) {
+                    const startBal = balance;
+                    const iMonthly = roundToThousand(startBal * rm);
+                    const pPaid = (k === n) ? startBal : Math.min(pMonthly, startBal);
+                    balance = Math.max(0, startBal - pPaid);
+                    totalInterest += iMonthly;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    tr.innerHTML = `
+                        <td class="py-1.5 px-2 text-center font-bold">${k}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(startBal)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(pPaid)}</td>
+                        <td class="py-1.5 px-2 text-right text-amber-800 font-semibold">${formatVND(iMonthly)}</td>
+                        <td class="py-1.5 px-2 text-right font-bold text-emerald-900">${formatVND(pPaid + iMonthly)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(balance)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            } else if (method === 'reducing_quarter') {
+                const numQuarters = Math.ceil(n / 3);
+                const pQuarterly = roundToThousand(P / numQuarters);
+                const rq = (rate / 100) / 4;
+
+                for (let k = 1; k <= numQuarters; k++) {
+                    const startBal = balance;
+                    const iQuarterly = roundToThousand(startBal * rq);
+                    const pPaid = (k === numQuarters) ? startBal : Math.min(pQuarterly, startBal);
+                    balance = Math.max(0, startBal - pPaid);
+                    totalInterest += iQuarterly;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    tr.innerHTML = `
+                        <td class="py-1.5 px-2 text-center font-bold">Quý ${k}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(startBal)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(pPaid)}</td>
+                        <td class="py-1.5 px-2 text-right text-amber-800 font-semibold">${formatVND(iQuarterly)}</td>
+                        <td class="py-1.5 px-2 text-right font-bold text-emerald-900">${formatVND(pPaid + iQuarterly)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(balance)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            } else if (method === 'annuity_month') {
+                const annuity = roundToThousand(P * (rm * Math.pow(1 + rm, n)) / (Math.pow(1 + rm, n) - 1));
+                for (let k = 1; k <= n; k++) {
+                    const startBal = balance;
+                    const iMonthly = roundToThousand(startBal * rm);
+                    const pPaid = (k === n) ? startBal : Math.min(annuity - iMonthly, startBal);
+                    balance = Math.max(0, startBal - pPaid);
+                    totalInterest += iMonthly;
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    tr.innerHTML = `
+                        <td class="py-1.5 px-2 text-center font-bold">${k}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(startBal)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(pPaid)}</td>
+                        <td class="py-1.5 px-2 text-right text-amber-800 font-semibold">${formatVND(iMonthly)}</td>
+                        <td class="py-1.5 px-2 text-right font-bold text-emerald-900">${formatVND(pPaid + iMonthly)}</td>
+                        <td class="py-1.5 px-2 text-right">${formatVND(balance)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            }
+
+            const setTxt = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            };
+
+            setTxt('loan-res-total-p', `${formatVND(P)} đ`);
+            setTxt('loan-res-total-i', `${formatVND(totalInterest)} đ`);
+            setTxt('loan-res-total-all', `${formatVND(P + totalInterest)} đ`);
+        }
+
+        // 1. QR LOAN PAYMENT LOGIC
+        function calcQRPayment() {
+            const loanAmountEl = document.getElementById('qr-loan-amount');
+            const rateEl = document.getElementById('qr-loan-rate');
+            const daysEl = document.getElementById('qr-loan-days');
+            const principalPayEl = document.getElementById('qr-principal-pay');
+
+            if (!loanAmountEl || !rateEl || !daysEl || !principalPayEl) return;
+
+            const loanAmount = parseVND(loanAmountEl.value);
+            const rate = parseFloat(rateEl.value) || 0;
+            const days = parseInt(daysEl.value) || 30;
+            const principalPay = parseVND(principalPayEl.value);
+
+            const rawInterest = loanAmount * (rate / 100) * (days / 365);
+            const interestPay = roundToThousand(rawInterest);
+            const totalPay = interestPay + principalPay;
+
+            const calcInterestEl = document.getElementById('qr-calc-interest');
+            const finalAmountEl = document.getElementById('qr-final-amount');
+            if (calcInterestEl) calcInterestEl.textContent = `${formatVND(interestPay)} VNĐ`;
+            if (finalAmountEl) finalAmountEl.value = formatVND(totalPay);
+
+            updateQRImageOnly();
+        }
+
+        function updateQRImageOnly() {
+            const nameEl = document.getElementById('qr-loan-name');
+            const contractEl = document.getElementById('qr-loan-contract');
+            const principalPayEl = document.getElementById('qr-principal-pay');
+            const finalAmountEl = document.getElementById('qr-final-amount');
+
+            if (!nameEl || !contractEl || !principalPayEl || !finalAmountEl) return;
+
+            const rawName = nameEl.value;
+            const rawContract = contractEl.value;
+            const principalPay = parseVND(principalPayEl.value);
+            const finalAmount = parseVND(finalAmountEl.value);
+
+            const nameClean = removeVietnameseTones(rawName);
+            const contractClean = removeVietnameseTones(rawContract);
+
+            let memo = `${nameClean} TRA LAI `;
+            if (principalPay > 0) {
+                memo = `${nameClean} TRA LAI VA GOC `;
+            }
+            memo += `HDTD SO ${contractClean}`;
+
+            const memoTextEl = document.getElementById('qr-memo-text');
+            const cardMemoEl = document.getElementById('qr-card-memo');
+            const cardAmountEl = document.getElementById('qr-card-amount');
+            const codeImgEl = document.getElementById('qr-code-img');
+
+            if (memoTextEl) memoTextEl.value = memo;
+            if (cardMemoEl) cardMemoEl.textContent = memo;
+            if (cardAmountEl) cardAmountEl.textContent = `${formatVND(finalAmount)} đ`;
+
+            const url = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}`;
+            if (codeImgEl) codeImgEl.src = url;
+        }
+
+        // 2. QR SAVINGS DEPOSIT LOGIC
+        function calcQRSavings() {
+            const nameEl = document.getElementById('qr-sav-name');
+            const cccdEl = document.getElementById('qr-sav-cccd');
+            const addrEl = document.getElementById('qr-sav-address');
+            const amountEl = document.getElementById('qr-sav-amount');
+            const termEl = document.getElementById('qr-sav-term');
+            const typeEl = document.getElementById('qr-sav-type');
+
+            if (!nameEl || !cccdEl || !addrEl || !amountEl || !termEl || !typeEl) return;
+
+            const rawName = nameEl.value;
+            const rawCccd = cccdEl.value;
+            const rawAddr = addrEl.value;
+            const amount = parseVND(amountEl.value);
+            const term = termEl.value;
+            const type = typeEl.value;
+
+            const nameClean = removeVietnameseTones(rawName);
+            const cccdClean = removeVietnameseTones(rawCccd);
+            const addrClean = removeVietnameseTones(rawAddr);
+
+            const memo = `${nameClean} CCCD ${cccdClean} ${addrClean} GUI TK KY HAN ${term} THANG SO TIEN ${formatVND(amount)} ${type}`;
+
+            const memoTextEl = document.getElementById('qr-sav-memo-text');
+            const cardMemoEl = document.getElementById('qr-sav-card-memo');
+            const cardAmountEl = document.getElementById('qr-sav-card-amount');
+            const codeImgEl = document.getElementById('qr-sav-code-img');
+
+            if (memoTextEl) memoTextEl.value = memo;
+            if (cardMemoEl) cardMemoEl.textContent = memo;
+            if (cardAmountEl) cardAmountEl.textContent = `${formatVND(amount)} đ`;
+
+            const url = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}`;
+            if (codeImgEl) codeImgEl.src = url;
+        }
+
+        function downloadQRImage(elementId) {
+            const img = document.getElementById(elementId);
+            if (!img || !img.src) return;
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = `VietQR_QTDND_YenTho_${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("Đã tải mã QR về máy!");
+        }
+
+        function shareQRImage(elementId) {
+            const img = document.getElementById(elementId);
+            if (!img || !img.src) return;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mã QR Thanh Toán QTDND Yên Thọ',
+                    text: 'Mã VietQR chuyển khoản COOPBANK QTDND Yên Thọ',
+                    url: img.src
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(img.src);
+                showToast("Đã sao chép liên kết mã QR!");
+            }
+        }
+
+        // Subtab Navigation Switcher
+        function switchSubTab(subId) {
+            document.querySelectorAll('.subtab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('button[id^="subtab-tool-"]').forEach(btn => {
+                btn.classList.remove('subtab-active');
+                btn.classList.add('text-slate-500');
+            });
+
+            const target = document.getElementById(subId);
+            if (target) target.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`subtab-${subId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('subtab-active');
+                activeBtn.classList.remove('text-slate-500');
+            }
+        }
+
+        function switchQRTab(qrId) {
+            document.querySelectorAll('.qr-subtab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('button[id^="subtab-qr-"]').forEach(btn => {
+                btn.classList.remove('subtab-active');
+                btn.classList.add('text-slate-500');
+            });
+
+            const target = document.getElementById(qrId);
+            if (target) target.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`subtab-${qrId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('subtab-active');
+                activeBtn.classList.remove('text-slate-500');
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+
+            // Desktop Nav Sync
+            document.querySelectorAll('nav button[id^="nav-"]').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('text-emerald-200');
+            });
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('tab-active');
+                activeBtn.classList.remove('text-emerald-200');
+            }
+
+            // Mobile Nav Sync
+            document.querySelectorAll('nav button[id^="mob-nav-"]').forEach(btn => {
+                btn.classList.remove('text-white', 'font-bold', 'bg-emerald-800/80');
+                btn.classList.add('text-emerald-200');
+            });
+
+            const activeMobBtn = document.getElementById(`mob-nav-${tabId}`);
+            if (activeMobBtn) {
+                activeMobBtn.classList.add('text-white', 'font-bold', 'bg-emerald-800/80');
+                activeMobBtn.classList.remove('text-emerald-200');
+            }
+
+            if (tabId === 'tab4' && window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        // Toast Messages
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 border border-slate-700 animate-bounce";
+            toast.innerHTML = `
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span>${msg}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Print & Export
+        function printReport() {
+            const today = new Date();
+            document.getElementById('print-date').textContent = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+            window.print();
+        }
+
+        function exportToExcel() {
+            let html = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="utf-8"></head>
+                <body>
+                    <h2>QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h2>
+                    <h3>BẢNG QUY ĐỔI LÃI SUẤT TIẾT KIỆM TỰ ĐỘNG</h3>
+                    <p><b>Số tiền gửi giả định:</b> ${getPrincipal().toLocaleString()} VNĐ</p>
+                    <table border="1">
+                        <tr style="background-color: #065f46; color: white; font-weight: bold;">
+                            <th>Kỳ Hạn</th>
+                            <th>Lãi Cuối Kỳ (%/năm)</th>
+                            <th>Lĩnh Lãi Hàng Tháng (%/năm)</th>
+                            <th>Lĩnh Lãi Trước (%/năm)</th>
+                            <th>Lĩnh Lãi Hàng Quý (%/năm)</th>
+                            <th>Gửi Góp Định Kỳ (%/năm)</th>
+                        </tr>
+            `;
+
+            TERMS.forEach(n => {
+                const rEnd = currentRates[n] || 0;
+                const rMonthly = calcMonthlyRate(rEnd, n);
+                const rPrepaid = calcPrepaidRate(rEnd, n);
+                const rQuarterly = calcQuarterlyRate(rEnd, n);
+
+                html += `
+                    <tr>
+                        <td>${n} Tháng</td>
+                        <td>${rEnd.toFixed(2)}%</td>
+                        <td>${rMonthly.toFixed(2)}%</td>
+                        <td>${rPrepaid.toFixed(2)}%</td>
+                        <td>${(rQuarterly !== null) ? rQuarterly.toFixed(2) + '%' : 'K.Áp dụng'}</td>
+                        <td>${rEnd.toFixed(2)}%</td>
+                    </tr>
+                `;
+            });
+
+            html += `</table></body></html>`;
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Bang_Quy_Doi_Lai_Suat_QTDND_YenTho_${Date.now()}.xls`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("Đã xuất file Excel thành công!");
+        }
+
+        // Initialize App
+        window.onload = function() {
+            initTermSelects();
+            renderTable1();
+            renderTab2Detail();
+            calculatePartialWithdrawal();
+            calcSavingsTool1();
+            calcSavingsTool2();
+            calcSavingsGoal();
+            calcLoanEstimate();
+            calcRepaymentSchedule();
+            calcQRPayment();
+            calcQRSavings();
+        };
+    </script>
+</body>
+</html>
