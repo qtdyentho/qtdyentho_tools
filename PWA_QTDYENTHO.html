@@ -278,32 +278,14 @@
                                 <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
                             </select>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Export Action Toolbar for Savings Tables -->
-                <div class="mt-3 flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-slate-800">📊 Xuất Bảng Tiết Kiệm Độc Lập:</span>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <!-- Group 1: Xuất Biểu Ban Hành QTD -->
-                        <div class="inline-flex rounded-lg shadow-xs" role="group">
-                            <button onclick="exportPromulgatedSavingsToExcel()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-l-lg border border-emerald-800 flex items-center gap-1">
-                                <span>📊 Excel Biểu Ban Hành</span>
+                        <div class="flex items-end gap-2 self-end">
+                            <button onclick="exportActiveSavingsTableToExcel()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Xuất file Excel cho bảng đang hiển thị">
+                                <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <span>📊 Xuất Excel</span>
                             </button>
-                            <button onclick="exportPromulgatedSavingsToPDF()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-r-lg border border-slate-900 flex items-center gap-1">
-                                <span>🖨️ PDF Biểu Ban Hành</span>
-                            </button>
-                        </div>
-
-                        <!-- Group 2: Xuất Quy Đổi Lý Thuyết -->
-                        <div class="inline-flex rounded-lg shadow-xs" role="group">
-                            <button onclick="exportTheoreticalSavingsToExcel()" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-l-lg border border-teal-800 flex items-center gap-1">
-                                <span>📊 Excel Quy Đổi Lý Thuyết</span>
-                            </button>
-                            <button onclick="exportTheoreticalSavingsToPDF()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-r-lg border border-slate-900 flex items-center gap-1">
-                                <span>🖨️ PDF Quy Đổi Lý Thuyết</span>
+                            <button onclick="exportActiveSavingsTableToPDF()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Xuất PDF / In cho bảng đang hiển thị">
+                                <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H7a2 2 0 00-2 2v4h10z"></path></svg>
+                                <span>🖨️ Xuất PDF</span>
                             </button>
                         </div>
                     </div>
@@ -1426,7 +1408,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v3.2";
+                    const thisVersion = "2026.07.28-v3.3";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1436,7 +1418,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v3.2";
+        const CURRENT_APP_VERSION = "2026.07.28-v3.3";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1477,7 +1459,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v3.2';
+                        const CACHE_NAME = 'qtd-tools-cache-v3.3';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -2772,6 +2754,25 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // Dynamic Routers: Tự động nhận diện Chế độ hiển thị (view-mode) để xuất/in bảng tương ứng
+        function exportActiveSavingsTableToExcel() {
+            const viewMode = document.getElementById('view-mode')?.value;
+            if (viewMode === 'promulgated') {
+                exportPromulgatedSavingsToExcel();
+            } else {
+                exportTheoreticalSavingsToExcel();
+            }
+        }
+
+        function exportActiveSavingsTableToPDF() {
+            const viewMode = document.getElementById('view-mode')?.value;
+            if (viewMode === 'promulgated') {
+                exportPromulgatedSavingsToPDF();
+            } else {
+                exportTheoreticalSavingsToPDF();
+            }
         }
 
         // Helper: Collect Savings Export Data for both tables
