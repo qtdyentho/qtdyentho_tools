@@ -14,8 +14,10 @@
     <meta name="application-name" content="QTDND Yên Thọ">
 
     <!-- Dynamic PWA Manifest & App Icon Link -->
+    <link rel="icon" type="image/x-icon" href="LOgoQR.ico">
+    <link rel="shortcut icon" href="LOgoQR.ico">
     <link id="pwa-manifest" rel="manifest">
-    <link rel="apple-touch-icon" id="pwa-apple-icon">
+    <link rel="apple-touch-icon" id="pwa-apple-icon" href="LOgoQR.jpg">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -151,10 +153,8 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                 <div class="flex items-center space-x-3">
-                    <div class="p-2 bg-white/10 rounded-xl backdrop-blur-md border border-white/20 flex-shrink-0">
-                        <svg class="w-7 h-7 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9m4 0V5" />
-                        </svg>
+                    <div class="p-1 bg-white rounded-xl shadow-md border border-emerald-400/50 flex-shrink-0">
+                        <img src="LOgoQR.jpg" alt="Logo QTDND Yên Thọ" class="w-9 h-9 object-contain rounded-lg">
                     </div>
                     <div>
                         <h1 class="text-base sm:text-xl font-extrabold tracking-tight leading-tight uppercase text-emerald-100">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h1>
@@ -1235,7 +1235,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.7";
+                    const thisVersion = "2026.07.28-v2.8";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1245,7 +1245,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.7";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.8";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1262,21 +1262,31 @@
                     display: "standalone",
                     background_color: "#065f46",
                     theme_color: "#065f46",
-                    icons: [{
-                        src: "https://static.vecteezy.com/system/resources/thumbnails/033/126/728/small/3d-purple-illustration-icon-of-using-smartphone-for-multimedia-music-video-and-content-creator-with-hand-gesture-png.png",
-                        sizes: "192x192 512x512",
-                        type: "image/png"
-                    }]
+                    icons: [
+                        {
+                            src: "./LOgoQR.jpg",
+                            sizes: "192x192 512x512",
+                            type: "image/jpeg"
+                        },
+                        {
+                            src: "./LOgoQR.ico",
+                            sizes: "64x64 32x32 24x24 16x16",
+                            type: "image/x-icon"
+                        }
+                    ]
                 };
                 const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
                 const manifestUrl = URL.createObjectURL(manifestBlob);
                 const manifestLink = document.getElementById('pwa-manifest');
                 if (manifestLink) manifestLink.href = manifestUrl;
 
+                const appleIconLink = document.getElementById('pwa-apple-icon');
+                if (appleIconLink) appleIconLink.href = './LOgoQR.jpg';
+
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.7';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.8';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
