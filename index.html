@@ -201,6 +201,15 @@
                         </button>
                         <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Xuất dữ liệu file .XLS</div>
                     </div>
+
+                    <!-- Reset App & Clear Cache Button -->
+                    <div class="relative group">
+                        <button onclick="resetAppAndCache()" aria-label="Reset Cache" class="p-2 sm:px-3 sm:py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl border border-slate-600/50 transition flex items-center justify-center gap-1.5 shadow-sm">
+                            <svg class="w-5 h-5 flex-shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-bold whitespace-nowrap transition-all duration-200">Reset App</span>
+                        </button>
+                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Xóa bộ nhớ đệm & Reset</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1065,7 +1074,24 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
-        const CURRENT_APP_VERSION = "2026.07.28-v1.8";
+        // PWA Early Bootloader Engine: Tự động kiểm tra và boot trực tiếp bản HTML mới nhất từ LocalStorage khi khởi chạy
+        (function runPwaEarlyBootloader() {
+            try {
+                const cachedHtml = localStorage.getItem('qtdnd_cached_app_html');
+                if (cachedHtml && cachedHtml.length > 1000) {
+                    const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
+                    const cachedVersion = match ? match[1] : null;
+                    const thisVersion = "2026.07.28-v1.9";
+                    if (cachedVersion && cachedVersion > thisVersion) {
+                        document.open();
+                        document.write(cachedHtml);
+                        document.close();
+                    }
+                }
+            } catch(e) {}
+        })();
+
+        const CURRENT_APP_VERSION = "2026.07.28-v1.9";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1096,7 +1122,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v1.4';
+                        const CACHE_NAME = 'qtd-tools-cache-v1.9';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1140,13 +1166,42 @@
                     const res = await fetch(url + '?t=' + Date.now(), { cache: 'no-store' });
                     if (res.ok) {
                         const html = await res.text();
-                        if (html && html.length > 500 && html.includes('CURRENT_APP_VERSION')) {
+                        if (html && html.length > 1000 && html.includes('CURRENT_APP_VERSION')) {
                             return { success: true, html: html, urlUsed: url };
                         }
                     }
                 } catch (err) {}
             }
             return { success: false };
+        }
+
+        // Hàm áp dụng bản nâng cấp mới: Lưu LocalStorage, Xóa Service Worker Cache & Reload
+        async function applyDownloadedUpdate(newHtml, remoteVersion) {
+            showToast(`🎉 Phát hiện bản mới (${remoteVersion})! Đang xóa Cache và nâng cấp...`);
+            
+            // 1. Ghi đè vào LocalStorage để Bootloader nạp cho các lần mở sau
+            try { localStorage.setItem('qtdnd_cached_app_html', newHtml); } catch(e) {}
+
+            // 2. Xóa sạch bộ nhớ đệm CacheStorage cũ
+            if ('caches' in window) {
+                try {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                } catch(e) {}
+            }
+
+            // 3. Hủy đăng ký Service Worker cũ
+            if ('serviceWorker' in navigator) {
+                try {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) { await reg.unregister(); }
+                } catch(e) {}
+            }
+
+            // 4. Reload trang để nạp lại bản mới nhất
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 1200);
         }
 
         // Tự động kiểm tra bản cập nhật ngầm khi mở ứng dụng (nếu có mạng)
@@ -1157,16 +1212,8 @@
                 if (result.success) {
                     const match = result.html.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const remoteVersion = match ? match[1] : null;
-                    if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
-                        // Lưu bản mới vào LocalStorage để đảm bảo Offline lần sau vẫn mở đúng bản mới
-                        try { localStorage.setItem('qtdnd_cached_app_html', result.html); } catch(e) {}
-                        
-                        showToast(`🎉 Đã phát hiện phiên bản mới (${remoteVersion}) trên GitHub! Đang tự động nâng cấp...`);
-                        setTimeout(() => {
-                            document.open();
-                            document.write(result.html);
-                            document.close();
-                        }, 1500);
+                    if (remoteVersion && remoteVersion > CURRENT_APP_VERSION) {
+                        await applyDownloadedUpdate(result.html, remoteVersion);
                     }
                 }
             } catch (err) {}
@@ -1187,24 +1234,38 @@
                     const match = result.html.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const remoteVersion = match ? match[1] : null;
 
-                    if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
-                        try { localStorage.setItem('qtdnd_cached_app_html', result.html); } catch(e) {}
-                        showToast(`🎉 Phát hiện bản nâng cấp (${remoteVersion})! Đang cập nhật...`);
-                        setTimeout(() => {
-                            document.open();
-                            document.write(result.html);
-                            document.close();
-                        }, 1200);
+                    if (remoteVersion && remoteVersion > CURRENT_APP_VERSION) {
+                        await applyDownloadedUpdate(result.html, remoteVersion);
                         return;
                     } else {
                         showToast(`✅ Bạn đang sử dụng phiên bản mới nhất (${CURRENT_APP_VERSION})!`);
                         return;
                     }
                 }
-                showToast("Không thể kết nối đến GitHub (Raw/Pages). Hãy kiểm tra lại Repo Public/Pages!");
+                showToast("Không thể kết nối đến GitHub (Raw/Pages). Vui lòng kiểm tra lại Repo Public/Pages!");
             } catch (err) {
                 showToast("Không thể kết nối đến GitHub. Vui lòng kiểm tra lại kết nối mạng!");
             }
+        }
+
+        // Khôi phục cài đặt gốc & Xóa sạch bộ nhớ đệm ứng dụng
+        async function resetAppAndCache() {
+            if (!confirm("Bạn có chắc chắn muốn xóa sạch bộ nhớ đệm (Cache/LocalStorage) và khởi động lại ứng dụng không?")) return;
+            try {
+                localStorage.removeItem('qtdnd_cached_app_html');
+                localStorage.removeItem('qtdnd_custom_rates');
+                localStorage.removeItem('qtdnd_update_url');
+                if ('caches' in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                }
+                if ('serviceWorker' in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) { await reg.unregister(); }
+                }
+            } catch(e) {}
+            showToast("Đã xóa sạch bộ nhớ đệm! Đang khởi động lại...");
+            setTimeout(() => { window.location.reload(true); }, 1000);
         }
 
         // PWA Install Prompt Handler
