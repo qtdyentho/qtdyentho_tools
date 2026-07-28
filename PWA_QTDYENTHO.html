@@ -287,6 +287,15 @@
                                 <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Mức giảm an toàn QTD</label>
+                            <select id="promulgated-margin-select" onchange="renderTable1()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-white border-emerald-300 focus:ring-2 focus:ring-emerald-500">
+                                <option value="0.05" selected>-0.05%/năm (Chuẩn QTD)</option>
+                                <option value="0.10">-0.10%/năm (Tiết kiệm chi phí)</option>
+                                <option value="0.15">-0.15%/năm</option>
+                                <option value="0.00">0.00% (Bằng trần quy đổi)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -570,9 +579,13 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Chọn Kỳ Hạn</label>
-                                <select id="select-term-detail" onchange="renderTab2Detail()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-emerald-50 focus:ring-2 focus:ring-emerald-500">
+                                <select id="select-term-detail" onchange="onDetailTermChange()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-emerald-50 focus:ring-2 focus:ring-emerald-500">
                                     <!-- Populated dynamically -->
                                 </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Lãi suất (%/năm)</label>
+                                <input type="number" step="0.1" id="detail-rate-input" value="5.6" onchange="renderTab2Detail()" class="px-3 py-1.5 border border-emerald-300 rounded-lg text-xs font-extrabold text-emerald-900 bg-white focus:ring-2 focus:ring-emerald-500 w-28 text-center">
                             </div>
                         </div>
                     </div>
@@ -1082,7 +1095,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.1";
+                    const thisVersion = "2026.07.28-v2.2";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1092,7 +1105,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.1";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.2";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1123,7 +1136,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.1';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.2';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1442,8 +1455,10 @@
         function renderTable1() {
             const tbody = document.getElementById('rate-table-body');
             const viewModeEl = document.getElementById('view-mode');
+            const marginEl = document.getElementById('promulgated-margin-select');
             if (!tbody || !viewModeEl) return;
             const viewMode = viewModeEl.value;
+            const margin = parseFloat(marginEl ? marginEl.value : '0.05');
             const P = getPrincipal();
             tbody.innerHTML = '';
 
@@ -1453,10 +1468,10 @@
                 const rPrepaid = calcPrepaidRate(rEnd, n);
                 const rQuarterly = calcQuarterlyRate(rEnd, n);
 
-                // Lãi suất Ban hành Thực tế QTD: Làm tròn an toàn xuống 0.05% (luôn <= trần lý thuyết)
-                const rMonthlyPromulgated = Math.floor(rMonthly * 20) / 20;
-                const rPrepaidPromulgated = Math.floor(rPrepaid * 20) / 20;
-                const rQuarterlyPromulgated = (rQuarterly !== null) ? Math.floor(rQuarterly * 20) / 20 : null;
+                // Lãi suất Ban hành Thực tế QTD: Làm tròn an toàn xuống mức tùy chỉnh margin (mặc định -0.05%)
+                const rMonthlyPromulgated = Math.max(0, Math.floor((rMonthly - margin) * 20) / 20);
+                const rPrepaidPromulgated = Math.max(0, Math.floor((rPrepaid - margin) * 20) / 20);
+                const rQuarterlyPromulgated = (rQuarterly !== null) ? Math.max(0, Math.floor((rQuarterly - margin) * 20) / 20) : null;
 
                 const interestEnd = roundToThousand(P * (rEnd / 100) * (n / 12));
                 const interestMonthly = roundToThousand(P * (rMonthly / 100) * (n / 12));
@@ -1541,22 +1556,37 @@
         }
 
         function selectTermAndDetail(n) {
+            initTermSelects();
             const sel = document.getElementById('select-term-detail');
             if (sel) sel.value = n;
+            const rateInput = document.getElementById('detail-rate-input');
+            if (rateInput) rateInput.value = (currentRates[n] || 6.0).toFixed(1);
             switchTab('tabTools');
             switchSubTab('tool-cashflow');
+            renderTab2Detail();
+        }
+
+        function onDetailTermChange() {
+            const sel = document.getElementById('select-term-detail');
+            const rateInput = document.getElementById('detail-rate-input');
+            if (sel && rateInput) {
+                const n = parseInt(sel.value) || 12;
+                rateInput.value = (currentRates[n] || 6.0).toFixed(1);
+            }
             renderTab2Detail();
         }
 
         function initTermSelects() {
             const sel = document.getElementById('select-term-detail');
             if (!sel) return;
+            const currentVal = sel.value;
             sel.innerHTML = '';
             TERMS.forEach(n => {
                 const opt = document.createElement('option');
                 opt.value = n;
                 opt.textContent = `Kỳ hạn ${n} tháng`;
-                if (n === 12) opt.selected = true;
+                if (currentVal && parseInt(currentVal) === n) opt.selected = true;
+                else if (!currentVal && n === 12) opt.selected = true;
                 sel.appendChild(opt);
             });
         }
@@ -1565,10 +1595,15 @@
         function renderTab2Detail() {
             const sel = document.getElementById('select-term-detail');
             if (!sel) return;
+            if (sel.options.length === 0) {
+                initTermSelects();
+            }
             const n = parseInt(sel.value) || 12;
             const principalInput = document.getElementById('detail-principal-input');
+            const rateInput = document.getElementById('detail-rate-input');
+
             const P = principalInput ? (parseVND(principalInput.value) || 100000000) : getPrincipal();
-            const rEnd = currentRates[n] || 0;
+            const rEnd = rateInput ? (parseFloat(rateInput.value) || 0) : (currentRates[n] || 0);
             
             const baseRateEl = document.getElementById('detail-base-rate');
             const principalEl = document.getElementById('detail-principal');
@@ -2097,6 +2132,11 @@
             if (activeBtn) {
                 activeBtn.classList.add('subtab-active');
                 activeBtn.classList.remove('text-slate-500');
+            }
+
+            if (subId === 'tool-cashflow') {
+                initTermSelects();
+                renderTab2Detail();
             }
         }
 
