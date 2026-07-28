@@ -706,13 +706,18 @@
                             
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                                 <div>
-                                    <label class="block font-semibold text-slate-600 mb-1">Họ và tên khách hàng</label>
+                                    <label class="block font-semibold text-slate-600 mb-1">Họ và tên khách hàng vay</label>
                                     <input type="text" id="qr-loan-name" value="NGUYEN VAN A" oninput="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
                                 </div>
                                 <div>
                                     <label class="block font-semibold text-slate-600 mb-1">Số Hợp đồng tín dụng (HĐTD)</label>
                                     <input type="text" id="qr-loan-contract" value="123/2026/HDTD" oninput="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-emerald-800">
                                 </div>
+                            </div>
+
+                            <div class="text-xs">
+                                <label class="block font-semibold text-slate-600 mb-1">Địa chỉ khách hàng vay</label>
+                                <input type="text" id="qr-loan-address" value="THON TAN LOC X QUY LOC" oninput="calcQRPayment()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -808,7 +813,7 @@
 
                             <div class="text-xs">
                                 <label class="block font-semibold text-slate-600 mb-1">Địa chỉ đăng ký</label>
-                                <input type="text" id="qr-sav-address" value="YEN THO DONG TRIEU QUANG NINH" oninput="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                <input type="text" id="qr-sav-address" value="THON TAN LOC X QUY LOC" oninput="calcQRSavings()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -1060,7 +1065,7 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
-        const CURRENT_APP_VERSION = "2026.07.28-v1.5";
+        const CURRENT_APP_VERSION = "2026.07.28-v1.6";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1876,6 +1881,7 @@
         function updateQRImageOnly() {
             const nameEl = document.getElementById('qr-loan-name');
             const contractEl = document.getElementById('qr-loan-contract');
+            const addressEl = document.getElementById('qr-loan-address');
             const principalPayEl = document.getElementById('qr-principal-pay');
             const finalAmountEl = document.getElementById('qr-final-amount');
 
@@ -1883,17 +1889,16 @@
 
             const rawName = nameEl.value;
             const rawContract = contractEl.value;
+            const rawAddress = addressEl ? addressEl.value : "THON TAN LOC X QUY LOC";
             const principalPay = parseVND(principalPayEl.value);
             const finalAmount = parseVND(finalAmountEl.value);
 
             const nameClean = removeVietnameseTones(rawName);
             const contractClean = removeVietnameseTones(rawContract);
+            const addressClean = removeVietnameseTones(rawAddress);
 
-            let memo = `${nameClean} TRA LAI `;
-            if (principalPay > 0) {
-                memo = `${nameClean} TRA LAI VA GOC `;
-            }
-            memo += `HDTD SO ${contractClean}`;
+            let prefix = (principalPay > 0) ? "TRA LAI VA GOC" : "TRA LAI";
+            let memo = `${prefix} HDTD SO ${contractClean} KH ${nameClean} ${addressClean}`.trim();
 
             const memoTextEl = document.getElementById('qr-memo-text');
             const cardMemoEl = document.getElementById('qr-card-memo');
