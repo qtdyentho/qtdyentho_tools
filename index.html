@@ -747,7 +747,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                                 <div>
                                     <label class="block font-semibold text-slate-600 mb-1">Số tiền trả Gốc kỳ này (Nếu có)</label>
-                                    <input type="text" id="qr-principal-pay" value="5.000.000" oninput="formatVNDInput(this); calcQRPayment();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
+                                    <input type="text" id="qr-principal-pay" value="0" oninput="formatVNDInput(this); calcQRPayment();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
                                 </div>
                                 <div>
                                     <label class="block font-semibold text-slate-600 mb-1">Tiền Lãi phát sinh (Làm tròn nghìn)</label>
@@ -757,7 +757,7 @@
 
                             <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
                                 <label class="block font-bold text-emerald-900 text-xs mb-1">Tổng Số Tiền Chuyển Khoản Mã QR (Có thể sửa thực tế)</label>
-                                <input type="text" id="qr-final-amount" value="5.740.000" oninput="formatVNDInput(this); updateQRImageOnly();" class="w-full px-3 py-2 border-2 border-emerald-500 rounded-lg font-extrabold text-emerald-900 text-base bg-white">
+                                <input type="text" id="qr-final-amount" value="740.000" oninput="formatVNDInput(this); updateQRImageOnly();" class="w-full px-3 py-2 border-2 border-emerald-500 rounded-lg font-extrabold text-emerald-900 text-base bg-white">
                             </div>
 
                             <div>
@@ -1081,7 +1081,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v1.9";
+                    const thisVersion = "2026.07.28-v2.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1091,7 +1091,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v1.9";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1122,7 +1122,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v1.9';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1959,7 +1959,8 @@
             const addressClean = removeVietnameseTones(rawAddress);
 
             let prefix = (principalPay > 0) ? "TRA LAI VA GOC" : "TRA LAI";
-            let memo = `${prefix} HDTD SO ${contractClean} KH ${nameClean} ${addressClean}`.trim();
+            let memoRaw = `${prefix} HDTD SO ${contractClean} KH ${nameClean} ${addressClean}`;
+            let memo = removeVietnameseTones(memoRaw);
 
             const memoTextEl = document.getElementById('qr-memo-text');
             const cardMemoEl = document.getElementById('qr-card-memo');
@@ -2003,8 +2004,10 @@
             const nameClean = removeVietnameseTones(rawName);
             const cccdClean = removeVietnameseTones(rawCccd);
             const addrClean = removeVietnameseTones(rawAddr);
+            const typeClean = removeVietnameseTones(type);
 
-            const memo = `${nameClean} CCCD ${cccdClean} ${addrClean} GUI TK KY HAN ${term} THANG SO TIEN ${formatVND(amount)} ${type}`;
+            const memoRaw = `${nameClean} CCCD ${cccdClean} ${addrClean} GUI TK KY HAN ${term} THANG SO TIEN ${Math.round(amount)} ${typeClean}`;
+            const memo = removeVietnameseTones(memoRaw);
 
             const memoTextEl = document.getElementById('qr-sav-memo-text');
             const cardMemoEl = document.getElementById('qr-sav-card-memo');
