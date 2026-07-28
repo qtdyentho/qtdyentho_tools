@@ -280,10 +280,11 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Chế độ hiển thị</label>
-                            <select id="view-mode" onchange="renderTable1()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 focus:ring-2 focus:ring-emerald-500">
+                            <select id="view-mode" onchange="renderTable1()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 bg-emerald-50 border-emerald-300 focus:ring-2 focus:ring-emerald-500">
+                                <option value="promulgated" selected>🏛️ Biểu Lãi Suất Ban Hành QTD (An toàn & Thực tế)</option>
+                                <option value="both">📐 Quy Đổi Lý Thuyết & Số Tiền</option>
                                 <option value="rates">Chỉ xem Lãi suất (%/năm)</option>
                                 <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
-                                <option value="both" selected>Xem Cả Lãi suất & Số tiền</option>
                             </select>
                         </div>
                     </div>
@@ -1081,7 +1082,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.0";
+                    const thisVersion = "2026.07.28-v2.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1091,7 +1092,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.0";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1122,7 +1123,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1452,18 +1453,42 @@
                 const rPrepaid = calcPrepaidRate(rEnd, n);
                 const rQuarterly = calcQuarterlyRate(rEnd, n);
 
+                // Lãi suất Ban hành Thực tế QTD: Làm tròn an toàn xuống 0.05% (luôn <= trần lý thuyết)
+                const rMonthlyPromulgated = Math.floor(rMonthly * 20) / 20;
+                const rPrepaidPromulgated = Math.floor(rPrepaid * 20) / 20;
+                const rQuarterlyPromulgated = (rQuarterly !== null) ? Math.floor(rQuarterly * 20) / 20 : null;
+
                 const interestEnd = roundToThousand(P * (rEnd / 100) * (n / 12));
                 const interestMonthly = roundToThousand(P * (rMonthly / 100) * (n / 12));
                 const interestPrepaid = roundToThousand(P * (rPrepaid / 100) * (n / 12));
                 const interestQuarterly = (rQuarterly !== null) ? roundToThousand(P * (rQuarterly / 100) * (n / 12)) : null;
                 const interestInstallment = roundToThousand(calcInstallmentInterest(P, rEnd, n));
 
+                const interestMonthlyPromulgated = roundToThousand(P * (rMonthlyPromulgated / 100) * (n / 12));
+                const interestPrepaidPromulgated = roundToThousand(P * (rPrepaidPromulgated / 100) * (n / 12));
+                const interestQuarterlyPromulgated = (rQuarterlyPromulgated !== null) ? roundToThousand(P * (rQuarterlyPromulgated / 100) * (n / 12)) : null;
+
                 const diffMonthly = interestEnd - interestMonthly;
                 const diffPrepaid = interestEnd - interestPrepaid;
 
                 let colEnd, colMonthly, colPrepaid, colQuarterly, colInstallment;
 
-                if (viewMode === 'rates') {
+                if (viewMode === 'promulgated') {
+                    const diffM = (rMonthly - rMonthlyPromulgated).toFixed(2);
+                    const diffP = (rPrepaid - rPrepaidPromulgated).toFixed(2);
+
+                    colEnd = `<b class="text-emerald-950">${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestEnd)} đ</span>`;
+                    
+                    colMonthly = `<b class="text-emerald-700 text-base">${rMonthlyPromulgated.toFixed(2)}%</b> <span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn (-${diffM}%)</span><br><span class="text-xs font-semibold text-slate-700">${formatVND(interestMonthlyPromulgated)} đ</span><br><span class="text-[10px] text-slate-400">Trần lý thuyết: ${rMonthly.toFixed(2)}%</span>`;
+
+                    colPrepaid = `<b class="text-emerald-700 text-base">${rPrepaidPromulgated.toFixed(2)}%</b> <span class="inline-block px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">✅ An toàn (-${diffP}%)</span><br><span class="text-xs font-semibold text-slate-700">${formatVND(interestPrepaidPromulgated)} đ</span><br><span class="text-[10px] text-slate-400">Trần lý thuyết: ${rPrepaid.toFixed(2)}%</span>`;
+
+                    colQuarterly = (rQuarterlyPromulgated !== null) 
+                        ? `<b class="text-emerald-700 text-base">${rQuarterlyPromulgated.toFixed(2)}%</b><br><span class="text-xs font-semibold text-slate-700">${formatVND(interestQuarterlyPromulgated)} đ</span><br><span class="text-[10px] text-slate-400">Trần lý thuyết: ${rQuarterly.toFixed(2)}%</span>` 
+                        : `<span class="text-slate-400 italic">K.Áp dụng</span>`;
+
+                    colInstallment = `<b>${rEnd.toFixed(2)}%</b><br><span class="text-xs text-slate-500">${formatVND(interestInstallment)} đ</span>`;
+                } else if (viewMode === 'rates') {
                     colEnd = `${rEnd.toFixed(2)} %/năm`;
                     colMonthly = `${rMonthly.toFixed(2)} %/năm`;
                     colPrepaid = `${rPrepaid.toFixed(2)} %/năm`;
@@ -2125,6 +2150,10 @@
                 activeMobBtn.classList.remove('text-emerald-200');
             }
 
+            if (tabId === 'tab1') {
+                renderTable1();
+            }
+
             if (tabId === 'tabQR') {
                 calcQRPayment();
                 calcQRSavings();
@@ -2207,8 +2236,8 @@
             showToast("Đã xuất file Excel thành công!");
         }
 
-        // Initialize App
-        window.onload = function() {
+        // Initialize All Components Immediately
+        function initAllAppComponents() {
             initTermSelects();
             renderTable1();
             renderTab2Detail();
@@ -2220,7 +2249,17 @@
             calcRepaymentSchedule();
             calcQRPayment();
             calcQRSavings();
-            // Tự động kiểm tra bản cập nhật ngầm khi mở app nếu máy có Internet
+        }
+
+        // Tự động kích hoạt ngay khi DOM parsed xong
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAllAppComponents);
+        } else {
+            initAllAppComponents();
+        }
+
+        window.onload = function() {
+            initAllAppComponents();
             autoCheckUpdateOnStartup();
         };
     </script>
