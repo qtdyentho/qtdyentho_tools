@@ -868,8 +868,9 @@
                                 <p class="text-xs text-slate-300 font-mono">COOPBANK - <span id="qr-disp-acc">3800001234567899</span></p>
                             </div>
 
-                            <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-emerald-500">
-                                <img id="qr-code-img" src="" alt="Mã QR Thanh Toán SePay" class="w-56 h-56 object-contain">
+                            <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-emerald-500 relative flex items-center justify-center">
+                                <img id="qr-code-img" src="" alt="Mã QR Thanh Toán QTD Yên Thọ" class="w-56 h-56 object-contain">
+                                <img src="./LOgoQR.jpg" alt="Logo QTD" class="absolute w-12 h-12 rounded-full border-2 border-white shadow-md object-cover bg-white p-0.5" title="Logo QTDND Yên Thọ">
                             </div>
 
                             <div class="w-full bg-slate-800 p-3 rounded-xl text-xs space-y-1 text-slate-300">
@@ -954,8 +955,9 @@
                                 <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800001234567899</span></p>
                             </div>
 
-                            <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-blue-500">
-                                <img id="qr-sav-code-img" src="" alt="Mã QR Gửi Tiết Kiệm SePay" class="w-56 h-56 object-contain">
+                            <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-blue-500 relative flex items-center justify-center">
+                                <img id="qr-sav-code-img" src="" alt="Mã QR Gửi Tiết Kiệm QTD Yên Thọ" class="w-56 h-56 object-contain">
+                                <img src="./LOgoQR.jpg" alt="Logo QTD" class="absolute w-12 h-12 rounded-full border-2 border-white shadow-md object-cover bg-white p-0.5" title="Logo QTDND Yên Thọ">
                             </div>
 
                             <div class="w-full bg-slate-800 p-3 rounded-xl text-xs space-y-1 text-slate-300">
@@ -1408,7 +1410,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v3.3";
+                    const thisVersion = "2026.07.28-v3.4";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1418,7 +1420,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v3.3";
+        const CURRENT_APP_VERSION = "2026.07.28-v3.4";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1459,7 +1461,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v3.3';
+                        const CACHE_NAME = 'qtd-tools-cache-v3.4';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3162,8 +3164,8 @@
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(finalAmount)} đ`;
 
             if (codeImgEl) {
-                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}`;
-                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-compact2.png?amount=${finalAmount}&addInfo=${encodeURIComponent(memo)}`;
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}&template=qr_only`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${finalAmount}&addInfo=${encodeURIComponent(memo)}`;
                 
                 codeImgEl.onerror = function() {
                     this.onerror = null;
@@ -3209,8 +3211,8 @@
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(amount)} đ`;
 
             if (codeImgEl) {
-                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}`;
-                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}&template=qr_only`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
                 
                 codeImgEl.onerror = function() {
                     this.onerror = null;
@@ -3220,16 +3222,83 @@
             }
         }
 
+        // Helper: Tải mã QR thương hiệu ghép Logo QTDND Yên Thọ (LOgoQR.jpg) ở tâm
         function downloadQRImage(elementId) {
-            const img = document.getElementById(elementId);
-            if (!img || !img.src) return;
-            const a = document.createElement('a');
-            a.href = img.src;
-            a.download = `VietQR_QTDND_YenTho_${Date.now()}.png`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            showToast("Đã tải mã QR về máy!");
+            const qrImg = document.getElementById(elementId);
+            if (!qrImg || !qrImg.src) return;
+
+            showToast("Đang tạo mã QR thương hiệu QTD Yên Thọ...");
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const canvasSize = 600;
+            canvas.width = canvasSize;
+            canvas.height = canvasSize;
+
+            // Nền trắng
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvasSize, canvasSize);
+
+            // Nạp và vẽ Ma trận Mã QR
+            const rawQR = new Image();
+            rawQR.crossOrigin = 'Anonymous';
+            rawQR.onload = function() {
+                ctx.drawImage(rawQR, 0, 0, canvasSize, canvasSize);
+
+                // Nạp và vẽ Logo Quỹ (LOgoQR.jpg) ở tâm
+                const logo = new Image();
+                logo.crossOrigin = 'Anonymous';
+                logo.onload = function() {
+                    const logoSize = canvasSize * 0.20; // 20% kích thước QR (chuẩn an toàn ISO/IEC 18004)
+                    const logoX = (canvasSize - logoSize) / 2;
+                    const logoY = (canvasSize - logoSize) / 2;
+
+                    // Vẽ hình tròn nền trắng + đường viền bảo vệ xung quanh Logo
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(canvasSize / 2, canvasSize / 2, (logoSize / 2) + 6, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = '#047857';
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Vẽ Logo Quỹ bo tròn ở tâm
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(canvasSize / 2, canvasSize / 2, logoSize / 2, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
+                    ctx.restore();
+
+                    // Tải tệp PNG thương hiệu về máy
+                    const a = document.createElement('a');
+                    a.href = canvas.toDataURL('image/png');
+                    a.download = `VietQR_QTDND_YenTho_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    showToast("Đã tải mã QR thương hiệu QTD Yên Thọ!");
+                };
+
+                logo.onerror = function() {
+                    // Fallback tải ảnh nếu Logo không nạp được
+                    const a = document.createElement('a');
+                    a.href = qrImg.src;
+                    a.download = `VietQR_QTDND_YenTho_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    showToast("Đã tải mã QR về máy!");
+                };
+                logo.src = './LOgoQR.jpg';
+            };
+
+            rawQR.onerror = function() {
+                showToast("Lỗi tải ảnh mã QR!");
+            };
+            rawQR.src = qrImg.src;
         }
 
         function shareQRImage(elementId) {
