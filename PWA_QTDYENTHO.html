@@ -488,7 +488,13 @@
 
                         <!-- Right 7 cols: Repayment Schedule Generator -->
                         <div class="lg:col-span-7 space-y-4">
-                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">2. Lập Lịch Trả Nợ Chi Tiết Khoản Vay</h3>
+                            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                                <h3 class="font-bold text-slate-800 text-sm">2. Lập Lịch Trả Nợ Chi Tiết Khoản Vay</h3>
+                                <button onclick="exportLoanScheduleToExcel()" class="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                                    <svg class="w-3.5 h-3.5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>📊 Xuất Lịch Trả Nợ Excel</span>
+                                </button>
+                            </div>
                             
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                                 <div>
@@ -548,6 +554,65 @@
                                         <!-- Schedule rows populated via JS -->
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Quy Đổi Lãi Suất Tiền Vay (Tháng <-> Năm) -->
+                    <div class="pt-6 border-t border-slate-200">
+                        <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white rounded-2xl p-5 shadow-sm space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-700/60 pb-3">
+                                <h3 class="font-bold text-base flex items-center gap-2 text-emerald-100">
+                                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                    3. Công Cụ Quy Đổi Lãi Suất Tiền Vay (Tháng ⇆ Năm)
+                                </h3>
+                                <span class="text-xs px-2.5 py-1 bg-emerald-800/80 text-emerald-200 rounded-lg font-medium border border-emerald-600/40">Tính toán 2 chiều linh hoạt</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Chiều 1: Tháng -> Năm -->
+                                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 space-y-3">
+                                    <h4 class="font-bold text-xs text-emerald-200 uppercase tracking-wider">Chiều 1: Quy đổi từ Lãi suất THÁNG sang NĂM</h4>
+                                    <div>
+                                        <label class="block text-xs text-slate-200 mb-1">Lãi suất tháng (%/tháng)</label>
+                                        <div class="relative">
+                                            <input type="number" step="0.01" id="rate-conv-monthly" value="0.75" oninput="convertLoanRateFromMonthly()" class="w-full px-3 py-2 bg-white text-slate-900 font-extrabold text-sm rounded-lg border border-emerald-400 focus:ring-2 focus:ring-emerald-300 pr-10">
+                                            <span class="absolute right-3 top-2 text-xs font-bold text-slate-500">%/tháng</span>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 border-t border-white/10 space-y-1.5 text-xs">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-emerald-200">Lãi suất năm phẳng ($r_{\text{năm}} = r_m \times 12$):</span>
+                                            <b id="rate-conv-res-annual-flat" class="text-emerald-300 text-sm font-extrabold">9.00 %/năm</b>
+                                        </div>
+                                        <div class="flex justify-between items-center text-[11px]">
+                                            <span class="text-slate-300">Lãi suất năm hiệu dụng (Kép):</span>
+                                            <b id="rate-conv-res-annual-eff" class="text-teal-200 font-bold">9.38 %/năm</b>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Chiều 2: Năm -> Tháng -->
+                                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 space-y-3">
+                                    <h4 class="font-bold text-xs text-teal-200 uppercase tracking-wider">Chiều 2: Quy đổi từ Lãi suất NĂM sang THÁNG</h4>
+                                    <div>
+                                        <label class="block text-xs text-slate-200 mb-1">Lãi suất năm (%/năm)</label>
+                                        <div class="relative">
+                                            <input type="number" step="0.1" id="rate-conv-annual" value="9.0" oninput="convertLoanRateFromAnnual()" class="w-full px-3 py-2 bg-white text-slate-900 font-extrabold text-sm rounded-lg border border-teal-400 focus:ring-2 focus:ring-teal-300 pr-10">
+                                            <span class="absolute right-3 top-2 text-xs font-bold text-slate-500">%/năm</span>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 border-t border-white/10 space-y-1.5 text-xs">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-teal-200">Lãi suất tháng phẳng ($r_m = r_{\text{năm}} / 12$):</span>
+                                            <b id="rate-conv-res-monthly-flat" class="text-teal-300 text-sm font-extrabold">0.75 %/tháng</b>
+                                        </div>
+                                        <div class="flex justify-between items-center text-[11px]">
+                                            <span class="text-slate-300">Tương đương tiền lãi 100 triệu/tháng:</span>
+                                            <b id="rate-conv-res-monthly-vnd" class="text-emerald-200 font-bold">750.000 đ/tháng</b>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -913,136 +978,212 @@
         <!-- ==================== TAB 4: TÀI LIỆU & CÔNG THỨC ==================== -->
         <div id="tab4" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-6">
-                <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
-                        <span class="w-2.5 h-6 bg-emerald-700 rounded-full inline-block"></span>
-                        Cơ Sở Toán Học & Giải Thích Chi Tiết Thông Số Công Thức
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-1">Bảng tổng hợp công thức quy đổi lãi suất tiền gửi, rút trước hạn Thông tư 04 và lập lịch trả nợ tiền vay tại Quỹ Tín dụng Nhân dân Yên Thọ.</p>
+                <!-- Subtab Navigation Header -->
+                <div class="flex border-b border-slate-200 pb-2 overflow-x-auto gap-2">
+                    <button onclick="switchDocSubTab('doc-formulas')" id="subtab-doc-formulas" class="py-2.5 px-4 font-bold text-sm doc-subtab-active transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        <span>Công thức</span>
+                    </button>
+                    <button onclick="switchDocSubTab('doc-operations')" id="subtab-doc-operations" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <span>Nghiệp vụ</span>
+                    </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-700">
-                    <!-- 1. Lãi hàng tháng -->
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            1. Lĩnh Lãi Hàng Tháng ($r_m$)
-                        </h3>
-                        <p class="text-xs text-slate-600">Quy đổi lãi suất tương đương khi trả lãi định kỳ mỗi tháng:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
-                            $$r_m = \frac{r}{1 + r \times \frac{n-1}{24}}$$
-                        </div>
-                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
-                                <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi ($n \ge 1$).</li>
-                                <li><b>$r_m$</b>: Lãi suất quy đổi tương đương trả hàng tháng (%/năm).</li>
-                                <li><b>$24$</b>: Hằng số quy đổi chu kỳ kép ($2 \times 12$ tháng/năm).</li>
-                            </ul>
-                        </div>
+                <!-- SUBTAB 1: CÔNG THỨC -->
+                <div id="doc-formulas" class="doc-subtab-content space-y-6">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
+                            <span class="w-2.5 h-6 bg-emerald-700 rounded-full inline-block"></span>
+                            Cơ Sở Toán Học & Giải Thích Chi Tiết Thông Số Công Thức
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Bảng tổng hợp công thức quy đổi lãi suất tiền gửi, rút trước hạn Thông tư 04, quy đổi lãi vay tháng/năm và lập lịch trả nợ tiền vay tại Quỹ Tín dụng Nhân dân Yên Thọ.</p>
                     </div>
 
-                    <!-- 2. Lãi trước -->
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            2. Lĩnh Lãi Trước ($r_{pre}$)
-                        </h3>
-                        <p class="text-xs text-slate-600">Trả toàn bộ tiền lãi ngay khi gửi ($t=0$):</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
-                            $$r_{pre} = \frac{r}{1 + r \times \frac{n}{12}}$$
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-700">
+                        <!-- 1. Lãi hàng tháng -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                1. Lĩnh Lãi Hàng Tháng ($r_m$)
+                            </h3>
+                            <p class="text-xs text-slate-600">Quy đổi lãi suất tương đương khi trả lãi định kỳ mỗi tháng:</p>
+                            <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
+                                $$r_m = \frac{r}{1 + r \times \frac{n-1}{24}}$$
+                            </div>
+                            <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
+                                    <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi ($n \ge 1$).</li>
+                                    <li><b>$r_m$</b>: Lãi suất quy đổi tương đương trả hàng tháng (%/năm).</li>
+                                    <li><b>$24$</b>: Hằng số quy đổi chu kỳ kép ($2 \times 12$ tháng/năm).</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
-                                <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi.</li>
-                                <li><b>$r_{pre}$</b>: Lãi suất quy đổi tương đương lĩnh lãi trước (%/năm).</li>
-                                <li><b>$12$</b>: Tổng số tháng trong một năm.</li>
-                            </ul>
+
+                        <!-- 2. Lãi trước -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                2. Lĩnh Lãi Trước ($r_{pre}$)
+                            </h3>
+                            <p class="text-xs text-slate-600">Trả toàn bộ tiền lãi ngay khi gửi ($t=0$):</p>
+                            <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
+                                $$r_{pre} = \frac{r}{1 + r \times \frac{n}{12}}$$
+                            </div>
+                            <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
+                                    <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi.</li>
+                                    <li><b>$r_{pre}$</b>: Lãi suất quy đổi tương đương lĩnh lãi trước (%/năm).</li>
+                                    <li><b>$12$</b>: Tổng số tháng trong một năm.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 3. Lãi hàng quý -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                3. Lĩnh Lãi Hàng Quý ($r_q$)
+                            </h3>
+                            <p class="text-xs text-slate-600">Trả lãi định kỳ 3 tháng/lần (Áp dụng $n \ge 3$ tháng):</p>
+                            <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
+                                $$r_q = \frac{r}{1 + r \times \frac{n-3}{24}}$$
+                            </div>
+                            <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
+                                    <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi ($n \ge 3$).</li>
+                                    <li><b>$r_q$</b>: Lãi suất quy đổi tương đương lĩnh lãi quý (%/năm).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 4. Gửi góp định kỳ -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                4. Gửi Góp Định Kỳ Hàng Tháng
+                            </h3>
+                            <p class="text-xs text-slate-600">Tiền lãi tích lũy khi gửi cố định $S$ vào đầu mỗi tháng:</p>
+                            <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
+                                $$\text{Lãi} = S \times r \times \frac{n(n+1)}{24}$$
+                            </div>
+                            <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$S$</b>: Số tiền gửi cố định đầu mỗi tháng ($S = P / n$).</li>
+                                    <li><b>$r$</b>: Lãi suất tiền gửi góp (%/năm).</li>
+                                    <li><b>$n$</b>: Tổng số tháng tích lũy.</li>
+                                    <li><b>$\frac{n(n+1)}{24}$</b>: Hệ số tổng chuỗi tích lũy số tháng tính lãi.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 5. TT04 Rút trước hạn 1 phần -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-amber-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+                                5. Rút Tiết Kiệm Trước Hạn 1 Phần (TT 04/2022)
+                            </h3>
+                            <p class="text-xs text-slate-600">Công thức phân tách lãi suất phần rút và phần giữ lại:</p>
+                            <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                                $$\text{Tổng Lãi} = P_{\text{rút}} \times r_{\text{kkh}} \times \frac{d}{365} + P_{\text{còn}} \times r_{\text{ck}} \times \frac{n}{12}$$
+                            </div>
+                            <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Giải thích thông số:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$P_{\text{rút}}$</b>: Số tiền tiết kiệm thành viên rút trước hạn.</li>
+                                    <li><b>$r_{\text{kkh}}$</b>: Lãi suất Không kỳ hạn (%/năm) áp dụng cho phần rút.</li>
+                                    <li><b>$d$</b>: Số ngày thực tế từ lúc gửi đến khi rút trước hạn.</li>
+                                    <li><b>$P_{\text{còn}}$</b>: Tiền gốc còn lại tiếp tục giữ nguyên kỳ hạn ($P - P_{\text{rút}}$).</li>
+                                    <li><b>$r_{\text{ck}}$</b>: Lãi suất cam kết ban đầu trên sổ tiết kiệm (%/năm).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 6. Trả nợ cố định Annuity -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-teal-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+                                6. Trả Nợ Cố Định Hàng Tháng (Annuity Loan)
+                            </h3>
+                            <p class="text-xs text-slate-600">Tổng tiền trả cố định hàng tháng (Gốc + Lãi dư nợ):</p>
+                            <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                                $$\text{Trả Hàng Tháng} = P \times \frac{r_m (1 + r_m)^n}{(1 + r_m)^n - 1}$$
+                            </div>
+                            <div class="p-3 bg-teal-50/70 border border-teal-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-teal-950 border-b border-teal-200 pb-1">📌 Giải thích thông số:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$P$</b>: Số tiền vay ban đầu (Dư nợ gốc ban đầu).</li>
+                                    <li><b>$r_m$</b>: Lãi suất vay hàng tháng ($r_m = r_{\text{năm}} / 12$).</li>
+                                    <li><b>$n$</b>: Tổng thời gian vay tính theo tháng.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 7. Quy đổi Lãi suất Tiền vay Tháng <-> Năm -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 md:col-span-2">
+                            <h3 class="font-bold text-indigo-900 text-base flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                                7. Quy Đổi Lãi Suất Tiền Vay (Tháng ⇆ Năm)
+                            </h3>
+                            <p class="text-xs text-slate-600">Công thức quy đổi tương đương hai chiều giữa Lãi suất tháng (%/tháng) và Lãi suất năm (%/năm):</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-sm shadow-sm overflow-x-auto">
+                                    $$\text{Lãi suất tháng} \rightarrow \text{Năm}: r_{\text{năm}} = r_m \times 12$$
+                                </div>
+                                <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-sm shadow-sm overflow-x-auto">
+                                    $$\text{Lãi suất năm} \rightarrow \text{Tháng}: r_m = \frac{r_{\text{năm}}}{12}$$
+                                </div>
+                            </div>
+                            <div class="p-3 bg-indigo-50/70 border border-indigo-200/80 rounded-lg text-xs space-y-1">
+                                <p class="font-bold text-indigo-950 border-b border-indigo-200 pb-1">📌 Giải thích thông số công thức:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                    <li><b>$r_{\text{năm}}$</b>: Lãi suất cho vay tính theo năm (%/năm).</li>
+                                    <li><b>$r_m$</b>: Lãi suất cho vay tính theo tháng (%/tháng).</li>
+                                    <li><b>$12$</b>: Hằng số quy đổi tổng số tháng trong một năm tài chính ($12$ tháng/năm).</li>
+                                    <li><b>Lãi suất năm hiệu dụng (Kép)</b>: $r_{\text{năm eff}} = (1 + r_m)^{12} - 1$ (Áp dụng khi tính tổng chi phí vốn vay theo cơ chế lãi nhập gốc kép).</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- 3. Lãi hàng quý -->
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            3. Lĩnh Lãi Hàng Quý ($r_q$)
-                        </h3>
-                        <p class="text-xs text-slate-600">Trả lãi định kỳ 3 tháng/lần (Áp dụng $n \ge 3$ tháng):</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
-                            $$r_q = \frac{r}{1 + r \times \frac{n-3}{24}}$$
-                        </div>
-                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                <li><b>$r$</b>: Lãi suất niêm yết trả lãi cuối kỳ cố định (%/năm).</li>
-                                <li><b>$n$</b>: Số tháng của kỳ hạn tiền gửi ($n \ge 3$).</li>
-                                <li><b>$r_q$</b>: Lãi suất quy đổi tương đương lĩnh lãi quý (%/năm).</li>
-                            </ul>
-                        </div>
+                <!-- SUBTAB 2: NGHIỆP VỤ -->
+                <div id="doc-operations" class="doc-subtab-content hidden space-y-6">
+                    <div class="pb-3 border-b border-slate-100">
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-6 bg-teal-700 rounded-full inline-block"></span>
+                            Quy Định & Hướng Dẫn Nghiệp Vụ Quỹ Tín Dụng Nhân Dân Yên Thọ
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Hệ thống văn bản quy định, quy trình nghiệp vụ huy động vốn, cho vay và thanh toán VietQR.</p>
                     </div>
 
-                    <!-- 4. Gửi góp định kỳ -->
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-emerald-900 text-base flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            4. Gửi Góp Định Kỳ Hàng Tháng
-                        </h3>
-                        <p class="text-xs text-slate-600">Tiền lãi tích lũy khi gửi cố định $S$ vào đầu mỗi tháng:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-base shadow-sm">
-                            $$\text{Lãi} = S \times r \times \frac{n(n+1)}{24}$$
-                        </div>
-                        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                <li><b>$S$</b>: Số tiền gửi cố định đầu mỗi tháng ($S = P / n$).</li>
-                                <li><b>$r$</b>: Lãi suất tiền gửi góp (%/năm).</li>
-                                <li><b>$n$</b>: Tổng số tháng tích lũy.</li>
-                                <li><b>$\frac{n(n+1)}{24}$</b>: Hệ số tổng chuỗi tích lũy số tháng tính lãi.</li>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-emerald-50/60 border border-emerald-200 rounded-xl space-y-2">
+                            <h3 class="font-bold text-emerald-900 text-sm flex items-center gap-2">
+                                📌 Nghiệp Vụ Tiền Gửi & Tiết Kiệm
+                            </h3>
+                            <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+                                <li>Tuân thủ quy định ban hành biểu lãi suất tiền gửi của QTDND Yên Thọ.</li>
+                                <li>Áp dụng Thông tư 04/2022/TT-NHNN về rút trước hạn một phần tiền gửi.</li>
+                                <li>Quy trình cấp sổ tiết kiệm, niêm yết và tư vấn phương thức nhận lãi.</li>
                             </ul>
                         </div>
-                    </div>
 
-                    <!-- 5. TT04 Rút trước hạn 1 phần -->
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-amber-900 text-base flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-amber-600"></span>
-                            5. Rút Tiết Kiệm Trước Hạn 1 Phần (TT 04/2022)
-                        </h3>
-                        <p class="text-xs text-slate-600">Công thức phân tách lãi suất phần rút và phần giữ lại:</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
-                            $$\text{Tổng Lãi} = P_{\text{rút}} \times r_{\text{kkh}} \times \frac{d}{365} + P_{\text{còn}} \times r_{\text{ck}} \times \frac{n}{12}$$
-                        </div>
-                        <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Giải thích thông số:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                <li><b>$P_{\text{rút}}$</b>: Số tiền tiết kiệm thành viên rút trước hạn.</li>
-                                <li><b>$r_{\text{kkh}}$</b>: Lãi suất Không kỳ hạn (%/năm) áp dụng cho phần rút.</li>
-                                <li><b>$d$</b>: Số ngày thực tế từ lúc gửi đến khi rút trước hạn.</li>
-                                <li><b>$P_{\text{còn}}$</b>: Tiền gốc còn lại tiếp tục giữ nguyên kỳ hạn ($P - P_{\text{rút}}$).</li>
-                                <li><b>$r_{\text{ck}}$</b>: Lãi suất cam kết ban đầu trên sổ tiết kiệm (%/năm).</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- 6. Trả nợ cố định Annuity -->
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-teal-900 text-base flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-teal-600"></span>
-                            6. Trả Nợ Cố Định Hàng Tháng (Annuity Loan)
-                        </h3>
-                        <p class="text-xs text-slate-600">Tổng tiền trả cố định hàng tháng (Gốc + Lãi dư nợ):</p>
-                        <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
-                            $$\text{Trả Hàng Tháng} = P \times \frac{r_m (1 + r_m)^n}{(1 + r_m)^n - 1}$$
-                        </div>
-                        <div class="p-3 bg-teal-50/70 border border-teal-200/80 rounded-lg text-xs space-y-1">
-                            <p class="font-bold text-teal-950 border-b border-teal-200 pb-1">📌 Giải thích thông số:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                <li><b>$P$</b>: Số tiền vay ban đầu (Dư nợ gốc ban đầu).</li>
-                                <li><b>$r_m$</b>: Lãi suất vay hàng tháng ($r_m = r_{\text{năm}} / 12$).</li>
-                                <li><b>$n$</b>: Tổng thời gian vay tính theo tháng.</li>
+                        <div class="p-4 bg-teal-50/60 border border-teal-200 rounded-xl space-y-2">
+                            <h3 class="font-bold text-teal-900 text-sm flex items-center gap-2">
+                                📌 Nghiệp Vụ Cho Vay & Quản Lý Nợ
+                            </h3>
+                            <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+                                <li>Quy trình thẩm định hạn mức vay vốn dựa trên thu nhập ròng & DTI.</li>
+                                <li>Lập lịch trả nợ theo phương thức dư nợ giảm dần hoặc Annuity.</li>
+                                <li>Tạo mã VietQR chuyển khoản thu nợ chính xác thông tin HĐTD.</li>
                             </ul>
                         </div>
                     </div>
@@ -1101,7 +1242,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.4";
+                    const thisVersion = "2026.07.28-v2.5";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1111,7 +1252,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.4";
+        const CURRENT_APP_VERSION = "2026.07.28-v2.5";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1142,7 +1283,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.4';
+                        const CACHE_NAME = 'qtd-tools-cache-v2.5';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1937,6 +2078,112 @@
             if (maxMonthlyEl) maxMonthlyEl.textContent = `${formatVND(maxMonthlyPayment)} đ/tháng`;
         }
 
+        // Quy Đổi Lãi Suất Tiền Vay Tháng <-> Năm
+        function convertLoanRateFromMonthly() {
+            const monthlyEl = document.getElementById('rate-conv-monthly');
+            if (!monthlyEl) return;
+            const rm = parseFloat(monthlyEl.value) || 0;
+            const annualFlat = rm * 12;
+            const annualEff = (Math.pow(1 + rm / 100, 12) - 1) * 100;
+
+            const resFlatEl = document.getElementById('rate-conv-res-annual-flat');
+            const resEffEl = document.getElementById('rate-conv-res-annual-eff');
+            if (resFlatEl) resFlatEl.textContent = `${annualFlat.toFixed(2)} %/năm`;
+            if (resEffEl) resEffEl.textContent = `${annualEff.toFixed(2)} %/năm`;
+        }
+
+        function convertLoanRateFromAnnual() {
+            const annualEl = document.getElementById('rate-conv-annual');
+            if (!annualEl) return;
+            const ry = parseFloat(annualEl.value) || 0;
+            const rm = ry / 12;
+            const monthlyVnd = roundToThousand(100000000 * (rm / 100));
+
+            const resMonthlyFlatEl = document.getElementById('rate-conv-res-monthly-flat');
+            const resMonthlyVndEl = document.getElementById('rate-conv-res-monthly-vnd');
+            if (resMonthlyFlatEl) resMonthlyFlatEl.textContent = `${rm.toFixed(2)} %/tháng`;
+            if (resMonthlyVndEl) resMonthlyVndEl.textContent = `${formatVND(monthlyVnd)} đ/tháng`;
+        }
+
+        // Xuất File Excel Lịch Trả Nợ Chi Tiết Khoản Vay
+        function exportLoanScheduleToExcel() {
+            const amountEl = document.getElementById('loan-sched-amount');
+            const termEl = document.getElementById('loan-sched-term');
+            const rateEl = document.getElementById('loan-sched-rate');
+            const methodEl = document.getElementById('loan-sched-method');
+            const tbody = document.getElementById('loan-schedule-tbody');
+
+            if (!amountEl || !termEl || !rateEl || !methodEl || !tbody) return;
+
+            const amountText = amountEl.value;
+            const termText = termEl.value;
+            const rateText = rateEl.value;
+            const methodText = methodEl.options[methodEl.selectedIndex].text;
+            const totalPText = document.getElementById('loan-res-total-p')?.textContent || '';
+            const totalIText = document.getElementById('loan-res-total-i')?.textContent || '';
+            const totalAllText = document.getElementById('loan-res-total-all')?.textContent || '';
+
+            let html = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="utf-8"></head>
+                <body>
+                    <h2>QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h2>
+                    <h3>BẢNG CHI TIẾT LỊCH TRẢ NỢ TIỀN VAY</h3>
+                    <p><b>Số tiền vay:</b> ${amountText} VNĐ | <b>Thời hạn vay:</b> ${termText} tháng | <b>Lãi suất:</b> ${rateText}%/năm</p>
+                    <p><b>Phương thức trả nợ:</b> ${methodText}</p>
+                    <table border="1">
+                        <tr style="background-color: #065f46; color: white; font-weight: bold;">
+                            <th>Kỳ</th>
+                            <th>Dư Nợ Đầu Kỳ (VNĐ)</th>
+                            <th>Tiền Gốc Trả (VNĐ)</th>
+                            <th>Tiền Lãi Trả (VNĐ)</th>
+                            <th>Tổng Cộng Trả (VNĐ)</th>
+                            <th>Dư Nợ Cuối Kỳ (VNĐ)</th>
+                        </tr>
+            `;
+
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach(tr => {
+                const cols = tr.querySelectorAll('td');
+                if (cols.length >= 6) {
+                    html += `
+                        <tr>
+                            <td style="text-align: center;">${cols[0].innerText}</td>
+                            <td style="text-align: right;">${cols[1].innerText}</td>
+                            <td style="text-align: right;">${cols[2].innerText}</td>
+                            <td style="text-align: right;">${cols[3].innerText}</td>
+                            <td style="text-align: right; font-weight: bold;">${cols[4].innerText}</td>
+                            <td style="text-align: right;">${cols[5].innerText}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            html += `
+                        <tr style="background-color: #ecfdf5; font-weight: bold;">
+                            <td style="text-align: center;">TỔNG CỘNG</td>
+                            <td></td>
+                            <td style="text-align: right;">${totalPText}</td>
+                            <td style="text-align: right; color: #b45309;">${totalIText}</td>
+                            <td style="text-align: right; color: #065f46;">${totalAllText}</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Lich_Tra_No_QTDND_YenTho_${Date.now()}.xls`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("Đã xuất Lịch Trả Nợ Excel thành công!");
+        }
+
         function calcRepaymentSchedule() {
             const amountEl = document.getElementById('loan-sched-amount');
             const termEl = document.getElementById('loan-sched-term');
@@ -2221,6 +2468,28 @@
             }
         }
 
+        // Doc Subtab Navigation Switcher
+        function switchDocSubTab(docSubId) {
+            document.querySelectorAll('.doc-subtab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('button[id^="subtab-doc-"]').forEach(btn => {
+                btn.classList.remove('doc-subtab-active');
+                btn.classList.add('text-slate-500');
+            });
+
+            const target = document.getElementById(docSubId);
+            if (target) target.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`subtab-${docSubId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('doc-subtab-active');
+                activeBtn.classList.remove('text-slate-500');
+            }
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
         function switchQRTab(qrId) {
             document.querySelectorAll('.qr-subtab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('button[id^="subtab-qr-"]').forEach(btn => {
@@ -2368,6 +2637,8 @@
             calcSavingsGoal();
             calcLoanEstimate();
             calcRepaymentSchedule();
+            convertLoanRateFromMonthly();
+            convertLoanRateFromAnnual();
             calcQRPayment();
             calcQRSavings();
         }
