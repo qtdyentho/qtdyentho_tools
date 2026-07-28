@@ -488,12 +488,18 @@
 
                         <!-- Right 7 cols: Repayment Schedule Generator -->
                         <div class="lg:col-span-7 space-y-4">
-                            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2">
                                 <h3 class="font-bold text-slate-800 text-sm">2. Lập Lịch Trả Nợ Chi Tiết Khoản Vay</h3>
-                                <button onclick="exportLoanScheduleToExcel()" class="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
-                                    <svg class="w-3.5 h-3.5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                    <span>📊 Xuất Lịch Trả Nợ Excel</span>
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="exportLoanScheduleToExcel()" class="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                                        <svg class="w-3.5 h-3.5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                        <span>📊 Xuất Excel</span>
+                                    </button>
+                                    <button onclick="exportLoanScheduleToPDF()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                                        <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H7a2 2 0 00-2 2v4h10z"></path></svg>
+                                        <span>🖨️ Xuất PDF</span>
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -1401,7 +1407,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v2.9";
+                    const thisVersion = "2026.07.28-v3.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1411,7 +1417,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v2.9";
+        const CURRENT_APP_VERSION = "2026.07.28-v3.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1452,7 +1458,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2.9';
+                        const CACHE_NAME = 'qtd-tools-cache-v3.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -2500,6 +2506,255 @@
             setTxt('loan-res-total-p', `${formatVND(P)} đ`);
             setTxt('loan-res-total-i', `${formatVND(totalInterest)} đ`);
             setTxt('loan-res-total-all', `${formatVND(P + totalInterest)} đ`);
+        }
+
+        function exportLoanScheduleToPDF() {
+            const tbody = document.getElementById('loan-schedule-tbody');
+            if (!tbody || !tbody.children.length) return;
+
+            const amountEl = document.getElementById('loan-sched-amount');
+            const termEl = document.getElementById('loan-sched-term');
+            const rateEl = document.getElementById('loan-sched-rate');
+            const methodEl = document.getElementById('loan-sched-method');
+
+            const amountStr = amountEl ? amountEl.value : '0';
+            const termStr = termEl ? termEl.value : '12';
+            const rateStr = rateEl ? rateEl.value : '9.0';
+            const methodStr = methodEl ? methodEl.options[methodEl.selectedIndex].text : '';
+            const todayStr = new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            let rowsHtml = '';
+            Array.from(tbody.children).forEach(tr => {
+                const tds = tr.querySelectorAll('td');
+                if (tds.length >= 6) {
+                    rowsHtml += `
+                        <tr>
+                            <td style="text-align: center; font-weight: bold;">${tds[0].textContent}</td>
+                            <td style="text-align: right;">${tds[1].textContent}</td>
+                            <td style="text-align: right; font-weight: bold;">${tds[2].textContent}</td>
+                            <td style="text-align: right; color: #b45309;">${tds[3].textContent}</td>
+                            <td style="text-align: right; font-weight: bold; color: #047857; background-color: #f4fce8;">${tds[4].textContent}</td>
+                            <td style="text-align: right;">${tds[5].textContent}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            const totalP = document.getElementById('loan-res-total-p')?.textContent || '';
+            const totalI = document.getElementById('loan-res-total-i')?.textContent || '';
+            const totalAll = document.getElementById('loan-res-total-all')?.textContent || '';
+
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) return;
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Bảng Lịch Trả Nợ Khoản Vay - QTDND Yên Thọ</title>
+                    <style>
+                        @page { size: A4; margin: 15mm; }
+                        body { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: #1e293b; line-height: 1.4; margin: 0; padding: 10px; }
+                        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #047857; padding-bottom: 10px; }
+                        .unit-title { font-size: 13px; font-weight: bold; text-transform: uppercase; color: #047857; }
+                        .doc-title { font-size: 17px; font-weight: bold; text-transform: uppercase; margin-top: 5px; color: #0f172a; }
+                        .sub-title { font-size: 12px; font-style: italic; color: #475569; }
+                        .info-box { margin: 15px 0; padding: 10px; background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; }
+                        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+                        th, td { border: 1px solid #94a3b8; padding: 6px 8px; }
+                        th { background-color: #047857; color: white; text-align: center; font-weight: bold; text-transform: uppercase; font-size: 11px; }
+                        tfoot tr td { font-weight: bold; background-color: #f1f5f9; }
+                        .signature-section { margin-top: 35px; display: flex; justify-content: space-between; text-align: center; font-size: 12px; page-break-inside: avoid; }
+                        .sig-box { width: 30%; }
+                        .sig-title { font-weight: bold; text-transform: uppercase; margin-bottom: 50px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="unit-title">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</div>
+                        <div class="doc-title">BẢNG LỊCH TRẢ NỢ GỐC & LÃI CHI TIẾT KHOẢN VAY</div>
+                        <div class="sub-title">Cơ sở tính toán lịch trả nợ phục vụ tham chiếu công việc nghiệp vụ</div>
+                    </div>
+
+                    <div class="info-box">
+                        <div class="info-grid">
+                            <div><strong>Số tiền vay giải ngân:</strong> ${amountStr} VNĐ</div>
+                            <div><strong>Thời hạn vay:</strong> ${termStr} tháng</div>
+                            <div><strong>Lãi suất cho vay:</strong> ${rateStr} %/năm</div>
+                            <div><strong>Phương thức trả gốc lãi:</strong> ${methodStr}</div>
+                            <div><strong>Ngày lập bảng lịch:</strong> ${todayStr}</div>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kỳ Trả Nợ</th>
+                                <th>Dư Nợ Đầu Kỳ (VNĐ)</th>
+                                <th>Tiền Gốc Trả (VNĐ)</th>
+                                <th>Tiền Lãi Trả (VNĐ)</th>
+                                <th>Tổng Phải Trả (VNĐ)</th>
+                                <th>Dư Nợ Còn Lại (VNĐ)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td style="text-align: center;">TỔNG CỘNG</td>
+                                <td style="text-align: right;">-</td>
+                                <td style="text-align: right;">${totalP}</td>
+                                <td style="text-align: right; color: #b45309;">${totalI}</td>
+                                <td style="text-align: right; color: #047857; font-size: 13px;">${totalAll}</td>
+                                <td style="text-align: right;">0 VNĐ</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="signature-section">
+                        <div class="sig-box">
+                            <div class="sig-title">NGƯỜI LẬP BẢNG</div>
+                            <div>(Ký & ghi rõ họ tên)</div>
+                        </div>
+                        <div class="sig-box">
+                            <div class="sig-title">KIỂM SOÁT VIÊN</div>
+                            <div>(Ký & ghi rõ họ tên)</div>
+                        </div>
+                        <div class="sig-box">
+                            <div class="sig-title">BAN GIÁM ĐỐC</div>
+                            <div>(Dấu & chữ ký)</div>
+                        </div>
+                    </div>
+
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                        };
+                    </script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function exportLoanScheduleToExcel() {
+            const tbody = document.getElementById('loan-schedule-tbody');
+            if (!tbody || !tbody.children.length) return;
+
+            const amountEl = document.getElementById('loan-sched-amount');
+            const termEl = document.getElementById('loan-sched-term');
+            const rateEl = document.getElementById('loan-sched-rate');
+            const methodEl = document.getElementById('loan-sched-method');
+
+            const amountStr = amountEl ? amountEl.value : '0';
+            const termStr = termEl ? termEl.value : '12';
+            const rateStr = rateEl ? rateEl.value : '9.0';
+            const methodStr = methodEl ? methodEl.options[methodEl.selectedIndex].text : '';
+            const todayStr = new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            let rowsHtml = '';
+            Array.from(tbody.children).forEach(tr => {
+                const tds = tr.querySelectorAll('td');
+                if (tds.length >= 6) {
+                    rowsHtml += `
+                        <tr>
+                            <td style="text-align: center; font-weight: bold; border: 1px solid #94a3b8;">${tds[0].textContent}</td>
+                            <td style="text-align: right; border: 1px solid #94a3b8;">${tds[1].textContent}</td>
+                            <td style="text-align: right; font-weight: bold; border: 1px solid #94a3b8;">${tds[2].textContent}</td>
+                            <td style="text-align: right; color: #b45309; border: 1px solid #94a3b8;">${tds[3].textContent}</td>
+                            <td style="text-align: right; font-weight: bold; color: #047857; background-color: #f4fce8; border: 1px solid #94a3b8;">${tds[4].textContent}</td>
+                            <td style="text-align: right; border: 1px solid #94a3b8;">${tds[5].textContent}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            const totalP = document.getElementById('loan-res-total-p')?.textContent || '';
+            const totalI = document.getElementById('loan-res-total-i')?.textContent || '';
+            const totalAll = document.getElementById('loan-res-total-all')?.textContent || '';
+
+            const excelHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <x:ExcelWorkbook>
+                            <x:ExcelWorksheets>
+                                <x:ExcelWorksheet>
+                                    <x:Name>Lich_Tra_No</x:Name>
+                                    <x:WorksheetOptions>
+                                        <x:DisplayGridlines/>
+                                    </x:WorksheetOptions>
+                                </x:ExcelWorksheet>
+                            </x:ExcelWorksheets>
+                        </x:ExcelWorkbook>
+                    </xml>
+                    <![endif]-->
+                </head>
+                <body>
+                    <table>
+                        <tr>
+                            <td colspan="6" style="font-size: 14px; font-weight: bold; color: #047857; text-align: center;">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="font-size: 16px; font-weight: bold; color: #0f172a; text-align: center;">BẢNG LỊCH TRẢ NỢ GỐC & LÃI CHI TIẾT KHOẢN VAY</td>
+                        </tr>
+                        <tr><td colspan="6"></td></tr>
+                        <tr>
+                            <td colspan="3" style="font-weight: bold;">Số tiền vay giải ngân:</td>
+                            <td colspan="3" style="font-weight: bold; color: #047857;">${amountStr} VNĐ</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Thời hạn vay vốn:</td>
+                            <td colspan="3">${termStr} tháng</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Lãi suất cho vay:</td>
+                            <td colspan="3">${rateStr} %/năm</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Phương thức trả gốc lãi:</td>
+                            <td colspan="3">${methodStr}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Ngày lập bảng:</td>
+                            <td colspan="3">${todayStr}</td>
+                        </tr>
+                        <tr><td colspan="6"></td></tr>
+                        <tr style="background-color: #047857; color: #ffffff; font-weight: bold; text-align: center;">
+                            <th style="border: 1px solid #94a3b8;">Kỳ Trả Nợ</th>
+                            <th style="border: 1px solid #94a3b8;">Dư Nợ Đầu Kỳ (VNĐ)</th>
+                            <th style="border: 1px solid #94a3b8;">Tiền Gốc Trả (VNĐ)</th>
+                            <th style="border: 1px solid #94a3b8;">Tiền Lãi Trả (VNĐ)</th>
+                            <th style="border: 1px solid #94a3b8;">Tổng Phải Trả (VNĐ)</th>
+                            <th style="border: 1px solid #94a3b8;">Dư Nợ Còn Lại (VNĐ)</th>
+                        </tr>
+                        ${rowsHtml}
+                        <tr style="font-weight: bold; background-color: #f1f5f9;">
+                            <td style="text-align: center; border: 1px solid #94a3b8;">TỔNG CỘNG</td>
+                            <td style="text-align: right; border: 1px solid #94a3b8;">-</td>
+                            <td style="text-align: right; border: 1px solid #94a3b8;">${totalP}</td>
+                            <td style="text-align: right; color: #b45309; border: 1px solid #94a3b8;">${totalI}</td>
+                            <td style="text-align: right; color: #047857; font-size: 13px; border: 1px solid #94a3b8;">${totalAll}</td>
+                            <td style="text-align: right; border: 1px solid #94a3b8;">0 VNĐ</td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(['\uFEFF' + excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Lich_Tra_No_QTD_Yen_Tho_${Date.now()}.xls`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // 1. QR LOAN PAYMENT LOGIC
