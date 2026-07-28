@@ -1426,7 +1426,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v3.1";
+                    const thisVersion = "2026.07.28-v3.2";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1436,7 +1436,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v3.1";
+        const CURRENT_APP_VERSION = "2026.07.28-v3.2";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1477,7 +1477,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v3.1';
+                        const CACHE_NAME = 'qtd-tools-cache-v3.2';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -2647,16 +2647,14 @@
                             <div>(Dấu & chữ ký)</div>
                         </div>
                     </div>
-
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                        };
-                    </script>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
 
         function exportLoanScheduleToExcel() {
@@ -2948,11 +2946,14 @@
                         <div class="sig-box"><div class="sig-title">KIỂM SOÁT VIÊN</div><div>(Ký & ghi rõ họ tên)</div></div>
                         <div class="sig-box"><div class="sig-title">BAN GIÁM ĐỐC</div><div>(Dấu & chữ ký)</div></div>
                     </div>
-                    <script>window.onload = function() { window.print(); };</script>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
 
         // Export Bảng 2: Biểu Lãi Suất Ban Hành QTDND Yên Thọ sang Excel
@@ -3091,11 +3092,14 @@
                         <div class="sig-box"><div class="sig-title">KIỂM SOÁT VIÊN</div><div>(Ký & ghi rõ họ tên)</div></div>
                         <div class="sig-box"><div class="sig-title">BAN GIÁM ĐỐC</div><div>(Dấu & chữ ký)</div></div>
                     </div>
-                    <script>window.onload = function() { window.print(); };</script>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
 
         // 1. QR LOAN PAYMENT LOGIC
