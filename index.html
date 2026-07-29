@@ -56,6 +56,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
+    <!-- Flatpickr Datepicker CDN & Theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -73,6 +77,41 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* Flatpickr Custom Emerald Theme */
+        .flatpickr-calendar {
+            font-family: 'Be Vietnam Pro', 'Inter', sans-serif !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+            border: 1px solid #cbd5e1 !important;
+            background: #ffffff !important;
+        }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected:focus, .flatpickr-day.selected:hover {
+            background: #059669 !important;
+            border-color: #059669 !important;
+            font-weight: 700 !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: #064e3b !important;
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            border-top-left-radius: 11px;
+            border-top-right-radius: 11px;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            background: #064e3b !important;
+        }
+        .flatpickr-current-month input.cur-year {
+            font-weight: 700 !important;
+            color: #ffffff !important;
+        }
+        span.flatpickr-weekday {
+            background: #ecfdf5 !important;
+            color: #047857 !important;
+            font-weight: 700 !important;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
@@ -782,13 +821,17 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày gửi tiền (dd/mm/yyyy)</label>
-                                    <input type="date" id="tt04-start-date" onchange="calculatePartialWithdrawal()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
-                                    <span id="tt04-start-date-vn" class="text-[10px] text-emerald-700 font-semibold mt-0.5 block">📅 Ngày gửi: --/--/----</span>
+                                    <div class="relative">
+                                        <input type="text" id="tt04-start-date" placeholder="dd/mm/yyyy" onchange="calculatePartialWithdrawal()" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 bg-white">
+                                        <svg class="w-4 h-4 text-emerald-600 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày rút tiền (dd/mm/yyyy)</label>
-                                    <input type="date" id="tt04-withdraw-date" onchange="calculatePartialWithdrawal()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-amber-900 focus:ring-2 focus:ring-amber-500">
-                                    <span id="tt04-withdraw-date-vn" class="text-[10px] text-amber-700 font-semibold mt-0.5 block">📅 Ngày rút: --/--/----</span>
+                                    <div class="relative">
+                                        <input type="text" id="tt04-withdraw-date" placeholder="dd/mm/yyyy" onchange="calculatePartialWithdrawal()" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs font-bold text-amber-900 focus:ring-2 focus:ring-amber-500 bg-white">
+                                        <svg class="w-4 h-4 text-amber-600 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
                                 </div>
                             </div>
 
@@ -2382,6 +2425,87 @@
             `;
         }
 
+        // Helper parsing & formatting cho Ngày tiếng Việt (dd/mm/yyyy)
+        function parseVietnameseDateStr(str) {
+            if (!str) return null;
+            str = String(str).trim();
+            if (str.includes('/')) {
+                const parts = str.split('/');
+                if (parts.length === 3) {
+                    const d = parseInt(parts[0], 10);
+                    const m = parseInt(parts[1], 10) - 1;
+                    const y = parseInt(parts[2], 10);
+                    if (!isNaN(d) && !isNaN(m) && !isNaN(y) && y > 1900 && m >= 0 && m <= 11 && d >= 1 && d <= 31) {
+                        return new Date(y, m, d);
+                    }
+                }
+            } else if (str.includes('-')) {
+                const parts = str.split('-');
+                if (parts.length === 3) {
+                    const y = parseInt(parts[0], 10);
+                    const m = parseInt(parts[1], 10) - 1;
+                    const d = parseInt(parts[2], 10);
+                    if (!isNaN(d) && !isNaN(m) && !isNaN(y) && y > 1900 && m >= 0 && m <= 11 && d >= 1 && d <= 31) {
+                        return new Date(y, m, d);
+                    }
+                }
+            }
+            return null;
+        }
+
+        function formatVietnameseDateStr(dObj) {
+            if (!dObj || isNaN(dObj.getTime())) return '';
+            const day = String(dObj.getDate()).padStart(2, '0');
+            const month = String(dObj.getMonth() + 1).padStart(2, '0');
+            const year = dObj.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        let flatpickrStartInstance = null;
+        let flatpickrWithdrawInstance = null;
+
+        function initVietnameseDatePickers() {
+            const vnLocale = {
+                firstDayOfWeek: 1,
+                weekdays: {
+                    shorthand: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+                    longhand: ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"]
+                },
+                months: {
+                    shorthand: ["Th1", "Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "Th8", "Th9", "Th10", "Th11", "Th12"],
+                    longhand: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
+                }
+            };
+
+            if (window.flatpickr) {
+                const startDateEl = document.getElementById('tt04-start-date');
+                const withdrawDateEl = document.getElementById('tt04-withdraw-date');
+
+                if (startDateEl && !flatpickrStartInstance) {
+                    flatpickrStartInstance = flatpickr(startDateEl, {
+                        dateFormat: "d/m/Y",
+                        locale: vnLocale,
+                        allowInput: true,
+                        onChange: function(selectedDates, dateStr) {
+                            startDateEl.value = dateStr;
+                            calculatePartialWithdrawal();
+                        }
+                    });
+                }
+                if (withdrawDateEl && !flatpickrWithdrawInstance) {
+                    flatpickrWithdrawInstance = flatpickr(withdrawDateEl, {
+                        dateFormat: "d/m/Y",
+                        locale: vnLocale,
+                        allowInput: true,
+                        onChange: function(selectedDates, dateStr) {
+                            withdrawDateEl.value = dateStr;
+                            calculatePartialWithdrawal();
+                        }
+                    });
+                }
+            }
+        }
+
         // Tab 3 TT04 Partial Withdrawal
         function calculatePartialWithdrawal() {
             const principalEl = document.getElementById('tt04-principal');
@@ -2394,16 +2518,25 @@
 
             if (!principalEl || !termEl || !rateEl || !demandRateEl || !withdrawAmountEl) return;
 
-            // Khởi tạo mặc định nếu chưa chọn ngày
+            // Đảm bảo Flatpickr được kích hoạt nếu có
+            if (window.flatpickr && (!flatpickrStartInstance || !flatpickrWithdrawInstance)) {
+                initVietnameseDatePickers();
+            }
+
+            // Khởi tạo ngày mặc định theo chuẩn dd/mm/yyyy
             const now = new Date();
-            const todayISO = now.toISOString().split('T')[0];
+            const todayVN = formatVietnameseDateStr(now);
+            const defaultStartObj = new Date();
+            defaultStartObj.setMonth(defaultStartObj.getMonth() - 6);
+            const defaultStartVN = formatVietnameseDateStr(defaultStartObj);
+
             if (withdrawDateEl && !withdrawDateEl.value) {
-                withdrawDateEl.value = todayISO;
+                withdrawDateEl.value = todayVN;
+                if (flatpickrWithdrawInstance) flatpickrWithdrawInstance.setDate(now);
             }
             if (startDateEl && !startDateEl.value) {
-                const defaultStart = new Date();
-                defaultStart.setMonth(defaultStart.getMonth() - 6);
-                startDateEl.value = defaultStart.toISOString().split('T')[0];
+                startDateEl.value = defaultStartVN;
+                if (flatpickrStartInstance) flatpickrStartInstance.setDate(defaultStartObj);
             }
 
             let P = parseVND(principalEl.value);
@@ -2412,22 +2545,14 @@
             let rDemand = parseFloat(demandRateEl.value) || 0;
             let wAmount = parseVND(withdrawAmountEl.value);
 
-            // Tính toán số ngày dựa trên Ngày gửi & Ngày rút
-            let daysHeld = 180;
-            let formattedStartVN = '';
-            let formattedWithdrawVN = '';
+            // Parse Ngày gửi & Ngày rút từ định dạng chuẩn dd/mm/yyyy
+            const dStart = parseVietnameseDateStr(startDateEl.value) || defaultStartObj;
+            const dWithdraw = parseVietnameseDateStr(withdrawDateEl.value) || now;
 
-            if (startDateEl && startDateEl.value && withdrawDateEl && withdrawDateEl.value) {
-                const dStart = new Date(startDateEl.value);
-                const dWithdraw = new Date(withdrawDateEl.value);
-                const diffTime = dWithdraw.getTime() - dStart.getTime();
-                daysHeld = Math.max(0, Math.round(diffTime / (1000 * 3600 * 24)));
-
-                const [sy, sm, sd] = startDateEl.value.split('-');
-                const [wy, wm, wd] = withdrawDateEl.value.split('-');
-                formattedStartVN = `${sd}/${sm}/${sy}`;
-                formattedWithdrawVN = `${wd}/${wm}/${wy}`;
-            }
+            const diffTime = dWithdraw.getTime() - dStart.getTime();
+            let daysHeld = Math.max(0, Math.round(diffTime / (1000 * 3600 * 24)));
+            let formattedStartVN = formatVietnameseDateStr(dStart);
+            let formattedWithdrawVN = formatVietnameseDateStr(dWithdraw);
 
             // Ràng buộc an toàn dữ liệu
             if (wAmount > P) {
@@ -2454,8 +2579,6 @@
                 if (el) el.textContent = text;
             };
 
-            setTxt('tt04-start-date-vn', `📅 Ngày gửi: ${formattedStartVN}`);
-            setTxt('tt04-withdraw-date-vn', `📅 Ngày rút: ${formattedWithdrawVN}`);
             setTxt('tt04-calculated-days', `${daysHeld} ngày`);
 
             setTxt('tt04-res-w-amount', `${formatVND(wAmount)} đ`);
@@ -5374,6 +5497,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
         // Initialize All Components Immediately
         function initAllAppComponents() {
             initTermSelects();
+            initVietnameseDatePickers();
             renderTable1();
             renderTab2Detail();
             calculatePartialWithdrawal();
