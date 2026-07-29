@@ -4433,25 +4433,98 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             }
         }
 
+        function directDownloadCanvas(canvas, fileName) {
+            if (!canvas) return;
+            try {
+                if (typeof canvas.toBlob === 'function') {
+                    canvas.toBlob(function(blob) {
+                        if (blob) {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = fileName;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            setTimeout(() => URL.revokeObjectURL(url), 10000);
+                            showToast("Đã tải ảnh mã QR thành công!");
+                        } else {
+                            fallbackDataUrl();
+                        }
+                    }, 'image/png');
+                } else {
+                    fallbackDataUrl();
+                }
+            } catch(e) {
+                fallbackDataUrl();
+            }
+
+            function fallbackDataUrl() {
+                try {
+                    const dataUrl = canvas.toDataURL('image/png');
+                    const a = document.createElement('a');
+                    a.href = dataUrl;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    showToast("Đã tải ảnh mã QR thành công!");
+                } catch(err) {
+                    showToast("⚠️ Không thể tải ảnh trực tiếp.");
+                }
+            }
+        }
+
+        function directShareCanvas(canvas, fileName, shareText) {
+            if (!canvas) return;
+            showToast("Đang chuẩn bị Chia sẻ mã QR...");
+            try {
+                if (typeof canvas.toBlob === 'function') {
+                    canvas.toBlob(function(blob) {
+                        if (blob) {
+                            const file = new File([blob], fileName, { type: 'image/png' });
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                navigator.share({
+                                    files: [file],
+                                    title: shareText || 'Mã VietQR QTDND Yên Thọ',
+                                    text: shareText || 'Mã VietQR Co-opBank - QTDND Yên Thọ'
+                                }).then(() => {
+                                    showToast("Đã chia sẻ mã QR thành công!");
+                                }).catch((err) => {
+                                    if (err.name !== 'AbortError') directDownloadCanvas(canvas, fileName);
+                                });
+                            } else {
+                                directDownloadCanvas(canvas, fileName);
+                            }
+                        } else {
+                            directDownloadCanvas(canvas, fileName);
+                        }
+                    }, 'image/png');
+                } else {
+                    directDownloadCanvas(canvas, fileName);
+                }
+            } catch(e) {
+                directDownloadCanvas(canvas, fileName);
+            }
+        }
+
         function downloadQRImage(imgId) {
-            showToast("Đang tạo ảnh mã QR HD...");
+            showToast("Đang tải ảnh mã QR HD...");
             const isLoan = (imgId === 'qr-code-img');
             const name = (document.getElementById(isLoan ? 'qr-loan-name' : 'qr-sav-name')?.value || 'KhachHang').replace(/\s+/g, '_');
             const fileName = isLoan ? `QR_TienVay_${name}.png` : `QR_TienGui_${name}.png`;
-            const title = isLoan ? `Mã QR Thanh Toán Tiền Vay - ${name}` : `Mã QR Gửi Tiết Kiệm - ${name}`;
             buildQRCardCanvas(imgId, function(canvas) {
-                openQrImageModal(canvas, fileName, title);
+                directDownloadCanvas(canvas, fileName);
             });
         }
 
         function shareQRImage(imgId) {
-            showToast("Đang chuẩn bị Chia sẻ mã QR...");
             const isLoan = (imgId === 'qr-code-img');
             const name = (document.getElementById(isLoan ? 'qr-loan-name' : 'qr-sav-name')?.value || 'KhachHang').replace(/\s+/g, '_');
             const fileName = isLoan ? `QR_TienVay_${name}.png` : `QR_TienGui_${name}.png`;
             const title = isLoan ? `Mã QR Tiền Vay QTDND Yên Thọ - ${name}` : `Mã QR Gửi Tiết Kiệm QTDND Yên Thọ - ${name}`;
             buildQRCardCanvas(imgId, function(canvas) {
-                tryShareOrModal(canvas, fileName, title);
+                directShareCanvas(canvas, fileName, title);
             });
         }
 
@@ -4881,12 +4954,10 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
-            showToast("Đang chuẩn bị Tải mã QR Standee...");
-
-            // Luôn render lại vào tempCanvas để đảm bảo xuất đúng toàn bộ khung standee
+            showToast("Đang tải ảnh mã QR Standee...");
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
+                directDownloadCanvas(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`);
             });
         }
 
@@ -4896,12 +4967,10 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
-            showToast("Đang chuẩn bị Tải mã QR LOA...");
-
-            // Luôn render lại vào tempCanvas để đảm bảo xuất đúng toàn bộ khung QR Loa
+            showToast("Đang tải ảnh mã QR LOA...");
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
+                directDownloadCanvas(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`);
             });
         }
 
@@ -4912,11 +4981,9 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
-            showToast("Đang chuẩn bị Chia sẻ mã QR Standee...");
-            // Render mới vào tempCanvas để đảm bảo chia sẻ đúng toàn bộ khung standee
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                tryShareOrModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
+                directShareCanvas(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
             });
         }
 
@@ -4926,11 +4993,9 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
-            showToast("Đang chuẩn bị Chia sẻ mã QR LOA...");
-            // Render mới vào tempCanvas để đảm bảo chia sẻ đúng toàn bộ khung QR Loa
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                tryShareOrModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
+                directShareCanvas(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
             });
         }
 
