@@ -884,7 +884,7 @@
 
                             <div>
                                 <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền (Mặc Định Cố Định)</label>
-                                <input type="text" id="qr-acc-number" value="3800200138221012" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                                <input type="text" id="qr-acc-number" value="3800001234567899" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
                             </div>
                         </div>
 
@@ -893,7 +893,7 @@
                             <div class="text-center space-y-1">
                                 <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR SePay Auto-Gen</span>
                                 <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span id="qr-disp-acc">3800200138221012</span></p>
+                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span id="qr-disp-acc">3800001234567899</span></p>
                             </div>
 
                             <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-emerald-500 relative flex items-center justify-center">
@@ -971,7 +971,7 @@
 
                             <div>
                                 <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền (Mặc Định Cố Định)</label>
-                                <input type="text" value="3800200138221012" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                                <input type="text" value="3800001234567899" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
                             </div>
                         </div>
 
@@ -980,7 +980,7 @@
                             <div class="text-center space-y-1">
                                 <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR Savings Deposit</span>
                                 <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800200138221012</span></p>
+                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800001234567899</span></p>
                             </div>
 
                             <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-blue-500 relative flex items-center justify-center">
@@ -1622,7 +1622,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v19.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v20.0";
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -1966,18 +1966,17 @@
 
         function formatCoopbankAccount(accStr) {
             if (!accStr) return "3800001234567899";
-            const digits = accStr.toString().replace(/[^0-9]/g, '');
-            if (digits.length === 16 && digits.startsWith("3800200")) {
-                return digits;
+            let digits = accStr.toString().replace(/[^0-9]/g, '');
+            if (!digits) return "3800001234567899";
+            if (digits.length === 16) return digits;
+            // Nếu nhập 10 số có số 0 ở đầu (ví dụ: 0138221012), bỏ số 0 đầu để còn 9 số đuôi
+            if (digits.length === 10 && digits.startsWith("0")) {
+                digits = digits.slice(1);
             }
-            if (digits.length === 9) {
-                return "3800200" + digits;
+            if (digits.length > 0 && digits.length <= 9) {
+                return "3800200" + digits.padStart(9, "0");
             }
-            if (digits.length > 0 && digits.length < 16 && !digits.startsWith("3800200")) {
-                const combined = "3800200" + digits;
-                if (combined.length <= 16) return combined;
-            }
-            return digits || "3800001234567899";
+            return digits;
         }
 
         // Math Formulas
@@ -3903,7 +3902,8 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 tag62 = "62" + pad2(sub08.length) + sub08;
             }
 
-            const payload = "000201" + "010212" + tag38 + tag53_curr + tag54 + tag58_country + tag62 + "6304";
+            const qrType = (amount && Number(amount) > 0) ? "010212" : "010211";
+            const payload = "000201" + qrType + tag38 + tag53_curr + tag54 + tag58_country + tag62 + "6304";
             return payload + calcCRC16(payload);
         }
 
