@@ -3494,7 +3494,17 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             updateStandeePreview();
         }
 
+        let currentStandeeRenderId = 0;
+
         function updateStandeePreview() {
+            clearTimeout(window.standeeDebounceTimer);
+            window.standeeDebounceTimer = setTimeout(doUpdateStandeePreview, 100);
+        }
+
+        function doUpdateStandeePreview() {
+            currentStandeeRenderId++;
+            const reqRenderId = currentStandeeRenderId;
+
             if (currentStandeeMode === 'qrloa') {
                 const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
                 const accEl = document.getElementById('loa-acc');
@@ -3512,14 +3522,14 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                             accEl.classList.add('border-purple-500');
                         }
                     } else {
-                        warnEl.innerHTML = '<span class="text-amber-600 font-bold">❌ Sai định dạng số tài khoản, kiểm tra lại</span>';
+                        warnEl.innerHTML = '<span class="text-amber-600 font-bold">❌ Sai định dạng số tài khoản (phải đủ 16 số)</span>';
                         if (accEl) {
                             accEl.classList.add('border-amber-500', 'ring-2', 'ring-amber-200');
                             accEl.classList.remove('border-purple-500');
                         }
                     }
                 }
-                renderQRLoaCanvasToTarget('standee-preview-canvas', name, acc, colorName, colorAcc);
+                renderQRLoaCanvasToTarget('standee-preview-canvas', name, acc, colorName, colorAcc, null, reqRenderId);
             } else {
                 const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
                 const aliasEl = document.getElementById('std-alias');
@@ -3558,7 +3568,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                     }
                 }
 
-                renderStandeeCanvasToTarget('standee-preview-canvas', name, alias, acc, colorName, colorInfo);
+                renderStandeeCanvasToTarget('standee-preview-canvas', name, alias, acc, colorName, colorInfo, null, reqRenderId);
             }
         }
 
@@ -3956,7 +3966,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
 
 
-        function renderStandeeCanvasToTarget(canvasTarget, name, alias, acc, colorName, colorInfo, onDone) {
+        function renderStandeeCanvasToTarget(canvasTarget, name, alias, acc, colorName, colorInfo, onDone, reqRenderId) {
             const canvas = (typeof canvasTarget === 'string') ? document.getElementById(canvasTarget) : canvasTarget;
             if (!canvas) return;
 
@@ -3966,6 +3976,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             canvas.width = W;
             canvas.height = H;
 
+            ctx.clearRect(0, 0, W, H);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, W, H);
 
@@ -3983,6 +3994,8 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             const bgImg = new Image();
             bgImg.onload = function() {
+                if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                ctx.clearRect(0, 0, W, H);
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
                 const qrX = 135;
@@ -3994,12 +4007,20 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
                 const qrImg = new Image();
                 qrImg.crossOrigin = 'Anonymous';
-                qrImg.onload = function() { drawQRAndLogo(qrImg); };
+                qrImg.onload = function() {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                    drawQRAndLogo(qrImg);
+                };
                 qrImg.onerror = function() {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     const fallbackQR = new Image();
                     fallbackQR.crossOrigin = 'Anonymous';
-                    fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
+                    fallbackQR.onload = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        drawQRAndLogo(fallbackQR);
+                    };
                     fallbackQR.onerror = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                         // 100% Offline Vector QR Generation
                         try {
                             const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean, amountVal);
@@ -4014,6 +4035,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 qrImg.src = vietQrUrl;
 
                 function drawQRAndLogo(qrImageObj) {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     try {
                         ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
                     } catch(e) {}
@@ -4021,8 +4043,10 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 }
 
                 function drawLogoAndFinish() {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     const logoImg = new Image();
                     logoImg.onload = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                         const logoSize = 110;
                         const centerX = qrX + (qrSize / 2);
                         const centerY = qrY + (qrSize / 2);
@@ -4046,7 +4070,10 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
                         finishRender();
                     };
-                    logoImg.onerror = function() { finishRender(); };
+                    logoImg.onerror = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        finishRender();
+                    };
                     logoImg.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
                 }
             };
@@ -4110,7 +4137,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 }
         }
 
-        function renderQRLoaCanvasToTarget(canvasTarget, name, acc, colorName, colorAcc, onDone) {
+        function renderQRLoaCanvasToTarget(canvasTarget, name, acc, colorName, colorAcc, onDone, reqRenderId) {
             const canvas = (typeof canvasTarget === 'string') ? document.getElementById(canvasTarget) : canvasTarget;
             if (!canvas) return;
 
@@ -4122,6 +4149,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             let hasFiredOnDone = false;
             function safeDone() {
+                if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                 if (!hasFiredOnDone) {
                     hasFiredOnDone = true;
                     if (onDone) onDone(canvas);
@@ -4130,20 +4158,21 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             setTimeout(safeDone, 2000);
 
+            ctx.clearRect(0, 0, W, H);
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, W, H);
 
             const rawAcc = (acc || "").trim();
             const accClean = formatCoopbankAccount(rawAcc);
-            const aliasClean = (document.getElementById('std-alias')?.value || "").trim();
             const nameClean = (name || "QUY TIN DUNG NHAN DAN YEN THO").trim().toUpperCase();
 
-            const useAlias = document.getElementById('loa-use-alias')?.checked;
-            const targetAccForQR = (useAlias && aliasClean) ? aliasClean : accClean;
+            const targetAccForQR = accClean;
             const memoClean = "";
 
             const bgImg = new Image();
             bgImg.onload = function() {
+                if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                ctx.clearRect(0, 0, W, H);
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
                 const qrSize = 710;
@@ -4155,12 +4184,20 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
                 const qrImg = new Image();
                 qrImg.crossOrigin = 'Anonymous';
-                qrImg.onload = function() { drawQRAndLogo(qrImg); };
+                qrImg.onload = function() {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                    drawQRAndLogo(qrImg);
+                };
                 qrImg.onerror = function() {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     const fallbackQR = new Image();
                     fallbackQR.crossOrigin = 'Anonymous';
-                    fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
+                    fallbackQR.onload = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        drawQRAndLogo(fallbackQR);
+                    };
                     fallbackQR.onerror = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                         // 100% Offline Vector QR Generation
                         try {
                             const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean);
@@ -4175,6 +4212,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 qrImg.src = vietQrUrl;
 
                 function drawQRAndLogo(qrImageObj) {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     try {
                         ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
                     } catch(e) {}
@@ -4182,8 +4220,10 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 }
 
                 function drawLogoAndFinish() {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     const logoImg = new Image();
                     logoImg.onload = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                         const logoSize = 95;
                         const centerX = qrX + (qrSize / 2);
                         const centerY = qrY + (qrSize / 2);
@@ -4209,7 +4249,10 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
                         finishRender();
                     };
-                    logoImg.onerror = function() { finishRender(); };
+                    logoImg.onerror = function() {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        finishRender();
+                    };
                     logoImg.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
                 }
             };
@@ -4614,6 +4657,16 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 const colorAcc = document.getElementById('loa-color-acc')?.value || '#0f172a';
                 renderQRLoaCanvasToTarget(c, name, acc, colorName, colorAcc, function() {
                     if (callback) callback(c);
+                });
+                return;
+            } else if (isTienVay) {
+                buildQRCardCanvas('qr-code-img', function(cardCanvas) {
+                    if (callback) callback(cardCanvas);
+                });
+                return;
+            } else if (isTienGui) {
+                buildQRCardCanvas('qr-sav-code-img', function(cardCanvas) {
+                    if (callback) callback(cardCanvas);
                 });
                 return;
             }
