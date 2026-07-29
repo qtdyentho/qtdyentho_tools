@@ -1574,7 +1574,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v6.0";
+                    const thisVersion = "2026.07.29-v6.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1584,7 +1584,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v6.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v6.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1625,7 +1625,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v6.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v6.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3780,127 +3780,6 @@
                 }, 'image/png');
             } catch(e) {
                 saveCanvasAsImageFile(canvas, fileName);
-            }
-        }
-
-        }
-
-        function printBatchStandeeA4() {
-            showToast("Đang tạo trang in A4 ghép 4 mã QR Standee...");
-
-            const customers = [
-                {
-                    name: document.getElementById('batch-name-1')?.value || "NGUYEN THI NGUYET",
-                    alias: document.getElementById('batch-alias-1')?.value || "0348741868",
-                    acc: document.getElementById('batch-acc-1')?.value || "3800200138221012"
-                },
-                {
-                    name: document.getElementById('batch-name-2')?.value || "TRAN VAN NAM",
-                    alias: document.getElementById('batch-alias-2')?.value || "0941562789",
-                    acc: document.getElementById('batch-acc-2')?.value || "3800200138999888"
-                },
-                {
-                    name: document.getElementById('batch-name-3')?.value || "LE THI HOA",
-                    alias: document.getElementById('batch-alias-3')?.value || "0983502181",
-                    acc: document.getElementById('batch-acc-3')?.value || "3800200138555666"
-                },
-                {
-                    name: document.getElementById('batch-name-4')?.value || "PHAM QUANG HUY",
-                    alias: document.getElementById('batch-alias-4')?.value || "0965122111",
-                    acc: document.getElementById('batch-acc-4')?.value || "3800200138111222"
-                }
-            ];
-
-            const dataUrls = [];
-            let completed = 0;
-
-            customers.forEach((cust, index) => {
-                const tempCanvas = document.createElement('canvas');
-                renderStandeeCanvasToTarget(tempCanvas, cust.name, cust.alias, cust.acc, '#003b7a', '#d97706', function(c) {
-                    dataUrls[index] = c.toDataURL('image/png');
-                    completed++;
-
-                    if (completed === 4) {
-                        openBatchPrintWindow(dataUrls);
-                    }
-                });
-            });
-
-            function openBatchPrintWindow(urls) {
-                const win = window.open('', '_blank');
-                if (!win) return;
-
-                win.document.write(`
-                    <!DOCTYPE html>
-                    <html lang="vi">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>In Ghép 4 Thẻ QR Standee Trang A4 - QTDND Yên Thọ</title>
-                        <style>
-                            @page { size: A4 portrait; margin: 8mm; }
-                            body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #fff; }
-                            .a4-grid {
-                                display: grid;
-                                grid-template-columns: 1fr 1fr;
-                                grid-template-rows: 1fr 1fr;
-                                gap: 6mm;
-                                width: 194mm;
-                                height: 280mm;
-                                box-sizing: border-box;
-                            }
-                            .card-box {
-                                border: 1.5px dashed #94a3b8;
-                                border-radius: 8px;
-                                padding: 3mm;
-                                box-sizing: border-box;
-                                display: flex;
-                                flex-direction: column;
-                                items-center;
-                                justify-content: center;
-                                background-color: #ffffff;
-                                position: relative;
-                            }
-                            .card-box img {
-                                max-width: 100%;
-                                max-height: 100%;
-                                object-contain: fit;
-                                border-radius: 4px;
-                            }
-                            .cut-label {
-                                position: absolute;
-                                bottom: 1mm;
-                                right: 2mm;
-                                font-size: 8px;
-                                color: #94a3b8;
-                                font-style: italic;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="a4-grid">
-                            <div class="card-box">
-                                <img src="${urls[0]}" alt="Standee KH 1">
-                                <span class="cut-label">✂️ Đường cắt nếp</span>
-                            </div>
-                            <div class="card-box">
-                                <img src="${urls[1]}" alt="Standee KH 2">
-                                <span class="cut-label">✂️ Đường cắt nếp</span>
-                            </div>
-                            <div class="card-box">
-                                <img src="${urls[2]}" alt="Standee KH 3">
-                                <span class="cut-label">✂️ Đường cắt nếp</span>
-                            </div>
-                            <div class="card-box">
-                                <img src="${urls[3]}" alt="Standee KH 4">
-                                <span class="cut-label">✂️ Đường cắt nếp</span>
-                            </div>
-                        </div>
-                    </body>
-                    </html>
-                `);
-                win.document.close();
-                win.focus();
-                setTimeout(() => { win.print(); }, 800);
             }
         }
 
