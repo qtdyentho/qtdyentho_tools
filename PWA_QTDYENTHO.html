@@ -182,11 +182,11 @@
             <div class="grid grid-cols-2 gap-2.5 pt-1">
                 <button id="qr-modal-download-btn" onclick="triggerModalDownload()" class="py-2.5 px-3 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    <span>💾 Tải Trực Tiếp Về Máy</span>
+                    <span>📥 Tải Mã QR</span>
                 </button>
                 <button id="qr-modal-share-btn" onclick="triggerModalShare()" class="py-2.5 px-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                    <span>📲 Chia Sẻ Qua App Khác</span>
+                    <span>📲 Chia Sẻ Mã QR</span>
                 </button>
             </div>
         </div>
@@ -1081,11 +1081,11 @@
                                 <div class="grid grid-cols-2 gap-2 pt-2">
                                     <button onclick="downloadSingleStandeePNG()" class="py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                        <span>📥 Tải & Lưu Ảnh PNG (HD)</span>
+                                        <span>📥 Tải Mã QR</span>
                                     </button>
                                     <button onclick="shareSingleStandee()" class="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                        <span>📲 Chia Sẻ Nhanh Mã QR</span>
+                                        <span>📲 Chia Sẻ Mã QR</span>
                                     </button>
                                 </div>
                             </div>
@@ -1140,11 +1140,11 @@
                                 <div class="grid grid-cols-2 gap-2 pt-2">
                                     <button onclick="downloadQRLoaPNG()" class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                        <span>📥 Tải & Lưu Ảnh PNG (HD)</span>
+                                        <span>📥 Tải Mã QR</span>
                                     </button>
                                     <button onclick="shareQRLoa()" class="py-2.5 px-3 bg-purple-900 hover:bg-purple-950 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                        <span>📲 Chia Sẻ Nhanh QR LOA</span>
+                                        <span>📲 Chia Sẻ Mã QR</span>
                                     </button>
                                 </div>
                             </div>                        </div>
@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v8.0";
+                    const thisVersion = "2026.07.29-v9.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v8.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v9.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v8.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v9.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3565,25 +3565,25 @@
                         ctx.restore();
                     }
 
-                    // 3. Số TK Nguồn (Dịch sang phải 5mm ~ X = 440px, Căn trái, không căn giữa so với Tên)
+                    // 3. Số TK Nguồn (Dịch sang trái 4mm ~ X = 404px, Căn trái, không căn giữa so với Tên)
                     ctx.save();
                     ctx.fillStyle = colorInfo || "#c2410c";
                     let accFontSize = 38;
                     ctx.font = `bold ${accFontSize}px ${fontName}`;
-                    const maxAccW = 520;
+                    const maxAccW = 550;
                     while (ctx.measureText(accClean).width > maxAccW && accFontSize > 18) {
                         accFontSize -= 2;
                         ctx.font = `bold ${accFontSize}px ${fontName}`;
                     }
                     ctx.textAlign = "left";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(accClean, 440, 1410);
+                    ctx.fillText(accClean, 404, 1410);
                     ctx.restore();
                 }
             };
             bgImg.onerror = function() {
                 console.error("Lỗi nạp phôi ảnh BackgroundQR.png");
-                if (onDone) onDone(canvas);
+                safeDone();
             };
             bgImg.src = './BackgroundQR.png';
         }
@@ -3597,6 +3597,17 @@
             const H = 1092;
             canvas.width = W;
             canvas.height = H;
+
+            let hasFiredOnDone = false;
+            function safeDone() {
+                if (!hasFiredOnDone) {
+                    hasFiredOnDone = true;
+                    if (onDone) onDone(canvas);
+                }
+            }
+
+            // Safety fallback timeout: Guarantee callback fires even if image loading stalls
+            setTimeout(safeDone, 2000);
 
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, W, H);
@@ -3628,7 +3639,9 @@
                     const qrSize = 710;
                     const qrX = 189;
                     const qrY = 191;
-                    ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
+                    try {
+                        ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
+                    } catch(e) {}
 
                     const logoImg = new Image();
                     logoImg.onload = function() {
@@ -3636,22 +3649,24 @@
                         const centerX = qrX + (qrSize / 2);
                         const centerY = qrY + (qrSize / 2);
 
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, (logoSize / 2) + 5, 0, Math.PI * 2);
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fill();
-                        ctx.lineWidth = 3.5;
-                        ctx.strokeStyle = '#047857';
-                        ctx.stroke();
-                        ctx.restore();
+                        try {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, (logoSize / 2) + 5, 0, Math.PI * 2);
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fill();
+                            ctx.lineWidth = 3.5;
+                            ctx.strokeStyle = '#047857';
+                            ctx.stroke();
+                            ctx.restore();
 
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
-                        ctx.clip();
-                        ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
-                        ctx.restore();
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
+                            ctx.clip();
+                            ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
+                            ctx.restore();
+                        } catch(e) {}
 
                         finishRender();
                     };
@@ -3661,15 +3676,16 @@
 
                 function finishRender() {
                     writeLoaText();
-                    if (onDone) onDone(canvas);
+                    safeDone();
                 }
 
                 function writeLoaText() {
                     const fontName = '"Be Vietnam Pro", Arial, sans-serif';
 
+                    // Tên chủ TK (Tăng thêm 10% lên 57px, Lùi lên trên 1mm ~ Y = 102px)
                     ctx.save();
                     ctx.fillStyle = colorName || "#003b7a";
-                    let nameFontSize = 52;
+                    let nameFontSize = 57;
                     ctx.font = `bold ${nameFontSize}px ${fontName}`;
                     const maxW = 900;
                     while (ctx.measureText(nameClean).width > maxW && nameFontSize > 22) {
@@ -3678,12 +3694,13 @@
                     }
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(nameClean, 544, 111);
+                    ctx.fillText(nameClean, 544, 102);
                     ctx.restore();
 
+                    // Số TK Nguồn (Tăng 20% nữa lên 58px, Lùi lên trên 1mm ~ Y = 1000px)
                     ctx.save();
                     ctx.fillStyle = colorAcc || "#0f172a";
-                    let accFontSize = 48;
+                    let accFontSize = 58;
                     ctx.font = `bold ${accFontSize}px ${fontName}`;
                     while (ctx.measureText(accClean).width > maxW && accFontSize > 20) {
                         accFontSize -= 2;
@@ -3691,13 +3708,13 @@
                     }
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(accClean, 544, 1009);
+                    ctx.fillText(accClean, 544, 1000);
                     ctx.restore();
                 }
             };
             bgImg.onerror = function() {
                 console.error("Lỗi nạp phôi ảnh QRLOA.png");
-                if (onDone) onDone(canvas);
+                safeDone();
             };
             bgImg.src = './QRLOA.png';
         }
@@ -3775,20 +3792,6 @@
             showToast("Nhấp giữ vào ảnh để chọn Lưu hoặc Gửi ảnh!");
         }
 
-        function triggerDirectDownloadAndModal(canvas, fileName, shareTitle) {
-            try {
-                const dataUrl = canvas.toDataURL('image/png');
-                const a = document.createElement('a');
-                a.href = dataUrl;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
-            } catch(e) {}
-
-            openQrImageModal(canvas, fileName, shareTitle);
-        }
-
         function downloadSingleStandeePNG() {
             const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
             const alias = document.getElementById('std-alias')?.value || "0348741868";
@@ -3796,10 +3799,16 @@
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
-            showToast("Đang tạo ảnh Standee PNG sắc nét HD...");
+            showToast("Đang chuẩn bị Tải mã QR...");
+
+            const liveCanvas = document.getElementById('standee-preview-canvas');
+            if (liveCanvas && liveCanvas.width > 0) {
+                openQrImageModal(liveCanvas, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
+            }
+
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                triggerDirectDownloadAndModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
+                openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
             });
         }
 
@@ -3809,10 +3818,16 @@
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
-            showToast("Đang tạo ảnh QR LOA PNG sắc nét HD...");
+            showToast("Đang chuẩn bị Tải mã QR...");
+
+            const liveCanvas = document.getElementById('standee-preview-canvas');
+            if (liveCanvas && liveCanvas.width > 0) {
+                openQrImageModal(liveCanvas, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
+            }
+
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                triggerDirectDownloadAndModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
+                openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
             });
         }
 
@@ -3823,30 +3838,15 @@
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
-            showToast("Đang xử lý tệp chia sẻ Standee QR...");
+            showToast("Đang chuẩn bị Chia sẻ mã QR...");
+            const liveCanvas = document.getElementById('standee-preview-canvas');
+            if (liveCanvas && liveCanvas.width > 0) {
+                tryShareOrModal(liveCanvas, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
+            }
+
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                try {
-                    c.toBlob(async function(blob) {
-                        if (blob) {
-                            const file = new File([blob], `QR_Standee_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                try {
-                                    await navigator.share({
-                                        title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
-                                        text: `Mã VietQR Standee QTDND Yên Thọ - ${name}`,
-                                        files: [file]
-                                    });
-                                    showToast("Đã chia sẻ thành công!");
-                                    return;
-                                } catch(e) {}
-                            }
-                        }
-                        openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
-                    }, 'image/png');
-                } catch(e) {
-                    openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
-                }
+                tryShareOrModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
             });
         }
 
@@ -3856,31 +3856,40 @@
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
-            showToast("Đang xử lý tệp chia sẻ QR LOA...");
+            showToast("Đang chuẩn bị Chia sẻ mã QR...");
+            const liveCanvas = document.getElementById('standee-preview-canvas');
+            if (liveCanvas && liveCanvas.width > 0) {
+                tryShareOrModal(liveCanvas, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
+            }
+
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                try {
-                    c.toBlob(async function(blob) {
-                        if (blob) {
-                            const file = new File([blob], `QR_LOA_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                try {
-                                    await navigator.share({
-                                        title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
-                                        text: `Mã VietQR LOA QTDND Yên Thọ - ${name}`,
-                                        files: [file]
-                                    });
-                                    showToast("Đã chia sẻ thành công!");
-                                    return;
-                                } catch(e) {}
-                            }
-                        }
-                        openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
-                    }, 'image/png');
-                } catch(e) {
-                    openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
-                }
+                tryShareOrModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
             });
+        }
+
+        function tryShareOrModal(canvas, fileName, shareText) {
+            try {
+                canvas.toBlob(async function(blob) {
+                    if (blob) {
+                        const file = new File([blob], fileName, { type: 'image/png' });
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            try {
+                                await navigator.share({
+                                    title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
+                                    text: shareText,
+                                    files: [file]
+                                });
+                                showToast("Đã chia sẻ thành công!");
+                                return;
+                            } catch(e) {}
+                        }
+                    }
+                    openQrImageModal(canvas, fileName, shareText);
+                }, 'image/png');
+            } catch(e) {
+                openQrImageModal(canvas, fileName, shareText);
+            }
         }
 
         // Subtab Navigation Switcher
