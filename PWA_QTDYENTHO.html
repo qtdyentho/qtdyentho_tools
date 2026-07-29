@@ -1622,7 +1622,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v20.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v21.0";
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -1966,17 +1966,22 @@
 
         function formatCoopbankAccount(accStr) {
             if (!accStr) return "3800001234567899";
-            let digits = accStr.toString().replace(/[^0-9]/g, '');
-            if (!digits) return "3800001234567899";
-            if (digits.length === 16) return digits;
-            // Nếu nhập 10 số có số 0 ở đầu (ví dụ: 0138221012), bỏ số 0 đầu để còn 9 số đuôi
-            if (digits.length === 10 && digits.startsWith("0")) {
-                digits = digits.slice(1);
+            const digits = accStr.toString().replace(/[^0-9]/g, '');
+            return digits || "3800001234567899";
+        }
+
+        function generateQRDataURI(accountNo, memo, amount) {
+            try {
+                const payload = generateVietQREMVCoPayload("970446", accountNo, memo, amount);
+                const c = document.createElement('canvas');
+                c.width = 400;
+                c.height = 400;
+                const ctx = c.getContext('2d');
+                QRCodeLib.drawQR(ctx, payload, 0, 0, 400);
+                return c.toDataURL('image/png');
+            } catch(e) {
+                return "";
             }
-            if (digits.length > 0 && digits.length <= 9) {
-                return "3800200" + digits.padStart(9, "0");
-            }
-            return digits;
         }
 
         // Math Formulas
@@ -3405,14 +3410,13 @@
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(finalAmount)} đ`;
 
             if (codeImgEl) {
-                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}&template=qr_only`;
-                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${finalAmount}&addInfo=${encodeURIComponent(memo)}`;
-                
-                codeImgEl.onerror = function() {
-                    this.onerror = null;
-                    this.src = fallbackUrl;
-                };
-                codeImgEl.src = primaryUrl;
+                const vectorDataUrl = generateQRDataURI(FIXED_ACC_NUMBER, memo, finalAmount);
+                if (vectorDataUrl) {
+                    codeImgEl.src = vectorDataUrl;
+                } else {
+                    const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}&template=qr_only`;
+                    codeImgEl.src = primaryUrl;
+                }
             }
         }
 
@@ -3452,14 +3456,13 @@
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(amount)} đ`;
 
             if (codeImgEl) {
-                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}&template=qr_only`;
-                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
-                
-                codeImgEl.onerror = function() {
-                    this.onerror = null;
-                    this.src = fallbackUrl;
-                };
-                codeImgEl.src = primaryUrl;
+                const vectorDataUrl = generateQRDataURI(FIXED_ACC_NUMBER, memo, amount);
+                if (vectorDataUrl) {
+                    codeImgEl.src = vectorDataUrl;
+                } else {
+                    const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}&template=qr_only`;
+                    codeImgEl.src = primaryUrl;
+                }
             }
         }
 
@@ -3501,16 +3504,36 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
         function updateStandeePreview() {
             if (currentStandeeMode === 'qrloa') {
                 const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
-                const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
+                const accEl = document.getElementById('loa-acc');
+                const acc = accEl?.value || "3800200138221012";
                 const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
                 const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+                
+                const cleanDigits = acc.replace(/[^0-9]/g, '');
+                if (accEl) {
+                    if (cleanDigits.length !== 16 && cleanDigits.length > 0) {
+                        accEl.classList.add('border-amber-500', 'ring-2', 'ring-amber-200');
+                    } else {
+                        accEl.classList.remove('border-amber-500', 'ring-2', 'ring-amber-200');
+                    }
+                }
                 renderQRLoaCanvasToTarget('standee-preview-canvas', name, acc, colorName, colorAcc);
             } else {
                 const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
                 const alias = document.getElementById('std-alias')?.value || "0348741868";
-                const acc = document.getElementById('std-acc')?.value || "3800200138221012";
+                const accEl = document.getElementById('std-acc');
+                const acc = accEl?.value || "3800200138221012";
                 const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
                 const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+
+                const cleanDigits = acc.replace(/[^0-9]/g, '');
+                if (accEl) {
+                    if (cleanDigits.length !== 16 && cleanDigits.length > 0) {
+                        accEl.classList.add('border-amber-500', 'ring-2', 'ring-amber-200');
+                    } else {
+                        accEl.classList.remove('border-amber-500', 'ring-2', 'ring-amber-200');
+                    }
+                }
                 renderStandeeCanvasToTarget('standee-preview-canvas', name, alias, acc, colorName, colorInfo);
             }
         }
@@ -3924,14 +3947,6 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             const rawAcc = (acc || "").trim();
             const accClean = formatCoopbankAccount(rawAcc);
-            const hintEl = document.getElementById('std-acc-hint');
-            if (hintEl) {
-                if (accClean.length === 16) {
-                    hintEl.innerHTML = `<span class="text-emerald-700 font-bold">✅ Mã QR dùng Số TK Co-opBank (16 số): ${accClean}</span>`;
-                } else {
-                    hintEl.innerHTML = `<span class="text-amber-700 font-bold">⚠️ Vui lòng nhập 10 số đuôi hoặc đủ 16 số Co-opBank (Hiện tại: ${accClean.length}/16 số)</span>`;
-                }
-            }
             const nameClean = (name || "QUY TIN DUNG NHAN DAN YEN THO").trim().toUpperCase();
             const aliasClean = (alias || "").trim();
             const memoClean = removeVietnameseTones(`TT STANDEE ${nameClean}`).toUpperCase();
@@ -4066,14 +4081,6 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             const rawAcc = (acc || "").trim();
             const accClean = formatCoopbankAccount(rawAcc);
-            const hintEl = document.getElementById('loa-acc-hint');
-            if (hintEl) {
-                if (accClean.length === 16) {
-                    hintEl.innerHTML = `<span class="text-purple-700 font-bold">✅ Mã QR dùng Số TK Co-opBank (16 số): ${accClean}</span>`;
-                } else {
-                    hintEl.innerHTML = `<span class="text-amber-700 font-bold">⚠️ Vui lòng nhập 10 số đuôi hoặc đủ 16 số Co-opBank (Hiện tại: ${accClean.length}/16 số)</span>`;
-                }
-            }
             const nameClean = (name || "QUY TIN DUNG NHAN DAN YEN THO").trim().toUpperCase();
             const memoClean = removeVietnameseTones(`TT QRLOA ${nameClean}`).toUpperCase();
 
