@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v11.1";
+                    const thisVersion = "2026.07.29-v11.2";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v11.1";
+        const CURRENT_APP_VERSION = "2026.07.29-v11.2";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v11.1';
+                        const CACHE_NAME = 'qtd-tools-cache-v11.2';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3749,7 +3749,7 @@
             };
         })();
 
-        function generateVietQREMVCoPayload(bin, accountNo, memo) {
+        function generateVietQREMVCoPayload(bin, accountNo, memo, amount) {
             function pad2(n) { return n < 10 ? '0' + n : '' + n; }
             function calcCRC16(str) {
                 let crc = 0xFFFF;
@@ -3775,6 +3775,13 @@
             const tag53_curr = "5303704";
             const tag58_country = "5802VN";
 
+            // Tag 54: Số tiền (tuỳ chọn, chuẩn EMVCo)
+            let tag54 = "";
+            if (amount && Number(amount) > 0) {
+                const amtStr = Math.round(Number(amount)).toString();
+                tag54 = "54" + pad2(amtStr.length) + amtStr;
+            }
+
             let tag62 = "";
             if (memo && memo.trim()) {
                 const memoClean = memo.trim();
@@ -3782,9 +3789,10 @@
                 tag62 = "62" + pad2(tag08_memo.length) + tag08_memo;
             }
 
-            const payload = "000201" + "010211" + tag38 + tag53_curr + tag58_country + tag62 + "6304";
+            const payload = "000201" + "010211" + tag38 + tag53_curr + tag54 + tag58_country + tag62 + "6304";
             return payload + calcCRC16(payload);
         }
+
 
         function renderStandeeCanvasToTarget(canvasTarget, name, alias, acc, colorName, colorInfo, onDone) {
             const canvas = (typeof canvasTarget === 'string') ? document.getElementById(canvasTarget) : canvasTarget;
@@ -4083,12 +4091,178 @@
             bgImg.src = './QRLOA.png';
         }
 
-        // ==================== BỘ XUẤT TỆP VÀ CHIA SẺ MÃ QR ĐA NỀN TẢNG (DESKTOP CHROME SAFE) ====================
-        let currentModalCanvasBlob = null;
-        let currentModalFileName = "VietQR_QTD_YenTho.png";
-        let currentModalShareText = "Mã VietQR Co-opBank - QTDND Yên Thọ";
+
+        // ==================== HÀM TẢI & CHIA SẺ MÃ QR TIỀN VY / TIỀN GỬI ====================
+        // Vẽ toàn bộ card (QR + thông tin) vào canvas rồi xuất ảnh HD
+
+        function buildQRCardCanvas(imgId, callback) {
+            const qrImg = document.getElementById(imgId);
+            if (!qrImg || !qrImg.src || qrImg.src === window.location.href) {
+                showToast("Chưa có mã QR để tải. Vui lòng điền đầy đủ thông tin!");
+                return;
+            }
+
+            // Phân biệt loan (qr-code-img) hay savings (qr-sav-code-img)
+            const isLoan = (imgId === 'qr-code-img');
+            const cardTitle = isLoan ? "QR THANH TOÁN TIỀN VAY" : "QR GỬI TIẾT KIỆM";
+            const accentColor = isLoan ? "#10b981" : "#3b82f6";
+            const cardAmountEl = document.getElementById(isLoan ? 'qr-card-amount' : 'qr-sav-card-amount');
+            const cardMemoEl   = document.getElementById(isLoan ? 'qr-card-memo'   : 'qr-sav-card-memo');
+            const amountText   = cardAmountEl ? cardAmountEl.textContent : "";
+            const memoText     = cardMemoEl   ? cardMemoEl.textContent   : "";
+
+            const W = 700, H = 860;
+            const canvas = document.createElement('canvas');
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            // Nền tối
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+
+            // Header
+            ctx.fillStyle = accentColor;
+            ctx.fillRect(0, 0, W, 80);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 26px "Be Vietnam Pro", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', W / 2, 30);
+            ctx.font = 'bold 18px "Be Vietnam Pro", Arial, sans-serif';
+            ctx.fillText(cardTitle, W / 2, 60);
+
+            // Khung QR trắng
+            const qrBox = { x: W / 2 - 210, y: 100, w: 420, h: 420 };
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.roundRect(qrBox.x - 12, qrBox.y - 12, qrBox.w + 24, qrBox.h + 24, 16);
+            ctx.fill();
+
+            // Vẽ ảnh QR
+            function drawQROnCanvas() {
+                try { ctx.drawImage(qrImg, qrBox.x, qrBox.y, qrBox.w, qrBox.h); } catch(e) {}
+
+                // Logo ở giữa QR
+                const logo = new Image();
+                logo.onload = function() {
+                    const logoSz = 80;
+                    const cx = qrBox.x + qrBox.w / 2;
+                    const cy = qrBox.y + qrBox.h / 2;
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, logoSz / 2 + 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, logoSz / 2, 0, Math.PI * 2);
+                    ctx.clip();
+                    try { ctx.drawImage(logo, cx - logoSz/2, cy - logoSz/2, logoSz, logoSz); } catch(e){}
+                    ctx.restore();
+                    drawInfo();
+                };
+                logo.onerror = drawInfo;
+                logo.src = './LOgoQR.jpg';
+            }
+
+            function drawInfo() {
+                // Thông tin số tiền
+                const infoY = qrBox.y + qrBox.h + 40;
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(40, infoY, W - 80, 200);
+                ctx.beginPath();
+                ctx.roundRect(40, infoY, W - 80, 200, 12);
+                ctx.fill();
+
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'top';
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '15px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText('Số tiền:', 60, infoY + 18);
+
+                ctx.fillStyle = accentColor;
+                ctx.font = 'bold 28px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText(amountText, 60, infoY + 40);
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '15px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText('Nội dung:', 60, infoY + 85);
+
+                ctx.fillStyle = '#f1f5f9';
+                ctx.font = 'bold 14px "Be Vietnam Pro", Arial, sans-serif';
+                // Wrap text nội dung
+                const maxW = W - 120;
+                const words = memoText.split(' ');
+                let line = '', ly = infoY + 108;
+                for (let w of words) {
+                    const test = line + w + ' ';
+                    if (ctx.measureText(test).width > maxW && line !== '') {
+                        ctx.fillText(line.trim(), 60, ly);
+                        line = w + ' ';
+                        ly += 22;
+                        if (ly > infoY + 190) break;
+                    } else {
+                        line = test;
+                    }
+                }
+                ctx.fillText(line.trim(), 60, ly);
+
+                // Footer
+                ctx.fillStyle = '#475569';
+                ctx.font = '13px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('COOPBANK — QTDND Yên Thọ — Powered by QTD Tools', W / 2, H - 20);
+
+                if (callback) callback(canvas);
+            }
+
+            // Nếu ảnh QR đã load xong, vẽ ngay; nếu chưa thì chờ
+            if (qrImg.complete && qrImg.naturalWidth > 0) {
+                drawQROnCanvas();
+            } else {
+                qrImg.onload = drawQROnCanvas;
+                qrImg.onerror = function() {
+                    // Offline: sinh QR trực tiếp bằng engine nội bộ
+                    const memoFull = (document.getElementById(isLoan ? 'qr-memo-text' : 'qr-sav-memo-text')?.value || "").trim();
+                    const amount = isLoan
+                        ? parseVND(document.getElementById('qr-final-amount')?.value || '0')
+                        : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
+                    try {
+                        const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(qrBox.x - 12, qrBox.y - 12, qrBox.w + 24, qrBox.h + 24);
+                        QRCodeLib.drawQR(ctx, payload, qrBox.x, qrBox.y, qrBox.w);
+                    } catch(e) {}
+                    drawInfo();
+                };
+            }
+        }
+
+        function downloadQRImage(imgId) {
+            showToast("Đang tạo ảnh mã QR HD...");
+            const isLoan = (imgId === 'qr-code-img');
+            const name = (document.getElementById(isLoan ? 'qr-loan-name' : 'qr-sav-name')?.value || 'KhachHang').replace(/\s+/g, '_');
+            const fileName = isLoan ? `QR_TienVay_${name}.png` : `QR_TienGui_${name}.png`;
+            const title = isLoan ? `Mã QR Thanh Toán Tiền Vay - ${name}` : `Mã QR Gửi Tiết Kiệm - ${name}`;
+            buildQRCardCanvas(imgId, function(canvas) {
+                openQrImageModal(canvas, fileName, title);
+            });
+        }
+
+        function shareQRImage(imgId) {
+            showToast("Đang chuẩn bị Chia sẻ mã QR...");
+            const isLoan = (imgId === 'qr-code-img');
+            const name = (document.getElementById(isLoan ? 'qr-loan-name' : 'qr-sav-name')?.value || 'KhachHang').replace(/\s+/g, '_');
+            const fileName = isLoan ? `QR_TienVay_${name}.png` : `QR_TienGui_${name}.png`;
+            const title = isLoan ? `Mã QR Tiền Vay QTDND Yên Thọ - ${name}` : `Mã QR Gửi Tiết Kiệm QTDND Yên Thọ - ${name}`;
+            buildQRCardCanvas(imgId, function(canvas) {
+                tryShareOrModal(canvas, fileName, title);
+            });
+        }
 
         function openQrImageModal(canvas, fileName, shareTitle) {
+
             currentModalFileName = fileName;
             currentModalShareText = shareTitle || "Mã VietQR Co-opBank - QTDND Yên Thọ";
             const modal = document.getElementById('qr-image-modal');
