@@ -789,6 +789,10 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         <span>QR Tiết kiệm</span>
                     </button>
+                    <button onclick="switchQRTab('qr-standee')" id="subtab-qr-standee" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span>🎴 QR Standee</span>
+                    </button>
                     <button onclick="switchQRTab('qr-guide')" id="subtab-qr-guide" class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
                         <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         <span>HD Chuyển khoản</span>
@@ -974,6 +978,151 @@
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
                                     <span>Chia Sẻ Mã</span>
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBTAB QR STANDEE KHÁCH HÀNG -->
+                <div id="qr-standee" class="qr-subtab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Left Panel: Inputs & Controls (7 Cols) -->
+                        <div class="lg:col-span-7 space-y-5">
+                            <!-- Toggle Mode: Standee Đơn vs Ghép 4 KH trên A4 -->
+                            <div class="p-1 bg-slate-100 rounded-xl flex gap-1 border border-slate-200 text-xs font-bold">
+                                <button type="button" id="btn-mode-single" onclick="setStandeeMode('single')" class="flex-1 py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm border border-slate-200 flex items-center justify-center gap-1.5 transition">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Tạo 1 Thẻ Standee Đơn</span>
+                                </button>
+                                <button type="button" id="btn-mode-batch" onclick="setStandeeMode('batch')" class="flex-1 py-2 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    <span>In Ghép 4 KH / Trang A4 (2x2)</span>
+                                </button>
+                            </div>
+
+                            <!-- Form 1: Standee Đơn -->
+                            <div id="standee-form-single" class="space-y-4">
+                                <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-emerald-600 rounded-full inline-block"></span>
+                                    Thông tin Thẻ QR Standee Khách Hàng
+                                </h3>
+
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Họ và tên Chủ Tài Khoản (In HOA)</label>
+                                        <input type="text" id="std-name" value="NGUYEN THI NGUYET" oninput="this.value = removeVietnameseTones(this.value).toUpperCase(); updateStandeePreview();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-900 bg-white focus:ring-2 focus:ring-emerald-500">
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block font-semibold text-slate-700 mb-1">Số Alias (Số điện thoại / Biệt danh)</label>
+                                            <input type="text" id="std-alias" value="0348741868" oninput="updateStandeePreview()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-amber-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-semibold text-slate-700 mb-1">Số TK Nguồn (Mã hóa QR)</label>
+                                            <input type="text" id="std-acc" value="3800200138221012" oninput="updateStandeePreview()" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-emerald-800 bg-white">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bộ Chọn Màu Chữ (Custom Color Pickers) -->
+                                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
+                                    <span class="font-bold text-slate-800 flex items-center gap-1.5">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+                                        Tuỳ chỉnh Màu chữ hiển thị lên Thẻ Standee:
+                                    </span>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Màu Tên Chủ Tài Khoản:</label>
+                                            <select id="std-color-name" onchange="updateStandeePreview()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white">
+                                                <option value="#003b7a" selected>🔷 Xanh Navy Chuyên Nghiệp (#003b7a)</option>
+                                                <option value="#047857">🟢 Xanh Lá Đậm Thương Hiệu (#047857)</option>
+                                                <option value="#991b1b">🔴 Đỏ Đậm Nổi Bật (#991b1b)</option>
+                                                <option value="#0f172a">⚫ Đen Sang Trọng (#0f172a)</option>
+                                                <option value="#c2410c">🟠 Cam Đậm Chấn Hưng (#c2410c)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Màu Số Alias & TK Nguồn:</label>
+                                            <select id="std-color-info" onchange="updateStandeePreview()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white">
+                                                <option value="#d97706" selected>🟠 Cam Đỏ Mặc Định (#d97706)</option>
+                                                <option value="#0f172a">⚫ Đen Tự Nhiên (#0f172a)</option>
+                                                <option value="#047857">🟢 Xanh Lá Bảo Vệ (#047857)</option>
+                                                <option value="#b45309">🟤 Nâu Hổ Phách (#b45309)</option>
+                                                <option value="#003b7a">🔷 Xanh Dương Đậm (#003b7a)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 pt-2">
+                                    <button onclick="downloadSingleStandeePNG()" class="py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        <span>📥 Tải Ảnh Standee PNG (HD)</span>
+                                    </button>
+                                    <button onclick="printSingleStandeeA4()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                        <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H7a2 2 0 00-2 2v4h10z"></path></svg>
+                                        <span>🖨️ In Khổ A4 (1 Thẻ Lớn)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Form 2: Ghép 4 Khách Hàng / Trang A4 -->
+                            <div id="standee-form-batch" class="hidden space-y-4">
+                                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                        <span class="w-2 h-4 bg-blue-600 rounded-full inline-block"></span>
+                                        Nhập Thông Tin 4 Khách Hàng In Ghép Trang A4 (Lưới 2x2)
+                                    </h3>
+                                    <span class="text-[11px] px-2 py-0.5 bg-blue-100 text-blue-900 font-bold rounded-md">Tối đa 4 KH</span>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                    <!-- KH 1 -->
+                                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                                        <span class="font-extrabold text-blue-900 flex items-center gap-1">👤 Khách Hàng 1 (Góc Trên Trái)</span>
+                                        <input type="text" id="batch-name-1" value="NGUYEN THI NGUYET" oninput="this.value = removeVietnameseTones(this.value).toUpperCase();" placeholder="Tên KH 1 (In HOA)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-xs">
+                                        <input type="text" id="batch-alias-1" value="0348741868" placeholder="Số Alias KH 1" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                        <input type="text" id="batch-acc-1" value="3800200138221012" placeholder="Số TK Nguồn KH 1" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                    </div>
+                                    <!-- KH 2 -->
+                                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                                        <span class="font-extrabold text-blue-900 flex items-center gap-1">👤 Khách Hàng 2 (Góc Trên Phải)</span>
+                                        <input type="text" id="batch-name-2" value="TRAN VAN NAM" oninput="this.value = removeVietnameseTones(this.value).toUpperCase();" placeholder="Tên KH 2 (In HOA)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-xs">
+                                        <input type="text" id="batch-alias-2" value="0941562789" placeholder="Số Alias KH 2" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                        <input type="text" id="batch-acc-2" value="3800200138999888" placeholder="Số TK Nguồn KH 2" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                    </div>
+                                    <!-- KH 3 -->
+                                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                                        <span class="font-extrabold text-blue-900 flex items-center gap-1">👤 Khách Hàng 3 (Góc Dưới Trái)</span>
+                                        <input type="text" id="batch-name-3" value="LE THI HOA" oninput="this.value = removeVietnameseTones(this.value).toUpperCase();" placeholder="Tên KH 3 (In HOA)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-xs">
+                                        <input type="text" id="batch-alias-3" value="0983502181" placeholder="Số Alias KH 3" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                        <input type="text" id="batch-acc-3" value="3800200138555666" placeholder="Số TK Nguồn KH 3" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                    </div>
+                                    <!-- KH 4 -->
+                                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                                        <span class="font-extrabold text-blue-900 flex items-center gap-1">👤 Khách Hàng 4 (Góc Dưới Phải)</span>
+                                        <input type="text" id="batch-name-4" value="PHAM QUANG HUY" oninput="this.value = removeVietnameseTones(this.value).toUpperCase();" placeholder="Tên KH 4 (In HOA)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-xs">
+                                        <input type="text" id="batch-alias-4" value="0965122111" placeholder="Số Alias KH 4" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                        <input type="text" id="batch-acc-4" value="3800200138111222" placeholder="Số TK Nguồn KH 4" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-mono text-xs">
+                                    </div>
+                                </div>
+
+                                <button onclick="printBatchStandeeA4()" class="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-md">
+                                    <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H7a2 2 0 00-2 2v4h10z"></path></svg>
+                                    <span>🖨️ In Ngay Trang A4 (Ghép 4 Mã QR - Lưới 2x2)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Live Standee Canvas Preview (5 Cols) -->
+                        <div class="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-900 rounded-2xl text-white space-y-3 shadow-md">
+                            <div class="text-center space-y-1">
+                                <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">Live Preview Standee</span>
+                                <h3 class="font-bold text-sm text-white">XEM TRƯỚC THẺ QR STANDEE</h3>
+                            </div>
+
+                            <div class="bg-white p-2 rounded-xl shadow-inner border-2 border-emerald-500 max-w-full overflow-hidden">
+                                <canvas id="standee-preview-canvas" width="1087" height="1643" class="w-full max-w-[300px] sm:max-w-[340px] h-auto object-contain rounded-lg shadow-sm"></canvas>
                             </div>
                         </div>
                     </div>
@@ -1410,7 +1559,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.28-v3.4";
+                    const thisVersion = "2026.07.29-v4.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1420,7 +1569,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.28-v3.4";
+        const CURRENT_APP_VERSION = "2026.07.29-v4.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1461,7 +1610,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v3.4';
+                        const CACHE_NAME = 'qtd-tools-cache-v4.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3316,6 +3465,345 @@
             }
         }
 
+        // ==================== 3. STANDEE QR GENERATOR & A4 BATCH PRINT ENGINE ====================
+        let currentStandeeMode = 'single';
+
+        function setStandeeMode(mode) {
+            currentStandeeMode = mode;
+            const singleForm = document.getElementById('standee-form-single');
+            const batchForm = document.getElementById('standee-form-batch');
+            const btnSingle = document.getElementById('btn-mode-single');
+            const btnBatch = document.getElementById('btn-mode-batch');
+
+            if (mode === 'single') {
+                if (singleForm) singleForm.classList.remove('hidden');
+                if (batchForm) batchForm.classList.add('hidden');
+
+                if (btnSingle) {
+                    btnSingle.className = "flex-1 py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm border border-slate-200 flex items-center justify-center gap-1.5 transition font-bold";
+                }
+                if (btnBatch) {
+                    btnBatch.className = "flex-1 py-2 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 font-bold";
+                }
+                updateStandeePreview();
+            } else {
+                if (singleForm) singleForm.classList.add('hidden');
+                if (batchForm) batchForm.classList.remove('hidden');
+
+                if (btnSingle) {
+                    btnSingle.className = "flex-1 py-2 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 font-bold";
+                }
+                if (btnBatch) {
+                    btnBatch.className = "flex-1 py-2 px-3 rounded-lg bg-white text-blue-800 shadow-sm border border-slate-200 flex items-center justify-center gap-1.5 transition font-bold";
+                }
+                // Preview Customer 1 in batch mode
+                const name1 = document.getElementById('batch-name-1')?.value || "NGUYEN THI NGUYET";
+                const alias1 = document.getElementById('batch-alias-1')?.value || "0348741868";
+                const acc1 = document.getElementById('batch-acc-1')?.value || "3800200138221012";
+                renderStandeeCanvasToTarget('standee-preview-canvas', name1, alias1, acc1, '#003b7a', '#d97706');
+            }
+        }
+
+        function updateStandeePreview() {
+            const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
+            const alias = document.getElementById('std-alias')?.value || "0348741868";
+            const acc = document.getElementById('std-acc')?.value || "3800200138221012";
+            const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
+            const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+
+            renderStandeeCanvasToTarget('standee-preview-canvas', name, alias, acc, colorName, colorInfo);
+        }
+
+        function renderStandeeCanvasToTarget(canvasTarget, name, alias, acc, colorName, colorInfo, onDone) {
+            const canvas = (typeof canvasTarget === 'string') ? document.getElementById(canvasTarget) : canvasTarget;
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const W = 1087;
+            const H = 1643;
+            canvas.width = W;
+            canvas.height = H;
+
+            // Step 1: Draw Background Image
+            const bgImg = new Image();
+            bgImg.crossOrigin = 'Anonymous';
+            bgImg.onload = function() {
+                ctx.drawImage(bgImg, 0, 0, W, H);
+
+                // Step 2: Draw QR Code (Encoded with TK Nguồn as requested)
+                const accClean = acc.trim();
+                const memoClean = removeVietnameseTones(`TT STANDEE ${name}`).toUpperCase();
+                const qrUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${accClean}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
+                
+                const qrImg = new Image();
+                qrImg.crossOrigin = 'Anonymous';
+                qrImg.onload = function() {
+                    // Position inside the yellow frame of BackgroundQR.png
+                    const qrX = 135;
+                    const qrY = 155;
+                    const qrSize = 818;
+                    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+                    // Step 3: Draw Fund Logo (LOgoQR.jpg) in the center of QR code
+                    const logoImg = new Image();
+                    logoImg.crossOrigin = 'Anonymous';
+                    logoImg.onload = function() {
+                        const logoSize = 164; // ~20% of QR size (safe ISO error correction)
+                        const centerX = qrX + (qrSize / 2);
+                        const centerY = qrY + (qrSize / 2);
+
+                        // White circle background + green border
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, (logoSize / 2) + 6, 0, Math.PI * 2);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fill();
+                        ctx.lineWidth = 4;
+                        ctx.strokeStyle = '#047857';
+                        ctx.stroke();
+                        ctx.restore();
+
+                        // Clip & draw logo
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
+                        ctx.clip();
+                        ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
+                        ctx.restore();
+
+                        // Step 4: Write Account Info Text
+                        writeStandeeText();
+                    };
+
+                    logoImg.onerror = function() {
+                        writeStandeeText();
+                    };
+                    logoImg.src = './LOgoQR.jpg';
+                };
+
+                qrImg.onerror = function() {
+                    writeStandeeText();
+                };
+                qrImg.src = qrUrl;
+
+                function writeStandeeText() {
+                    // Tên Chủ Tài Khoản (Center Aligned)
+                    const nameStr = name ? name.toUpperCase() : "NGUYEN THI NGUYET";
+                    ctx.save();
+                    ctx.fillStyle = colorName || "#003b7a";
+                    ctx.font = "bold 52px 'Times New Roman', Times, Arial, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(nameStr, 543.5, 1248);
+                    ctx.restore();
+
+                    // Alias Number (Left Aligned next to 'Alias:')
+                    const aliasStr = alias || "";
+                    ctx.save();
+                    ctx.fillStyle = colorInfo || "#d97706";
+                    ctx.font = "bold 44px 'Times New Roman', Times, Arial, sans-serif";
+                    ctx.textAlign = "left";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(aliasStr, 318, 1318);
+                    ctx.restore();
+
+                    // TK Nguồn Number (Left Aligned next to 'TK nguồn:')
+                    const accStr = acc || "";
+                    ctx.save();
+                    ctx.fillStyle = colorInfo || "#c2410c";
+                    ctx.font = "bold 44px 'Times New Roman', Times, Arial, sans-serif";
+                    ctx.textAlign = "left";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(accStr, 395, 1365);
+                    ctx.restore();
+
+                    if (onDone) onDone(canvas);
+                }
+            };
+            bgImg.src = './BackgroundQR.png';
+        }
+
+        function downloadSingleStandeePNG() {
+            const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
+            const alias = document.getElementById('std-alias')?.value || "0348741868";
+            const acc = document.getElementById('std-acc')?.value || "3800200138221012";
+            const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
+            const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+
+            showToast("Đang tạo ảnh Standee PNG sắc nét HD...");
+            const tempCanvas = document.createElement('canvas');
+
+            renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
+                const a = document.createElement('a');
+                a.href = c.toDataURL('image/png');
+                a.download = `QR_Standee_QTD_YenTho_${name.replace(/\s+/g, '_')}_${Date.now()}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast("Đã tải ảnh QR Standee PNG thành công!");
+            });
+        }
+
+        function printSingleStandeeA4() {
+            const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
+            const alias = document.getElementById('std-alias')?.value || "0348741868";
+            const acc = document.getElementById('std-acc')?.value || "3800200138221012";
+            const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
+            const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+
+            showToast("Đang chuẩn bị trang in A4 Standee...");
+            const tempCanvas = document.createElement('canvas');
+
+            renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
+                const dataUrl = c.toDataURL('image/png');
+                const win = window.open('', '_blank');
+                if (!win) return;
+
+                win.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>In Thẻ QR Standee - ${name}</title>
+                        <style>
+                            @page { size: A4 portrait; margin: 10mm; }
+                            body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #fff; }
+                            .standee-card { width: 180mm; height: auto; max-height: 270mm; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 5px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+                            .standee-card img { width: 100%; height: auto; display: block; border-radius: 6px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="standee-card">
+                            <img src="${dataUrl}" alt="Thẻ QR Standee">
+                        </div>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+                win.focus();
+                setTimeout(() => { win.print(); }, 600);
+            });
+        }
+
+        function printBatchStandeeA4() {
+            showToast("Đang tạo trang in A4 ghép 4 mã QR Standee...");
+
+            const customers = [
+                {
+                    name: document.getElementById('batch-name-1')?.value || "NGUYEN THI NGUYET",
+                    alias: document.getElementById('batch-alias-1')?.value || "0348741868",
+                    acc: document.getElementById('batch-acc-1')?.value || "3800200138221012"
+                },
+                {
+                    name: document.getElementById('batch-name-2')?.value || "TRAN VAN NAM",
+                    alias: document.getElementById('batch-alias-2')?.value || "0941562789",
+                    acc: document.getElementById('batch-acc-2')?.value || "3800200138999888"
+                },
+                {
+                    name: document.getElementById('batch-name-3')?.value || "LE THI HOA",
+                    alias: document.getElementById('batch-alias-3')?.value || "0983502181",
+                    acc: document.getElementById('batch-acc-3')?.value || "3800200138555666"
+                },
+                {
+                    name: document.getElementById('batch-name-4')?.value || "PHAM QUANG HUY",
+                    alias: document.getElementById('batch-alias-4')?.value || "0965122111",
+                    acc: document.getElementById('batch-acc-4')?.value || "3800200138111222"
+                }
+            ];
+
+            const dataUrls = [];
+            let completed = 0;
+
+            customers.forEach((cust, index) => {
+                const tempCanvas = document.createElement('canvas');
+                renderStandeeCanvasToTarget(tempCanvas, cust.name, cust.alias, cust.acc, '#003b7a', '#d97706', function(c) {
+                    dataUrls[index] = c.toDataURL('image/png');
+                    completed++;
+
+                    if (completed === 4) {
+                        openBatchPrintWindow(dataUrls);
+                    }
+                });
+            });
+
+            function openBatchPrintWindow(urls) {
+                const win = window.open('', '_blank');
+                if (!win) return;
+
+                win.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>In Ghép 4 Thẻ QR Standee Trang A4 - QTDND Yên Thọ</title>
+                        <style>
+                            @page { size: A4 portrait; margin: 8mm; }
+                            body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #fff; }
+                            .a4-grid {
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                grid-template-rows: 1fr 1fr;
+                                gap: 6mm;
+                                width: 194mm;
+                                height: 280mm;
+                                box-sizing: border-box;
+                            }
+                            .card-box {
+                                border: 1.5px dashed #94a3b8;
+                                border-radius: 8px;
+                                padding: 3mm;
+                                box-sizing: border-box;
+                                display: flex;
+                                flex-direction: column;
+                                items-center;
+                                justify-content: center;
+                                background-color: #ffffff;
+                                position: relative;
+                            }
+                            .card-box img {
+                                max-width: 100%;
+                                max-height: 100%;
+                                object-contain: fit;
+                                border-radius: 4px;
+                            }
+                            .cut-label {
+                                position: absolute;
+                                bottom: 1mm;
+                                right: 2mm;
+                                font-size: 8px;
+                                color: #94a3b8;
+                                font-style: italic;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="a4-grid">
+                            <div class="card-box">
+                                <img src="${urls[0]}" alt="Standee KH 1">
+                                <span class="cut-label">✂️ Đường cắt nếp</span>
+                            </div>
+                            <div class="card-box">
+                                <img src="${urls[1]}" alt="Standee KH 2">
+                                <span class="cut-label">✂️ Đường cắt nếp</span>
+                            </div>
+                            <div class="card-box">
+                                <img src="${urls[2]}" alt="Standee KH 3">
+                                <span class="cut-label">✂️ Đường cắt nếp</span>
+                            </div>
+                            <div class="card-box">
+                                <img src="${urls[3]}" alt="Standee KH 4">
+                                <span class="cut-label">✂️ Đường cắt nếp</span>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+                win.focus();
+                setTimeout(() => { win.print(); }, 800);
+            }
+        }
+
         // Subtab Navigation Switcher
         function switchSubTab(subId) {
             document.querySelectorAll('.subtab-content').forEach(el => el.classList.add('hidden'));
@@ -3379,6 +3867,7 @@
 
             if (qrId === 'qr-loan') calcQRPayment();
             if (qrId === 'qr-sav') calcQRSavings();
+            if (qrId === 'qr-standee') updateStandeePreview();
         }
 
         // Tab Navigation
