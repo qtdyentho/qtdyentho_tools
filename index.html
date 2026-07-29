@@ -1574,7 +1574,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v5.1";
+                    const thisVersion = "2026.07.29-v5.2";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1584,7 +1584,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v5.1";
+        const CURRENT_APP_VERSION = "2026.07.29-v5.2";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1625,7 +1625,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v5.1';
+                        const CACHE_NAME = 'qtd-tools-cache-v5.2';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3508,50 +3508,55 @@
 
                     ctx.save();
                     ctx.fillStyle = colorName || "#003b7a";
-                    let nameFontSize = 52;
+                    let nameFontSize = 68;
                     ctx.font = `bold ${nameFontSize}px ${fontName}`;
-                    const maxNameW = 760;
+                    const maxNameW = 780;
                     while (ctx.measureText(nameClean).width > maxNameW && nameFontSize > 24) {
                         nameFontSize -= 2;
                         ctx.font = `bold ${nameFontSize}px ${fontName}`;
                     }
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(nameClean, 543.5, 1266);
+                    ctx.fillText(nameClean, 543.5, 1275);
                     ctx.restore();
 
                     if (aliasClean) {
                         ctx.save();
                         ctx.fillStyle = colorInfo || "#d97706";
                         let aliasFontSize = Math.round(nameFontSize * 0.80);
+                        if (aliasFontSize < 50) aliasFontSize = 50;
                         ctx.font = `bold ${aliasFontSize}px ${fontName}`;
-                        const maxAliasW = 640;
-                        while (ctx.measureText(aliasClean).width > maxAliasW && aliasFontSize > 18) {
+                        const maxAliasW = 700;
+                        while (ctx.measureText(aliasClean).width > maxAliasW && aliasFontSize > 20) {
                             aliasFontSize -= 2;
                             ctx.font = `bold ${aliasFontSize}px ${fontName}`;
                         }
-                        ctx.textAlign = "left";
+                        ctx.textAlign = "center";
                         ctx.textBaseline = "middle";
-                        ctx.fillText(aliasClean, 310, 1336);
+                        ctx.fillText(aliasClean, 543.5, 1345);
                         ctx.restore();
                     }
 
                     ctx.save();
                     ctx.fillStyle = colorInfo || "#c2410c";
-                    let accFontSize = 31;
+                    let accFontSize = 38;
                     ctx.font = `bold ${accFontSize}px ${fontName}`;
-                    const maxAccW = 560;
-                    while (ctx.measureText(accClean).width > maxAccW && accFontSize > 16) {
+                    const maxAccW = 700;
+                    while (ctx.measureText(accClean).width > maxAccW && accFontSize > 18) {
                         accFontSize -= 2;
                         ctx.font = `bold ${accFontSize}px ${fontName}`;
                     }
-                    ctx.textAlign = "left";
+                    ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(accClean, 395, 1401);
+                    ctx.fillText(accClean, 543.5, 1410);
                     ctx.restore();
 
                     if (onDone) onDone(canvas);
                 }
+            };
+            bgImg.onerror = function() {
+                console.error("Lỗi nạp phôi ảnh BackgroundQR.png");
+                if (onDone) onDone(canvas);
             };
             bgImg.src = './BackgroundQR.png';
         }
