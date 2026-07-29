@@ -3,7 +3,6 @@
   "name": "qtd-tools",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/tools", "destination": "/tools/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
