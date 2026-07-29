@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v12.1";
+                    const thisVersion = "2026.07.29-v12.2";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v12.1";
+        const CURRENT_APP_VERSION = "2026.07.29-v12.2";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v12.1';
+                        const CACHE_NAME = 'qtd-tools-cache-v12.2';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3737,19 +3737,23 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
             };
             return {
                 drawQR: function(ctx, text, x, y, size) {
-                    // Tự động chọn type number phù hợp với độ dài payload (tránh QR trắng)
+                    // Tự động chọn Cấp độ sửa lỗi Level H (30%) trước để đảm bảo chèn logo quét nhạy 100% trên app ngân hàng
                     var qr = null;
-                    for (var t = 1; t <= 10; t++) {
-                        try {
-                            var attempt = new QRCode(t, 0);
-                            attempt.addData(text);
-                            attempt.make();
-                            qr = attempt;
-                            break;
-                        } catch(e) {}
+                    var levelsToTry = [2, 3, 0, 1]; // 2=Level H (30%), 3=Level Q (25%), 0=Level M (15%), 1=Level L (7%)
+                    for (var lIdx = 0; lIdx < levelsToTry.length; lIdx++) {
+                        var lvl = levelsToTry[lIdx];
+                        for (var t = 1; t <= 10; t++) {
+                            try {
+                                var attempt = new QRCode(t, lvl);
+                                attempt.addData(text);
+                                attempt.make();
+                                qr = attempt;
+                                break;
+                            } catch(e) {}
+                        }
+                        if (qr) break;
                     }
                     if (!qr) {
-                        // Hiện chữ báo lỗi thay vì để trắng
                         ctx.fillStyle = '#ffffff';
                         ctx.fillRect(x, y, size, size);
                         ctx.fillStyle = '#ef4444';
@@ -4144,7 +4148,7 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
                 // Logo ở giữa QR
                 const logo = new Image();
                 logo.onload = function() {
-                    const logoSz = 80;
+                    const logoSz = Math.round(qrBox.w * 0.16); // 16% QR width chuẩn ISO 18004
                     const cx = qrBox.x + qrBox.w / 2;
                     const cy = qrBox.y + qrBox.h / 2;
                     ctx.save();
