@@ -1559,7 +1559,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v4.0";
+                    const thisVersion = "2026.07.29-v4.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1569,7 +1569,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v4.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v4.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1610,7 +1610,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v4.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v4.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3524,35 +3524,58 @@
             canvas.width = W;
             canvas.height = H;
 
-            // Step 1: Draw Background Image
+            // Xóa canvas và tô nền trắng
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, W, H);
+
+            const accClean = (acc || "3800200138221012").trim();
+            const nameClean = (name || "NGUYEN THI NGUYET").trim().toUpperCase();
+            const aliasClean = (alias || "").trim();
+            const memoClean = removeVietnameseTones(`TT STANDEE ${nameClean}`).toUpperCase();
+
+            // Step 1: Nạp phôi BackgroundQR.png (không dùng crossOrigin cho tệp cục bộ)
             const bgImg = new Image();
-            bgImg.crossOrigin = 'Anonymous';
             bgImg.onload = function() {
                 ctx.drawImage(bgImg, 0, 0, W, H);
+                writeStandeeText(); // Vẽ text ngay khi có nền
 
-                // Step 2: Draw QR Code (Encoded with TK Nguồn as requested)
-                const accClean = acc.trim();
-                const memoClean = removeVietnameseTones(`TT STANDEE ${name}`).toUpperCase();
-                const qrUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${accClean}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
-                
+                // Step 2: Nạp mã VietQR Co-opBank (Hỗ trợ CORS)
                 const qrImg = new Image();
                 qrImg.crossOrigin = 'Anonymous';
+                const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${accClean}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+                const sepayUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${accClean}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
+
                 qrImg.onload = function() {
-                    // Position inside the yellow frame of BackgroundQR.png
+                    drawQRAndLogo(qrImg);
+                };
+
+                qrImg.onerror = function() {
+                    const fallbackQR = new Image();
+                    fallbackQR.onload = function() {
+                        drawQRAndLogo(fallbackQR);
+                    };
+                    fallbackQR.onerror = function() {
+                        if (onDone) onDone(canvas);
+                    };
+                    fallbackQR.src = sepayUrl;
+                };
+
+                qrImg.src = vietQrUrl;
+
+                function drawQRAndLogo(qrImageObj) {
                     const qrX = 135;
                     const qrY = 155;
                     const qrSize = 818;
-                    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+                    ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
 
-                    // Step 3: Draw Fund Logo (LOgoQR.jpg) in the center of QR code
+                    // Step 3: Nạp Logo QTDND Yên Thọ (LOgoQR.jpg - tệp cục bộ)
                     const logoImg = new Image();
-                    logoImg.crossOrigin = 'Anonymous';
                     logoImg.onload = function() {
-                        const logoSize = 164; // ~20% of QR size (safe ISO error correction)
+                        const logoSize = 164;
                         const centerX = qrX + (qrSize / 2);
                         const centerY = qrY + (qrSize / 2);
 
-                        // White circle background + green border
+                        // Hình tròn nền trắng + đường viền bảo vệ
                         ctx.save();
                         ctx.beginPath();
                         ctx.arc(centerX, centerY, (logoSize / 2) + 6, 0, Math.PI * 2);
@@ -3563,7 +3586,7 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Clip & draw logo
+                        // Clip & vẽ Logo Quỹ ở tâm
                         ctx.save();
                         ctx.beginPath();
                         ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
@@ -3571,54 +3594,51 @@
                         ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
                         ctx.restore();
 
-                        // Step 4: Write Account Info Text
-                        writeStandeeText();
+                        writeStandeeText(); // Vẽ lại chữ đè nét đẹp
                     };
 
                     logoImg.onerror = function() {
                         writeStandeeText();
                     };
                     logoImg.src = './LOgoQR.jpg';
-                };
-
-                qrImg.onerror = function() {
-                    writeStandeeText();
-                };
-                qrImg.src = qrUrl;
+                }
 
                 function writeStandeeText() {
-                    // Tên Chủ Tài Khoản (Center Aligned)
-                    const nameStr = name ? name.toUpperCase() : "NGUYEN THI NGUYET";
+                    // Tên Chủ Tài Khoản (Căn giữa)
                     ctx.save();
                     ctx.fillStyle = colorName || "#003b7a";
                     ctx.font = "bold 52px 'Times New Roman', Times, Arial, sans-serif";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(nameStr, 543.5, 1248);
+                    ctx.fillText(nameClean, 543.5, 1248);
                     ctx.restore();
 
-                    // Alias Number (Left Aligned next to 'Alias:')
-                    const aliasStr = alias || "";
-                    ctx.save();
-                    ctx.fillStyle = colorInfo || "#d97706";
-                    ctx.font = "bold 44px 'Times New Roman', Times, Arial, sans-serif";
-                    ctx.textAlign = "left";
-                    ctx.textBaseline = "middle";
-                    ctx.fillText(aliasStr, 318, 1318);
-                    ctx.restore();
+                    // Số Alias (Căn trái sau 'Alias:')
+                    if (aliasClean) {
+                        ctx.save();
+                        ctx.fillStyle = colorInfo || "#d97706";
+                        ctx.font = "bold 44px 'Times New Roman', Times, Arial, sans-serif";
+                        ctx.textAlign = "left";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(aliasClean, 318, 1318);
+                        ctx.restore();
+                    }
 
-                    // TK Nguồn Number (Left Aligned next to 'TK nguồn:')
-                    const accStr = acc || "";
+                    // Số TK Nguồn (Căn trái sau 'TK nguồn:')
                     ctx.save();
                     ctx.fillStyle = colorInfo || "#c2410c";
                     ctx.font = "bold 44px 'Times New Roman', Times, Arial, sans-serif";
                     ctx.textAlign = "left";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(accStr, 395, 1365);
+                    ctx.fillText(accClean, 395, 1365);
                     ctx.restore();
 
                     if (onDone) onDone(canvas);
                 }
+            };
+
+            bgImg.onerror = function() {
+                console.error("Lỗi nạp phôi ảnh BackgroundQR.png");
             };
             bgImg.src = './BackgroundQR.png';
         }
