@@ -4350,34 +4350,57 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 ? parseVND(document.getElementById('qr-final-amount')?.value || '0')
                 : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
 
-            // Pure Vector QR Code Generation with Level H Error Correction
-            try {
-                const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
-                QRCodeLib.drawQR(ctx, payload, qrBox.x, qrBox.y, qrBox.w);
-            } catch(e) {
-                console.error("Lỗi vẽ QR Card Canvas:", e);
-            }
+            const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoFull)}`;
+            const sepayUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memoFull)}&template=qr_only`;
 
-            // Draw Base64 Logo in Center
-            const logo = new Image();
-            logo.onload = function() {
-                const logoSz = Math.round(qrBox.w * 0.16);
-                const cx = qrBox.x + qrBox.w / 2;
-                const cy = qrBox.y + qrBox.h / 2;
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(cx, cy, logoSz / 2 + 5, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(cx, cy, logoSz / 2, 0, Math.PI * 2);
-                ctx.clip();
-                try { ctx.drawImage(logo, cx - logoSz/2, cy - logoSz/2, logoSz, logoSz); } catch(e){}
-                ctx.restore();
-                drawInfo();
+            const cardQrImg = new Image();
+            cardQrImg.crossOrigin = 'Anonymous';
+            cardQrImg.onload = function() {
+                try { ctx.drawImage(cardQrImg, qrBox.x, qrBox.y, qrBox.w, qrBox.h); } catch(e){}
+                drawLogoAndInfo();
             };
-            logo.onerror = drawInfo;
-            logo.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
+            cardQrImg.onerror = function() {
+                const fallbackQR = new Image();
+                fallbackQR.crossOrigin = 'Anonymous';
+                fallbackQR.onload = function() {
+                    try { ctx.drawImage(fallbackQR, qrBox.x, qrBox.y, qrBox.w, qrBox.h); } catch(e){}
+                    drawLogoAndInfo();
+                };
+                fallbackQR.onerror = function() {
+                    try {
+                        const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
+                        QRCodeLib.drawQR(ctx, payload, qrBox.x, qrBox.y, qrBox.w);
+                    } catch(e) {
+                        console.error("Lỗi vẽ QR Card Canvas:", e);
+                    }
+                    drawLogoAndInfo();
+                };
+                fallbackQR.src = sepayUrl;
+            };
+            cardQrImg.src = vietQrUrl;
+
+            function drawLogoAndInfo() {
+                // Draw Base64 Logo in Center
+                const logo = new Image();
+                logo.onload = function() {
+                    const logoSz = Math.round(qrBox.w * 0.16);
+                    const cx = qrBox.x + qrBox.w / 2;
+                    const cy = qrBox.y + qrBox.h / 2;
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, logoSz / 2 + 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, logoSz / 2, 0, Math.PI * 2);
+                    ctx.clip();
+                    try { ctx.drawImage(logo, cx - logoSz/2, cy - logoSz/2, logoSz, logoSz); } catch(e){}
+                    ctx.restore();
+                    drawInfo();
+                };
+                logo.onerror = drawInfo;
+                logo.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
+            }
 
             function drawInfo() {
                 // Thông tin số tiền
@@ -4949,54 +4972,82 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
         function downloadSingleStandeePNG() {
             const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
-            const alias = document.getElementById('std-alias')?.value || "0348741868";
-            const acc = document.getElementById('std-acc')?.value || "3800200138221012";
-            const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
-            const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+            const fileName = `QR_Standee_${name.replace(/\s+/g, '_')}.png`;
+            const previewCanvas = document.getElementById('standee-preview-canvas');
 
             showToast("Đang tải ảnh mã QR Standee...");
-            const tempCanvas = document.createElement('canvas');
-            renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                directDownloadCanvas(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`);
-            });
+
+            if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
+                directDownloadCanvas(previewCanvas, fileName);
+            } else {
+                const alias = document.getElementById('std-alias')?.value || "0348741868";
+                const acc = document.getElementById('std-acc')?.value || "3800200138221012";
+                const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
+                const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+                const tempCanvas = document.createElement('canvas');
+                renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
+                    directDownloadCanvas(c, fileName);
+                });
+            }
         }
 
         function downloadQRLoaPNG() {
             const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
-            const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
-            const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
-            const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+            const fileName = `QR_LOA_${name.replace(/\s+/g, '_')}.png`;
+            const previewCanvas = document.getElementById('standee-preview-canvas');
 
             showToast("Đang tải ảnh mã QR LOA...");
-            const tempCanvas = document.createElement('canvas');
-            renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                directDownloadCanvas(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`);
-            });
+
+            if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
+                directDownloadCanvas(previewCanvas, fileName);
+            } else {
+                const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
+                const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
+                const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+                const tempCanvas = document.createElement('canvas');
+                renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
+                    directDownloadCanvas(c, fileName);
+                });
+            }
         }
 
         function shareSingleStandee() {
             const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
-            const alias = document.getElementById('std-alias')?.value || "0348741868";
-            const acc = document.getElementById('std-acc')?.value || "3800200138221012";
-            const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
-            const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+            const fileName = `QR_Standee_${name.replace(/\s+/g, '_')}.png`;
+            const title = `Mã VietQR Standee QTDND Yên Thọ - ${name}`;
+            const previewCanvas = document.getElementById('standee-preview-canvas');
 
-            const tempCanvas = document.createElement('canvas');
-            renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                directShareCanvas(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
-            });
+            if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
+                directShareCanvas(previewCanvas, fileName, title);
+            } else {
+                const alias = document.getElementById('std-alias')?.value || "0348741868";
+                const acc = document.getElementById('std-acc')?.value || "3800200138221012";
+                const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
+                const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+                const tempCanvas = document.createElement('canvas');
+                renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
+                    directShareCanvas(c, fileName, title);
+                });
+            }
         }
 
         function shareQRLoa() {
             const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
-            const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
-            const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
-            const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+            const fileName = `QR_LOA_${name.replace(/\s+/g, '_')}.png`;
+            const title = `Mã VietQR LOA QTDND Yên Thọ - ${name}`;
+            const previewCanvas = document.getElementById('standee-preview-canvas');
 
-            const tempCanvas = document.createElement('canvas');
-            renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                directShareCanvas(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
-            });
+            if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
+                directShareCanvas(previewCanvas, fileName, title);
+            } else {
+                const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
+                const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
+                const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+                const tempCanvas = document.createElement('canvas');
+                renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
+                    directShareCanvas(c, fileName, title);
+                });
+            }
         }
 
         function tryShareOrModal(canvas, fileName, shareText) {
