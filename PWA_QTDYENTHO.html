@@ -340,38 +340,52 @@
     </div>
 
     <header class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-emerald-700/30">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                <div class="flex items-center space-x-3">
-                    <div class="p-1 bg-white rounded-xl shadow-md border border-emerald-400/50 flex-shrink-0">
-                        <img src="LOgoQR.jpg" alt="Logo QTDND Yên Thọ" class="w-9 h-9 object-contain rounded-lg">
-                    </div>
-                    <div>
-                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight leading-tight uppercase text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h1>
-                        <p class="text-xs text-emerald-200/90 font-medium flex items-center gap-2">
-                            <span>Công cụ hỗ trợ công việc nghiệp vụ tín dụng & tiền gửi</span>
-                            <span id="app-version-badge" class="px-2 py-0.5 bg-black/40 text-emerald-300 font-mono text-[10px] rounded-full border border-emerald-500/40">v2026.07.29</span>
-                        </p>
-                    </div>
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3">
+            <!-- Single-row layout on ALL screen sizes: Logo | Name | Spacer | Buttons -->
+            <div class="flex items-center gap-2.5">
+
+                <!-- Logo -->
+                <div class="p-0.5 sm:p-1 bg-white rounded-lg sm:rounded-xl shadow-md border border-emerald-400/50 flex-shrink-0">
+                    <img src="LOgoQR.jpg" alt="Logo QTDND Yên Thọ" class="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md sm:rounded-lg">
                 </div>
 
-                <div class="flex items-center space-x-2 self-end md:self-auto flex-wrap gap-y-1">
-                    <!-- Prominent PWA Install Button -->
+                <!-- Name & info -->
+                <div class="flex-1 min-w-0">
+                    <!-- Mobile: short name on 1 line -->
+                    <h1 class="sm:hidden text-[13px] font-extrabold tracking-tight leading-tight uppercase text-white truncate">QTDND YÊN THỌ</h1>
+                    <!-- Tablet/Desktop: full name -->
+                    <h1 class="hidden sm:block text-lg lg:text-xl font-extrabold tracking-tight leading-tight uppercase text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h1>
+                    <!-- Subtitle: hidden on mobile, visible on sm+ -->
+                    <p class="hidden sm:flex text-xs text-emerald-200/90 font-medium items-center gap-2 mt-0.5">
+                        <span>Công cụ hỗ trợ nghiệp vụ tín dụng & tiền gửi</span>
+                    </p>
+                    <!-- Version badge on mobile inline with name -->
+                    <span id="app-version-badge" class="sm:hidden mt-0.5 inline-block px-1.5 py-0.5 bg-black/40 text-emerald-300 font-mono text-[9px] rounded-full border border-emerald-500/40">v2026.07.29</span>
+                </div>
+
+                <!-- Version badge desktop (next to subtitle) -->
+                <span id="app-version-badge-desktop" class="hidden sm:inline-block px-2 py-0.5 bg-black/40 text-emerald-300 font-mono text-[10px] rounded-full border border-emerald-500/40 flex-shrink-0">v2026.07.29</span>
+
+                <!-- Action Buttons: always in a row -->
+                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    <!-- PWA Install Button -->
                     <div class="relative group">
-                        <button id="pwa-install-btn" onclick="triggerPwaInstall()" aria-label="Cài đặt App" class="p-2 sm:px-3.5 sm:py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 backdrop-blur-md rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm font-bold text-xs">
+                        <button id="pwa-install-btn" onclick="triggerPwaInstall()" aria-label="Cài đặt App"
+                            class="p-1.5 sm:p-2 bg-amber-500/20 hover:bg-amber-500/35 text-amber-300 border border-amber-400/40 backdrop-blur-md rounded-lg sm:rounded-xl transition flex items-center justify-center gap-1 shadow-sm font-bold">
                             <svg class="w-4 h-4 text-amber-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-extrabold whitespace-nowrap transition-all duration-200">Cài Đặt App</span>
+                            <span class="hidden sm:inline text-xs font-extrabold whitespace-nowrap">Cài App</span>
                         </button>
-                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Cài đặt App màn hình chính</div>
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Cài đặt App màn hình chính</div>
                     </div>
 
-                    <!-- Online Auto-Update Button -->
+                    <!-- Update Button -->
                     <div class="relative group">
-                        <button id="pwa-update-btn" onclick="checkAppUpdate()" aria-label="Cập nhật" class="p-2 sm:px-3.5 sm:py-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 backdrop-blur-md rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm font-bold text-xs">
+                        <button id="pwa-update-btn" onclick="checkAppUpdate()" aria-label="Cập nhật"
+                            class="p-1.5 sm:p-2 bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 border border-emerald-400/40 backdrop-blur-md rounded-lg sm:rounded-xl transition flex items-center justify-center gap-1 shadow-sm font-bold">
                             <svg class="w-4 h-4 text-emerald-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-extrabold whitespace-nowrap transition-all duration-200">Cập Nhật</span>
+                            <span class="hidden sm:inline text-xs font-extrabold whitespace-nowrap">Cập nhật</span>
                         </button>
-                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Tải & Kiểm tra bản mới</div>
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Tải & Kiểm tra bản mới</div>
                     </div>
                 </div>
             </div>
