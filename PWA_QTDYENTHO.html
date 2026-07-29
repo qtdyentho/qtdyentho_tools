@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v7.0";
+                    const thisVersion = "2026.07.29-v8.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v7.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v8.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v7.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v8.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3473,7 +3473,6 @@
             const bgImg = new Image();
             bgImg.onload = function() {
                 ctx.drawImage(bgImg, 0, 0, W, H);
-                writeStandeeText();
 
                 const qrImg = new Image();
                 qrImg.crossOrigin = 'Anonymous';
@@ -3483,8 +3482,9 @@
                 qrImg.onload = function() { drawQRAndLogo(qrImg); };
                 qrImg.onerror = function() {
                     const fallbackQR = new Image();
+                    fallbackQR.crossOrigin = 'Anonymous';
                     fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
-                    fallbackQR.onerror = function() { if (onDone) onDone(canvas); };
+                    fallbackQR.onerror = function() { finishRender(); };
                     fallbackQR.src = sepayUrl;
                 };
                 qrImg.src = vietQrUrl;
@@ -3518,10 +3518,15 @@
                         ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
                         ctx.restore();
 
-                        writeStandeeText();
+                        finishRender();
                     };
-                    logoImg.onerror = function() { writeStandeeText(); };
+                    logoImg.onerror = function() { finishRender(); };
                     logoImg.src = './LOgoQR.jpg';
+                }
+
+                function finishRender() {
+                    writeStandeeText();
+                    if (onDone) onDone(canvas);
                 }
 
                 function writeStandeeText() {
@@ -3574,8 +3579,6 @@
                     ctx.textBaseline = "middle";
                     ctx.fillText(accClean, 440, 1410);
                     ctx.restore();
-
-                    if (onDone) onDone(canvas);
                 }
             };
             bgImg.onerror = function() {
@@ -3605,7 +3608,6 @@
             const bgImg = new Image();
             bgImg.onload = function() {
                 ctx.drawImage(bgImg, 0, 0, W, H);
-                writeLoaText();
 
                 const qrImg = new Image();
                 qrImg.crossOrigin = 'Anonymous';
@@ -3615,8 +3617,9 @@
                 qrImg.onload = function() { drawQRAndLogo(qrImg); };
                 qrImg.onerror = function() {
                     const fallbackQR = new Image();
+                    fallbackQR.crossOrigin = 'Anonymous';
                     fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
-                    fallbackQR.onerror = function() { if (onDone) onDone(canvas); };
+                    fallbackQR.onerror = function() { finishRender(); };
                     fallbackQR.src = sepayUrl;
                 };
                 qrImg.src = vietQrUrl;
@@ -3650,10 +3653,15 @@
                         ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
                         ctx.restore();
 
-                        writeLoaText();
+                        finishRender();
                     };
-                    logoImg.onerror = function() { writeLoaText(); };
+                    logoImg.onerror = function() { finishRender(); };
                     logoImg.src = './LOgoQR.jpg';
+                }
+
+                function finishRender() {
+                    writeLoaText();
+                    if (onDone) onDone(canvas);
                 }
 
                 function writeLoaText() {
@@ -3685,9 +3693,11 @@
                     ctx.textBaseline = "middle";
                     ctx.fillText(accClean, 544, 1009);
                     ctx.restore();
-
-                    if (onDone) onDone(canvas);
                 }
+            };
+            bgImg.onerror = function() {
+                console.error("Lỗi nạp phôi ảnh QRLOA.png");
+                if (onDone) onDone(canvas);
             };
             bgImg.src = './QRLOA.png';
         }
@@ -3765,6 +3775,20 @@
             showToast("Nhấp giữ vào ảnh để chọn Lưu hoặc Gửi ảnh!");
         }
 
+        function triggerDirectDownloadAndModal(canvas, fileName, shareTitle) {
+            try {
+                const dataUrl = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = dataUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
+            } catch(e) {}
+
+            openQrImageModal(canvas, fileName, shareTitle);
+        }
+
         function downloadSingleStandeePNG() {
             const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
             const alias = document.getElementById('std-alias')?.value || "0348741868";
@@ -3775,7 +3799,7 @@
             showToast("Đang tạo ảnh Standee PNG sắc nét HD...");
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
+                triggerDirectDownloadAndModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
             });
         }
 
@@ -3788,7 +3812,7 @@
             showToast("Đang tạo ảnh QR LOA PNG sắc nét HD...");
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
+                triggerDirectDownloadAndModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
             });
         }
 
