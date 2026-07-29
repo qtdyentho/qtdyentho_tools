@@ -900,7 +900,267 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
+                <!-- SUBTAB 5: SO SÁNH RÚT TRƯỚC HẠN VS VAY CẦM CỐ -->
+                <div id="tool-compare" class="subtab-content hidden space-y-6">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-5 bg-amber-600 rounded-full inline-block"></span>
+                            Công Cụ Tư Vấn So Sánh: Rút Tiết Kiệm Trước Hạn vs Vay Cầm Cố Sổ Tiết Kiệm
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">So sánh chính xác dòng tiền và thu nhập ròng để tư vấn cho thành viên phương án tối ưu nhất khi cần tiền gấp trước ngày đáo hạn sổ tiết kiệm.</p>
+                    </div>
+
+                    <!-- SMART ADVISORY RECOMMENDATION BANNER -->
+                    <div id="compare-recommendation-banner" class="p-4 bg-emerald-50 border-2 border-emerald-300 rounded-2xl shadow-sm space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">💡</span>
+                            <h3 id="compare-rec-title" class="font-extrabold text-emerald-950 text-sm sm:text-base">LỜI KHUYÊN DÀNH CHO THÀNH VIÊN: NÊN VAY CẦM CỐ SỔ TIẾT KIỆM</h3>
+                        </div>
+                        <p id="compare-rec-detail" class="text-xs text-emerald-900 leading-relaxed pl-7 font-medium">Phương án Vay cầm cố sổ tiết kiệm giúp thành viên giữ nguyên 100% tiền lãi cam kết khi đáo hạn, mang lại lợi ích cao hơn so với Rút trước hạn.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Input Form -->
+                        <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-4">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Thông tin Sổ Tiết Kiệm & Khoản Vay</h3>
+                            
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Số tiền gốc trên sổ (VNĐ)</label>
+                                    <input type="text" id="cmp-principal" value="100.000.000" oninput="formatVNDInput(this); calcWithdrawVsCollateralLoan();" class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800 bg-white focus:ring-2 focus:ring-emerald-500">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Ngày gửi tiền</label>
+                                        <div class="relative">
+                                            <input type="text" id="cmp-start-date" placeholder="dd/mm/yyyy" onchange="calcWithdrawVsCollateralLoan()" class="w-full pl-7 pr-2 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 bg-white">
+                                            <svg class="w-3.5 h-3.5 text-emerald-600 absolute left-2 top-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Kỳ hạn gửi</label>
+                                        <select id="cmp-term" onchange="calcWithdrawVsCollateralLoan()" class="w-full px-2 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 bg-white">
+                                            <option value="1">1 tháng</option>
+                                            <option value="3">3 tháng</option>
+                                            <option value="6">6 tháng</option>
+                                            <option value="12" selected>12 tháng</option>
+                                            <option value="18">18 tháng</option>
+                                            <option value="24">24 tháng</option>
+                                            <option value="36">36 tháng</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Ngày cần tiền / Rút trước hạn</label>
+                                    <div class="relative">
+                                        <input type="text" id="cmp-needed-date" placeholder="dd/mm/yyyy" onchange="calcWithdrawVsCollateralLoan()" class="w-full pl-7 pr-2 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-amber-900 bg-white">
+                                        <svg class="w-3.5 h-3.5 text-amber-600 absolute left-2 top-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Lãi tiết kiệm (%/năm)</label>
+                                        <input type="number" step="0.1" id="cmp-savings-rate" value="6.5" onchange="calcWithdrawVsCollateralLoan()" class="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-bold text-emerald-800 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-700 mb-1">Lãi Không kỳ hạn (%/năm)</label>
+                                        <input type="number" step="0.05" id="cmp-demand-rate" value="0.3" onchange="calcWithdrawVsCollateralLoan()" class="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-bold text-slate-600 bg-white">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Lãi suất Vay cầm cố sổ (%/năm)</label>
+                                    <input type="number" step="0.1" id="cmp-loan-rate" value="8.0" onchange="calcWithdrawVsCollateralLoan()" class="w-full px-3 py-2 border border-amber-300 rounded-lg font-extrabold text-amber-900 bg-amber-50">
+                                    <p class="text-[10px] text-slate-500 mt-1 italic">* Thông thường = Lãi tiết kiệm + 1,5% đến 2,0%/năm.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Output Options Comparison -->
+                        <div class="lg:col-span-2 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Option A: Early Withdrawal -->
+                                <div class="bg-amber-50/70 border border-amber-200 p-4 rounded-2xl space-y-3 shadow-sm">
+                                    <div class="flex justify-between items-center border-b border-amber-200/80 pb-2">
+                                        <span class="px-2 py-0.5 bg-amber-200 text-amber-950 text-[10px] font-extrabold rounded uppercase">Phương án A</span>
+                                        <h4 class="font-bold text-amber-950 text-sm">Rút Tiết Kiệm Trước Hạn</h4>
+                                    </div>
+                                    <div class="space-y-1.5 text-xs text-slate-700">
+                                        <div class="flex justify-between"><span class="text-slate-500">Số ngày đã gửi:</span> <b id="cmp-res-a-days" class="text-slate-800">0 ngày</b></div>
+                                        <div class="flex justify-between"><span class="text-slate-500">Lãi suất áp dụng:</span> <b id="cmp-res-a-rate" class="text-amber-900 font-extrabold">0.30 %/năm (KKH)</b></div>
+                                        <div class="flex justify-between"><span class="text-slate-500">Tiền lãi thực nhận:</span> <b id="cmp-res-a-interest" class="text-amber-900 font-extrabold">0 đ</b></div>
+                                        <div class="flex justify-between pt-1 border-t border-amber-200"><span class="font-bold text-amber-950">Lợi nhuận ròng thu về:</span> <b id="cmp-res-a-net" class="text-amber-950 text-sm font-black">0 đ</b></div>
+                                    </div>
+                                </div>
+
+                                <!-- Option B: Pledged Loan -->
+                                <div class="bg-emerald-50/70 border border-emerald-200 p-4 rounded-2xl space-y-3 shadow-sm">
+                                    <div class="flex justify-between items-center border-b border-emerald-200/80 pb-2">
+                                        <span class="px-2 py-0.5 bg-emerald-200 text-emerald-950 text-[10px] font-extrabold rounded uppercase">Phương án B</span>
+                                        <h4 class="font-bold text-emerald-950 text-sm">Vay Cầm Cố Sổ Tiết Kiệm</h4>
+                                    </div>
+                                    <div class="space-y-1.5 text-xs text-slate-700">
+                                        <div class="flex justify-between"><span class="text-slate-500">Số ngày vay còn lại đến hạn:</span> <b id="cmp-res-b-days" class="text-slate-800">0 ngày</b></div>
+                                        <div class="flex justify-between"><span class="text-slate-500">Lãi tiết kiệm nhận đáo hạn:</span> <b id="cmp-res-b-savings-int" class="text-emerald-800 font-bold">0 đ</b></div>
+                                        <div class="flex justify-between"><span class="text-slate-500">Tiền lãi vay phải trả:</span> <b id="cmp-res-b-loan-cost" class="text-rose-700 font-bold">0 đ</b></div>
+                                        <div class="flex justify-between pt-1 border-t border-emerald-200"><span class="font-bold text-emerald-950">Lợi nhuận ròng thu về:</span> <b id="cmp-res-b-net" class="text-emerald-950 text-sm font-black">0 đ</b></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary Table -->
+                            <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-2 shadow-sm">
+                                <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wide">Bảng So Sánh Đối Chiếu Chi Tiết</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-xs text-left">
+                                        <thead class="bg-slate-100 text-slate-700 font-bold">
+                                            <tr>
+                                                <th class="p-2">Chỉ số so sánh</th>
+                                                <th class="p-2 text-right">Phương án A (Rút trước hạn)</th>
+                                                <th class="p-2 text-right">Phương án B (Vay cầm cố)</th>
+                                                <th class="p-2 text-right">Chênh lệch lợi ích</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-100">
+                                            <tr>
+                                                <td class="p-2 font-medium text-slate-600">Tổng thu nhập tiền lãi tiết kiệm</td>
+                                                <td id="cmp-tbl-a-int" class="p-2 text-right font-semibold text-amber-900">0 đ</td>
+                                                <td id="cmp-tbl-b-int" class="p-2 text-right font-semibold text-emerald-900">0 đ</td>
+                                                <td id="cmp-tbl-diff-int" class="p-2 text-right font-bold text-emerald-700">0 đ</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-2 font-medium text-slate-600">Chi phí lãi vay phát sinh</td>
+                                                <td class="p-2 text-right font-semibold text-slate-400">0 đ</td>
+                                                <td id="cmp-tbl-b-cost" class="p-2 text-right font-semibold text-rose-700">0 đ</td>
+                                                <td id="cmp-tbl-diff-cost" class="p-2 text-right font-bold text-rose-700">0 đ</td>
+                                            </tr>
+                                            <tr class="bg-slate-50 font-bold">
+                                                <td class="p-2 text-slate-900">Kết quả Tài Chính Ròng (Net Benefit)</td>
+                                                <td id="cmp-tbl-a-net" class="p-2 text-right text-amber-950">0 đ</td>
+                                                <td id="cmp-tbl-b-net" class="p-2 text-right text-emerald-950">0 đ</td>
+                                                <td id="cmp-tbl-diff-net" class="p-2 text-right text-base text-emerald-700 font-extrabold">0 đ</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBTAB 6: CHỈ SỐ TÀI CHÍNH QUỸ -->
+                <div id="tool-fin" class="subtab-content hidden space-y-6">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-5 bg-teal-700 rounded-full inline-block"></span>
+                            Phân Hệ Tính Toán & Đánh Giá Chỉ Số Tài Chính Quỹ (ROA, ROE, NPL, CAR, CIR...)
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Đánh giá các chỉ số an toàn hoạt động, tỷ lệ nợ xấu và hiệu quả tài chính của Quỹ Tín dụng Nhân dân Yên Thọ theo Thông tư 31/2019/TT-NHNN.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Input Form -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Số Liệu Tài Chính Quỹ (VNĐ)</h3>
+                            
+                            <div class="space-y-2 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Lợi nhuận sau thuế</label>
+                                    <input type="text" id="fin-net-profit" value="2.500.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Tổng tài sản bình quân</label>
+                                    <input type="text" id="fin-avg-assets" value="250.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Vốn chủ sở hữu bình quân</label>
+                                    <input type="text" id="fin-avg-equity" value="25.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Tổng nợ xấu (Nhóm 3 + 4 + 5)</label>
+                                    <input type="text" id="fin-npl-loans" value="1.800.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-amber-300 rounded font-bold text-amber-950 bg-amber-50">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Tổng dư nợ cho vay</label>
+                                    <input type="text" id="fin-total-loans" value="180.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Vốn tự có (Tier 1 + Tier 2)</label>
+                                    <input type="text" id="fin-capital-equity" value="22.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-emerald-300 rounded font-bold text-emerald-950 bg-emerald-50">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Tổng tài sản CÓ rủi ro</label>
+                                    <input type="text" id="fin-risk-assets" value="200.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Chi phí hoạt động</label>
+                                    <input type="text" id="fin-operating-expenses" value="4.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-0.5">Tổng thu nhập hoạt động</label>
+                                    <input type="text" id="fin-operating-income" value="10.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Indicators Display Cards -->
+                        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- ROA -->
+                            <div class="p-4 bg-white border border-slate-200 rounded-2xl space-y-2 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-700 text-xs">ROA (Sinh lời / Tài sản)</span>
+                                    <span id="badge-roa" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Đạt chuẩn</span>
+                                </div>
+                                <p id="res-roa" class="text-2xl font-black text-emerald-800">1.00 %</p>
+                                <p class="text-[10px] text-slate-500">Chuẩn an toàn QTDND: $ROA \ge 0,8\%$. Đo lường hiệu quả quản lý tổng tài sản.</p>
+                            </div>
+
+                            <!-- ROE -->
+                            <div class="p-4 bg-white border border-slate-200 rounded-2xl space-y-2 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-700 text-xs">ROE (Sinh lời / Vốn CSH)</span>
+                                    <span id="badge-roe" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Khá giỏi</span>
+                                </div>
+                                <p id="res-roe" class="text-2xl font-black text-emerald-800">10.00 %</p>
+                                <p class="text-[10px] text-slate-500">Chuẩn mục tiêu: $ROE \ge 8,0\%$. Đánh giá khả năng sinh lời trên vốn góp thành viên.</p>
+                            </div>
+
+                            <!-- NPL -->
+                            <div class="p-4 bg-white border border-slate-200 rounded-2xl space-y-2 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-700 text-xs">NPL (Tỷ lệ nợ xấu)</span>
+                                    <span id="badge-npl" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ An toàn</span>
+                                </div>
+                                <p id="res-npl" class="text-2xl font-black text-emerald-800">1.00 %</p>
+                                <p class="text-[10px] text-slate-500">Quy định NHNN: $NPL \le 3,0\%$. Tỷ lệ nợ xấu Nhóm 3, 4, 5 trên tổng dư nợ cho vay.</p>
+                            </div>
+
+                            <!-- CAR -->
+                            <div class="p-4 bg-white border border-slate-200 rounded-2xl space-y-2 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-700 text-xs">CAR (An toàn vốn TT 31)</span>
+                                    <span id="badge-car" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Vượt chuẩn</span>
+                                </div>
+                                <p id="res-car" class="text-2xl font-black text-emerald-800">11.00 %</p>
+                                <p class="text-[10px] text-slate-500">Quy định TT 31/2019/TT-NHNN: $CAR \ge 8,0\%$. Tỷ lệ an toàn vốn tối thiểu bắt buộc.</p>
+                            </div>
+
+                            <!-- CIR -->
+                            <div class="p-4 bg-white border border-slate-200 rounded-2xl space-y-2 shadow-sm sm:col-span-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-700 text-xs">CIR (Tỷ lệ chi phí / Thu nhập)</span>
+                                    <span id="badge-cir" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Quản lý tốt</span>
+                                </div>
+                                <p id="res-cir" class="text-2xl font-black text-teal-800">40.00 %</p>
+                                <p class="text-[10px] text-slate-500">Mục tiêu hiệu quả hoạt động: $CIR \le 55,0\%$. Chi phí hoạt động chiếm 40,00% thu nhập ròng.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div></div>
 
         <!-- ==================== TAB QR: TẠO MÃ QR THANH TOÁN (SEPAY) ==================== -->
         <div id="tabQR" class="tab-content hidden space-y-6">
@@ -2809,6 +3069,391 @@
         }
 
         // TAB SAVINGS TOOLS LOGIC
+        
+        // Export Active Interest Rate Table to Excel matching current Display View Mode
+        function exportActiveSavingsTableToExcel() {
+            const viewModeEl = document.getElementById('view-mode');
+            const viewMode = viewModeEl ? viewModeEl.value : 'all';
+            const principalInput = document.getElementById('principal-input');
+            const PText = principalInput ? principalInput.value : '100.000.000';
+
+            const modeLabels = {
+                'promulgated': 'Lãi suất Ban hành Thực tế QTD',
+                'all': 'Chế độ Xem Tất Cả Các Cột',
+                'monthly': 'Chỉ xem Lĩnh Lãi Hàng Tháng',
+                'prepaid': 'Chỉ xem Lĩnh Lãi Trước',
+                'quarterly': 'Chỉ xem Lĩnh Lãi Hàng Quý',
+                'installment': 'Chỉ xem Gửi Góp Định Kỳ',
+                'amount': 'Chỉ xem Số Tiền Lãi (VNĐ)'
+            };
+
+            const modeTitle = modeLabels[viewMode] || 'Tất Cả Kỳ Hạn';
+            const todayStr = formatVietnameseDateStr(new Date());
+
+            let excelContent = `
+            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head>
+                <meta charset="utf-8" />
+                <style>
+                    body { font-family: "Segoe UI", Arial, sans-serif; }
+                    table { border-collapse: collapse; width: 100%; }
+                    th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: center; font-size: 13px; }
+                    th { background-color: #064e3b; color: #ffffff; font-weight: bold; }
+                    .header-title { font-size: 16px; font-weight: bold; color: #064e3b; text-align: left; border: none; }
+                    .header-sub { font-size: 12px; color: #475569; text-align: left; border: none; }
+                    .bg-prom { background-color: #ecfdf5; font-weight: bold; color: #064e3b; }
+                    .bg-highlight { background-color: #fef3c7; }
+                </style>
+            </head>
+            <body>
+                <table>
+                    <tr><td colspan="7" class="header-title">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</td></tr>
+                    <tr><td colspan="7" class="header-sub">Đông Triều - Quảng Ninh | Ngày xuất file: ${todayStr}</td></tr>
+                    <tr><td colspan="7" class="header-title" style="text-align:center; padding-top:15px;">BẢNG QUY ĐỔI LÃI SUẤT TIỀN GỬI TIẾT KIỆM</td></tr>
+                    <tr><td colspan="7" class="header-sub" style="text-align:center;">Chế độ hiển thị: <b>${modeTitle}</b> | Số tiền gốc tính toán: <b>${PText} VNĐ</b></td></tr>
+                    <tr><td colspan="7" style="border:none;"></td></tr>
+            `;
+
+            const mainTable = document.querySelector('#tab1 table');
+            if (mainTable) {
+                excelContent += mainTable.outerHTML;
+            }
+
+            excelContent += `
+                    <tr><td colspan="7" style="border:none; height:20px;"></td></tr>
+                    <tr>
+                        <td colspan="3" style="border:none; text-align:center;"><b>NGƯỜI LẬP BẢNG</b><br><i>(Ký, ghi rõ họ tên)</i></td>
+                        <td colspan="4" style="border:none; text-align:center;"><b>TRƯỞNG ĐƠN VỊ</b><br><i>(Ký, đóng dấu)</i></td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+            `;
+
+            const blob = new Blob([excelContent], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Bang_Lai_Suat_QTDND_YenTho_${viewMode}_${Date.now()}.xls`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+            showToast("Đã xuất file Excel theo đúng Chế độ hiển thị thành công!");
+        }
+
+        // Export Active Interest Rate Table to Printable PDF matching current Display View Mode
+        function exportActiveSavingsTableToPDF() {
+            const viewModeEl = document.getElementById('view-mode');
+            const viewMode = viewModeEl ? viewModeEl.value : 'all';
+            const principalInput = document.getElementById('principal-input');
+            const PText = principalInput ? principalInput.value : '100.000.000';
+
+            const modeLabels = {
+                'promulgated': 'Lãi suất Ban hành Thực tế QTD',
+                'all': 'Chế độ Xem Tất Cả Các Cột',
+                'monthly': 'Chỉ xem Lĩnh Lãi Hàng Tháng',
+                'prepaid': 'Chỉ xem Lĩnh Lãi Trước',
+                'quarterly': 'Chỉ xem Lĩnh Lãi Hàng Quý',
+                'installment': 'Chỉ xem Gửi Góp Định Kỳ',
+                'amount': 'Chỉ xem Số Tiền Lãi (VNĐ)'
+            };
+
+            const modeTitle = modeLabels[viewMode] || 'Tất Cả Kỳ Hạn';
+            const todayStr = formatVietnameseDateStr(new Date());
+
+            const printWin = window.open('', '_blank', 'width=900,height=700');
+            if (!printWin) {
+                showToast("⚠️ Vui lòng cho phép mở cửa sổ popup để in PDF.");
+                return;
+            }
+
+            const mainTable = document.querySelector('#tab1 table');
+            const tableHTML = mainTable ? mainTable.outerHTML : '';
+
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>In Bảng Lãi Suất QTDND Yên Thọ</title>
+                    <style>
+                        body { font-family: "Segoe UI", Arial, sans-serif; padding: 20px; color: #0f172a; }
+                        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #064e3b; padding-bottom: 10px; margin-bottom: 20px; }
+                        .title { text-align: center; margin-bottom: 20px; }
+                        .title h2 { color: #064e3b; margin: 0; font-size: 20px; text-transform: uppercase; }
+                        .title p { margin: 5px 0 0 0; font-size: 13px; color: #475569; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 12px; }
+                        th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+                        th { background-color: #064e3b; color: white; font-weight: bold; }
+                        .footer { display: flex; justify-content: space-between; margin-top: 40px; text-align: center; }
+                        .footer div { width: 45%; }
+                        input { border: none; background: transparent; text-align: center; font-weight: bold; font-size: 12px; }
+                        .no-print { display: none !important; }
+                        @media print {
+                            body { padding: 0; }
+                            .no-print { display: none !important; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div>
+                            <h3 style="margin:0; font-size:14px; text-transform:uppercase;">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
+                            <p style="margin:3px 0 0 0; font-size:11px; color:#64748b;">Đông Triều - Quảng Ninh | ĐT: (0203) 3800 123</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <p style="margin:0; font-size:11px; color:#64748b;">Ngày lập: ${todayStr}</p>
+                        </div>
+                    </div>
+
+                    <div class="title">
+                        <h2>BẢNG QUY ĐỔI LÃI SUẤT TIỀN GỬI TIẾT KIỆM</h2>
+                        <p>Chế độ hiển thị: <b>${modeTitle}</b> | Số tiền gốc tính toán: <b>${PText} VNĐ</b></p>
+                    </div>
+
+                    ${tableHTML}
+
+                    <div class="footer">
+                        <div>
+                            <b>NGƯỜI LẬP BẢNG</b><br>
+                            <span style="font-size:11px; color:#64748b;">(Ký, ghi rõ họ tên)</span>
+                        </div>
+                        <div>
+                            <b>TRƯỞNG ĐƠN VỊ</b><br>
+                            <span style="font-size:11px; color:#64748b;">(Ký, đóng dấu)</span>
+                        </div>
+                    </div>
+
+                    <script>
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+
+            printWin.document.close();
+            showToast("Đã mở trang in PDF Bảng Lãi Suất thành công!");
+        }
+
+        // Tool Advisor: Compare Early Withdrawal vs Pledged Certificate Loan
+        let cmpStartInstance = null;
+        let cmpNeededInstance = null;
+
+        function initCompareDatePickers() {
+            const vnLocale = {
+                firstDayOfWeek: 1,
+                weekdays: {
+                    shorthand: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+                    longhand: ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"]
+                },
+                months: {
+                    shorthand: ["Th1", "Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "Th8", "Th9", "Th10", "Th11", "Th12"],
+                    longhand: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
+                }
+            };
+
+            if (window.flatpickr) {
+                const startDateEl = document.getElementById('cmp-start-date');
+                const neededDateEl = document.getElementById('cmp-needed-date');
+
+                if (startDateEl && !cmpStartInstance) {
+                    cmpStartInstance = flatpickr(startDateEl, {
+                        dateFormat: "d/m/Y",
+                        locale: vnLocale,
+                        allowInput: true,
+                        onChange: function(selectedDates, dateStr) {
+                            startDateEl.value = dateStr;
+                            calcWithdrawVsCollateralLoan();
+                        }
+                    });
+                }
+                if (neededDateEl && !cmpNeededInstance) {
+                    cmpNeededInstance = flatpickr(neededDateEl, {
+                        dateFormat: "d/m/Y",
+                        locale: vnLocale,
+                        allowInput: true,
+                        onChange: function(selectedDates, dateStr) {
+                            neededDateEl.value = dateStr;
+                            calcWithdrawVsCollateralLoan();
+                        }
+                    });
+                }
+            }
+        }
+
+        function calcWithdrawVsCollateralLoan() {
+            const principalEl = document.getElementById('cmp-principal');
+            const startDateEl = document.getElementById('cmp-start-date');
+            const termEl = document.getElementById('cmp-term');
+            const neededDateEl = document.getElementById('cmp-needed-date');
+            const savingsRateEl = document.getElementById('cmp-savings-rate');
+            const demandRateEl = document.getElementById('cmp-demand-rate');
+            const loanRateEl = document.getElementById('cmp-loan-rate');
+
+            if (!principalEl || !startDateEl || !termEl || !neededDateEl || !savingsRateEl || !demandRateEl || !loanRateEl) return;
+
+            if (window.flatpickr && (!cmpStartInstance || !cmpNeededInstance)) {
+                initCompareDatePickers();
+            }
+
+            const now = new Date();
+            const todayVN = formatVietnameseDateStr(now);
+            const defaultStartObj = new Date();
+            defaultStartObj.setMonth(defaultStartObj.getMonth() - 6);
+            const defaultStartVN = formatVietnameseDateStr(defaultStartObj);
+
+            if (startDateEl && !startDateEl.value) {
+                startDateEl.value = defaultStartVN;
+                if (cmpStartInstance) cmpStartInstance.setDate(defaultStartObj);
+            }
+            if (neededDateEl && !neededDateEl.value) {
+                neededDateEl.value = todayVN;
+                if (cmpNeededInstance) cmpNeededInstance.setDate(now);
+            }
+
+            let P = parseVND(principalEl.value);
+            let nTerm = parseInt(termEl.value) || 12;
+            let rSavings = parseFloat(savingsRateEl.value) || 0;
+            let rDemand = parseFloat(demandRateEl.value) || 0;
+            let rLoan = parseFloat(loanRateEl.value) || 0;
+
+            const dStart = parseVietnameseDateStr(startDateEl.value) || defaultStartObj;
+            const dNeeded = parseVietnameseDateStr(neededDateEl.value) || now;
+
+            const dDueDate = new Date(dStart.getTime());
+            dDueDate.setMonth(dDueDate.getMonth() + nTerm);
+
+            const diffHeldTime = dNeeded.getTime() - dStart.getTime();
+            let daysHeld = Math.max(0, Math.round(diffHeldTime / (1000 * 3600 * 24)));
+
+            const diffRemainingTime = dDueDate.getTime() - dNeeded.getTime();
+            let daysRemaining = Math.max(0, Math.round(diffRemainingTime / (1000 * 3600 * 24)));
+
+            const interestA = roundToThousand(P * (rDemand / 100) * (daysHeld / 365));
+            const netA = interestA;
+
+            const fullSavingsInterest = roundToThousand(P * (rSavings / 100) * (nTerm / 12));
+            const loanInterestCost = roundToThousand(P * (rLoan / 100) * (daysRemaining / 365));
+            const netB = fullSavingsInterest - loanInterestCost;
+
+            const diffNet = netB - netA;
+
+            const setTxt = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            };
+
+            setTxt('cmp-res-a-days', `${daysHeld} ngày`);
+            setTxt('cmp-res-a-rate', `${rDemand.toFixed(2)} %/năm (Không kỳ hạn)`);
+            setTxt('cmp-res-a-interest', `${formatVND(interestA)} đ`);
+            setTxt('cmp-res-a-net', `${formatVND(netA)} đ`);
+
+            setTxt('cmp-res-b-days', `${daysRemaining} ngày (${formatVietnameseDateStr(dNeeded)} ➔ ${formatVietnameseDateStr(dDueDate)})`);
+            setTxt('cmp-res-b-savings-int', `${formatVND(fullSavingsInterest)} đ`);
+            setTxt('cmp-res-b-loan-cost', `-${formatVND(loanInterestCost)} đ`);
+            setTxt('cmp-res-b-net', `${formatVND(netB)} đ`);
+
+            setTxt('cmp-tbl-a-int', `${formatVND(interestA)} đ`);
+            setTxt('cmp-tbl-b-int', `${formatVND(fullSavingsInterest)} đ`);
+            setTxt('cmp-tbl-diff-int', `+${formatVND(fullSavingsInterest - interestA)} đ`);
+
+            setTxt('cmp-tbl-b-cost', `-${formatVND(loanInterestCost)} đ`);
+            setTxt('cmp-tbl-diff-cost', `-${formatVND(loanInterestCost)} đ`);
+
+            setTxt('cmp-tbl-a-net', `${formatVND(netA)} đ`);
+            setTxt('cmp-tbl-b-net', `${formatVND(netB)} đ`);
+            
+            const diffNetEl = document.getElementById('cmp-tbl-diff-net');
+            if (diffNetEl) {
+                if (diffNet >= 0) {
+                    diffNetEl.textContent = `+${formatVND(diffNet)} đ`;
+                    diffNetEl.className = 'p-2 text-right text-base text-emerald-700 font-extrabold';
+                } else {
+                    diffNetEl.textContent = `-${formatVND(Math.abs(diffNet))} đ`;
+                    diffNetEl.className = 'p-2 text-right text-base text-rose-700 font-extrabold';
+                }
+            }
+
+            const recBannerEl = document.getElementById('compare-recommendation-banner');
+            const recTitleEl = document.getElementById('compare-rec-title');
+            const recDetailEl = document.getElementById('compare-rec-detail');
+
+            if (recBannerEl && recTitleEl && recDetailEl) {
+                if (diffNet > 0) {
+                    recBannerEl.className = 'p-4 bg-emerald-50 border-2 border-emerald-400 rounded-2xl shadow-sm space-y-1';
+                    recTitleEl.className = 'font-extrabold text-emerald-950 text-sm sm:text-base';
+                    recTitleEl.textContent = '💡 LỜI KHUYÊN DÀNH CHO THÀNH VIÊN: NÊN VAY CẦM CỐ SỔ TIẾT KIỆM';
+                    recDetailEl.className = 'text-xs text-emerald-900 leading-relaxed pl-7 font-medium';
+                    recDetailEl.textContent = `Phương án Vay cầm cố sổ tiết kiệm giúp thành viên giữ nguyên 100% tiền lãi cam kết khi đáo hạn (${formatVND(fullSavingsInterest)} đ), mang lại tổng lợi ích ròng cao hơn +${formatVND(diffNet)} VNĐ so với Rút trước hạn!`;
+                } else if (diffNet < 0) {
+                    recBannerEl.className = 'p-4 bg-amber-50 border-2 border-amber-400 rounded-2xl shadow-sm space-y-1';
+                    recTitleEl.className = 'font-extrabold text-amber-950 text-sm sm:text-base';
+                    recTitleEl.textContent = '💡 LỜI KHUYÊN DÀNH CHO THÀNH VIÊN: NÊN RÚT SỔ TIẾT KIỆM TRƯỚC HẠN';
+                    recDetailEl.className = 'text-xs text-amber-900 leading-relaxed pl-7 font-medium';
+                    recDetailEl.textContent = `Do sổ mới gửi (số ngày còn lại đến hạn còn tới ${daysRemaining} ngày), phương án Rút tiết kiệm trước hạn giúp thành viên tiết kiệm +${formatVND(Math.abs(diffNet))} VNĐ tiền chi phí lãi vay!`;
+                } else {
+                    recBannerEl.className = 'p-4 bg-slate-50 border-2 border-slate-300 rounded-2xl shadow-sm space-y-1';
+                    recTitleEl.className = 'font-extrabold text-slate-900 text-sm sm:text-base';
+                    recTitleEl.textContent = '💡 LỜI KHUYÊN DÀNH CHO THÀNH VIÊN: HAI PHƯƠNG ÁN CÓ HIỆU QUẢ TƯƠNG ĐƯƠNG';
+                    recDetailEl.className = 'text-xs text-slate-700 leading-relaxed pl-7 font-medium';
+                    recDetailEl.textContent = 'Cả hai phương án Rút tiết kiệm trước hạn và Vay cầm cố sổ tiết kiệm đều mang lại hiệu quả tài chính ròng tương đương nhau.';
+                }
+            }
+        }
+
+        // Tool: Financial Indicators (ROA, ROE, NPL, CAR, CIR)
+        function calcFinancialIndicators() {
+            const netProfit = parseVND(document.getElementById('fin-net-profit')?.value || '0');
+            const avgAssets = parseVND(document.getElementById('fin-avg-assets')?.value || '1');
+            const avgEquity = parseVND(document.getElementById('fin-avg-equity')?.value || '1');
+            const nplLoans = parseVND(document.getElementById('fin-npl-loans')?.value || '0');
+            const totalLoans = parseVND(document.getElementById('fin-total-loans')?.value || '1');
+            const capitalEquity = parseVND(document.getElementById('fin-capital-equity')?.value || '0');
+            const riskAssets = parseVND(document.getElementById('fin-risk-assets')?.value || '1');
+            const opExpenses = parseVND(document.getElementById('fin-operating-expenses')?.value || '0');
+            const opIncome = parseVND(document.getElementById('fin-operating-income')?.value || '1');
+
+            const roa = (netProfit / Math.max(1, avgAssets)) * 100;
+            const roe = (netProfit / Math.max(1, avgEquity)) * 100;
+            const npl = (nplLoans / Math.max(1, totalLoans)) * 100;
+            const car = (capitalEquity / Math.max(1, riskAssets)) * 100;
+            const cir = (opExpenses / Math.max(1, opIncome)) * 100;
+
+            const setVal = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            };
+
+            setVal('res-roa', `${roa.toFixed(2)} %`);
+            setVal('res-roe', `${roe.toFixed(2)} %`);
+            setVal('res-npl', `${npl.toFixed(2)} %`);
+            setVal('res-car', `${car.toFixed(2)} %`);
+            setVal('res-cir', `${cir.toFixed(2)} %`);
+
+            const updateBadge = (id, text, isOk) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.textContent = text;
+                if (isOk) {
+                    el.className = 'px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded';
+                } else {
+                    el.className = 'px-2 py-0.5 bg-rose-100 text-rose-800 text-[10px] font-bold rounded';
+                }
+            };
+
+            updateBadge('badge-roa', roa >= 0.8 ? '✅ Đạt chuẩn' : '⚠️ Thấp', roa >= 0.8);
+            updateBadge('badge-roe', roe >= 8.0 ? '✅ Khá giỏi' : '⚠️ Thấp', roe >= 8.0);
+            updateBadge('badge-npl', npl <= 3.0 ? '✅ An toàn' : '❌ Vượt 3%', npl <= 3.0);
+            updateBadge('badge-car', car >= 8.0 ? '✅ Vượt chuẩn' : '❌ Dưới 8%', car >= 8.0);
+            updateBadge('badge-cir', cir <= 55.0 ? '✅ Quản lý tốt' : '⚠️ Cao', cir <= 55.0);
+        }
+
         function calcSavingsTool1() {
             const amountEl = document.getElementById('sav1-amount');
             const termEl = document.getElementById('sav1-term');
@@ -5717,7 +6362,9 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
             convertLoanRateFromAnnual();
             calcQRPayment();
             calcQRSavings();
-        }
+        
+            calcWithdrawVsCollateralLoan();
+            calcFinancialIndicators();}
 
         // Tự động kích hoạt ngay khi DOM parsed xong
         if (document.readyState === 'loading') {
