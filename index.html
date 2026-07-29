@@ -136,6 +136,24 @@
             position: relative;
             box-shadow: inset 0 -2px 0 #059669 !important;
         }
+        /* Gold metallic text effect for fund name */
+        .text-gold-premium {
+            background: linear-gradient(
+                135deg,
+                #f6d860 0%,
+                #fbbf24 20%,
+                #f59e0b 35%,
+                #fde68a 50%,
+                #f59e0b 65%,
+                #d97706 80%,
+                #fbbf24 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            filter: drop-shadow(0 1px 2px rgba(180, 120, 0, 0.4));
+        }
         .subtab-active::after {
             content: '';
             position: absolute;
@@ -349,22 +367,13 @@
                     <img src="LOgoQR.jpg" alt="Logo QTDND Yên Thọ" class="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md sm:rounded-lg">
                 </div>
 
-                <!-- Name & info -->
+                <!-- Name & info - Full name always visible, gold metallic -->
                 <div class="flex-1 min-w-0">
-                    <!-- Mobile: short name on 1 line -->
-                    <h1 class="sm:hidden text-[13px] font-extrabold tracking-tight leading-tight uppercase text-white truncate">QTDND YÊN THỌ</h1>
-                    <!-- Tablet/Desktop: full name -->
-                    <h1 class="hidden sm:block text-lg lg:text-xl font-extrabold tracking-tight leading-tight uppercase text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h1>
-                    <!-- Subtitle: hidden on mobile, visible on sm+ -->
-                    <p class="hidden sm:flex text-xs text-emerald-200/90 font-medium items-center gap-2 mt-0.5">
-                        <span>Công cụ hỗ trợ nghiệp vụ tín dụng & tiền gửi</span>
-                    </p>
-                    <!-- Version badge on mobile inline with name -->
-                    <span id="app-version-badge" class="sm:hidden mt-0.5 inline-block px-1.5 py-0.5 bg-black/40 text-emerald-300 font-mono text-[9px] rounded-full border border-emerald-500/40">v2026.07.29</span>
+                    <!-- Full fund name on ALL screens - Gold metallic color -->
+                    <h1 class="text-[13px] xs:text-sm sm:text-base lg:text-lg font-extrabold tracking-tight leading-tight uppercase text-gold-premium">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h1>
+                    <!-- Subtitle always visible below name -->
+                    <p class="text-[10px] sm:text-xs text-emerald-200/80 font-medium mt-0.5 leading-tight">Công cụ hỗ trợ công việc nội bộ</p>
                 </div>
-
-                <!-- Version badge desktop (next to subtitle) -->
-                <span id="app-version-badge-desktop" class="hidden sm:inline-block px-2 py-0.5 bg-black/40 text-emerald-300 font-mono text-[10px] rounded-full border border-emerald-500/40 flex-shrink-0">v2026.07.29</span>
 
                 <!-- Action Buttons: always in a row -->
                 <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
@@ -2514,8 +2523,13 @@
     </main>
 
     <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800 no-print">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-4 space-y-1">
             <p class="font-semibold text-slate-300">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ © 2026</p>
+            <p class="text-slate-500 text-[10px] flex items-center justify-center gap-2">
+                <span>Công cụ hỗ trợ công việc nội bộ</span>
+                <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
+                <span id="app-version-badge" class="font-mono text-emerald-500/70">v2026.07.29</span>
+            </p>
         </div>
     </footer>
 
