@@ -1574,7 +1574,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v5.0";
+                    const thisVersion = "2026.07.29-v5.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1584,7 +1584,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v5.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v5.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1625,7 +1625,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v5.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v5.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3593,23 +3593,24 @@
                 qrImg.src = vietQrUrl;
 
                 function drawQRAndLogo(qrImageObj) {
-                    const qrX = 128;
-                    const qrY = 208;
-                    const qrSize = 832;
+                    // Thu gọn kích thước QR LOA 4mm mỗi cạnh (710px) và căn đúng tâm khung chứa
+                    const qrSize = 710;
+                    const qrX = 189;
+                    const qrY = 191;
                     ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
 
                     const logoImg = new Image();
                     logoImg.onload = function() {
-                        const logoSize = 166;
+                        const logoSize = 142;
                         const centerX = qrX + (qrSize / 2);
                         const centerY = qrY + (qrSize / 2);
 
                         ctx.save();
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY, (logoSize / 2) + 6, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY, (logoSize / 2) + 5, 0, Math.PI * 2);
                         ctx.fillStyle = '#ffffff';
                         ctx.fill();
-                        ctx.lineWidth = 4;
+                        ctx.lineWidth = 3.5;
                         ctx.strokeStyle = '#047857';
                         ctx.stroke();
                         ctx.restore();
@@ -3630,31 +3631,33 @@
                 function writeLoaText() {
                     const fontName = '"Be Vietnam Pro", Arial, sans-serif';
 
+                    // Tên chủ TK (Tăng cỡ chữ lên 52px, Đẩy lên trên 1mm ~ Y = 111px để vào giữa khung)
                     ctx.save();
                     ctx.fillStyle = colorName || "#003b7a";
-                    let nameFontSize = 44;
+                    let nameFontSize = 52;
                     ctx.font = `bold ${nameFontSize}px ${fontName}`;
-                    const maxW = 960;
-                    while (ctx.measureText(nameClean).width > maxW && nameFontSize > 20) {
+                    const maxW = 900;
+                    while (ctx.measureText(nameClean).width > maxW && nameFontSize > 22) {
                         nameFontSize -= 2;
                         ctx.font = `bold ${nameFontSize}px ${fontName}`;
                     }
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(nameClean, 544, 120);
+                    ctx.fillText(nameClean, 544, 111);
                     ctx.restore();
 
+                    // Số TK Nguồn (Tăng cỡ chữ thêm 20% lên 48px, Đẩy lên trên 4mm ~ Y = 1009px để vào giữa khung)
                     ctx.save();
                     ctx.fillStyle = colorAcc || "#0f172a";
-                    let accFontSize = 40;
+                    let accFontSize = 48;
                     ctx.font = `bold ${accFontSize}px ${fontName}`;
-                    while (ctx.measureText(accClean).width > maxW && accFontSize > 18) {
+                    while (ctx.measureText(accClean).width > maxW && accFontSize > 20) {
                         accFontSize -= 2;
                         ctx.font = `bold ${accFontSize}px ${fontName}`;
                     }
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(accClean, 544, 1045);
+                    ctx.fillText(accClean, 544, 1009);
                     ctx.restore();
 
                     if (onDone) onDone(canvas);
