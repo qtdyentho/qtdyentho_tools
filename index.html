@@ -1612,39 +1612,8 @@
             showToast("Đã sao chép nội dung mẫu!");
         }
 
-        // PWA Early Bootloader Engine: Tự động kiểm tra và boot trực tiếp bản HTML mới nhất từ LocalStorage khi khởi chạy
-        (function runPwaEarlyBootloader() {
-            // Hàm so sánh version semantic (tránh lỗi string comparison: "v9" > "v14")
-            function versionGt(a, b) {
-                // Parse "2026.07.29-v15.0" => [2026,7,29,15,0]
-                function parse(v) {
-                    return v.replace(/[^\d.]/g, '.').split('.').filter(Boolean).map(Number);
-                }
-                const pa = parse(a), pb = parse(b);
-                for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-                    const na = pa[i] || 0, nb = pb[i] || 0;
-                    if (na > nb) return true;
-                    if (na < nb) return false;
-                }
-                return false;
-            }
-            try {
-                const thisVersion = "2026.07.29-v19.0";
-                const cachedHtml = localStorage.getItem('qtdnd_cached_app_html');
-                if (cachedHtml && cachedHtml.length > 1000) {
-                    const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
-                    const cachedVersion = match ? match[1] : null;
-                    // Nếu cached version cũ hơn bản hiện tại => xóa cache, không nạp
-                    if (!cachedVersion || !versionGt(cachedVersion, thisVersion)) {
-                        localStorage.removeItem('qtdnd_cached_app_html');
-                    } else {
-                        document.open();
-                        document.write(cachedHtml);
-                        document.close();
-                    }
-                }
-            } catch(e) {}
-        })();
+        // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
+        try { localStorage.removeItem('qtdnd_cached_app_html'); } catch(e) {}
 
         const CURRENT_APP_VERSION = "2026.07.29-v21.0";
         const FIXED_ACC_NUMBER = "3800001234567899";
@@ -1750,8 +1719,8 @@
         async function applyDownloadedUpdate(newHtml, remoteVersion) {
             showToast(`🎉 Phát hiện bản mới (${remoteVersion})! Đang xóa Cache và nâng cấp...`);
             
-            // 1. Ghi đè vào LocalStorage để Bootloader nạp cho các lần mở sau
-            try { localStorage.setItem('qtdnd_cached_app_html', newHtml); } catch(e) {}
+            // 1. Purge legacy localStorage HTML cache
+            try { localStorage.removeItem('qtdnd_cached_app_html'); } catch(e) {}
 
             // 2. Xóa sạch bộ nhớ đệm CacheStorage cũ
             if ('caches' in window) {
@@ -3434,13 +3403,13 @@
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(finalAmount)} đ`;
 
             if (codeImgEl) {
-                const vectorDataUrl = generateQRDataURI(FIXED_ACC_NUMBER, memo, finalAmount);
-                if (vectorDataUrl) {
-                    codeImgEl.src = vectorDataUrl;
-                } else {
-                    const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}&template=qr_only`;
-                    codeImgEl.src = primaryUrl;
-                }
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}&template=qr_only`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${finalAmount}&addInfo=${encodeURIComponent(memo)}`;
+                codeImgEl.onerror = function() {
+                    this.onerror = null;
+                    this.src = fallbackUrl || generateQRDataURI(FIXED_ACC_NUMBER, memo, finalAmount);
+                };
+                codeImgEl.src = primaryUrl;
             }
         }
 
@@ -3480,13 +3449,13 @@
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(amount)} đ`;
 
             if (codeImgEl) {
-                const vectorDataUrl = generateQRDataURI(FIXED_ACC_NUMBER, memo, amount);
-                if (vectorDataUrl) {
-                    codeImgEl.src = vectorDataUrl;
-                } else {
-                    const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}&template=qr_only`;
-                    codeImgEl.src = primaryUrl;
-                }
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}&template=qr_only`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
+                codeImgEl.onerror = function() {
+                    this.onerror = null;
+                    this.src = fallbackUrl || generateQRDataURI(FIXED_ACC_NUMBER, memo, amount);
+                };
+                codeImgEl.src = primaryUrl;
             }
         }
 
