@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v12.2";
+                    const thisVersion = "2026.07.29-v13.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v12.2";
+        const CURRENT_APP_VERSION = "2026.07.29-v13.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v12.2';
+                        const CACHE_NAME = 'qtd-tools-cache-v13.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3858,46 +3858,69 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
             bgImg.onload = function() {
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
-                // 100% CLEAN CANVAS & OFFLINE EMVCo QR GENERATION
                 const qrX = 135;
                 const qrY = 173;
                 const qrSize = 818;
 
-                try {
-                    const payload = generateVietQREMVCoPayload("970446", accClean, memoClean);
-                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
-                } catch(e) {
-                    console.error("Lỗi tạo mã QR Standee:", e);
+                const qrImg = new Image();
+                qrImg.crossOrigin = 'Anonymous';
+                const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${accClean}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+                const sepayUrl  = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${accClean}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
+
+                qrImg.onload = function() { drawQRAndLogo(qrImg); };
+                qrImg.onerror = function() {
+                    const fallbackQR = new Image();
+                    fallbackQR.crossOrigin = 'Anonymous';
+                    fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
+                    fallbackQR.onerror = function() { renderOfflineQR(); };
+                    fallbackQR.src = sepayUrl;
+                };
+                qrImg.src = vietQrUrl;
+
+                function renderOfflineQR() {
+                    try {
+                        const payload = generateVietQREMVCoPayload("970446", accClean, memoClean);
+                        QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                    } catch(e) {
+                        console.error("Lỗi tạo mã QR Standee:", e);
+                    }
+                    drawLogo();
                 }
 
-                // Vẽ logo Co-opBank ở giữa QR
-                const logoImg = new Image();
-                logoImg.onload = function() {
-                    const logoSize = 164;
-                    const centerX = qrX + (qrSize / 2);
-                    const centerY = qrY + (qrSize / 2);
+                function drawQRAndLogo(qrImageObj) {
+                    try { ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize); } catch(e){}
+                    drawLogo();
+                }
 
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, (logoSize / 2) + 6, 0, Math.PI * 2);
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fill();
-                    ctx.lineWidth = 4;
-                    ctx.strokeStyle = '#047857';
-                    ctx.stroke();
-                    ctx.restore();
+                function drawLogo() {
+                    const logoImg = new Image();
+                    logoImg.onload = function() {
+                        const logoSize = 164;
+                        const centerX = qrX + (qrSize / 2);
+                        const centerY = qrY + (qrSize / 2);
 
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
-                    ctx.clip();
-                    ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
-                    ctx.restore();
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, (logoSize / 2) + 6, 0, Math.PI * 2);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fill();
+                        ctx.lineWidth = 4;
+                        ctx.strokeStyle = '#047857';
+                        ctx.stroke();
+                        ctx.restore();
 
-                    finishRender();
-                };
-                logoImg.onerror = function() { finishRender(); };
-                logoImg.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
+                        ctx.clip();
+                        ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
+                        ctx.restore();
+
+                        finishRender();
+                    };
+                    logoImg.onerror = function() { finishRender(); };
+                    logoImg.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
+                }
 
                 function finishRender() {
                     writeStandeeText();
@@ -3994,48 +4017,71 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
             bgImg.onload = function() {
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
-                // 100% CLEAN CANVAS & OFFLINE EMVCo QR GENERATION
                 const qrSize = 710;
                 const qrX = 189;
                 const qrY = 191;
 
-                try {
-                    const payload = generateVietQREMVCoPayload("970446", accClean, memoClean);
-                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
-                } catch(e) {
-                    console.error("Lỗi tạo mã QR LOA:", e);
+                const qrImg = new Image();
+                qrImg.crossOrigin = 'Anonymous';
+                const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${accClean}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+                const sepayUrl  = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${accClean}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
+
+                qrImg.onload = function() { drawQRAndLogo(qrImg); };
+                qrImg.onerror = function() {
+                    const fallbackQR = new Image();
+                    fallbackQR.crossOrigin = 'Anonymous';
+                    fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
+                    fallbackQR.onerror = function() { renderOfflineQR(); };
+                    fallbackQR.src = sepayUrl;
+                };
+                qrImg.src = vietQrUrl;
+
+                function renderOfflineQR() {
+                    try {
+                        const payload = generateVietQREMVCoPayload("970446", accClean, memoClean);
+                        QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                    } catch(e) {
+                        console.error("Lỗi tạo mã QR LOA:", e);
+                    }
+                    drawLogo();
                 }
 
-                // Logo Co-opBank ở giữa QR
-                const logoImg = new Image();
-                logoImg.onload = function() {
-                    const logoSize = 142;
-                    const centerX = qrX + (qrSize / 2);
-                    const centerY = qrY + (qrSize / 2);
+                function drawQRAndLogo(qrImageObj) {
+                    try { ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize); } catch(e){}
+                    drawLogo();
+                }
 
-                    try {
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, (logoSize / 2) + 5, 0, Math.PI * 2);
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fill();
-                        ctx.lineWidth = 3.5;
-                        ctx.strokeStyle = '#047857';
-                        ctx.stroke();
-                        ctx.restore();
+                function drawLogo() {
+                    const logoImg = new Image();
+                    logoImg.onload = function() {
+                        const logoSize = 142;
+                        const centerX = qrX + (qrSize / 2);
+                        const centerY = qrY + (qrSize / 2);
 
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
-                        ctx.clip();
-                        ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
-                        ctx.restore();
-                    } catch(e) {}
+                        try {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, (logoSize / 2) + 5, 0, Math.PI * 2);
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fill();
+                            ctx.lineWidth = 3.5;
+                            ctx.strokeStyle = '#047857';
+                            ctx.stroke();
+                            ctx.restore();
 
-                    finishRender();
-                };
-                logoImg.onerror = function() { finishRender(); };
-                logoImg.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
+                            ctx.clip();
+                            ctx.drawImage(logoImg, centerX - (logoSize / 2), centerY - (logoSize / 2), logoSize, logoSize);
+                            ctx.restore();
+                        } catch(e) {}
+
+                        finishRender();
+                    };
+                    logoImg.onerror = function() { finishRender(); };
+                    logoImg.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
+                }
 
                 function finishRender() {
                     writeLoaText();
@@ -4130,25 +4176,45 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
             ctx.roundRect(qrBox.x - 12, qrBox.y - 12, qrBox.w + 24, qrBox.h + 24, 16);
             ctx.fill();
 
-            // Vẽ ảnh QR
-            // Vẽ mã QR thuần JS 100% không qua URL ngoài (Đảm bảo Canvas 100% Clean)
-            function drawQROnCanvas() {
-                const memoFull = (document.getElementById(isLoan ? 'qr-memo-text' : 'qr-sav-memo-text')?.value || "").trim();
-                const amount = isLoan
-                    ? parseVND(document.getElementById('qr-final-amount')?.value || '0')
-                    : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
+            const memoFull = (document.getElementById(isLoan ? 'qr-memo-text' : 'qr-sav-memo-text')?.value || "").trim();
+            const amount = isLoan
+                ? parseVND(document.getElementById('qr-final-amount')?.value || '0')
+                : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
 
+            const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoFull)}`;
+            const sepayUrl  = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memoFull)}&template=qr_only`;
+
+            const mainQR = new Image();
+            mainQR.crossOrigin = 'Anonymous';
+            mainQR.onload = function() { drawQRAndLogo(mainQR); };
+            mainQR.onerror = function() {
+                const fallbackQR = new Image();
+                fallbackQR.crossOrigin = 'Anonymous';
+                fallbackQR.onload = function() { drawQRAndLogo(fallbackQR); };
+                fallbackQR.onerror = function() { drawQROnCanvas(); };
+                fallbackQR.src = sepayUrl;
+            };
+            mainQR.src = vietQrUrl;
+
+            function drawQRAndLogo(qrImageObj) {
+                try { ctx.drawImage(qrImageObj, qrBox.x, qrBox.y, qrBox.w, qrBox.h); } catch(e){}
+                drawLogo();
+            }
+
+            function drawQROnCanvas() {
                 try {
                     const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
                     QRCodeLib.drawQR(ctx, payload, qrBox.x, qrBox.y, qrBox.w);
                 } catch(e) {
                     console.error("Lỗi vẽ QR Card Canvas:", e);
                 }
+                drawLogo();
+            }
 
-                // Logo ở giữa QR
+            function drawLogo() {
                 const logo = new Image();
                 logo.onload = function() {
-                    const logoSz = Math.round(qrBox.w * 0.16); // 16% QR width chuẩn ISO 18004
+                    const logoSz = Math.round(qrBox.w * 0.16);
                     const cx = qrBox.x + qrBox.w / 2;
                     const cy = qrBox.y + qrBox.h / 2;
                     ctx.save();
@@ -4218,8 +4284,6 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
 
                 if (callback) callback(canvas);
             }
-
-            drawQROnCanvas();
         }
 
         function downloadQRImage(imgId) {
