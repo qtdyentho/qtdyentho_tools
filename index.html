@@ -152,6 +152,46 @@
         </div>
     </div>
 
+    <!-- Universal QR Image Preview, Save & Share Modal -->
+    <div id="qr-image-modal" class="fixed inset-0 bg-slate-900/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-6 text-slate-800 space-y-4 shadow-2xl relative border border-slate-200 max-h-[95vh] overflow-y-auto">
+            <button onclick="closeQrImageModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                <div class="p-2.5 bg-emerald-100 text-emerald-800 rounded-xl font-bold flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h3 id="qr-modal-title" class="font-extrabold text-base text-slate-900">Mã VietQR QTDND Yên Thọ</h3>
+                    <p class="text-xs text-emerald-700 font-semibold">Tải ảnh HD • Chia sẻ gửi khách hàng 1 chạm</p>
+                </div>
+            </div>
+
+            <!-- Image Container -->
+            <div class="bg-slate-100 p-2.5 rounded-xl border border-slate-200 flex justify-center items-center">
+                <img id="qr-modal-img" src="" alt="Mã VietQR QTDND Yên Thọ" class="max-h-[50vh] w-auto object-contain rounded-lg shadow-md">
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 flex items-start space-x-2">
+                <span class="text-base flex-shrink-0">💡</span>
+                <p><b>Mẹo lưu nhanh:</b> Nhấp giữ trực tiếp vào hình ảnh trên và chọn <b>"Lưu ảnh"</b> hoặc <b>"Tải hình ảnh"</b> để lưu vào bộ sưu tập điện thoại!</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <button id="qr-modal-download-btn" onclick="triggerModalDownload()" class="py-2.5 px-3 bg-emerald-800 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>💾 Tải Trực Tiếp Về Máy</span>
+                </button>
+                <button id="qr-modal-share-btn" onclick="triggerModalShare()" class="py-2.5 px-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                    <span>📲 Chia Sẻ Qua App Khác</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <header class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white shadow-lg sticky top-0 z-40 no-print">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
@@ -185,25 +225,6 @@
                             <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-extrabold whitespace-nowrap transition-all duration-200">Cập Nhật</span>
                         </button>
                         <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Tải & Kiểm tra bản mới</div>
-                    </div>
-
-                    <!-- Export Excel Button -->
-                    <div class="relative group">
-                        <button onclick="exportToExcel()" aria-label="Xuất Excel" class="p-2 sm:px-3 sm:py-2 bg-teal-700/80 hover:bg-teal-600 text-white rounded-xl border border-teal-500/50 transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-bold whitespace-nowrap transition-all duration-200">Xuất Excel</span>
-                        </button>
-                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Xuất dữ liệu file .XLS</div>
-                    </div>
-
-                    <!-- Reset App & Clear Cache Button -->
-                    <div class="relative group">
-                        <button onclick="resetAppAndCache()" aria-label="Reset Cache" class="p-2 sm:px-3 sm:py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl border border-slate-600/50 transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <svg class="w-5 h-5 flex-shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            <span class="hidden group-hover:inline-block group-focus:inline-block text-xs font-bold whitespace-nowrap transition-all duration-200">Reset App</span>
-                        </button>
-                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap pointer-events-none z-50">Xóa bộ nhớ đệm & Reset</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1574,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v6.1";
+                    const thisVersion = "2026.07.29-v7.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1584,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v6.1";
+        const CURRENT_APP_VERSION = "2026.07.29-v7.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1625,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v6.1';
+                        const CACHE_NAME = 'qtd-tools-cache-v7.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3672,40 +3693,76 @@
         }
 
         // ==================== BỘ XUẤT TỆP VÀ CHIA SẺ MÃ QR ĐA NỀN TẢNG ====================
-        function saveCanvasAsImageFile(canvas, fileName, toastMsg) {
-            showToast("Đang chuẩn bị ảnh PNG chất lượng cao HD...");
+        let currentModalCanvasBlob = null;
+        let currentModalFileName = "VietQR_QTD_YenTho.png";
+        let currentModalShareText = "Mã VietQR Co-opBank - QTDND Yên Thọ";
+
+        function openQrImageModal(canvas, fileName, shareTitle) {
+            currentModalFileName = fileName;
+            currentModalShareText = shareTitle || "Mã VietQR Co-opBank - QTDND Yên Thọ";
+            const modal = document.getElementById('qr-image-modal');
+            const modalImg = document.getElementById('qr-modal-img');
+            const modalTitle = document.getElementById('qr-modal-title');
+
+            if (modalTitle) modalTitle.textContent = shareTitle || "Mã VietQR QTDND Yên Thọ";
+
             try {
                 canvas.toBlob(function(blob) {
-                    if (!blob) {
-                        triggerDirectDownload(canvas.toDataURL('image/png'), fileName);
-                        return;
-                    }
-                    const blobUrl = URL.createObjectURL(blob);
-                    triggerDirectDownload(blobUrl, fileName);
-                    showToast(toastMsg || "Đã xuất tệp ảnh thành công!");
+                    currentModalCanvasBlob = blob;
+                    const url = blob ? URL.createObjectURL(blob) : canvas.toDataURL('image/png');
+                    if (modalImg) modalImg.src = url;
+                    if (modal) modal.classList.remove('hidden');
                 }, 'image/png');
             } catch(e) {
-                triggerDirectDownload(canvas.toDataURL('image/png'), fileName);
+                if (modalImg) modalImg.src = canvas.toDataURL('image/png');
+                if (modal) modal.classList.remove('hidden');
             }
         }
 
-        function triggerDirectDownload(url, fileName) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            a.target = '_blank';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                try { document.body.removeChild(a); } catch(e){}
-            }, 500);
+        function closeQrImageModal() {
+            const modal = document.getElementById('qr-image-modal');
+            if (modal) modal.classList.add('hidden');
+        }
 
-            setTimeout(() => {
-                const win = window.open(url, '_blank');
-                if (win) {
-                    showToast("Đã mở ảnh trong cửa sổ mới! Nhấp giữ ảnh để 'Lưu ảnh'.");
+        function triggerModalDownload() {
+            if (currentModalCanvasBlob) {
+                const url = URL.createObjectURL(currentModalCanvasBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentModalFileName;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
+                showToast("Đã lưu tệp ảnh về thiết bị!");
+            } else {
+                const modalImg = document.getElementById('qr-modal-img');
+                if (modalImg && modalImg.src) {
+                    const a = document.createElement('a');
+                    a.href = modalImg.src;
+                    a.download = currentModalFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
+                    showToast("Đã lưu tệp ảnh về thiết bị!");
                 }
-            }, 300);
+            }
+        }
+
+        function triggerModalShare() {
+            if (currentModalCanvasBlob) {
+                const file = new File([currentModalCanvasBlob], currentModalFileName, { type: 'image/png' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    navigator.share({
+                        title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
+                        text: currentModalShareText,
+                        files: [file]
+                    }).then(() => {
+                        showToast("Đã chia sẻ thành công!");
+                    }).catch(() => {});
+                    return;
+                }
+            }
+            showToast("Nhấp giữ vào ảnh để chọn Lưu hoặc Gửi ảnh!");
         }
 
         function downloadSingleStandeePNG() {
@@ -3715,9 +3772,10 @@
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
+            showToast("Đang tạo ảnh Standee PNG sắc nét HD...");
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                saveCanvasAsImageFile(c, `QR_Standee_QTD_YenTho_${name.replace(/\s+/g, '_')}_${Date.now()}.png`, "Đã lưu ảnh QR Standee HD về thiết bị!");
+                openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
             });
         }
 
@@ -3727,9 +3785,10 @@
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
+            showToast("Đang tạo ảnh QR LOA PNG sắc nét HD...");
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                saveCanvasAsImageFile(c, `QR_LOA_QTD_YenTho_${name.replace(/\s+/g, '_')}_${Date.now()}.png`, "Đã lưu ảnh QR LOA HD về thiết bị!");
+                openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
             });
         }
 
@@ -3743,7 +3802,27 @@
             showToast("Đang xử lý tệp chia sẻ Standee QR...");
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
-                shareCanvasFile(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
+                try {
+                    c.toBlob(async function(blob) {
+                        if (blob) {
+                            const file = new File([blob], `QR_Standee_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                try {
+                                    await navigator.share({
+                                        title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
+                                        text: `Mã VietQR Standee QTDND Yên Thọ - ${name}`,
+                                        files: [file]
+                                    });
+                                    showToast("Đã chia sẻ thành công!");
+                                    return;
+                                } catch(e) {}
+                            }
+                        }
+                        openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
+                    }, 'image/png');
+                } catch(e) {
+                    openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
+                }
             });
         }
 
@@ -3756,31 +3835,28 @@
             showToast("Đang xử lý tệp chia sẻ QR LOA...");
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
-                shareCanvasFile(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
+                try {
+                    c.toBlob(async function(blob) {
+                        if (blob) {
+                            const file = new File([blob], `QR_LOA_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                try {
+                                    await navigator.share({
+                                        title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
+                                        text: `Mã VietQR LOA QTDND Yên Thọ - ${name}`,
+                                        files: [file]
+                                    });
+                                    showToast("Đã chia sẻ thành công!");
+                                    return;
+                                } catch(e) {}
+                            }
+                        }
+                        openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
+                    }, 'image/png');
+                } catch(e) {
+                    openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
+                }
             });
-        }
-
-        function shareCanvasFile(canvas, fileName, shareText) {
-            try {
-                canvas.toBlob(async function(blob) {
-                    if (!blob) return;
-                    const file = new File([blob], fileName, { type: 'image/png' });
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        try {
-                            await navigator.share({
-                                title: 'Mã VietQR Co-opBank - QTDND Yên Thọ',
-                                text: shareText,
-                                files: [file]
-                            });
-                            showToast("Đã chia sẻ thành công!");
-                            return;
-                        } catch(e) {}
-                    }
-                    saveCanvasAsImageFile(canvas, fileName, "Trình duyệt không hỗ trợ chia sẻ tệp trực tiếp. Đã mở ảnh để lưu!");
-                }, 'image/png');
-            } catch(e) {
-                saveCanvasAsImageFile(canvas, fileName);
-            }
         }
 
         // Subtab Navigation Switcher
