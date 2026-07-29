@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v11.0";
+                    const thisVersion = "2026.07.29-v11.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v11.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v11.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v11.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v11.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -4126,12 +4126,11 @@
                 }
             }
 
-            // 3. Dự phòng cho file:// protocol trên Desktop Chrome nếu bị Tainted Canvas
+            // 3. Dự phòng: Nếu cả toBlob & toDataURL đều thất bại (Tainted Canvas nặng), hiện thông báo hướng dẫn
             if (!exported && modalImg) {
-                const accClean = (document.getElementById('std-acc')?.value || document.getElementById('loa-acc')?.value || "3800200138221012").trim();
-                const nameClean = (document.getElementById('std-name')?.value || document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET").trim().toUpperCase();
-                const memoClean = removeVietnameseTones(`TT ${nameClean}`).toUpperCase();
-                modalImg.src = `https://img.vietqr.io/image/COOPBANK-${accClean}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+                // Hiển thị placeholder thay vì dùng API ngoài để tránh lấy ảnh QR đơn thay cho toàn bộ khung
+                modalImg.src = '';
+                if (modalTitle) modalTitle.textContent = '⚠️ Canvas bị giới hạn bảo mật — Vui lòng dùng PWA (HTTPS) để tải ảnh đầy đủ';
             }
 
             if (modal) modal.classList.remove('hidden');
@@ -4214,13 +4213,9 @@
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
-            showToast("Đang chuẩn bị Tải mã QR...");
+            showToast("Đang chuẩn bị Tải mã QR Standee...");
 
-            const liveCanvas = document.getElementById('standee-preview-canvas');
-            if (liveCanvas && liveCanvas.width > 0) {
-                openQrImageModal(liveCanvas, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
-            }
-
+            // Luôn render lại vào tempCanvas để đảm bảo xuất đúng toàn bộ khung standee
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
                 openQrImageModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee - ${name}`);
@@ -4233,13 +4228,9 @@
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
-            showToast("Đang chuẩn bị Tải mã QR...");
+            showToast("Đang chuẩn bị Tải mã QR LOA...");
 
-            const liveCanvas = document.getElementById('standee-preview-canvas');
-            if (liveCanvas && liveCanvas.width > 0) {
-                openQrImageModal(liveCanvas, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
-            }
-
+            // Luôn render lại vào tempCanvas để đảm bảo xuất đúng toàn bộ khung QR Loa
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
                 openQrImageModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA - ${name}`);
@@ -4253,12 +4244,8 @@
             const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
             const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
 
-            showToast("Đang chuẩn bị Chia sẻ mã QR...");
-            const liveCanvas = document.getElementById('standee-preview-canvas');
-            if (liveCanvas && liveCanvas.width > 0) {
-                tryShareOrModal(liveCanvas, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
-            }
-
+            showToast("Đang chuẩn bị Chia sẻ mã QR Standee...");
+            // Render mới vào tempCanvas để đảm bảo chia sẻ đúng toàn bộ khung standee
             const tempCanvas = document.createElement('canvas');
             renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function(c) {
                 tryShareOrModal(c, `QR_Standee_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR Standee QTDND Yên Thọ - ${name}`);
@@ -4271,12 +4258,8 @@
             const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
             const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
 
-            showToast("Đang chuẩn bị Chia sẻ mã QR...");
-            const liveCanvas = document.getElementById('standee-preview-canvas');
-            if (liveCanvas && liveCanvas.width > 0) {
-                tryShareOrModal(liveCanvas, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
-            }
-
+            showToast("Đang chuẩn bị Chia sẻ mã QR LOA...");
+            // Render mới vào tempCanvas để đảm bảo chia sẻ đúng toàn bộ khung QR Loa
             const tempCanvas = document.createElement('canvas');
             renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function(c) {
                 tryShareOrModal(c, `QR_LOA_${name.replace(/\s+/g, '_')}.png`, `Mã VietQR LOA QTDND Yên Thọ - ${name}`);
