@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v9.0";
+                    const thisVersion = "2026.07.29-v10.0";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v9.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v10.0";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v9.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v10.0';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -3719,7 +3719,7 @@
             bgImg.src = './QRLOA.png';
         }
 
-        // ==================== BỘ XUẤT TỆP VÀ CHIA SẺ MÃ QR ĐA NỀN TẢNG ====================
+        // ==================== BỘ XUẤT TỆP VÀ CHIA SẺ MÃ QR ĐA NỀN TẢNG (DESKTOP CHROME SAFE) ====================
         let currentModalCanvasBlob = null;
         let currentModalFileName = "VietQR_QTD_YenTho.png";
         let currentModalShareText = "Mã VietQR Co-opBank - QTDND Yên Thọ";
@@ -3733,17 +3733,44 @@
 
             if (modalTitle) modalTitle.textContent = shareTitle || "Mã VietQR QTDND Yên Thọ";
 
+            let exported = false;
+
+            // 1. Thử xuất sang Blob (Tránh crash nếu Chrome bảo vệ Tainted Canvas)
             try {
-                canvas.toBlob(function(blob) {
-                    currentModalCanvasBlob = blob;
-                    const url = blob ? URL.createObjectURL(blob) : canvas.toDataURL('image/png');
-                    if (modalImg) modalImg.src = url;
-                    if (modal) modal.classList.remove('hidden');
-                }, 'image/png');
-            } catch(e) {
-                if (modalImg) modalImg.src = canvas.toDataURL('image/png');
-                if (modal) modal.classList.remove('hidden');
+                if (canvas && typeof canvas.toBlob === 'function') {
+                    canvas.toBlob(function(blob) {
+                        if (blob) {
+                            currentModalCanvasBlob = blob;
+                            const url = URL.createObjectURL(blob);
+                            if (modalImg) modalImg.src = url;
+                            exported = true;
+                        }
+                    }, 'image/png');
+                }
+            } catch(e) {}
+
+            // 2. Thử xuất sang DataURL nếu toBlob chưa hoàn tất
+            if (!exported && canvas && typeof canvas.toDataURL === 'function') {
+                try {
+                    const dataUrl = canvas.toDataURL('image/png');
+                    if (dataUrl && modalImg) {
+                        modalImg.src = dataUrl;
+                        exported = true;
+                    }
+                } catch(e) {
+                    console.warn("Desktop Chrome Tainted Canvas export fallback activated:", e);
+                }
             }
+
+            // 3. Dự phòng cho file:// protocol trên Desktop Chrome nếu bị Tainted Canvas
+            if (!exported && modalImg) {
+                const accClean = (document.getElementById('std-acc')?.value || document.getElementById('loa-acc')?.value || "3800200138221012").trim();
+                const nameClean = (document.getElementById('std-name')?.value || document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET").trim().toUpperCase();
+                const memoClean = removeVietnameseTones(`TT ${nameClean}`).toUpperCase();
+                modalImg.src = `https://img.vietqr.io/image/COOPBANK-${accClean}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+            }
+
+            if (modal) modal.classList.remove('hidden');
         }
 
         function closeQrImageModal() {
@@ -3751,28 +3778,52 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        function triggerModalDownload() {
+        async function triggerModalDownload() {
+            showToast("Đang xử lý tải ảnh về máy...");
+
             if (currentModalCanvasBlob) {
-                const url = URL.createObjectURL(currentModalCanvasBlob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = currentModalFileName;
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
-                showToast("Đã lưu tệp ảnh về thiết bị!");
-            } else {
-                const modalImg = document.getElementById('qr-modal-img');
-                if (modalImg && modalImg.src) {
+                try {
+                    const url = URL.createObjectURL(currentModalCanvasBlob);
                     const a = document.createElement('a');
-                    a.href = modalImg.src;
+                    a.href = url;
                     a.download = currentModalFileName;
                     document.body.appendChild(a);
                     a.click();
                     setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
                     showToast("Đã lưu tệp ảnh về thiết bị!");
+                    return;
+                } catch(e) {}
+            }
+
+            const modalImg = document.getElementById('qr-modal-img');
+            if (modalImg && modalImg.src) {
+                try {
+                    // Fetch URL dưới dạng Blob để vượt rào cản CORS Download trên Desktop Chrome
+                    const response = await fetch(modalImg.src);
+                    const blob = await response.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = currentModalFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
+                    showToast("Đã lưu tệp ảnh về thiết bị!");
+                    return;
+                } catch(e) {
+                    const a = document.createElement('a');
+                    a.href = modalImg.src;
+                    a.download = currentModalFileName;
+                    a.target = "_blank";
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => { try { document.body.removeChild(a); } catch(e){} }, 500);
+                    showToast("Đã mở ảnh trong tab mới!");
+                    return;
                 }
             }
+
+            showToast("Vui lòng nhấp chuột phải vào ảnh chọn 'Lưu hình ảnh thành...'!");
         }
 
         function triggerModalShare() {
@@ -3789,7 +3840,7 @@
                     return;
                 }
             }
-            showToast("Nhấp giữ vào ảnh để chọn Lưu hoặc Gửi ảnh!");
+            showToast("Desktop Chrome: Vui lòng nhấp chuột phải chọn 'Sao chép hình ảnh' hoặc bấm '📥 Tải Mã QR'!");
         }
 
         function downloadSingleStandeePNG() {
