@@ -884,7 +884,7 @@
 
                             <div>
                                 <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền (Mặc Định Cố Định)</label>
-                                <input type="text" id="qr-acc-number" value="3800001234567899" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                                <input type="text" id="qr-acc-number" value="3800200138221012" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
                             </div>
                         </div>
 
@@ -893,7 +893,7 @@
                             <div class="text-center space-y-1">
                                 <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR SePay Auto-Gen</span>
                                 <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span id="qr-disp-acc">3800001234567899</span></p>
+                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span id="qr-disp-acc">3800200138221012</span></p>
                             </div>
 
                             <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-emerald-500 relative flex items-center justify-center">
@@ -971,7 +971,7 @@
 
                             <div>
                                 <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền (Mặc Định Cố Định)</label>
-                                <input type="text" value="3800001234567899" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                                <input type="text" value="3800200138221012" readonly class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
                             </div>
                         </div>
 
@@ -980,7 +980,7 @@
                             <div class="text-center space-y-1">
                                 <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR Savings Deposit</span>
                                 <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800001234567899</span></p>
+                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800200138221012</span></p>
                             </div>
 
                             <div class="bg-white p-3 rounded-xl shadow-inner border-4 border-blue-500 relative flex items-center justify-center">
@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v12.0";
+                    const thisVersion = "2026.07.29-v12.1";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v12.0";
+        const CURRENT_APP_VERSION = "2026.07.29-v12.1";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v12.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v12.1';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -1832,7 +1832,7 @@
         }
 
         // ---------------- BUSINESS LOGIC ENGINE ----------------
-        const FIXED_ACC_NUMBER = "3800001234567899";
+        const FIXED_ACC_NUMBER = "3800200138221012";
         const TERMS = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 18, 24, 36];
         const DEFAULT_RATES = {
             1: 3.2, 2: 3.2, 3: 3.5, 5: 3.8, 6: 4.8, 7: 4.9, 8: 5.0,
@@ -3827,7 +3827,7 @@ const ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCA
                 tag62 = "62" + pad2(tag08_memo.length) + tag08_memo;
             }
 
-            const payload = "000201" + "010211" + tag38 + tag53_curr + tag54 + tag58_country + tag62 + "6304";
+            const payload = "000201" + "010212" + tag38 + tag53_curr + tag54 + tag58_country + tag62 + "6304";
             return payload + calcCRC16(payload);
         }
 
