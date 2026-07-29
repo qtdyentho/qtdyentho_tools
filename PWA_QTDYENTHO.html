@@ -3966,9 +3966,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             const amountVal = parseVND(document.getElementById('std-amount')?.value || '0');
             const customMemo = (document.getElementById('std-memo')?.value || '').trim();
-            const memoClean = customMemo 
-                ? removeVietnameseTones(customMemo).toUpperCase() 
-                : removeVietnameseTones(`TT STANDEE ${nameClean}`).toUpperCase();
+            const memoClean = customMemo ? removeVietnameseTones(customMemo).toUpperCase() : "";
 
             const bgImg = new Image();
             bgImg.onload = function() {
@@ -3986,19 +3984,19 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                     console.error("Lỗi tạo mã QR Standee:", e);
                 }
 
-                // Draw Base64 Logo in Center
+                // Draw Base64 Logo in Center (Optimal size 110px ~ 13.4% of QR box width to protect modules)
                 const logoImg = new Image();
                 logoImg.onload = function() {
-                    const logoSize = 164;
+                    const logoSize = 110;
                     const centerX = qrX + (qrSize / 2);
                     const centerY = qrY + (qrSize / 2);
 
                     ctx.save();
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY, (logoSize / 2) + 6, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY, (logoSize / 2) + 4, 0, Math.PI * 2);
                     ctx.fillStyle = '#ffffff';
                     ctx.fill();
-                    ctx.lineWidth = 4;
+                    ctx.lineWidth = 3;
                     ctx.strokeStyle = '#047857';
                     ctx.stroke();
                     ctx.restore();
@@ -4105,7 +4103,7 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
 
             const useAlias = document.getElementById('loa-use-alias')?.checked;
             const targetAccForQR = (useAlias && aliasClean) ? aliasClean : accClean;
-            const memoClean = removeVietnameseTones(`TT QRLOA ${nameClean}`).toUpperCase();
+            const memoClean = "";
 
             const bgImg = new Image();
             bgImg.onload = function() {
@@ -4123,20 +4121,20 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                     console.error("Lỗi tạo mã QR LOA:", e);
                 }
 
-                // Draw Base64 Logo in Center
+                // Draw Base64 Logo in Center (Optimal size 95px ~ 13.3% of QR box width)
                 const logoImg = new Image();
                 logoImg.onload = function() {
-                    const logoSize = 142;
+                    const logoSize = 95;
                     const centerX = qrX + (qrSize / 2);
                     const centerY = qrY + (qrSize / 2);
 
                     try {
                         ctx.save();
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY, (logoSize / 2) + 5, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY, (logoSize / 2) + 4, 0, Math.PI * 2);
                         ctx.fillStyle = '#ffffff';
                         ctx.fill();
-                        ctx.lineWidth = 3.5;
+                        ctx.lineWidth = 3;
                         ctx.strokeStyle = '#047857';
                         ctx.stroke();
                         ctx.restore();
