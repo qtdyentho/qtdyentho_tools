@@ -554,6 +554,83 @@
                             </div>
                         </div>
                     </div>
+                
+                    <!-- Additional Savings Tools Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-slate-200">
+                        <!-- Tool 4: Savings with Fractional Days -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <h3 class="font-bold text-emerald-950 text-sm mb-3 flex items-center gap-1.5">
+                                    <span class="px-2 py-0.5 bg-emerald-200 text-emerald-900 rounded text-xs font-bold">4</span>
+                                    Tiết Kiệm Lẻ Ngày (Kỳ Hạn + Số Ngày Lẻ)
+                                </h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                        <input type="text" id="sav4-amount" value="100.000.000" oninput="formatVNDInput(this); calcSavingsTool4();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Kỳ hạn (tháng)</label>
+                                            <input type="number" id="sav4-term" value="6" onchange="calcSavingsTool4()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Số ngày lẻ thêm</label>
+                                            <input type="number" id="sav4-days" value="15" onchange="calcSavingsTool4()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi kỳ hạn (%/năm)</label>
+                                            <input type="number" step="0.1" id="sav4-rate" value="5.8" onchange="calcSavingsTool4()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-emerald-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi KKH (%/năm)</label>
+                                            <input type="number" step="0.05" id="sav4-demand-rate" value="0.3" onchange="calcSavingsTool4()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-600 bg-white">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-emerald-50/70 p-2.5 rounded-lg space-y-1">
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">Lãi kỳ hạn trọn vẹn:</span> <b id="sav4-res-term-int" class="text-emerald-900">2.900.000 đ</b></div>
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">Lãi ngày lẻ (KKH):</span> <b id="sav4-res-days-int" class="text-slate-700">12.329 đ</b></div>
+                                <div class="flex justify-between text-[11px] pt-1 border-t border-emerald-200"><span class="font-bold text-slate-700">Tổng lãi nhận được:</span> <b id="sav4-res-total-int" class="text-emerald-900 font-extrabold text-sm">2.912.329 đ</b></div>
+                                <div class="flex justify-between text-[11px]"><span class="font-bold text-slate-700">Tổng gốc + Lãi:</span> <b id="sav4-res-total" class="text-slate-900 font-extrabold">102.912.329 đ</b></div>
+                            </div>
+                        </div>
+
+                        <!-- Tool 5: Term Rollover Comparison -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <h3 class="font-bold text-teal-950 text-sm mb-3 flex items-center gap-1.5">
+                                    <span class="px-2 py-0.5 bg-teal-200 text-teal-900 rounded text-xs font-bold">5</span>
+                                    So Sánh Tái Gửi Nối Kỳ Hạn (Cộng Dồn Gốc)
+                                </h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền vốn ban đầu (VNĐ)</label>
+                                        <input type="text" id="sav5-amount" value="100.000.000" oninput="formatVNDInput(this); calcSavingsTool5();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi 12 tháng (%/năm)</label>
+                                            <input type="number" step="0.1" id="sav5-long-rate" value="6.5" onchange="calcSavingsTool5()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-teal-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi 6 tháng (%/năm)</label>
+                                            <input type="number" step="0.1" id="sav5-short-rate" value="6.0" onchange="calcSavingsTool5()" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-emerald-800 bg-white">
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 italic">* So sánh gửi 12T 1 lần vs gửi 6T x 2 kỳ (kỳ 2 dồn lãi kỳ 1 vào gốc).</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-teal-50/70 p-2.5 rounded-lg space-y-1">
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">PA 1: Gửi 12 tháng 1 lần:</span> <b id="sav5-res-long-total" class="text-slate-800">106.500.000 đ (+6.500.000 đ)</b></div>
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">PA 2: Gửi 6T x 2 kỳ tái gốc:</span> <b id="sav5-res-rollover-total" class="text-teal-900 font-bold">106.090.000 đ (+6.090.000 đ)</b></div>
+                                <div class="flex justify-between text-[11px] pt-1 border-t border-teal-200"><span class="font-bold text-slate-700">Chênh lệch phương án:</span> <b id="sav5-res-diff" class="text-emerald-800 font-extrabold">PA 1 hơn +410.000 VNĐ</b></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- SUBTAB 2: TIỀN VAY -->
@@ -723,6 +800,83 @@
                                         <p id="rate-conv-res-monthly-vnd" class="font-extrabold text-emerald-200 text-sm">750.000 đ/30 ngày</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Additional Loan Tools Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-slate-200">
+                        <!-- Tool 3: Overdue Penalty Calculator -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <h3 class="font-bold text-amber-950 text-sm mb-3 flex items-center gap-1.5">
+                                    <span class="px-2 py-0.5 bg-amber-200 text-amber-950 rounded text-xs font-bold">3</span>
+                                    Tính Lãi Phạt Quá Hạn & Chậm Trả (TT 39/2016/TT-NHNN)
+                                </h3>
+                                <div class="space-y-3 text-xs">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Nợ gốc quá hạn (VNĐ)</label>
+                                            <input type="text" id="loan3-overdue-p" value="50.000.000" oninput="formatVNDInput(this); calcLoanTool3Overdue();" class="w-full px-2.5 py-1.5 border border-amber-300 rounded font-bold text-amber-950 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Nợ lãi chậm trả (VNĐ)</label>
+                                            <input type="text" id="loan3-overdue-i" value="3.000.000" oninput="formatVNDInput(this); calcLoanTool3Overdue();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi trong hạn (%/năm)</label>
+                                            <input type="number" step="0.1" id="loan3-rate" value="9.0" onchange="calcLoanTool3Overdue()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Số ngày quá hạn</label>
+                                            <input type="number" id="loan3-days" value="15" onchange="calcLoanTool3Overdue()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-rose-700 bg-white">
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 italic">* Lãi phạt gốc quá hạn = 150% lãi trong hạn; Lãi chậm trả = 10%/năm.</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-amber-50/70 p-2.5 rounded-lg space-y-1">
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">Lãi phạt gốc quá hạn (150%):</span> <b id="loan3-res-penalty-p" class="text-amber-900">277.397 đ</b></div>
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">Lãi phạt chậm trả (10%/năm):</span> <b id="loan3-res-penalty-i" class="text-rose-700">12.329 đ</b></div>
+                                <div class="flex justify-between text-[11px] pt-1 border-t border-amber-200"><span class="font-bold text-slate-700">Tổng phạt phát sinh:</span> <b id="loan3-res-total-penalty" class="text-rose-700 font-extrabold text-sm">289.726 đ</b></div>
+                                <div class="flex justify-between text-[11px]"><span class="font-bold text-slate-700">Tổng phải thanh toán:</span> <b id="loan3-res-total-pay" class="text-slate-900 font-extrabold">53.289.726 đ</b></div>
+                            </div>
+                        </div>
+
+                        <!-- Tool 4: Early Prepayment & Interest Savings -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <h3 class="font-bold text-emerald-950 text-sm mb-3 flex items-center gap-1.5">
+                                    <span class="px-2 py-0.5 bg-emerald-200 text-emerald-900 rounded text-xs font-bold">4</span>
+                                    Tính Phí Tất Toán Trước Hạn & Tiền Lãi Tiết Kiệm Được
+                                </h3>
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-600 mb-1">Dư nợ gốc còn lại tất toán (VNĐ)</label>
+                                        <input type="text" id="loan4-remain-p" value="200.000.000" oninput="formatVNDInput(this); calcLoanTool4Prepay();" class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Tháng trả sớm</label>
+                                            <input type="number" id="loan4-remain-months" value="12" onchange="calcLoanTool4Prepay()" class="w-full px-2 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Lãi suất (%/năm)</label>
+                                            <input type="number" step="0.1" id="loan4-rate" value="9.5" onchange="calcLoanTool4Prepay()" class="w-full px-2 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block font-medium text-slate-600 mb-1">Phí trả sớm (%)</label>
+                                            <input type="number" step="0.5" id="loan4-penalty-rate" value="1.0" onchange="calcLoanTool4Prepay()" class="w-full px-2 py-1.5 border border-amber-300 rounded font-bold text-amber-900 bg-amber-50">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-200 bg-emerald-50/70 p-2.5 rounded-lg space-y-1">
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">Phí phạt tất toán trước hạn:</span> <b id="loan4-res-fee" class="text-rose-700">2.000.000 đ</b></div>
+                                <div class="flex justify-between text-[11px]"><span class="text-slate-500">Tiền lãi vay tiết kiệm được:</span> <b id="loan4-res-saved-interest" class="text-emerald-800 font-bold">19.000.000 đ</b></div>
+                                <div class="flex justify-between text-[11px] pt-1 border-t border-emerald-200"><span class="font-bold text-slate-700">Lợi ích ròng thu về:</span> <b id="loan4-res-net-benefit" class="text-emerald-900 font-extrabold text-sm">+17.000.000 VNĐ</b></div>
                             </div>
                         </div>
                     </div>
@@ -3460,6 +3614,132 @@
             updateBadge('badge-npl', npl <= 3.0 ? '✅ An toàn' : '❌ Vượt 3%', npl <= 3.0);
             updateBadge('badge-car', car >= 8.0 ? '✅ Vượt chuẩn' : '❌ Dưới 8%', car >= 8.0);
             updateBadge('badge-cir', cir <= 55.0 ? '✅ Quản lý tốt' : '⚠️ Cao', cir <= 55.0);
+        }
+
+        
+        // Tool 4: Savings Fractional Days Calculator
+        function calcSavingsTool4() {
+            const P = parseVND(document.getElementById('sav4-amount')?.value || '0');
+            const nTerm = parseInt(document.getElementById('sav4-term')?.value || '0');
+            const nDays = parseInt(document.getElementById('sav4-days')?.value || '0');
+            const rTerm = parseFloat(document.getElementById('sav4-rate')?.value || '0');
+            const rDemand = parseFloat(document.getElementById('sav4-demand-rate')?.value || '0');
+
+            const termInterest = roundToThousand(P * (rTerm / 100) * (nTerm / 12));
+            const daysInterest = roundToThousand(P * (rDemand / 100) * (nDays / 365));
+            const totalInterest = termInterest + daysInterest;
+            const totalAmount = P + totalInterest;
+
+            const setTxt = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            setTxt('sav4-res-term-int', `${formatVND(termInterest)} đ`);
+            setTxt('sav4-res-days-int', `${formatVND(daysInterest)} đ`);
+            setTxt('sav4-res-total-int', `${formatVND(totalInterest)} đ`);
+            setTxt('sav4-res-total', `${formatVND(totalAmount)} đ`);
+        }
+
+        // Tool 5: Savings Term Rollover Comparison
+        function calcSavingsTool5() {
+            const P = parseVND(document.getElementById('sav5-amount')?.value || '0');
+            const rLong = parseFloat(document.getElementById('sav5-long-rate')?.value || '0');
+            const rShort = parseFloat(document.getElementById('sav5-short-rate')?.value || '0');
+
+            // PA 1: Gửi 12T 1 lần
+            const longInterest = roundToThousand(P * (rLong / 100) * 1);
+            const totalLong = P + longInterest;
+
+            // PA 2: Gửi 6T x 2 kỳ (kỳ 1 dồn gốc)
+            const shortInt1 = roundToThousand(P * (rShort / 100) * 0.5);
+            const P2 = P + shortInt1;
+            const shortInt2 = roundToThousand(P2 * (rShort / 100) * 0.5);
+            const totalRollover = P2 + shortInt2;
+            const rolloverInterest = shortInt1 + shortInt2;
+
+            const diff = totalLong - totalRollover;
+
+            const setTxt = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            setTxt('sav5-res-long-total', `${formatVND(totalLong)} đ (+${formatVND(longInterest)} đ)`);
+            setTxt('sav5-res-rollover-total', `${formatVND(totalRollover)} đ (+${formatVND(rolloverInterest)} đ)`);
+
+            const diffEl = document.getElementById('sav5-res-diff');
+            if (diffEl) {
+                if (diff > 0) {
+                    diffEl.textContent = `PA 1 gửi 12T hơn +${formatVND(diff)} VNĐ`;
+                    diffEl.className = 'text-emerald-800 font-extrabold';
+                } else if (diff < 0) {
+                    diffEl.textContent = `PA 2 gửi 6T x 2 kỳ hơn +${formatVND(Math.abs(diff))} VNĐ`;
+                    diffEl.className = 'text-teal-800 font-extrabold';
+                } else {
+                    diffEl.textContent = 'Hai phương án có hiệu quả bằng nhau';
+                    diffEl.className = 'text-slate-700 font-bold';
+                }
+            }
+        }
+
+        // Tool 3 Loan: Overdue Penalty & Delay Interest (TT 39/2016)
+        function calcLoanTool3Overdue() {
+            const pOverdue = parseVND(document.getElementById('loan3-overdue-p')?.value || '0');
+            const iOverdue = parseVND(document.getElementById('loan3-overdue-i')?.value || '0');
+            const rNormal = parseFloat(document.getElementById('loan3-rate')?.value || '0');
+            const days = parseInt(document.getElementById('loan3-days')?.value || '0');
+
+            // Lãi phạt gốc quá hạn = 150% * rNormal * days / 365
+            const rPenaltyP = (rNormal * 1.5) / 100;
+            const penaltyP = roundToThousand(pOverdue * rPenaltyP * (days / 365));
+
+            // Lãi chậm trả tiền lãi = 10%/năm * days / 365
+            const penaltyI = roundToThousand(iOverdue * 0.10 * (days / 365));
+
+            const totalPenalty = penaltyP + penaltyI;
+            const totalPay = pOverdue + iOverdue + totalPenalty;
+
+            const setTxt = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            setTxt('loan3-res-penalty-p', `${formatVND(penaltyP)} đ`);
+            setTxt('loan3-res-penalty-i', `${formatVND(penaltyI)} đ`);
+            setTxt('loan3-res-total-penalty', `${formatVND(totalPenalty)} đ`);
+            setTxt('loan3-res-total-pay', `${formatVND(totalPay)} đ`);
+        }
+
+        // Tool 4 Loan: Early Prepayment & Interest Savings
+        function calcLoanTool4Prepay() {
+            const P = parseVND(document.getElementById('loan4-remain-p')?.value || '0');
+            const months = parseInt(document.getElementById('loan4-remain-months')?.value || '0');
+            const rLoan = parseFloat(document.getElementById('loan4-rate')?.value || '0');
+            const rPenaltyRate = parseFloat(document.getElementById('loan4-penalty-rate')?.value || '0');
+
+            const fee = roundToThousand(P * (rPenaltyRate / 100));
+            const savedInterest = roundToThousand(P * (rLoan / 100) * (months / 12));
+            const netBenefit = savedInterest - fee;
+
+            const setTxt = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            setTxt('loan4-res-fee', `${formatVND(fee)} đ`);
+            setTxt('loan4-res-saved-interest', `${formatVND(savedInterest)} đ`);
+            
+            const netEl = document.getElementById('loan4-res-net-benefit');
+            if (netEl) {
+                if (netBenefit >= 0) {
+                    netEl.textContent = `+${formatVND(netBenefit)} VNĐ`;
+                    netEl.className = 'text-emerald-900 font-extrabold text-sm';
+                } else {
+                    netEl.textContent = `-${formatVND(Math.abs(netBenefit))} VNĐ`;
+                    netEl.className = 'text-rose-700 font-extrabold text-sm';
+                }
+            }
         }
 
         function calcSavingsTool1() {
@@ -6373,7 +6653,11 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
         
             calcWithdrawVsCollateralLoan();
             calcFinancialIndicators();
-        }
+        
+            calcSavingsTool4();
+            calcSavingsTool5();
+            calcLoanTool3Overdue();
+            calcLoanTool4Prepay();}
 
         // Tự động kích hoạt ngay khi DOM parsed xong
         if (document.readyState === 'loading') {
