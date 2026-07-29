@@ -750,7 +750,7 @@
                     <div class="pb-4 border-b border-slate-100">
                         <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
                             <span class="w-2.5 h-6 bg-amber-600 rounded-full inline-block"></span>
-                            Mô Phỏng Rút Tiết Kiệm Trước Hạn Một Phần (Thông tư 04/2022/TT-NHNN)
+                            Rút tiết kiệm trước hạn
                         </h2>
                         <p class="text-xs text-slate-500 mt-0.5">Theo Thông tư 04/2022/TT-NHNN, phần tiền gửi rút trước hạn áp dụng lãi suất không kỳ hạn, phần tiền gửi còn lại tiếp tục hưởng lãi suất cam kết ban đầu.</p>
                     </div>
@@ -778,14 +778,34 @@
                                 <input type="number" step="0.05" id="tt04-demand-rate" value="0.3" onchange="calculatePartialWithdrawal()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-amber-800 focus:ring-2 focus:ring-amber-500">
                             </div>
 
-                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 pt-2">Thông tin rút trước hạn</h3>
+                            <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 pt-2">Thời gian & Số tiền rút trước hạn</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày gửi tiền (dd/mm/yyyy)</label>
+                                    <input type="date" id="tt04-start-date" onchange="calculatePartialWithdrawal()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
+                                    <span id="tt04-start-date-vn" class="text-[10px] text-emerald-700 font-semibold mt-0.5 block">📅 Ngày gửi: --/--/----</span>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày rút tiền (dd/mm/yyyy)</label>
+                                    <input type="date" id="tt04-withdraw-date" onchange="calculatePartialWithdrawal()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-amber-900 focus:ring-2 focus:ring-amber-500">
+                                    <span id="tt04-withdraw-date-vn" class="text-[10px] text-amber-700 font-semibold mt-0.5 block">📅 Ngày rút: --/--/----</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-1">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-semibold text-amber-950">Số ngày gửi thực tế (Không kỳ hạn):</span>
+                                    <span id="tt04-calculated-days" class="font-extrabold text-amber-900 text-sm bg-amber-200/80 px-2 py-0.5 rounded">0 ngày</span>
+                                </div>
+                                <p class="text-[10px] text-amber-800/90 italic">* Hệ thống tự động tính số ngày từ Ngày gửi đến Ngày rút để áp dụng lãi suất không kỳ hạn.</p>
+                            </div>
+
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền rút trước hạn (VNĐ)</label>
                                 <input type="text" id="tt04-withdraw-amount" value="30.000.000" oninput="formatVNDInput(this); calculatePartialWithdrawal();" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-amber-900 focus:ring-2 focus:ring-amber-500">
                             </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Thời điểm rút (Cuối tháng thứ)</label>
-                                <input type="number" id="tt04-withdraw-month" value="6" min="1" max="36" onchange="calculatePartialWithdrawal()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
+                            <div class="hidden">
+                                <input type="number" id="tt04-withdraw-month" value="6" min="1" max="36" onchange="calculatePartialWithdrawal()">
                             </div>
                         </div>
 
@@ -1481,7 +1501,7 @@
                         <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
                             <h3 class="font-bold text-amber-900 text-base flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-amber-600"></span>
-                                5. Rút Tiết Kiệm Trước Hạn 1 Phần (TT 04/2022)
+                                5. Rút tiết kiệm trước hạn (TT 04/2022)
                             </h3>
                             <p class="text-xs text-slate-600">Công thức phân tách lãi suất phần rút và phần giữ lại:</p>
                             <div class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
@@ -2369,33 +2389,59 @@
             const rateEl = document.getElementById('tt04-rate');
             const demandRateEl = document.getElementById('tt04-demand-rate');
             const withdrawAmountEl = document.getElementById('tt04-withdraw-amount');
-            const withdrawMonthEl = document.getElementById('tt04-withdraw-month');
+            const startDateEl = document.getElementById('tt04-start-date');
+            const withdrawDateEl = document.getElementById('tt04-withdraw-date');
 
-            if (!principalEl || !termEl || !rateEl || !demandRateEl || !withdrawAmountEl || !withdrawMonthEl) return;
+            if (!principalEl || !termEl || !rateEl || !demandRateEl || !withdrawAmountEl) return;
+
+            // Khởi tạo mặc định nếu chưa chọn ngày
+            const now = new Date();
+            const todayISO = now.toISOString().split('T')[0];
+            if (withdrawDateEl && !withdrawDateEl.value) {
+                withdrawDateEl.value = todayISO;
+            }
+            if (startDateEl && !startDateEl.value) {
+                const defaultStart = new Date();
+                defaultStart.setMonth(defaultStart.getMonth() - 6);
+                startDateEl.value = defaultStart.toISOString().split('T')[0];
+            }
 
             let P = parseVND(principalEl.value);
             let n = parseInt(termEl.value) || 12;
             let rBase = parseFloat(rateEl.value) || 0;
             let rDemand = parseFloat(demandRateEl.value) || 0;
             let wAmount = parseVND(withdrawAmountEl.value);
-            let wMonth = parseInt(withdrawMonthEl.value) || 1;
+
+            // Tính toán số ngày dựa trên Ngày gửi & Ngày rút
+            let daysHeld = 180;
+            let formattedStartVN = '';
+            let formattedWithdrawVN = '';
+
+            if (startDateEl && startDateEl.value && withdrawDateEl && withdrawDateEl.value) {
+                const dStart = new Date(startDateEl.value);
+                const dWithdraw = new Date(withdrawDateEl.value);
+                const diffTime = dWithdraw.getTime() - dStart.getTime();
+                daysHeld = Math.max(0, Math.round(diffTime / (1000 * 3600 * 24)));
+
+                const [sy, sm, sd] = startDateEl.value.split('-');
+                const [wy, wm, wd] = withdrawDateEl.value.split('-');
+                formattedStartVN = `${sd}/${sm}/${sy}`;
+                formattedWithdrawVN = `${wd}/${wm}/${wy}`;
+            }
 
             // Ràng buộc an toàn dữ liệu
             if (wAmount > P) {
                 wAmount = P;
                 withdrawAmountEl.value = formatVND(P);
             }
-            if (wMonth > n) {
-                wMonth = n;
-                withdrawMonthEl.value = n;
-            }
 
             const remainAmount = Math.max(0, P - wAmount);
-            const daysHeld = wMonth * 30;
 
+            // Lãi không kỳ hạn = Gốc rút * Lãi suất KKH * (Số ngày gửi / 365)
             const interestW = roundToThousand(wAmount * (rDemand / 100) * (daysHeld / 365));
             const totalW = wAmount + interestW;
 
+            // Lãi giữ nguyên kỳ hạn gốc = Gốc duy trì * Lãi suất cam kết * (Kỳ hạn / 12)
             const interestR = roundToThousand(remainAmount * (rBase / 100) * (n / 12));
             const totalR = remainAmount + interestR;
 
@@ -2408,12 +2454,16 @@
                 if (el) el.textContent = text;
             };
 
+            setTxt('tt04-start-date-vn', `📅 Ngày gửi: ${formattedStartVN}`);
+            setTxt('tt04-withdraw-date-vn', `📅 Ngày rút: ${formattedWithdrawVN}`);
+            setTxt('tt04-calculated-days', `${daysHeld} ngày`);
+
             setTxt('tt04-res-w-amount', `${formatVND(wAmount)} đ`);
-            setTxt('tt04-res-w-time', `${wMonth} tháng (${daysHeld} ngày)`);
+            setTxt('tt04-res-w-time', `${daysHeld} ngày (${formattedStartVN} ➔ ${formattedWithdrawVN})`);
             setTxt('tt04-res-w-rate', `${rDemand.toFixed(2)} %/năm`);
             setTxt('tt04-res-w-interest', `${formatVND(interestW)} đ`);
             setTxt('tt04-res-w-total', `${formatVND(totalW)} đ`);
-            setTxt('tt04-lbl-m1', wMonth);
+            setTxt('tt04-lbl-m1', `${daysHeld} ngày`);
 
             setTxt('tt04-res-r-amount', `${formatVND(remainAmount)} đ`);
             setTxt('tt04-res-r-time', `${n} tháng`);
@@ -2423,7 +2473,7 @@
             setTxt('tt04-lbl-m2', n);
 
             setTxt('tt04-res-total-interest', `${formatVND(totalInterestCombined)} VNĐ`);
-            setTxt('tt04-lbl-m3', wMonth);
+            setTxt('tt04-lbl-m3', `${daysHeld} ngày`);
             setTxt('tt04-res-full-withdraw', `${formatVND(interestIfFullWithdrawAtMonth)} đ`);
             setTxt('tt04-res-saved', `+${formatVND(savedInterest)} VNĐ`);
         }
