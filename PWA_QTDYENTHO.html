@@ -13,6 +13,40 @@
     <meta name="apple-mobile-web-app-title" content="QTDND Yên Thọ">
     <meta name="application-name" content="QTDND Yên Thọ">
 
+    <!-- HTTP Cache Control & Auto-Update Header Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- Automatic Version Purger & Service Worker Cache-Buster -->
+    <script>
+        (function autoPurgeStaleCaches() {
+            const CURRENT_VERSION = 'v2026.07.29-v21.9';
+            const lastVersion = localStorage.getItem('qtdnd_app_version');
+
+            // 1. Unregister all stale Service Workers
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (var r of registrations) r.unregister();
+                }).catch(function(){});
+            }
+
+            // 2. Clear CacheStorage
+            if ('caches' in window) {
+                caches.keys().then(function(keys) {
+                    keys.forEach(function(k){ caches.delete(k); });
+                }).catch(function(){});
+            }
+
+            // 3. Purge legacy localStorage HTML cache if version bumped
+            if (lastVersion !== CURRENT_VERSION) {
+                localStorage.setItem('qtdnd_app_version', CURRENT_VERSION);
+                localStorage.removeItem('qtdnd_cached_app_html');
+                console.log('[QTD Tools] Updated to ' + CURRENT_VERSION + '. Stale caches purged.');
+            }
+        })();
+    </script>
+
     <!-- Dynamic PWA Manifest & App Icon Link -->
     <link rel="icon" type="image/x-icon" href="LOgoQR.ico">
     <link rel="shortcut icon" href="LOgoQR.ico">
@@ -4477,146 +4511,6 @@ var ASSET_QRLOA_BG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAERCAYA
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ — Powered by QTD Tools', W / 2, H - 25);
-
-                if (callback) callback(canvas);
-            }
-        }= cardAmountEl ? cardAmountEl.textContent : "";
-            const memoText     = cardMemoEl   ? cardMemoEl.textContent   : "";
-
-            const W = 700, H = 860;
-            const canvas = document.createElement('canvas');
-            canvas.width = W;
-            canvas.height = H;
-            const ctx = canvas.getContext('2d');
-
-            // Nền tối
-            ctx.fillStyle = '#0f172a';
-            ctx.fillRect(0, 0, W, H);
-
-            // Header
-            ctx.fillStyle = accentColor;
-            ctx.fillRect(0, 0, W, 80);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 26px "Be Vietnam Pro", Arial, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', W / 2, 30);
-            ctx.font = 'bold 18px "Be Vietnam Pro", Arial, sans-serif';
-            ctx.fillText(cardTitle, W / 2, 60);
-
-            // Khung QR trắng
-            const qrBox = { x: W / 2 - 210, y: 100, w: 420, h: 420 };
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.roundRect(qrBox.x - 12, qrBox.y - 12, qrBox.w + 24, qrBox.h + 24, 16);
-            ctx.fill();
-
-            const memoFull = (document.getElementById(isLoan ? 'qr-memo-text' : 'qr-sav-memo-text')?.value || "").trim();
-            const amount = isLoan
-                ? parseVND(document.getElementById('qr-final-amount')?.value || '0')
-                : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
-
-            const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoFull)}`;
-            const sepayUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memoFull)}&template=qr_only`;
-
-            const cardQrImg = new Image();
-            cardQrImg.crossOrigin = 'Anonymous';
-            cardQrImg.onload = function() {
-                try { ctx.drawImage(cardQrImg, qrBox.x, qrBox.y, qrBox.w, qrBox.h); } catch(e){}
-                drawLogoAndInfo();
-            };
-            cardQrImg.onerror = function() {
-                const fallbackQR = new Image();
-                fallbackQR.crossOrigin = 'Anonymous';
-                fallbackQR.onload = function() {
-                    try { ctx.drawImage(fallbackQR, qrBox.x, qrBox.y, qrBox.w, qrBox.h); } catch(e){}
-                    drawLogoAndInfo();
-                };
-                fallbackQR.onerror = function() {
-                    try {
-                        const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
-                        QRCodeLib.drawQR(ctx, payload, qrBox.x, qrBox.y, qrBox.w);
-                    } catch(e) {
-                        console.error("Lỗi vẽ QR Card Canvas:", e);
-                    }
-                    drawLogoAndInfo();
-                };
-                fallbackQR.src = sepayUrl;
-            };
-            cardQrImg.src = vietQrUrl;
-
-            function drawLogoAndInfo() {
-                // Draw Base64 Logo in Center
-                const logo = new Image();
-                logo.onload = function() {
-                    const logoSz = Math.round(qrBox.w * 0.16);
-                    const cx = qrBox.x + qrBox.w / 2;
-                    const cy = qrBox.y + qrBox.h / 2;
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(cx, cy, logoSz / 2 + 5, 0, Math.PI * 2);
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.arc(cx, cy, logoSz / 2, 0, Math.PI * 2);
-                    ctx.clip();
-                    try { ctx.drawImage(logo, cx - logoSz/2, cy - logoSz/2, logoSz, logoSz); } catch(e){}
-                    ctx.restore();
-                    drawInfo();
-                };
-                logo.onerror = drawInfo;
-                logo.src = (typeof ASSET_LOGO !== 'undefined') ? ASSET_LOGO : './LOgoQR.jpg';
-            }
-
-            function drawInfo() {
-                // Thông tin số tiền
-                const infoY = qrBox.y + qrBox.h + 40;
-                ctx.fillStyle = '#1e293b';
-                ctx.fillRect(40, infoY, W - 80, 200);
-                ctx.beginPath();
-                ctx.roundRect(40, infoY, W - 80, 200, 12);
-                ctx.fill();
-
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'top';
-
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '15px "Be Vietnam Pro", Arial, sans-serif';
-                ctx.fillText('Số tiền:', 60, infoY + 18);
-
-                ctx.fillStyle = accentColor;
-                ctx.font = 'bold 28px "Be Vietnam Pro", Arial, sans-serif';
-                ctx.fillText(amountText, 60, infoY + 40);
-
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '15px "Be Vietnam Pro", Arial, sans-serif';
-                ctx.fillText('Nội dung:', 60, infoY + 85);
-
-                ctx.fillStyle = '#f1f5f9';
-                ctx.font = 'bold 14px "Be Vietnam Pro", Arial, sans-serif';
-                // Wrap text nội dung
-                const maxW = W - 120;
-                const words = memoText.split(' ');
-                let line = '', ly = infoY + 108;
-                for (let w of words) {
-                    const test = line + w + ' ';
-                    if (ctx.measureText(test).width > maxW && line !== '') {
-                        ctx.fillText(line.trim(), 60, ly);
-                        line = w + ' ';
-                        ly += 22;
-                        if (ly > infoY + 190) break;
-                    } else {
-                        line = test;
-                    }
-                }
-                ctx.fillText(line.trim(), 60, ly);
-
-                // Footer & Acc Info
-                ctx.fillStyle = '#475569';
-                ctx.font = '13px "Be Vietnam Pro", Arial, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText(`Chủ TK: ${FIXED_ACC_NAME} — STK: ${FIXED_ACC_NUMBER} (Co-opBank)`, W / 2, H - 35);
-                ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ — Powered by QTD Tools', W / 2, H - 18);
 
                 if (callback) callback(canvas);
             }
