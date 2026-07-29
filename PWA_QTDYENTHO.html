@@ -1595,7 +1595,7 @@
                 if (cachedHtml && cachedHtml.length > 1000) {
                     const match = cachedHtml.match(/CURRENT_APP_VERSION\s*=\s*["']([^"']+)["']/);
                     const cachedVersion = match ? match[1] : null;
-                    const thisVersion = "2026.07.29-v11.2";
+                    const thisVersion = "2026.07.29-v11.3";
                     if (cachedVersion && cachedVersion > thisVersion) {
                         document.open();
                         document.write(cachedHtml);
@@ -1605,7 +1605,7 @@
             } catch(e) {}
         })();
 
-        const CURRENT_APP_VERSION = "2026.07.29-v11.2";
+        const CURRENT_APP_VERSION = "2026.07.29-v11.3";
         const GITHUB_RAW_URL = "https://raw.githubusercontent.com/qtdyentho/qtdyentho_tools/main/index.html";
         const GITHUB_PAGES_URL = "https://qtdyentho.github.io/qtdyentho_tools/index.html";
         let swRegistrationObj = null;
@@ -1646,7 +1646,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v11.2';
+                        const CACHE_NAME = 'qtd-tools-cache-v11.3';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -4268,26 +4268,82 @@
             const modal = document.getElementById('qr-image-modal');
             const modalImg = document.getElementById('qr-modal-img');
             const modalTitle = document.getElementById('qr-modal-title');
-
             if (modalTitle) modalTitle.textContent = shareTitle || "Mã VietQR QTDND Yên Thọ";
 
-            let exported = false;
+            // Hàm phụ: kiểm tra nhanh xem canvas có bị tainted không
+            function isCanvasTainted(c) {
+                try { c.getContext('2d').getImageData(0, 0, 1, 1); return false; }
+                catch(e) { return true; }
+            }
 
-            // 1. Thử xuất sang Blob (Tránh crash nếu Chrome bảo vệ Tainted Canvas)
+            // Hàm xuất canvas sạch → set vào modal
+            function exportCleanCanvas(cleanCanvas) {
+                try {
+                    cleanCanvas.toBlob(function(blob) {
+                        if (blob) {
+                            currentModalCanvasBlob = blob;
+                            if (modalImg) modalImg.src = URL.createObjectURL(blob);
+                        } else {
+                            // toBlob trả về null (hiếm) → thử dataURL
+                            try {
+                                const du = cleanCanvas.toDataURL('image/png');
+                                currentModalCanvasBlob = null;
+                                if (modalImg) modalImg.src = du;
+                            } catch(e2) {}
+                        }
+                    }, 'image/png');
+                } catch(e) {
+                    try {
+                        const du = cleanCanvas.toDataURL('image/png');
+                        currentModalCanvasBlob = null;
+                        if (modalImg) modalImg.src = du;
+                    } catch(e2) {}
+                }
+                if (modal) modal.classList.remove('hidden');
+            }
+
+            // Kiểm tra tainted TRƯỚC
+            if (canvas && isCanvasTainted(canvas)) {
+                // Canvas bị tainted → sinh canvas sạch thay thế bằng QR engine nội bộ
+                buildCleanFallbackCanvas(fileName, shareTitle, function(cleanCanvas) {
+                    if (cleanCanvas) {
+                        exportCleanCanvas(cleanCanvas);
+                    } else {
+                        if (modalTitle) modalTitle.textContent = '⚠️ Không thể xuất ảnh. Vui lòng mở ứng dụng qua HTTPS (PWA).';
+                        if (modal) modal.classList.remove('hidden');
+                    }
+                });
+                return;
+            }
+
+            // Canvas OK — thử toBlob trước
+            let exported = false;
             try {
                 if (canvas && typeof canvas.toBlob === 'function') {
                     canvas.toBlob(function(blob) {
                         if (blob) {
                             currentModalCanvasBlob = blob;
-                            const url = URL.createObjectURL(blob);
-                            if (modalImg) modalImg.src = url;
+                            if (modalImg) modalImg.src = URL.createObjectURL(blob);
                             exported = true;
+                        } else {
+                            // toBlob null → thử dataURL
+                            try {
+                                const du = canvas.toDataURL('image/png');
+                                currentModalCanvasBlob = null;
+                                if (modalImg) modalImg.src = du;
+                            } catch(e2) {
+                                buildCleanFallbackCanvas(fileName, shareTitle, function(cc) {
+                                    if (cc) exportCleanCanvas(cc);
+                                });
+                            }
                         }
+                        if (modal) modal.classList.remove('hidden');
                     }, 'image/png');
+                    return; // Chờ callback
                 }
             } catch(e) {}
 
-            // 2. Thử xuất sang DataURL nếu toBlob chưa hoàn tất
+            // Fallback toDataURL
             if (!exported && canvas && typeof canvas.toDataURL === 'function') {
                 try {
                     const dataUrl = canvas.toDataURL('image/png');
@@ -4295,20 +4351,164 @@
                         modalImg.src = dataUrl;
                         exported = true;
                     }
-                } catch(e) {
-                    console.warn("Desktop Chrome Tainted Canvas export fallback activated:", e);
-                }
+                } catch(e) {}
             }
 
-            // 3. Dự phòng: Nếu cả toBlob & toDataURL đều thất bại (Tainted Canvas nặng), hiện thông báo hướng dẫn
-            if (!exported && modalImg) {
-                // Hiển thị placeholder thay vì dùng API ngoài để tránh lấy ảnh QR đơn thay cho toàn bộ khung
-                modalImg.src = '';
-                if (modalTitle) modalTitle.textContent = '⚠️ Canvas bị giới hạn bảo mật — Vui lòng dùng PWA (HTTPS) để tải ảnh đầy đủ';
+            if (!exported) {
+                buildCleanFallbackCanvas(fileName, shareTitle, function(cc) {
+                    if (cc) exportCleanCanvas(cc);
+                    else {
+                        if (modalTitle) modalTitle.textContent = '⚠️ Không thể xuất ảnh. Vui lòng mở qua HTTPS (PWA).';
+                    }
+                });
             }
 
             if (modal) modal.classList.remove('hidden');
         }
+
+        // Tạo canvas sạch hoàn toàn bằng canvas 2D API + QRCodeLib (KHÔNG dùng drawImage từ URL ngoài)
+        function buildCleanFallbackCanvas(fileName, shareTitle, callback) {
+            // Xác định context: standee, loa, tiền vay, hay tiền gửi
+            const isStandee  = /standee/i.test(fileName);
+            const isLoa      = /loa/i.test(fileName);
+            const isTienVay  = /tien.?vay/i.test(fileName);
+            const isTienGui  = /tien.?gui/i.test(fileName);
+
+            const W = 700, H = 900;
+            const c = document.createElement('canvas');
+            c.width = W; c.height = H;
+            const ctx = c.getContext('2d');
+
+            // Nền gradient
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            grad.addColorStop(0, isLoa ? '#1e1b4b' : isStandee ? '#052e16' : isTienVay ? '#052e16' : '#1e3a5f');
+            grad.addColorStop(1, '#0f172a');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            // Header
+            const accent = isLoa ? '#818cf8' : isStandee ? '#34d399' : isTienVay ? '#34d399' : '#60a5fa';
+            ctx.fillStyle = accent;
+            ctx.fillRect(0, 0, W, 76);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 22px "Be Vietnam Pro", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', W / 2, 26);
+            ctx.font = 'bold 16px "Be Vietnam Pro", Arial, sans-serif';
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillText((shareTitle || '').toUpperCase().substring(0, 50), W / 2, 56);
+
+            // Khung QR
+            const qrX = W/2 - 190, qrY = 96, qrSz = 380;
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(qrX - 14, qrY - 14, qrSz + 28, qrSz + 28, 16);
+            else ctx.rect(qrX - 14, qrY - 14, qrSz + 28, qrSz + 28);
+            ctx.fill();
+
+            // Sinh payload QR dựa vào context
+            let payload = '';
+            try {
+                if (isStandee) {
+                    const acc   = (document.getElementById('std-acc')?.value   || FIXED_ACC_NUMBER).trim();
+                    const name  = document.getElementById('std-name')?.value   || '';
+                    const memo  = removeVietnameseTones('TT STANDEE ' + name).toUpperCase();
+                    payload = generateVietQREMVCoPayload('970446', acc, memo);
+                } else if (isLoa) {
+                    const acc   = (document.getElementById('loa-acc')?.value   || FIXED_ACC_NUMBER).trim();
+                    const name  = document.getElementById('loa-name')?.value   || '';
+                    const memo  = removeVietnameseTones('TT QRLOA ' + name).toUpperCase();
+                    payload = generateVietQREMVCoPayload('970446', acc, memo);
+                } else if (isTienVay) {
+                    const memo   = document.getElementById('qr-memo-text')?.value || '';
+                    const amount = parseVND(document.getElementById('qr-final-amount')?.value || '0');
+                    payload = generateVietQREMVCoPayload('970446', FIXED_ACC_NUMBER, memo, amount);
+                } else if (isTienGui) {
+                    const memo   = document.getElementById('qr-sav-memo-text')?.value || '';
+                    const amount = parseVND(document.getElementById('qr-sav-amount')?.value || '0');
+                    payload = generateVietQREMVCoPayload('970446', FIXED_ACC_NUMBER, memo, amount);
+                }
+            } catch(e) {}
+
+            if (payload) {
+                try { QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSz); } catch(e) {}
+            } else {
+                // Hiển thị thông báo lỗi trong khung QR
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '16px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText('Không đủ dữ liệu để tạo QR', W/2, qrY + qrSz/2);
+            }
+
+            // Thông tin bổ sung
+            const infoY = qrY + qrSz + 40;
+            ctx.fillStyle = '#1e293b';
+            if (ctx.roundRect) ctx.roundRect(40, infoY, W - 80, 160, 12);
+            else ctx.rect(40, infoY, W - 80, 160);
+            ctx.fill();
+
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '13px "Be Vietnam Pro", Arial, sans-serif';
+            ctx.fillText('COOPBANK — QTDND Yên Thọ', 60, infoY + 14);
+
+            let infoText = '';
+            if (isTienVay) {
+                const amt = document.getElementById('qr-card-amount')?.textContent || '';
+                const memo = document.getElementById('qr-memo-text')?.value || '';
+                ctx.fillStyle = accent;
+                ctx.font = 'bold 22px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText(amt, 60, infoY + 36);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '13px "Be Vietnam Pro", Arial, sans-serif';
+                infoText = memo;
+            } else if (isTienGui) {
+                const amt = document.getElementById('qr-sav-card-amount')?.textContent || '';
+                const memo = document.getElementById('qr-sav-memo-text')?.value || '';
+                ctx.fillStyle = accent;
+                ctx.font = 'bold 22px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText(amt, 60, infoY + 36);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '13px "Be Vietnam Pro", Arial, sans-serif';
+                infoText = memo;
+            } else if (isStandee || isLoa) {
+                const name = document.getElementById(isStandee ? 'std-name' : 'loa-name')?.value || '';
+                const acc  = document.getElementById(isStandee ? 'std-acc'  : 'loa-acc')?.value || '';
+                ctx.fillStyle = accent;
+                ctx.font = 'bold 20px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText(name.toUpperCase(), 60, infoY + 36);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '16px "Be Vietnam Pro", Arial, sans-serif';
+                ctx.fillText(acc, 60, infoY + 68);
+                infoText = '';
+            }
+            // Wrap nội dung
+            if (infoText) {
+                const maxW2 = W - 120;
+                const words = infoText.split(' ');
+                let line = '', ly = infoY + 70;
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '13px "Be Vietnam Pro", Arial, sans-serif';
+                for (let w of words) {
+                    const test = line + w + ' ';
+                    if (ctx.measureText(test).width > maxW2 && line) {
+                        ctx.fillText(line.trim(), 60, ly); line = w + ' '; ly += 18;
+                        if (ly > infoY + 150) break;
+                    } else { line = test; }
+                }
+                if (line) ctx.fillText(line.trim(), 60, ly);
+            }
+
+            // Footer
+            ctx.fillStyle = '#475569';
+            ctx.font = '12px "Be Vietnam Pro", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Powered by QTD Tools — QTDND Yên Thọ', W/2, H - 16);
+
+            if (callback) callback(c);
+        }
+
 
         function closeQrImageModal() {
             const modal = document.getElementById('qr-image-modal');
