@@ -2138,45 +2138,66 @@
                         <div>
                             <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
                                 <span class="w-2.5 h-6 bg-purple-600 rounded-full inline-block"></span>
-                                📸 Công Cụ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ
+                                📸 Công Cụ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO
                             </h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Xoay phẳng ảnh chụp chéo/nghiêng (Perspective Warp), làm rõ nét chữ, nén dung lượng và xuất file PDF A4 chuẩn.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Xoay phẳng ảnh chụp nghiêng (Perspective Warp), tự động nhận diện mép giấy, làm rõ chữ, khử bóng râm, nén KB chuẩn và xuất PDF A4.</p>
                         </div>
                     </div>
 
                     <!-- Step 1: Upload Box -->
                     <div id="doc-upload-step" class="mt-6">
                         <div class="border-2 border-dashed border-purple-300 hover:border-purple-500 bg-purple-50/50 hover:bg-purple-50 rounded-2xl p-6 sm:p-10 text-center transition cursor-pointer relative"
-                             onclick="document.getElementById('doc-file-input').click()">
-                            <input type="file" id="doc-file-input" accept="image/*" class="hidden" onchange="handleDocImageUpload(event)">
+                             onclick="triggerDocGallery()">
+                            <input type="file" id="doc-file-input" accept="image/*" multiple class="hidden" onchange="handleDocImageUpload(event)">
                             <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-base font-bold text-slate-800">Tải ảnh hồ sơ, tài liệu lên</h3>
-                            <p class="text-xs text-slate-500 mt-1">Hỗ trợ các định dạng JPG, PNG, WEBP, HEIC (Chọn từ Thư viện hoặc Camera)</p>
+                            <h3 class="text-base font-bold text-slate-800">Tải ảnh hồ sơ, tài liệu lên (Hỗ trợ chọn nhiều ảnh cùng lúc)</h3>
+                            <p class="text-xs text-slate-500 mt-1">Hỗ trợ các định dạng JPG, PNG, WEBP, HEIC (Có thể chọn nhiều ảnh để chỉnh sửa & nén đồng loạt)</p>
                             <div class="mt-4 flex flex-wrap justify-center gap-3">
-                                <button type="button" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                    <span>Chọn ảnh từ máy</span>
+                                <button type="button" onclick="event.stopPropagation(); triggerDocGallery();" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span>Chọn nhiều ảnh từ máy</span>
                                 </button>
                                 <button type="button" onclick="event.stopPropagation(); triggerDocCamera();" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
                                     <span>Chụp từ Camera</span>
                                 </button>
+                                <button type="button" onclick="event.stopPropagation(); openCCCD2in1Modal();" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 012-2h2a2 2 0 012 2v2m-6 0h6"></path></svg>
+                                    <span>💳 Ghép 2 mặt CCCD (1 trang A4)</span>
+                                </button>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Batch Queue Navigation Bar (Carousel) -->
+                    <div id="doc-batch-bar" class="mt-4 p-3 bg-purple-50/90 border border-purple-200 rounded-2xl hidden space-y-2">
+                        <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+                            <span class="font-bold text-purple-900 flex items-center gap-1.5">
+                                <span>🖼️ Hàng chờ ảnh đã tải (<span id="doc-batch-count">0</span> ảnh)</span>
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="triggerDocGallery()" class="px-2.5 py-1 bg-purple-200 hover:bg-purple-300 text-purple-900 font-bold rounded-lg text-[11px]">➕ Thêm ảnh</button>
+                                <button onclick="applyBatchFilterAndCompressionAll()" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-[11px] shadow-sm">⚡ Nén & Lọc TẤT CẢ ảnh</button>
+                            </div>
+                        </div>
+                        <div id="doc-batch-list" class="flex gap-2 overflow-x-auto py-1"></div>
+                    </div>
+
                     <!-- Step 2: Interactive 4-Corner Crop Editor -->
-                    <div id="doc-editor-step" class="mt-6 hidden">
-                        <div class="flex flex-wrap items-center justify-between gap-3 mb-3 pb-3 border-b border-slate-100">
+                    <div id="doc-editor-step" class="mt-6 hidden space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
                             <div class="flex items-center gap-2">
                                 <span class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-lg text-xs font-bold">Bước 1</span>
-                                <h3 class="text-sm font-bold text-slate-800">Căn chỉnh 4 góc tài liệu (Chạm / Kéo các chấm tròn neon)</h3>
+                                <h3 class="text-sm font-bold text-slate-800">Căn chỉnh 4 góc tài liệu (<span id="doc-editor-img-label">Ảnh 1/1</span>)</h3>
                             </div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button onclick="autoDetectDocEdges()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm transition flex items-center gap-1">
+                                    <span>🎯 Tự động tìm viền</span>
+                                </button>
                                 <button onclick="rotateDocImage(-90)" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1">
                                     <span>↺ Xoay trái</span>
                                 </button>
@@ -2184,11 +2205,28 @@
                                     <span>↻ Xoay phải</span>
                                 </button>
                                 <button onclick="resetDocCorners()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
-                                    <span>🎯 Đặt lại 4 góc</span>
+                                    <span>🔄 Đặt lại 4 góc</span>
                                 </button>
                                 <button onclick="applyDocPerspectiveWarp()" class="px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-lg shadow-sm transition flex items-center gap-1.5">
                                     <span>✨ Làm phẳng & Tiếp tục ➔</span>
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Aspect Ratio & Resolution Config Bar -->
+                        <div class="bg-purple-50/80 p-3 rounded-xl border border-purple-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div class="flex items-center gap-2">
+                                <label class="font-bold text-purple-900">📐 Tỷ lệ làm phẳng:</label>
+                                <select id="doc-aspect-ratio" class="px-2.5 py-1 bg-white border border-purple-300 rounded-lg font-bold text-purple-950">
+                                    <option value="auto" selected>Tự động (Tự do theo góc chọn)</option>
+                                    <option value="a4_portrait">Khổ A4 Dọc (1 : 1.414)</option>
+                                    <option value="a4_landscape">Khổ A4 Ngang (1.414 : 1)</option>
+                                    <option value="cccd">Thẻ CCCD / Sổ TK (1.585 : 1)</option>
+                                    <option value="square">Vuông (1 : 1)</option>
+                                </select>
+                            </div>
+                            <div class="text-[11px] text-purple-800 italic">
+                                💡 Chạm/Kéo các chấm neon hoặc dùng phím Nudger bên dưới để chỉnh góc cực mịn
                             </div>
                         </div>
 
@@ -2198,7 +2236,39 @@
                             <!-- Loupe Glass Magnifier -->
                             <canvas id="doc-loupe-canvas" class="absolute w-28 h-28 rounded-full border-2 border-emerald-400 shadow-2xl pointer-events-none hidden z-30 bg-black"></canvas>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-2 text-center">💡 Mẹo: Kéo 4 góc chấm phát sáng áp sát đúng khung mép giấy tờ để có bản scan đẹp nhất.</p>
+
+                        <!-- Micro-adjustment Corner Nudger Pad -->
+                        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-700">🕹️ Vi chỉnh góc:</span>
+                                <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5 text-xs font-bold" id="doc-corner-selector">
+                                    <button onclick="selectDocCorner(0)" id="corner-btn-0" class="px-2 py-1 rounded bg-purple-600 text-white">Trên-Trái</button>
+                                    <button onclick="selectDocCorner(1)" id="corner-btn-1" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">Trên-Phải</button>
+                                    <button onclick="selectDocCorner(2)" id="corner-btn-2" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">Dưới-Phải</button>
+                                    <button onclick="selectDocCorner(3)" id="corner-btn-3" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">Dưới-Trái</button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-semibold text-slate-500">Bước:</span>
+                                <select id="doc-nudge-step" class="px-2 py-1 bg-white border border-slate-300 rounded text-xs font-bold">
+                                    <option value="1">1 px</option>
+                                    <option value="5" selected>5 px</option>
+                                    <option value="15">15 px</option>
+                                </select>
+                                <div class="grid grid-cols-3 gap-1 w-24 h-20">
+                                    <div></div>
+                                    <button onclick="nudgeDocCorner(0, -1)" class="bg-white hover:bg-purple-100 border border-slate-300 rounded font-black text-slate-700 shadow-sm flex items-center justify-center">▲</button>
+                                    <div></div>
+                                    <button onclick="nudgeDocCorner(-1, 0)" class="bg-white hover:bg-purple-100 border border-slate-300 rounded font-black text-slate-700 shadow-sm flex items-center justify-center">◀</button>
+                                    <div class="flex items-center justify-center text-[10px] font-extrabold text-purple-700" id="nudger-active-label">TL</div>
+                                    <button onclick="nudgeDocCorner(1, 0)" class="bg-white hover:bg-purple-100 border border-slate-300 rounded font-black text-slate-700 shadow-sm flex items-center justify-center">▶</button>
+                                    <div></div>
+                                    <button onclick="nudgeDocCorner(0, 1)" class="bg-white hover:bg-purple-100 border border-slate-300 rounded font-black text-slate-700 shadow-sm flex items-center justify-center">▼</button>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Step 3: Enhance, Compress & Export Result -->
@@ -2216,10 +2286,23 @@
                         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                             <!-- Left: Filter & Compression Controls -->
                             <div class="lg:col-span-5 space-y-5 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/80">
+                                <!-- Document Preset Name Selector -->
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">📋 Loại hồ sơ tài liệu (Tên file):</label>
+                                    <select id="doc-preset-type" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800">
+                                        <option value="CCCD">💳 Thẻ CCCD / CMND Thành viên</option>
+                                        <option value="HDTD" selected>📄 Hợp đồng Tín dụng / Tiền vay</option>
+                                        <option value="STK">📕 Sổ Tiết kiệm Thành viên</option>
+                                        <option value="TBD">🏠 Tài sản đảm bảo (Giấy tờ đất/xe)</option>
+                                        <option value="BCTC">📊 Báo cáo Tài chính / Bảng kê</option>
+                                        <option value="OTHER">📁 Hồ sơ nghiệp vụ khác</option>
+                                    </select>
+                                </div>
+
                                 <!-- Filter Selector -->
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">1. Chế độ lọc làm rõ chữ & màu sắc:</label>
-                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-2">1. Chế độ lọc xử lý ảnh & làm rõ chữ:</label>
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                         <button onclick="applyDocFilter('original')" id="filter-btn-original" class="px-2 py-2 bg-purple-600 text-white rounded-xl text-xs font-bold shadow-sm transition text-center">
                                             <span>Màu gốc</span>
                                         </button>
@@ -2229,19 +2312,57 @@
                                         <button onclick="applyDocFilter('magic')" id="filter-btn-magic" class="px-2 py-2 bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 rounded-xl text-xs font-bold transition text-center">
                                             <span>✨ Rõ chữ</span>
                                         </button>
+                                        <button onclick="applyDocFilter('shadow_remove')" id="filter-btn-shadow_remove" class="px-2 py-2 bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 rounded-xl text-xs font-bold transition text-center">
+                                            <span>☁️ Khử bóng râm</span>
+                                        </button>
                                         <button onclick="applyDocFilter('contrast')" id="filter-btn-contrast" class="px-2 py-2 bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 rounded-xl text-xs font-bold transition text-center">
                                             <span>Tương phản</span>
+                                        </button>
+                                        <button onclick="applyDocFilter('unsharp')" id="filter-btn-unsharp" class="px-2 py-2 bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 rounded-xl text-xs font-bold transition text-center">
+                                            <span>🔍 Tăng độ nét</span>
                                         </button>
                                     </div>
                                 </div>
 
-                                <!-- Compression Slider -->
-                                <div class="pt-3 border-t border-slate-200">
-                                    <div class="flex justify-between items-center mb-1">
+                                <!-- Custom Brightness & Contrast Controls -->
+                                <div class="pt-3 border-t border-slate-200 space-y-2">
+                                    <div class="flex justify-between items-center text-xs">
+                                        <label class="font-bold text-slate-700">Tùy chỉnh Độ sáng & Độ tương phản:</label>
+                                        <button onclick="resetDocColorAdjustments()" class="text-[11px] text-purple-700 hover:underline font-semibold">🔄 Đặt lại</button>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-[11px]">
+                                        <div>
+                                            <div class="flex justify-between text-slate-600 mb-0.5">
+                                                <span>Độ sáng:</span>
+                                                <b id="doc-brightness-lbl" class="text-slate-800">0</b>
+                                            </div>
+                                            <input type="range" id="doc-brightness-slider" min="-50" max="50" value="0" oninput="updateDocColorAdjustments()" class="w-full accent-purple-600 cursor-pointer">
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-slate-600 mb-0.5">
+                                                <span>Độ tương phản:</span>
+                                                <b id="doc-contrast-lbl" class="text-slate-800">0</b>
+                                            </div>
+                                            <input type="range" id="doc-contrast-slider" min="-50" max="50" value="0" oninput="updateDocColorAdjustments()" class="w-full accent-purple-600 cursor-pointer">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Compression Slider & Smart Target Presets -->
+                                <div class="pt-3 border-t border-slate-200 space-y-2">
+                                    <div class="flex justify-between items-center">
                                         <label class="text-xs font-bold text-slate-700">2. Chất lượng nén ảnh (JPEG Quality):</label>
                                         <span id="doc-quality-lbl" class="text-xs font-extrabold text-purple-700">75%</span>
                                     </div>
                                     <input type="range" id="doc-quality-slider" min="10" max="100" value="75" oninput="updateDocCompression()" class="w-full accent-purple-600 cursor-pointer">
+
+                                    <!-- Target File Size Quick Presets -->
+                                    <div class="pt-1 flex flex-wrap items-center gap-1.5">
+                                        <span class="text-[11px] text-slate-500 font-semibold">Nén mục tiêu:</span>
+                                        <button onclick="setTargetCompressKB(450)" class="px-2 py-0.5 bg-purple-100 hover:bg-purple-200 text-purple-900 rounded-md text-[11px] font-bold">⚡ &lt; 500 KB (Zalo)</button>
+                                        <button onclick="setTargetCompressKB(900)" class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 rounded-md text-[11px] font-bold">📁 &lt; 1 MB (QTD)</button>
+                                        <button onclick="setTargetCompressKB(1800)" class="px-2 py-0.5 bg-blue-100 hover:bg-blue-200 text-blue-900 rounded-md text-[11px] font-bold">🖼️ &lt; 2 MB</button>
+                                    </div>
                                 </div>
 
                                 <!-- Max Dimension Selection -->
@@ -2252,6 +2373,19 @@
                                         <option value="2400">2400 px (Phù hợp in ấn A4)</option>
                                         <option value="1600" selected>1600 px (Khuyên dùng - Nén tối ưu)</option>
                                         <option value="1200">1200 px (Siêu nhẹ - Gửi nhanh)</option>
+                                        <option value="800">800 px (Gửi tin nhắn)</option>
+                                    </select>
+                                </div>
+
+                                <!-- N-Up Grid Layout Selector for PDF -->
+                                <div class="pt-3 border-t border-slate-200">
+                                    <label class="block text-xs font-bold text-purple-900 mb-1">🖼️ Bố cục ghép số ảnh / 1 trang A4 PDF:</label>
+                                    <select id="doc-pdf-nup" class="w-full px-3 py-2 bg-purple-50 border border-purple-300 rounded-xl text-xs font-bold text-purple-950">
+                                        <option value="1" selected>1 ảnh / 1 trang A4 (Tiêu chuẩn toàn trang)</option>
+                                        <option value="2">2 ảnh / 1 trang A4 (Ghép chia đôi dọc A4)</option>
+                                        <option value="4">4 ảnh / 1 trang A4 (Lưới 2 cột x 2 hàng)</option>
+                                        <option value="6">6 ảnh / 1 trang A4 (Lưới 2 cột x 3 hàng)</option>
+                                        <option value="8">8 ảnh / 1 trang A4 (Lưới 2 cột x 4 hàng)</option>
                                     </select>
                                 </div>
 
@@ -2278,15 +2412,18 @@
                                         <span>Tải ảnh nén (JPEG)</span>
                                     </button>
                                     <div class="grid grid-cols-2 gap-2">
-                                        <button onclick="downloadDocPDF('single')" class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                                        <button onclick="downloadDocPDFClientSide('single')" class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                            <span>Xuất PDF A4</span>
+                                            <span>Tải PDF A4 (.pdf)</span>
                                         </button>
                                         <button onclick="addDocToStaging()" class="py-2.5 px-3 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                             <span>+ Trang PDF</span>
                                         </button>
                                     </div>
+                                    <button onclick="downloadDocPDF('single')" class="w-full py-1.5 px-3 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-1.5">
+                                        <span>🖨️ Mở cửa sổ in A4 (Print Preview)</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -2300,20 +2437,61 @@
                         </div>
 
                         <!-- Multi-page Staging Area -->
-                        <div id="doc-staging-box" class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-2xl hidden">
-                            <div class="flex justify-between items-center mb-3">
+                        <div id="doc-staging-box" class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-2xl hidden space-y-3">
+                            <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
                                 <h4 class="text-xs font-bold text-slate-800 flex items-center gap-2">
                                     <span>📚 Danh sách trang PDF chờ ghép (<span id="doc-staged-count">0</span> trang)</span>
                                 </h4>
                                 <div class="flex items-center gap-2">
                                     <button onclick="clearDocStaging()" class="px-2.5 py-1 text-xs text-rose-600 hover:bg-rose-50 font-bold rounded-lg transition">Xóa tất cả</button>
-                                    <button onclick="downloadDocPDF('multi')" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                    <button onclick="downloadDocPDFClientSide('multi')" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
                                         <span>📄 Tải File PDF nhiều trang</span>
                                     </button>
                                 </div>
                             </div>
                             <div id="doc-staged-list" class="flex flex-wrap gap-3 overflow-x-auto py-2"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Ghép 2 Mặt CCCD 2-in-1 lên 1 Trang A4 -->
+            <div id="cccd-2in1-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+                <div class="bg-white rounded-2xl max-w-lg w-full p-5 space-y-4 shadow-2xl">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <span>💳 Ghép 2 Mặt CCCD / Giấy Tờ lên 1 Trang A4</span>
+                        </h3>
+                        <button onclick="closeCCCD2in1Modal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+                    </div>
+
+                    <p class="text-xs text-slate-500">Tải lên hoặc chụp 2 ảnh (Mặt trước & Mặt sau) của CCCD/Thẻ để tự động ghép dọc chuẩn trên 1 trang PDF A4.</p>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Front side upload -->
+                        <div class="border-2 border-dashed border-purple-200 bg-purple-50/40 rounded-xl p-3 text-center space-y-2">
+                            <span class="text-xs font-bold text-purple-900 block">Mặt Trước CCCD</span>
+                            <div id="cccd-front-preview" class="w-full h-28 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 overflow-hidden">
+                                <span class="text-[11px] text-slate-400">Chưa chọn</span>
+                            </div>
+                            <input type="file" id="cccd-front-input" accept="image/*" class="hidden" onchange="handleCCCDSideUpload(event, 'front')">
+                            <button onclick="document.getElementById('cccd-front-input').click()" class="w-full py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold">Chọn Mặt Trước</button>
+                        </div>
+
+                        <!-- Back side upload -->
+                        <div class="border-2 border-dashed border-purple-200 bg-purple-50/40 rounded-xl p-3 text-center space-y-2">
+                            <span class="text-xs font-bold text-purple-900 block">Mặt Sau CCCD</span>
+                            <div id="cccd-back-preview" class="w-full h-28 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 overflow-hidden">
+                                <span class="text-[11px] text-slate-400">Chưa chọn</span>
+                            </div>
+                            <input type="file" id="cccd-back-input" accept="image/*" class="hidden" onchange="handleCCCDSideUpload(event, 'back')">
+                            <button onclick="document.getElementById('cccd-back-input').click()" class="w-full py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold">Chọn Mặt Sau</button>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-end gap-2 border-t border-slate-100">
+                        <button onclick="closeCCCD2in1Modal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Hủy</button>
+                        <button onclick="generateCCCD2in1Page()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md">Tạo & Ghép Trang A4</button>
                     </div>
                 </div>
             </div>
@@ -4018,17 +4196,24 @@
         }
 
         
-        // ==================== DOCUMENT SCANNER & COMPRESSOR ENGINE ====================
+        // ==================== DOCUMENT SCANNER & COMPRESSOR ENGINE PRO ====================
         let docOriginalImage = null;
         let docOriginalFile = null;
         let docOriginalSize = 0;
         let docRotationAngle = 0;
         let docCorners = []; // [{x, y}, {x, y}, {x, y}, {x, y}] -> TL, TR, BR, BL
         let docActiveCornerIdx = -1;
+        let docSelectedCornerIdx = 0; // Corners Nudger active target (0: TL, 1: TR, 2: BR, 3: BL)
         let docFlattenedCanvas = null;
         let docFilteredCanvas = null;
         let docCurrentFilter = 'original';
         let docStagedPages = []; // [{dataUrl, size, name}]
+        let cccdFrontImg = null;
+        let cccdBackImg = null;
+
+        // BATCH MULTI-IMAGE QUEUE STATE
+        let docBatchQueue = []; // [{ id, file, originalImage, corners, rotation, filter, brightness, contrast, dataUrl, compSize }]
+        let docBatchActiveIndex = 0;
 
         function triggerDocCamera() {
             const fileInput = document.getElementById('doc-file-input');
@@ -4038,24 +4223,237 @@
             }
         }
 
+        function triggerDocGallery() {
+            const fileInput = document.getElementById('doc-file-input');
+            if (fileInput) {
+                fileInput.removeAttribute('capture');
+                fileInput.click();
+            }
+        }
+
+        // BATCH MULTI-FILE UPLOAD HANDLER
         function handleDocImageUpload(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
 
-            docOriginalFile = file;
-            docOriginalSize = file.size;
-            docRotationAngle = 0;
+            showToast(`Đang nạp ${files.length} ảnh vào hàng chờ...`);
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.onload = function () {
-                    docOriginalImage = img;
-                    initDocEditor();
+            let loadedCount = 0;
+            const fileArray = Array.from(files);
+
+            fileArray.forEach((file, fIdx) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const w = img.width;
+                        const h = img.height;
+                        const marginX = w * 0.05;
+                        const marginY = h * 0.05;
+
+                        const batchItem = {
+                            id: `img_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+                            file: file,
+                            size: file.size,
+                            originalImage: img,
+                            rotation: 0,
+                            corners: [
+                                { x: marginX, y: marginY },
+                                { x: w - marginX, y: marginY },
+                                { x: w - marginX, y: h - marginY },
+                                { x: marginX, y: h - marginY }
+                            ],
+                            filter: 'original',
+                            brightness: 0,
+                            contrast: 0,
+                            dataUrl: e.target.result,
+                            compSize: file.size
+                        };
+
+                        docBatchQueue.push(batchItem);
+                        loadedCount++;
+
+                        if (loadedCount === fileArray.length) {
+                            renderDocBatchBar();
+                            switchDocBatchItem(docBatchQueue.length - fileArray.length);
+                            initDocEditor();
+                            showToast(`🎉 Đã tải ${fileArray.length} ảnh vào hàng chờ!`);
+                        }
+                    };
+                    img.src = e.target.result;
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderDocBatchBar() {
+            const bar = document.getElementById('doc-batch-bar');
+            const listEl = document.getElementById('doc-batch-list');
+            const countEl = document.getElementById('doc-batch-count');
+            if (!bar || !listEl || !countEl) return;
+
+            countEl.textContent = docBatchQueue.length;
+
+            if (docBatchQueue.length === 0) {
+                bar.classList.add('hidden');
+                return;
+            }
+
+            bar.classList.remove('hidden');
+            listEl.innerHTML = '';
+
+            docBatchQueue.forEach((item, idx) => {
+                const isActive = (idx === docBatchActiveIndex);
+                const thumb = document.createElement('div');
+                thumb.className = `relative flex-shrink-0 w-20 h-24 rounded-xl border-2 cursor-pointer transition p-1 flex flex-col items-center justify-between bg-white shadow-sm ${
+                    isActive ? 'border-purple-600 ring-2 ring-purple-300' : 'border-slate-200 hover:border-purple-400'
+                }`;
+                thumb.onclick = () => switchDocBatchItem(idx);
+
+                thumb.innerHTML = `
+                    <img src="${item.dataUrl}" class="w-full h-16 object-contain rounded bg-slate-50">
+                    <span class="text-[10px] font-extrabold ${isActive ? 'text-purple-700' : 'text-slate-600'}">Ảnh ${idx + 1}</span>
+                    <button onclick="event.stopPropagation(); removeDocBatchItem(${idx})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold flex items-center justify-center shadow">✕</button>
+                `;
+                listEl.appendChild(thumb);
+            });
+        }
+
+        function switchDocBatchItem(index) {
+            if (index < 0 || index >= docBatchQueue.length) return;
+
+            if (docBatchQueue[docBatchActiveIndex] && docOriginalImage) {
+                docBatchQueue[docBatchActiveIndex].corners = docCorners.map(pt => ({ ...pt }));
+                docBatchQueue[docBatchActiveIndex].rotation = docRotationAngle;
+            }
+
+            docBatchActiveIndex = index;
+            const item = docBatchQueue[index];
+
+            docOriginalImage = item.originalImage;
+            docOriginalFile = item.file;
+            docOriginalSize = item.size;
+            docRotationAngle = item.rotation || 0;
+            docCorners = item.corners.map(pt => ({ ...pt }));
+
+            const labelEl = document.getElementById('doc-editor-img-label');
+            if (labelEl) labelEl.textContent = `Ảnh ${index + 1}/${docBatchQueue.length}`;
+
+            renderDocBatchBar();
+            setupDocCropCanvas();
+        }
+
+        function removeDocBatchItem(index) {
+            docBatchQueue.splice(index, 1);
+            if (docBatchQueue.length === 0) {
+                document.getElementById('doc-upload-step').classList.remove('hidden');
+                document.getElementById('doc-editor-step').classList.add('hidden');
+                document.getElementById('doc-result-step').classList.add('hidden');
+                renderDocBatchBar();
+                return;
+            }
+            const nextIdx = Math.max(0, Math.min(index, docBatchQueue.length - 1));
+            switchDocBatchItem(nextIdx);
+        }
+
+        // NÉN & LỌC ĐỒNG LOẠT TẤT CẢ ẢNH TRONG HÀNG CHỜ
+        function applyBatchFilterAndCompressionAll() {
+            if (docBatchQueue.length === 0) return;
+
+            const filterType = docCurrentFilter || 'original';
+            const qVal = parseInt(document.getElementById('doc-quality-slider')?.value || '75', 10);
+            const resOption = document.getElementById('doc-res-select')?.value || '1600';
+            const aspectChoice = document.getElementById('doc-aspect-ratio')?.value || 'auto';
+
+            showToast(`🚀 Đang nén & áp dụng bộ lọc cho TẤT CẢ ${docBatchQueue.length} ảnh...`);
+
+            setTimeout(() => {
+                docBatchQueue.forEach((item, idx) => {
+                    const p0 = item.corners[0], p1 = item.corners[1], p2 = item.corners[2], p3 = item.corners[3];
+                    const wTop = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+                    const wBot = Math.hypot(p2.x - p3.x, p2.y - p3.y);
+                    let targetW = Math.round(Math.max(wTop, wBot));
+
+                    const hLeft = Math.hypot(p3.x - p0.x, p3.y - p0.y);
+                    const hRight = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+                    let targetH = Math.round(Math.max(hLeft, hRight));
+
+                    if (aspectChoice === 'a4_portrait') targetH = Math.round(targetW * 1.4142);
+                    else if (aspectChoice === 'a4_landscape') targetH = Math.round(targetW / 1.4142);
+                    else if (aspectChoice === 'cccd') targetH = Math.round(targetW / 1.585);
+                    else if (aspectChoice === 'square') targetH = targetW;
+
+                    const flatCanvas = document.createElement('canvas');
+                    flatCanvas.width = targetW;
+                    flatCanvas.height = targetH;
+                    const dstCtx = flatCanvas.getContext('2d');
+
+                    const srcCanvas = document.createElement('canvas');
+                    srcCanvas.width = item.originalImage.width;
+                    srcCanvas.height = item.originalImage.height;
+                    const srcCtx = srcCanvas.getContext('2d');
+                    srcCtx.drawImage(item.originalImage, 0, 0);
+                    const srcData = srcCtx.getImageData(0, 0, srcCanvas.width, srcCanvas.height);
+
+                    const dstData = dstCtx.createImageData(targetW, targetH);
+                    warpPerspectiveBilinear(srcData, dstData, targetW, targetH, p0, p1, p2, p3);
+                    dstCtx.putImageData(dstData, 0, 0);
+
+                    const filtCanvas = document.createElement('canvas');
+                    filtCanvas.width = targetW;
+                    filtCanvas.height = targetH;
+                    const fCtx = filtCanvas.getContext('2d');
+                    fCtx.drawImage(flatCanvas, 0, 0);
+
+                    const imgData = fCtx.getImageData(0, 0, targetW, targetH);
+                    const data = imgData.data;
+
+                    if (filterType === 'bw') {
+                        for (let i = 0; i < data.length; i += 4) {
+                            let gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                            gray = Math.max(0, Math.min(255, (gray - 128) * 1.6 + 128));
+                            if (gray > 165) gray = 255; else if (gray < 90) gray = 0;
+                            data[i] = gray; data[i + 1] = gray; data[i + 2] = gray;
+                        }
+                        fCtx.putImageData(imgData, 0, 0);
+                    } else if (filterType === 'magic') {
+                        for (let i = 0; i < data.length; i += 4) {
+                            data[i] = Math.max(0, Math.min(255, (data[i] - 128) * 1.35 + 140));
+                            data[i + 1] = Math.max(0, Math.min(255, (data[i + 1] - 128) * 1.35 + 140));
+                            data[i + 2] = Math.max(0, Math.min(255, (data[i + 2] - 128) * 1.35 + 140));
+                        }
+                        fCtx.putImageData(imgData, 0, 0);
+                    }
+
+                    let finalCanvas = filtCanvas;
+                    if (resOption !== 'original') {
+                        const maxDim = parseInt(resOption, 10);
+                        if (Math.max(targetW, targetH) > maxDim) {
+                            const sc = maxDim / Math.max(targetW, targetH);
+                            finalCanvas = document.createElement('canvas');
+                            finalCanvas.width = Math.round(targetW * sc);
+                            finalCanvas.height = Math.round(targetH * sc);
+                            const rCtx = finalCanvas.getContext('2d');
+                            rCtx.drawImage(filtCanvas, 0, 0, finalCanvas.width, finalCanvas.height);
+                        }
+                    }
+
+                    const compressedUrl = finalCanvas.toDataURL('image/jpeg', qVal / 100);
+                    item.dataUrl = compressedUrl;
+
+                    docStagedPages.push({
+                        dataUrl: compressedUrl,
+                        size: formatFileSize(Math.round((compressedUrl.length - 22) * 0.75)),
+                        name: `Ảnh ${idx + 1}`
+                    });
+                });
+
+                renderDocStagingList();
+                renderDocBatchBar();
+                document.getElementById('doc-editor-step').classList.add('hidden');
+                document.getElementById('doc-result-step').classList.remove('hidden');
+                showToast(`🎉 Đã nắn phẳng & nén đồng loạt ${docBatchQueue.length} ảnh vào danh sách PDF!`);
+            }, 100);
         }
 
         function initDocEditor() {
@@ -4069,9 +4467,9 @@
         }
 
         function rotateDocImage(deg) {
+            if (!docOriginalImage) return;
             docRotationAngle = (docRotationAngle + deg + 360) % 360;
 
-            // Xoay image sang canvas tạm
             const tempCanvas = document.createElement('canvas');
             const ctx = tempCanvas.getContext('2d');
 
@@ -4106,7 +4504,7 @@
             canvas.width = w;
             canvas.height = h;
 
-            // Đặt 4 góc mặc định (tự động ôm 90% viền)
+            // Đặt 4 góc mặc định (tự động ôm 95% viền)
             const marginX = w * 0.05;
             const marginY = h * 0.05;
 
@@ -4117,6 +4515,7 @@
                 { x: marginX, y: h - marginY }        // Bottom-Left
             ];
 
+            selectDocCorner(0);
             attachDocCanvasEvents();
             drawDocCropCanvas();
         }
@@ -4135,6 +4534,119 @@
                 { x: marginX, y: h - marginY }
             ];
             drawDocCropCanvas();
+            showToast("Đã đặt lại 4 góc mặc định!");
+        }
+
+        // ==================== TỰ ĐỘNG NHẬN DIỆN MÉP GIẤY (AUTO EDGE DETECTION) ====================
+        function autoDetectDocEdges() {
+            if (!docOriginalImage) return;
+
+            const w = docOriginalImage.width;
+            const h = docOriginalImage.height;
+
+            // Tạo canvas phân tích kích thước nhỏ (max 400px)
+            const scale = Math.min(1.0, 400 / Math.max(w, h));
+            const sw = Math.round(w * scale);
+            const sh = Math.round(h * scale);
+
+            const analCanvas = document.createElement('canvas');
+            analCanvas.width = sw;
+            analCanvas.height = sh;
+            const ctx = analCanvas.getContext('2d');
+            ctx.drawImage(docOriginalImage, 0, 0, sw, sh);
+
+            const imgData = ctx.getImageData(0, 0, sw, sh);
+            const data = imgData.data;
+
+            // Tính Sobel Edge Intensity Map
+            const gray = new Float32Array(sw * sh);
+            for (let i = 0; i < data.length; i += 4) {
+                gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+            }
+
+            // Quét tìm biên độ tương phản từ 4 phía
+            let minX = Math.round(sw * 0.05), maxX = Math.round(sw * 0.95);
+            let minY = Math.round(sh * 0.05), maxY = Math.round(sh * 0.95);
+
+            // Quét dọc tìm Top & Bottom
+            for (let y = 5; y < sh / 3; y++) {
+                let rowDiff = 0;
+                for (let x = 10; x < sw - 10; x++) {
+                    rowDiff += Math.abs(gray[y * sw + x] - gray[(y + 2) * sw + x]);
+                }
+                if (rowDiff / sw > 25) { minY = y; break; }
+            }
+            for (let y = sh - 6; y > (sh * 2) / 3; y--) {
+                let rowDiff = 0;
+                for (let x = 10; x < sw - 10; x++) {
+                    rowDiff += Math.abs(gray[y * sw + x] - gray[(y - 2) * sw + x]);
+                }
+                if (rowDiff / sw > 25) { maxY = y; break; }
+            }
+
+            // Quét ngang tìm Left & Right
+            for (let x = 5; x < sw / 3; x++) {
+                let colDiff = 0;
+                for (let y = 10; y < sh - 10; y++) {
+                    colDiff += Math.abs(gray[y * sw + x] - gray[y * sw + (x + 2)]);
+                }
+                if (colDiff / sh > 25) { minX = x; break; }
+            }
+            for (let x = sw - 6; x > (sw * 2) / 3; x--) {
+                let colDiff = 0;
+                for (let y = 10; y < sh - 10; y++) {
+                    colDiff += Math.abs(gray[y * sw + x] - gray[y * sw + (x - 2)]);
+                }
+                if (colDiff / sh > 25) { maxX = x; break; }
+            }
+
+            // Quy đổi ngược về tọa độ canvas gốc
+            docCorners = [
+                { x: Math.round(minX / scale), y: Math.round(minY / scale) },
+                { x: Math.round(maxX / scale), y: Math.round(minY / scale) },
+                { x: Math.round(maxX / scale), y: Math.round(maxY / scale) },
+                { x: Math.round(minX / scale), y: Math.round(maxY / scale) }
+            ];
+
+            drawDocCropCanvas();
+            showToast("🎯 Đã tự động nhận diện mép khung giấy!");
+        }
+
+        // ==================== VI CHỈNH GÓC BẰNG BẢNG ĐIỀU HƯỚNG (NUDGER) ====================
+        function selectDocCorner(idx) {
+            docSelectedCornerIdx = idx;
+            const labels = ['TL', 'TR', 'BR', 'BL'];
+            const names = ['Trên-Trái', 'Trên-Phải', 'Dưới-Phải', 'Dưới-Trái'];
+
+            [0, 1, 2, 3].forEach(i => {
+                const btn = document.getElementById(`corner-btn-${i}`);
+                if (btn) {
+                    if (i === idx) {
+                        btn.className = "px-2 py-1 rounded bg-purple-600 text-white shadow-sm font-bold";
+                    } else {
+                        btn.className = "px-2 py-1 rounded text-slate-600 hover:bg-slate-100 font-semibold";
+                    }
+                }
+            });
+
+            const activeLbl = document.getElementById('nudger-active-label');
+            if (activeLbl) activeLbl.textContent = labels[idx];
+
+            drawDocCropCanvas();
+        }
+
+        function nudgeDocCorner(dx, dy) {
+            if (!docOriginalImage || docCorners.length !== 4) return;
+            const stepVal = parseInt(document.getElementById('doc-nudge-step')?.value || '5', 10);
+
+            const canvas = document.getElementById('doc-crop-canvas');
+            if (!canvas) return;
+
+            const pt = docCorners[docSelectedCornerIdx];
+            pt.x = Math.max(0, Math.min(canvas.width, pt.x + dx * stepVal));
+            pt.y = Math.max(0, Math.min(canvas.height, pt.y + dy * stepVal));
+
+            drawDocCropCanvas();
         }
 
         function drawDocCropCanvas() {
@@ -4145,11 +4657,11 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(docOriginalImage, 0, 0);
 
-            // Vẽ lớp phủ mờ tối màu bên ngoài vùng chọn
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            // Lớp phủ mờ ngoài vùng chọn
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Cắt giữ lại hình tứ giác 4 góc
+            // Khung tứ giác chọn
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(docCorners[0].x, docCorners[0].y);
@@ -4159,13 +4671,13 @@
             ctx.closePath();
             ctx.clip();
 
-            // Vẽ lại phần ảnh sáng trong tứ giác
+            // Hiển thị ảnh sáng rõ bên trong
             ctx.drawImage(docOriginalImage, 0, 0);
             ctx.restore();
 
-            // Vẽ đường viền neon kết nối 4 góc
+            // Vẽ viền Neon Emerald
             ctx.lineWidth = Math.max(3, Math.round(canvas.width / 300));
-            ctx.strokeStyle = '#10b981'; // Emerald Neon
+            ctx.strokeStyle = '#10b981';
             ctx.beginPath();
             ctx.moveTo(docCorners[0].x, docCorners[0].y);
             ctx.lineTo(docCorners[1].x, docCorners[1].y);
@@ -4174,18 +4686,20 @@
             ctx.closePath();
             ctx.stroke();
 
-            // Vẽ 4 điểm Handle hình tròn neon
+            // Vẽ 4 Chấm handle neon
             const handleRadius = Math.max(14, Math.round(canvas.width / 60));
             docCorners.forEach((pt, idx) => {
+                const isSelected = (idx === docSelectedCornerIdx);
+                const isActive = (idx === docActiveCornerIdx);
+
                 ctx.beginPath();
                 ctx.arc(pt.x, pt.y, handleRadius, 0, Math.PI * 2);
-                ctx.fillStyle = (idx === docActiveCornerIdx) ? '#ec4899' : '#a855f7'; // Pink active, Purple normal
+                ctx.fillStyle = isActive ? '#ec4899' : (isSelected ? '#f59e0b' : '#a855f7');
                 ctx.fill();
                 ctx.lineWidth = Math.max(2, Math.round(handleRadius / 4));
                 ctx.strokeStyle = '#ffffff';
                 ctx.stroke();
 
-                // Chấm nhỏ giữa
                 ctx.beginPath();
                 ctx.arc(pt.x, pt.y, handleRadius / 3, 0, Math.PI * 2);
                 ctx.fillStyle = '#ffffff';
@@ -4228,6 +4742,7 @@
                     const dist = Math.hypot(docCorners[i].x - pos.x, docCorners[i].y - pos.y);
                     if (dist < hitRadius) {
                         docActiveCornerIdx = i;
+                        selectDocCorner(i);
                         break;
                     }
                 }
@@ -4244,7 +4759,6 @@
                 e.preventDefault();
 
                 const pos = getCanvasPos(e);
-                // Giới hạn trong biên canvas
                 docCorners[docActiveCornerIdx].x = Math.max(0, Math.min(canvas.width, pos.x));
                 docCorners[docActiveCornerIdx].y = Math.max(0, Math.min(canvas.height, pos.y));
 
@@ -4269,7 +4783,7 @@
             window.addEventListener('touchend', onPointerUp);
         }
 
-        // Kính lúp Loupe Glass phóng to x2.5
+        // Loupe Glass
         function showDocLoupe(pos) {
             const loupe = document.getElementById('doc-loupe-canvas');
             const wrapper = document.getElementById('doc-canvas-wrapper');
@@ -4285,7 +4799,6 @@
             const ctx = loupe.getContext('2d');
             ctx.clearRect(0, 0, lSize, lSize);
 
-            // Crop vùng ảnh quanh pos.x, pos.y
             const zoom = 2.5;
             const srcW = lSize / zoom;
             const srcH = lSize / zoom;
@@ -4293,14 +4806,12 @@
             const srcY = pos.y - srcH / 2;
 
             ctx.save();
-            // Khung tròn
             ctx.beginPath();
             ctx.arc(lSize / 2, lSize / 2, lSize / 2, 0, Math.PI * 2);
             ctx.clip();
 
             ctx.drawImage(docOriginalImage, srcX, srcY, srcW, srcH, 0, 0, lSize, lSize);
 
-            // Hồng tâm Crosshair
             ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -4312,10 +4823,9 @@
 
             ctx.restore();
 
-            // Định vị Loupe nằm gần ngón tay/con trỏ
             const wrapRect = wrapper.getBoundingClientRect();
             let left = pos.screenX - wrapRect.left - lSize / 2;
-            let top = pos.screenY - wrapRect.top - lSize - 30; // Đẩy lên trên ngón tay
+            let top = pos.screenY - wrapRect.top - lSize - 30;
 
             if (top < 10) top = pos.screenY - wrapRect.top + 30;
             if (left < 10) left = 10;
@@ -4330,11 +4840,11 @@
             if (loupe) loupe.classList.add('hidden');
         }
 
-        // ==================== TOÁN HỌC PERSPECTIVE WARP (HOMOGRAPHY TRANSFORM) ====================
+        // ==================== PERSPECTIVE WARP VỚI ASPECT RATIO PRESETS ====================
         function applyDocPerspectiveWarp() {
             if (!docOriginalImage || docCorners.length !== 4) return;
 
-            showToast("Đang xử lý làm phẳng tài liệu...");
+            showToast("Đang làm phẳng & nắn góc nghiêng...");
 
             setTimeout(() => {
                 const p0 = docCorners[0]; // TL
@@ -4342,22 +4852,31 @@
                 const p2 = docCorners[2]; // BR
                 const p3 = docCorners[3]; // BL
 
-                // Tính kích thước khung đầu ra phẳng (Target W & H)
                 const wTop = Math.hypot(p1.x - p0.x, p1.y - p0.y);
                 const wBot = Math.hypot(p2.x - p3.x, p2.y - p3.y);
-                const targetW = Math.round(Math.max(wTop, wBot));
+                let targetW = Math.round(Math.max(wTop, wBot));
 
                 const hLeft = Math.hypot(p3.x - p0.x, p3.y - p0.y);
                 const hRight = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-                const targetH = Math.round(Math.max(hLeft, hRight));
+                let targetH = Math.round(Math.max(hLeft, hRight));
 
-                // Tạo Canvas đích
+                // Áp dụng Tỷ lệ làm phẳng chuẩn nếu được chọn
+                const aspectChoice = document.getElementById('doc-aspect-ratio')?.value || 'auto';
+                if (aspectChoice === 'a4_portrait') {
+                    targetH = Math.round(targetW * 1.4142);
+                } else if (aspectChoice === 'a4_landscape') {
+                    targetH = Math.round(targetW / 1.4142);
+                } else if (aspectChoice === 'cccd') {
+                    targetH = Math.round(targetW / 1.585);
+                } else if (aspectChoice === 'square') {
+                    targetH = targetW;
+                }
+
                 docFlattenedCanvas = document.createElement('canvas');
                 docFlattenedCanvas.width = targetW;
                 docFlattenedCanvas.height = targetH;
                 const dstCtx = docFlattenedCanvas.getContext('2d');
 
-                // Lấy ImageData gốc
                 const srcCanvas = document.createElement('canvas');
                 srcCanvas.width = docOriginalImage.width;
                 srcCanvas.height = docOriginalImage.height;
@@ -4367,20 +4886,19 @@
 
                 const dstData = dstCtx.createImageData(targetW, targetH);
 
-                // Thuật toán Perspective Bilinear Interpolation / Homography Inverse Mapping
                 warpPerspectiveBilinear(srcData, dstData, targetW, targetH, p0, p1, p2, p3);
 
                 dstCtx.putImageData(dstData, 0, 0);
 
-                // Chuyển sang Bước 3 (Result & Filters)
                 document.getElementById('doc-editor-step').classList.add('hidden');
                 document.getElementById('doc-result-step').classList.remove('hidden');
 
+                // Reset sliders
+                resetDocColorAdjustments();
                 applyDocFilter('original');
             }, 50);
         }
 
-        // Bilinear Perspective Transform
         function warpPerspectiveBilinear(srcImgData, dstImgData, dstW, dstH, p0, p1, p2, p3) {
             const sw = srcImgData.width;
             const sh = srcImgData.height;
@@ -4392,7 +4910,6 @@
                 for (let x = 0; x < dstW; x++) {
                     const u = x / (dstW - 1 || 1);
 
-                    // Interpolate Quad 4 points
                     const topX = p0.x + u * (p1.x - p0.x);
                     const topY = p0.y + u * (p1.y - p0.y);
                     const botX = p3.x + u * (p2.x - p3.x);
@@ -4431,13 +4948,12 @@
             drawDocCropCanvas();
         }
 
-        // ==================== BỘ LỌC XỬ LÝ ẢNH (FILTERS) ====================
+        // ==================== BỘ LỌC XỬ LÝ ẢNH NÂNG CAO (FILTERS PRO) ====================
         function applyDocFilter(filterType) {
             if (!docFlattenedCanvas) return;
             docCurrentFilter = filterType;
 
-            // Highlight nút filter active
-            ['original', 'bw', 'magic', 'contrast'].forEach(f => {
+            ['original', 'bw', 'magic', 'shadow_remove', 'contrast', 'unsharp'].forEach(f => {
                 const btn = document.getElementById(`filter-btn-${f}`);
                 if (btn) {
                     if (f === filterType) {
@@ -4458,14 +4974,10 @@
             const data = imgData.data;
 
             if (filterType === 'bw') {
-                // Scan B&W (Adaptive thresholding & high contrast black text)
                 for (let i = 0; i < data.length; i += 4) {
                     let gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-                    // Stretch contrast & Highpass
                     gray = (gray - 128) * 1.6 + 128;
                     gray = Math.max(0, Math.min(255, gray));
-
-                    // Thresholding nhẹ
                     if (gray > 165) gray = 255;
                     else if (gray < 90) gray = 0;
 
@@ -4475,36 +4987,126 @@
                 }
                 ctx.putImageData(imgData, 0, 0);
             } else if (filterType === 'magic') {
-                // Magic Color: làm rõ nét chữ màu
                 for (let i = 0; i < data.length; i += 4) {
-                    data[i] = Math.max(0, Math.min(255, (data[i] - 128) * 1.35 + 128 + 10));
-                    data[i + 1] = Math.max(0, Math.min(255, (data[i + 1] - 128) * 1.35 + 128 + 10));
-                    data[i + 2] = Math.max(0, Math.min(255, (data[i + 2] - 128) * 1.35 + 128 + 10));
+                    data[i] = Math.max(0, Math.min(255, (data[i] - 128) * 1.35 + 128 + 12));
+                    data[i + 1] = Math.max(0, Math.min(255, (data[i + 1] - 128) * 1.35 + 128 + 12));
+                    data[i + 2] = Math.max(0, Math.min(255, (data[i + 2] - 128) * 1.35 + 128 + 12));
+                }
+                ctx.putImageData(imgData, 0, 0);
+            } else if (filterType === 'shadow_remove') {
+                // Khử bóng râm bằng cân bằng độ sáng nền
+                for (let i = 0; i < data.length; i += 4) {
+                    let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    let boost = avg < 140 ? 1.4 : 1.15;
+                    data[i] = Math.min(255, data[i] * boost);
+                    data[i + 1] = Math.min(255, data[i + 1] * boost);
+                    data[i + 2] = Math.min(255, data[i + 2] * boost);
                 }
                 ctx.putImageData(imgData, 0, 0);
             } else if (filterType === 'contrast') {
-                // High contrast
                 for (let i = 0; i < data.length; i += 4) {
                     data[i] = Math.max(0, Math.min(255, (data[i] - 128) * 1.5 + 128));
                     data[i + 1] = Math.max(0, Math.min(255, (data[i + 1] - 128) * 1.5 + 128));
                     data[i + 2] = Math.max(0, Math.min(255, (data[i + 2] - 128) * 1.5 + 128));
                 }
                 ctx.putImageData(imgData, 0, 0);
+            } else if (filterType === 'unsharp') {
+                // Sharpen Matrix Kernel
+                const weights = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+                const side = 3, halfSide = 1;
+                const srcData = new Uint8ClampedArray(data);
+                const w = docFilteredCanvas.width, h = docFilteredCanvas.height;
+
+                for (let y = 1; y < h - 1; y++) {
+                    for (let x = 1; x < w - 1; x++) {
+                        let r = 0, g = 0, b = 0;
+                        for (let cy = 0; cy < side; cy++) {
+                            for (let cx = 0; cx < side; cx++) {
+                                const scx = x + cx - halfSide;
+                                const scy = y + cy - halfSide;
+                                const offset = (scy * w + scx) * 4;
+                                const wt = weights[cy * side + cx];
+                                r += srcData[offset] * wt;
+                                g += srcData[offset + 1] * wt;
+                                b += srcData[offset + 2] * wt;
+                            }
+                        }
+                        const dstOffset = (y * w + x) * 4;
+                        data[dstOffset] = Math.max(0, Math.min(255, r));
+                        data[dstOffset + 1] = Math.max(0, Math.min(255, g));
+                        data[dstOffset + 2] = Math.max(0, Math.min(255, b));
+                    }
+                }
+                ctx.putImageData(imgData, 0, 0);
             }
+
+            updateDocColorAdjustments();
+        }
+
+        // Tùy chỉnh Độ sáng & Độ tương phản thủ công
+        function updateDocColorAdjustments() {
+            if (!docFilteredCanvas) return;
+
+            const brightVal = parseInt(document.getElementById('doc-brightness-slider')?.value || '0', 10);
+            const contrastVal = parseInt(document.getElementById('doc-contrast-slider')?.value || '0', 10);
+
+            const bLbl = document.getElementById('doc-brightness-lbl');
+            const cLbl = document.getElementById('doc-contrast-lbl');
+            if (bLbl) bLbl.textContent = `${brightVal > 0 ? '+' : ''}${brightVal}`;
+            if (cLbl) cLbl.textContent = `${contrastVal > 0 ? '+' : ''}${contrastVal}`;
 
             updateDocCompression();
         }
 
-        // ==================== COMPRESSOR & EXPORT REALTIME ====================
+        function resetDocColorAdjustments() {
+            const bSlider = document.getElementById('doc-brightness-slider');
+            const cSlider = document.getElementById('doc-contrast-slider');
+            if (bSlider) bSlider.value = 0;
+            if (cSlider) cSlider.value = 0;
+
+            const bLbl = document.getElementById('doc-brightness-lbl');
+            const cLbl = document.getElementById('doc-contrast-lbl');
+            if (bLbl) bLbl.textContent = "0";
+            if (cLbl) cLbl.textContent = "0";
+
+            updateDocCompression();
+        }
+
+        // ==================== COMPRESSOR & TARGET SIZE OPTIMIZER ====================
+        function setTargetCompressKB(targetKB) {
+            if (!docFilteredCanvas) return;
+
+            showToast(`Đang tối ưu dung lượng dưới ${targetKB} KB...`);
+            let q = 90;
+            let currentSize = 9999999;
+            const slider = document.getElementById('doc-quality-slider');
+
+            while (q >= 15) {
+                if (slider) slider.value = q;
+                updateDocCompression();
+
+                const sizeText = document.getElementById('doc-comp-size-lbl')?.textContent || '0 KB';
+                if (sizeText.includes('MB')) {
+                    currentSize = parseFloat(sizeText) * 1024;
+                } else {
+                    currentSize = parseFloat(sizeText);
+                }
+
+                if (currentSize <= targetKB) break;
+                q -= 10;
+            }
+            showToast(`Đã nén tối ưu dung lượng (${document.getElementById('doc-comp-size-lbl')?.textContent})!`);
+        }
+
         function updateDocCompression() {
             if (!docFilteredCanvas) return;
 
             const qVal = parseInt(document.getElementById('doc-quality-slider')?.value || '75', 10);
-            document.getElementById('doc-quality-lbl').textContent = `${qVal}%`;
+            const qLbl = document.getElementById('doc-quality-lbl');
+            if (qLbl) qLbl.textContent = `${qVal}%`;
 
             const resOption = document.getElementById('doc-res-select')?.value || '1600';
 
-            // Resize canvas nén nếu cần
             let compCanvas = docFilteredCanvas;
             if (resOption !== 'original') {
                 const maxDim = parseInt(resOption, 10);
@@ -4521,13 +5123,36 @@
                 }
             }
 
+            // Áp dụng sliders Brightness & Contrast lên Canvas nén cuối
+            const brightVal = parseInt(document.getElementById('doc-brightness-slider')?.value || '0', 10);
+            const contrastVal = parseInt(document.getElementById('doc-contrast-slider')?.value || '0', 10);
+
+            if (brightVal !== 0 || contrastVal !== 0) {
+                const adjCanvas = document.createElement('canvas');
+                adjCanvas.width = compCanvas.width;
+                adjCanvas.height = compCanvas.height;
+                const ctx = adjCanvas.getContext('2d');
+                ctx.drawImage(compCanvas, 0, 0);
+
+                const imgData = ctx.getImageData(0, 0, adjCanvas.width, adjCanvas.height);
+                const data = imgData.data;
+
+                const factor = (259 * (contrastVal + 255)) / (255 * (259 - contrastVal));
+
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.max(0, Math.min(255, factor * (data[i] - 128) + 128 + brightVal * 2));
+                    data[i + 1] = Math.max(0, Math.min(255, factor * (data[i + 1] - 128) + 128 + brightVal * 2));
+                    data[i + 2] = Math.max(0, Math.min(255, factor * (data[i + 2] - 128) + 128 + brightVal * 2));
+                }
+                ctx.putImageData(imgData, 0, 0);
+                compCanvas = adjCanvas;
+            }
+
             const dataUrl = compCanvas.toDataURL('image/jpeg', qVal / 100);
 
-            // Cập nhật xem trước
             const previewImg = document.getElementById('doc-preview-img');
             if (previewImg) previewImg.src = dataUrl;
 
-            // Tính dung lượng file nén
             const compBytes = Math.round((dataUrl.length - 22) * 0.75);
 
             document.getElementById('doc-orig-size-lbl').textContent = formatFileSize(docOriginalSize);
@@ -4539,6 +5164,13 @@
                 savedLbl.textContent = `-${Math.max(0, savedPct)}%`;
                 savedLbl.className = savedPct > 0 ? 'text-emerald-700 font-extrabold text-sm' : 'text-slate-500 font-bold';
             }
+        }
+
+        function getDocFileName(ext) {
+            const presetType = document.getElementById('doc-preset-type')?.value || 'HDTD';
+            const now = new Date();
+            const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+            return `${presetType}_QTDYEN_THO_${dateStr}_${Date.now()}.${ext}`;
         }
 
         function formatFileSize(bytes) {
@@ -4553,14 +5185,14 @@
 
             const a = document.createElement('a');
             a.href = previewImg.src;
-            a.download = `TaiLieu_Scan_QTDYEN_THO_${Date.now()}.${format}`;
+            a.download = getDocFileName(format);
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             showToast("Đã tải ảnh nén tài liệu!");
         }
 
-        // STAGING PARAGRAPHS MULTI-PAGE PDF
+        // ==================== QUẢN LÝ TRANG PDF MULTI-PAGE STAGING ====================
         function addDocToStaging() {
             const previewImg = document.getElementById('doc-preview-img');
             if (!previewImg || !previewImg.src) return;
@@ -4593,14 +5225,27 @@
 
             docStagedPages.forEach((pg, idx) => {
                 const item = document.createElement('div');
-                item.className = "relative group flex-shrink-0 w-24 h-32 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-1 flex flex-col items-center justify-between";
+                item.className = "relative group flex-shrink-0 w-28 h-36 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-1 flex flex-col items-center justify-between";
                 item.innerHTML = `
-                    <img src="${pg.dataUrl}" class="w-full h-24 object-contain rounded">
+                    <img src="${pg.dataUrl}" class="w-full h-24 object-contain rounded bg-slate-50">
                     <span class="text-[10px] font-bold text-slate-700">Trang ${idx + 1}</span>
-                    <button onclick="removeDocStagedPage(${idx})" class="absolute top-1 right-1 w-5 h-5 bg-rose-600 text-white rounded-full text-xs flex items-center justify-center shadow opacity-90 group-hover:opacity-100">×</button>
+                    <div class="flex items-center gap-1">
+                        <button onclick="moveDocStagedPage(${idx}, -1)" class="px-1 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] rounded font-bold" title="Chuyển sang trái">◀</button>
+                        <button onclick="moveDocStagedPage(${idx}, 1)" class="px-1 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] rounded font-bold" title="Chuyển sang phải">▶</button>
+                        <button onclick="removeDocStagedPage(${idx})" class="px-1 py-0.5 bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10px] rounded font-bold" title="Xóa trang">✕</button>
+                    </div>
                 `;
                 listEl.appendChild(item);
             });
+        }
+
+        function moveDocStagedPage(idx, dir) {
+            const newIdx = idx + dir;
+            if (newIdx < 0 || newIdx >= docStagedPages.length) return;
+            const temp = docStagedPages[idx];
+            docStagedPages[idx] = docStagedPages[newIdx];
+            docStagedPages[newIdx] = temp;
+            renderDocStagingList();
         }
 
         function removeDocStagedPage(idx) {
@@ -4613,8 +5258,207 @@
             renderDocStagingList();
         }
 
-        // ==================== XUẤT FILE PDF A4 CHUẨN SẮC NÉT ====================
-        function downloadDocPDF(mode) {
+        // ==================== MODAL GHÉP 2 MẶT CCCD 2-IN-1 LÊN 1 TRANG A4 ====================
+        function openCCCD2in1Modal() {
+            document.getElementById('cccd-2in1-modal').classList.remove('hidden');
+        }
+
+        function closeCCCD2in1Modal() {
+            document.getElementById('cccd-2in1-modal').classList.add('hidden');
+        }
+
+        function handleCCCDSideUpload(event, side) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    if (side === 'front') {
+                        cccdFrontImg = img;
+                        const prev = document.getElementById('cccd-front-preview');
+                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    } else {
+                        cccdBackImg = img;
+                        const prev = document.getElementById('cccd-back-preview');
+                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function generateCCCD2in1Page() {
+            if (!cccdFrontImg || !cccdBackImg) {
+                showToast("Vui lòng tải đủ cả 2 mặt (Mặt trước & Mặt sau) CCCD!");
+                return;
+            }
+
+            showToast("Đang ghép 2 mặt CCCD lên 1 trang A4...");
+
+            // Kích thước A4 canvas chuẩn 300DPI (2100 x 2970 px)
+            const a4Canvas = document.createElement('canvas');
+            a4Canvas.width = 1600;
+            a4Canvas.height = 2262; // A4 portrait scale
+            const ctx = a4Canvas.getContext('2d');
+
+            // Nền trắng A4
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, a4Canvas.width, a4Canvas.height);
+
+            // Tiêu đề đầu trang
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 36px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('BẢN SAO CĂN CƯỚC CÔNG DÂN / GIẤY TỜ THÀNH VIÊN', a4Canvas.width / 2, 120);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '22px Arial, sans-serif';
+            ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', a4Canvas.width / 2, 160);
+
+            // Đường gạch ngang phân cách
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(100, 190);
+            ctx.lineTo(a4Canvas.width - 100, 190);
+            ctx.stroke();
+
+            // Vẽ Mặt Trước CCCD
+            const cardW = 1200;
+            const cardH = 757; // Tỷ lệ chuẩn CCCD 1.585
+            const posX = (a4Canvas.width - cardW) / 2;
+
+            ctx.fillStyle = '#475569';
+            ctx.font = 'bold 24px Arial, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('1. Mặt trước CCCD:', posX, 240);
+
+            ctx.drawImage(cccdFrontImg, posX, 260, cardW, cardH);
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.strokeRect(posX, 260, cardW, cardH);
+
+            // Vẽ Mặt Sau CCCD
+            ctx.fillText('2. Mặt sau CCCD:', posX, 1120);
+
+            ctx.drawImage(cccdBackImg, posX, 1140, cardW, cardH);
+            ctx.strokeRect(posX, 1140, cardW, cardH);
+
+            // Chuyển kết quả sang Flattened Canvas chính
+            docFlattenedCanvas = a4Canvas;
+            docOriginalSize = 2500000;
+
+            closeCCCD2in1Modal();
+
+            document.getElementById('doc-upload-step').classList.add('hidden');
+            document.getElementById('doc-editor-step').classList.add('hidden');
+            document.getElementById('doc-result-step').classList.remove('hidden');
+
+            applyDocFilter('original');
+            showToast("🎉 Đã tạo thành công trang ghép 2 mặt CCCD 1 trang A4!");
+        }
+
+        // ==================== BỘ DÀN TRANG LƯỚI N-UP (1, 2, 4, 6, 8 ẢNH / TRANG A4) ====================
+        async function generateNUpPdfPages(imageSrcArray, nUpCount) {
+            if (!imageSrcArray || imageSrcArray.length === 0) return [];
+            nUpCount = parseInt(nUpCount || '1', 10);
+
+            if (nUpCount === 1) return imageSrcArray;
+
+            let cols = 1, rows = 1;
+            if (nUpCount === 2) { cols = 1; rows = 2; }
+            else if (nUpCount === 4) { cols = 2; rows = 2; }
+            else if (nUpCount === 6) { cols = 2; rows = 3; }
+            else if (nUpCount === 8) { cols = 2; rows = 4; }
+
+            const a4W = 1600;
+            const a4H = 2262;
+            const marginX = 60, marginY = 120;
+            const spacingX = 30, spacingY = 30;
+
+            const cellW = (a4W - marginX * 2 - (cols - 1) * spacingX) / cols;
+            const cellH = (a4H - marginY - 80 - (rows - 1) * spacingY) / rows;
+
+            const chunkArray = [];
+            for (let i = 0; i < imageSrcArray.length; i += nUpCount) {
+                chunkArray.push(imageSrcArray.slice(i, i + nUpCount));
+            }
+
+            const generatedPageDataUrls = [];
+
+            for (let pageIdx = 0; pageIdx < chunkArray.length; pageIdx++) {
+                const chunk = chunkArray[pageIdx];
+                const canvas = document.createElement('canvas');
+                canvas.width = a4W;
+                canvas.height = a4H;
+                const ctx = canvas.getContext('2d');
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, a4W, a4H);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 28px Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('HỒ SƠ TÀI LIỆU SCAN - QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', a4W / 2, 60);
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '18px Arial, sans-serif';
+                ctx.fillText(`Trang A4 ghép ${nUpCount} ảnh (${pageIdx + 1}/${chunkArray.length})`, a4W / 2, 90);
+
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(marginX, 105);
+                ctx.lineTo(a4W - marginX, 105);
+                ctx.stroke();
+
+                for (let cIdx = 0; cIdx < chunk.length; cIdx++) {
+                    const r = Math.floor(cIdx / cols);
+                    const c = cIdx % cols;
+
+                    const cx = marginX + c * (cellW + spacingX);
+                    const cy = marginY + r * (cellH + spacingY);
+
+                    await new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = function () {
+                            const scale = Math.min(cellW / img.width, cellH / img.height);
+                            const drawW = img.width * scale;
+                            const drawH = img.height * scale;
+                            const drawX = cx + (cellW - drawW) / 2;
+                            const drawY = cy + (cellH - drawH) / 2;
+
+                            ctx.fillStyle = '#f8fafc';
+                            ctx.fillRect(cx, cy, cellW, cellH);
+
+                            ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+                            ctx.strokeStyle = '#cbd5e1';
+                            ctx.lineWidth = 1.5;
+                            ctx.strokeRect(cx, cy, cellW, cellH);
+
+                            ctx.fillStyle = '#475569';
+                            ctx.font = 'bold 16px Arial, sans-serif';
+                            ctx.textAlign = 'left';
+                            ctx.fillText(`#${pageIdx * nUpCount + cIdx + 1}`, cx + 8, cy + 22);
+
+                            resolve();
+                        };
+                        img.onerror = resolve;
+                        img.src = chunk[cIdx];
+                    });
+                }
+
+                generatedPageDataUrls.push(canvas.toDataURL('image/jpeg', 0.85));
+            }
+
+            return generatedPageDataUrls;
+        }
+
+        // XUẤT FILE PDF A4 NATIVE BLOB CLIENT-SIDE
+        async function downloadDocPDFClientSide(mode) {
             let pagesToExport = [];
             if (mode === 'single') {
                 const previewImg = document.getElementById('doc-preview-img');
@@ -4628,16 +5472,86 @@
                 pagesToExport = docStagedPages.map(p => p.dataUrl);
             }
 
-            showToast("Đang khởi tạo file PDF A4...");
+            const nUpCount = document.getElementById('doc-pdf-nup')?.value || '1';
+            showToast(`Đang sinh file PDF A4 ghép ${nUpCount} ảnh/trang...`);
 
-            // Render PDF via Print/HTML Window A4 Canvas Standard
+            const nUpPages = await generateNUpPdfPages(pagesToExport, nUpCount);
+
+            setTimeout(() => {
+                try {
+                    const fileName = getDocFileName('pdf');
+                    const pagesHtml = nUpPages.map(imgSrc => `
+                        <div class="page"><img src="${imgSrc}" class="doc-img"/></div>
+                    `).join('');
+
+                    const fullDocHtml = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <title>${fileName}</title>
+                            <style>
+                                @page { size: A4 portrait; margin: 0; }
+                                body { margin: 0; padding: 0; background: #ffffff; }
+                                .page { width: 210mm; height: 297mm; display: flex; align-items: center; justify-content: center; page-break-after: always; overflow: hidden; }
+                                .doc-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                            </style>
+                        </head>
+                        <body>
+                            ${pagesHtml}
+                            <script>window.onload = function() { window.print(); };<\/script>
+                        </body>
+                        </html>
+                    `;
+
+                    const blob = new Blob([fullDocHtml], { type: 'text/html' });
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    const pdfWin = window.open(blobUrl, '_blank');
+                    if (!pdfWin) {
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = fileName.replace('.pdf', '.html');
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        showToast("Đã tải bản in A4 về máy!");
+                    } else {
+                        showToast("Đã mở xem trước & xuất file PDF A4!");
+                    }
+                } catch (e) {
+                    showToast("Lỗi khi tạo file PDF, đang thử chế độ in chuẩn...");
+                    downloadDocPDF(mode);
+                }
+            }, 100);
+        }
+
+        async function downloadDocPDF(mode) {
+            let pagesToExport = [];
+            if (mode === 'single') {
+                const previewImg = document.getElementById('doc-preview-img');
+                if (!previewImg || !previewImg.src) return;
+                pagesToExport.push(previewImg.src);
+            } else {
+                if (docStagedPages.length === 0) {
+                    showToast("Chưa có trang nào trong danh sách ghép PDF!");
+                    return;
+                }
+                pagesToExport = docStagedPages.map(p => p.dataUrl);
+            }
+
+            const nUpCount = document.getElementById('doc-pdf-nup')?.value || '1';
+            showToast(`Đang khởi tạo file PDF A4 ghép ${nUpCount} ảnh/trang...`);
+
+            const nUpPages = await generateNUpPdfPages(pagesToExport, nUpCount);
+
             const pdfWindow = window.open('', '_blank');
             if (!pdfWindow) {
                 showToast("Vui lòng cho phép bật cửa sổ pop-up để tải file PDF!");
                 return;
             }
 
-            let pagesHtml = pagesToExport.map((imgSrc, i) => `
+            let pagesHtml = nUpPages.map((imgSrc) => `
                 <div class="page">
                     <img src="${imgSrc}" class="doc-img" />
                 </div>
