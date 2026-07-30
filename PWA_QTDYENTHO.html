@@ -2534,8 +2534,8 @@
                     <!-- Scale Slider & Controls (Only >= 1.0x) -->
                     <div class="pt-3 border-t border-slate-200 space-y-2">
                         <div class="flex justify-between items-center text-xs font-bold text-slate-800">
-                            <span class="flex items-center gap-1 text-purple-950">📏 Tỷ lệ phóng đại thẻ (Khóa tỷ lệ chuẩn 85.6x54mm):</span>
-                            <span id="cccd-scale-lbl" class="text-purple-700 font-extrabold bg-purple-100 px-2 py-0.5 rounded-lg text-xs">1.0x (85.6 x 54mm)</span>
+                            <span class="flex items-center gap-1 text-purple-950">📏 Tỷ lệ phóng đại thẻ:</span>
+                            <span id="cccd-scale-lbl" class="text-purple-700 font-extrabold bg-purple-100 px-2 py-0.5 rounded-lg text-xs">1.0x (Chuẩn thẻ)</span>
                         </div>
                         <input type="range" id="cccd-scale-slider" min="1.0" max="1.8" step="0.05" value="1.0" oninput="updateCCCDScaleLabel(this.value)" class="w-full accent-purple-600 cursor-pointer">
                         <div class="flex items-center justify-between gap-1 pt-1 flex-wrap">
@@ -5228,178 +5228,189 @@
             }
         }
 
-        function getDocFileName(ext) {
-            const presetType = document.getElementById('doc-preset-type')?.value || 'HDTD';
-            const now = new Date();
-            const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
-            return `${presetType}_QTDYEN_THO_${dateStr}_${Date.now()}.${ext}`;
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes <= 0) return '0 KB';
-            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-            return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-        }
-
-        function downloadDocImage(format) {
-            const previewImg = document.getElementById('doc-preview-img');
-            if (!previewImg || !previewImg.src) return;
-
-            const a = document.createElement('a');
-            a.href = previewImg.src;
-            a.download = getDocFileName(format);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            showToast("Đã tải ảnh nén tài liệu!");
-        }
-
-        // ==================== QUẢN LÝ TRANG PDF MULTI-PAGE STAGING ====================
-        function addDocToStaging() {
-            const previewImg = document.getElementById('doc-preview-img');
-            if (!previewImg || !previewImg.src) return;
-
-            docStagedPages.push({
-                dataUrl: previewImg.src,
-                size: document.getElementById('doc-comp-size-lbl')?.textContent || '',
-                name: `Trang ${docStagedPages.length + 1}`
-            });
-
-            renderDocStagingList();
-            showToast(`Đã thêm Trang ${docStagedPages.length} vào danh sách chờ ghép PDF!`);
-        }
-
-        function renderDocStagingList() {
-            const box = document.getElementById('doc-staging-box');
-            const listEl = document.getElementById('doc-staged-list');
-            const countEl = document.getElementById('doc-staged-count');
-            if (!box || !listEl || !countEl) return;
-
-            countEl.textContent = docStagedPages.length;
-
-            if (docStagedPages.length === 0) {
-                box.classList.add('hidden');
-                return;
-            }
-
-            box.classList.remove('hidden');
-            listEl.innerHTML = '';
-
-            docStagedPages.forEach((pg, idx) => {
-                const item = document.createElement('div');
-                item.className = "relative group flex-shrink-0 w-28 h-36 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-1 flex flex-col items-center justify-between";
-                item.innerHTML = `
-                    <img src="${pg.dataUrl}" class="w-full h-24 object-contain rounded bg-slate-50">
-                    <span class="text-[10px] font-bold text-slate-700">Trang ${idx + 1}</span>
-                    <div class="flex items-center gap-1">
-                        <button onclick="moveDocStagedPage(${idx}, -1)" class="px-1 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] rounded font-bold" title="Chuyển sang trái">◀</button>
-                        <button onclick="moveDocStagedPage(${idx}, 1)" class="px-1 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] rounded font-bold" title="Chuyển sang phải">▶</button>
-                        <button onclick="removeDocStagedPage(${idx})" class="px-1 py-0.5 bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10px] rounded font-bold" title="Xóa trang">✕</button>
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
-            updateDocNUpHint();
-        }
-
-        function moveDocStagedPage(idx, dir) {
-            const newIdx = idx + dir;
-            if (newIdx < 0 || newIdx >= docStagedPages.length) return;
-            const temp = docStagedPages[idx];
-            docStagedPages[idx] = docStagedPages[newIdx];
-            docStagedPages[newIdx] = temp;
-            renderDocStagingList();
-        }
-
-        function removeDocStagedPage(idx) {
-            docStagedPages.splice(idx, 1);
-            renderDocStagingList();
-        }
-
-        function clearDocStaging() {
-            docStagedPages = [];
-            renderDocStagingList();
-        }
-
-        // ==================== MODAL GHÉP 2 MẶT CCCD 2-IN-1 LÊN 1 TRANG A4 ====================
-        function openCCCD2in1Modal() {
-            document.getElementById('cccd-2in1-modal').classList.remove('hidden');
-        }
-
-        function closeCCCD2in1Modal() {
-            document.getElementById('cccd-2in1-modal').classList.add('hidden');
-        }
-
-        function switchCCCDPersonMode(count) {
-            cccdPersonCount = count;
-            const btn1 = document.getElementById('btn-cccd-mode-1');
-            const btn2 = document.getElementById('btn-cccd-mode-2');
-            const sec2 = document.getElementById('cccd-person2-section');
-
-            if (count === 1) {
-                if (btn1) btn1.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition bg-white text-purple-900 shadow-sm border border-purple-200';
-                if (btn2) btn2.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
-                if (sec2) sec2.classList.add('hidden');
+        function drawRoundRectPath(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(x, y, w, h, r);
             } else {
-                if (btn1) btn1.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
-                if (btn2) btn2.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition bg-white text-purple-900 shadow-sm border border-purple-200';
-                if (sec2) sec2.classList.remove('hidden');
+                ctx.moveTo(x + r, y);
+                ctx.arcTo(x + w, y, x + w, y + h, r);
+                ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y);
+                ctx.arcTo(x, y, x + w, y, r);
+                ctx.closePath();
             }
         }
 
-        function handleCCCDSideUpload(event, side) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
+        function drawCardToContext(ctx, img, x, y, targetW, targetH) {
+            ctx.save();
+            const cornerRadius = Math.round(18 * (targetW / 652));
+            
+            // Nền trắng cho ô thẻ
+            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.onload = function () {
-                    if (side === 'front') {
-                        cccdFrontImg = img;
-                        const prev = document.getElementById('cccd-front-preview');
-                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
-                    } else if (side === 'back') {
-                        cccdBackImg = img;
-                        const prev = document.getElementById('cccd-back-preview');
-                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
-                    } else if (side === 'front2') {
-                        cccd2FrontImg = img;
-                        const prev = document.getElementById('cccd2-front-preview');
-                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
-                    } else if (side === 'back2') {
-                        cccd2BackImg = img;
-                        const prev = document.getElementById('cccd2-back-preview');
-                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
-                    }
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+            // Clip theo viền bo góc thẻ
+            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
+            ctx.clip();
+
+            // Cắt ảnh khớp tỷ lệ chuẩn thẻ ID-1 ISO/IEC (1.58577)
+            const imgRatio = img.width / img.height;
+            const targetRatio = targetW / targetH;
+            let sx, sy, sWidth, sHeight;
+
+            if (imgRatio > targetRatio) {
+                sHeight = img.height;
+                sWidth = img.height * targetRatio;
+                sx = (img.width - sWidth) / 2;
+                sy = 0;
+            } else {
+                sWidth = img.width;
+                sHeight = img.width / targetRatio;
+                sx = 0;
+                sy = (img.height - sHeight) / 2;
+            }
+
+            ctx.drawImage(img, sx, sy, sWidth, sHeight, x, y, targetW, targetH);
+            ctx.restore();
+
+            // Vẽ viền thẻ sắc nét chuẩn
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2.5;
+            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
+            ctx.stroke();
         }
 
-        function updateCCCDScaleLabel(val) {
-            const scale = parseFloat(val || '1.0');
-            const lbl = document.getElementById('cccd-scale-lbl');
-            const widthMm = (85.6 * scale).toFixed(1);
-            const heightMm = (53.98 * scale).toFixed(1);
-            
-            if (lbl) {
-                if (scale === 1.0) {
-                    lbl.innerHTML = `1.0x (85.6 x 54mm)`;
-                } else {
-                    const percent = Math.round((scale - 1.0) * 100);
-                    lbl.innerHTML = `${scale.toFixed(2)}x (+${percent}%: ${widthMm}x${heightMm}mm)`;
+        function generateCCCD2in1Page() {
+            if (cccdPersonCount === 1) {
+                if (!cccdFrontImg || !cccdBackImg) {
+                    showToast("Vui lòng tải đủ cả 2 mặt (Mặt trước & Mặt sau) của Người 1!");
+                    return;
+                }
+            } else {
+                if (!cccdFrontImg || !cccdBackImg || !cccd2FrontImg || !cccd2BackImg) {
+                    showToast("Vui lòng tải đủ cả 4 mặt CCCD của 2 người (Người 1 & Người 2)!");
+                    return;
                 }
             }
-        }
 
-        function setCCCDScale(val) {
-            const slider = document.getElementById('cccd-scale-slider');
-            if (slider) {
-                slider.value = val;
-                updateCCCDScaleLabel(val);
+            const scale = Math.max(1.0, parseFloat(document.getElementById('cccd-scale-slider')?.value || '1.0'));
+            showToast(`Đang ghép ${cccdPersonCount === 1 ? '2 mặt (1 người)' : '4 mặt (2 người)'} CCCD lên trang A4...`);
+
+            // Kích thước A4 canvas chuẩn (1600 x 2262 px)
+            const baseW = 652;
+            const baseH = 411;
+
+            const a4Canvas = document.createElement('canvas');
+            a4Canvas.width = 1600;
+            a4Canvas.height = 2262;
+            const ctx = a4Canvas.getContext('2d');
+
+            // Nền trắng A4
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, a4Canvas.width, a4Canvas.height);
+
+            // Tiêu đề đầu trang
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 36px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('BẢN SAO CĂN CƯỚC CÔNG DÂN / GIẤY TỜ THÀNH VIÊN', a4Canvas.width / 2, 110);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '22px Arial, sans-serif';
+            ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', a4Canvas.width / 2, 150);
+
+            // Đường gạch ngang phân cách
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(100, 180);
+            ctx.lineTo(a4Canvas.width - 100, 180);
+            ctx.stroke();
+
+            if (cccdPersonCount === 1) {
+                // CHẾ ĐỘ 1 NGƯỜI: 2 Mặt xếp dọc căn giữa
+                const cardW = Math.round(baseW * scale);
+                const cardH = Math.round(baseH * scale);
+                const posX = Math.round((a4Canvas.width - cardW) / 2);
+                
+                const posYFront = 250;
+                const gapY = Math.max(70, Math.round(110 - (scale - 1.0) * 80));
+                const posYBack = posYFront + cardH + gapY;
+
+                ctx.fillStyle = '#334155';
+                ctx.font = 'bold 24px Arial, sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText('1. Mặt trước CCCD:', posX, posYFront - 15);
+                drawCardToContext(ctx, cccdFrontImg, posX, posYFront, cardW, cardH);
+
+                ctx.fillText('2. Mặt sau CCCD:', posX, posYBack - 15);
+                drawCardToContext(ctx, cccdBackImg, posX, posYBack, cardW, cardH);
+
+            } else {
+                // CHẾ ĐỘ 2 NGƯỜI (4 MẶT CCCD): Xếp 2 Hàng x 2 Cột (Mặt trước bên trái, Mặt sau bên phải)
+                const adjustedScale = Math.min(scale, 1.15); 
+                const cardW = Math.round(baseW * adjustedScale);
+                const cardH = Math.round(baseH * adjustedScale);
+                
+                const spacingX = Math.round((a4Canvas.width - cardW * 2) / 3);
+                const posX1 = spacingX;
+                const posX2 = spacingX * 2 + cardW;
+
+                const posYRow1 = 265;
+                const posYRow2 = posYRow1 + cardH + 140;
+
+                // HÀNG 1: NGƯỜI THỨ 1
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 26px Arial, sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText('I. HỒ SƠ CCCD NGƯỜI THỨ 1:', posX1, posYRow1 - 25);
+
+                ctx.fillStyle = '#475569';
+                ctx.font = 'bold 20px Arial, sans-serif';
+                ctx.fillText('1. Mặt trước:', posX1, posYRow1 - 5);
+                drawCardToContext(ctx, cccdFrontImg, posX1, posYRow1, cardW, cardH);
+
+                ctx.fillText('2. Mặt sau:', posX2, posYRow1 - 5);
+                drawCardToContext(ctx, cccdBackImg, posX2, posYRow1, cardW, cardH);
+
+                // Đường gạch nét đứt phân cách 2 người
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 10]);
+                ctx.beginPath();
+                ctx.moveTo(100, posYRow1 + cardH + 68);
+                ctx.lineTo(a4Canvas.width - 100, posYRow1 + cardH + 68);
+                ctx.stroke();
+                ctx.setLineDash([]); // Reset line dash
+
+                // HÀNG 2: NGƯỜI THỨ 2
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 26px Arial, sans-serif';
+                ctx.fillText('II. HỒ SƠ CCCD NGƯỜI THỨ 2:', posX1, posYRow2 - 25);
+
+                ctx.fillStyle = '#475569';
+                ctx.font = 'bold 20px Arial, sans-serif';
+                ctx.fillText('1. Mặt trước:', posX1, posYRow2 - 5);
+                drawCardToContext(ctx, cccd2FrontImg, posX1, posYRow2, cardW, cardH);
+
+                ctx.fillText('2. Mặt sau:', posX2, posYRow2 - 5);
+                drawCardToContext(ctx, cccd2BackImg, posX2, posYRow2, cardW, cardH);
             }
+
+            // Chuyển kết quả sang Flattened Canvas chính
+            docFlattenedCanvas = a4Canvas;
+            docOriginalSize = 2500000;
+
+            closeCCCD2in1Modal();
+
+            document.getElementById('doc-upload-step').classList.add('hidden');
+            document.getElementById('doc-editor-step').classList.add('hidden');
+            document.getElementById('doc-result-step').classList.remove('hidden');
+
+            applyDocFilter('original');
+            showToast(`🎉 Đã ghép thành công ${cccdPersonCount === 1 ? '2 mặt CCCD (1 người)' : '4 mặt CCCD (2 người)'} lên 1 trang A4!`);
         }
 
         function drawRoundRectPath(ctx, x, y, w, h, r) {
