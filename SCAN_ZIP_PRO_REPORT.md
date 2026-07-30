@@ -44,12 +44,22 @@ Dựa trên phản hồi và các hình ảnh chụp màn hình thực tế, đ�
 
 ---
 
+### 5. Bổ sung tính năng Di chuyển & Sắp xếp thứ tự ảnh / trang PDF trước khi xuất
+* **Tính năng mới bổ sung**:
+  - Trên mảng hàng chờ ảnh (`#doc-batch-list`) và danh sách gom trang PDF (`#doc-staged-list`), mỗi hình thu nhỏ (thumbnail) hiện được tích hợp 2 nút điều hướng nhanh:
+    - **`◀` (Di chuyển lên trước/sang trái)**
+    - **`▶` (Di chuyển xuống sau/sang phải)**
+    - **`✕` (Xóa bỏ)**
+  - Cho phép người dùng trực tiếp **thay đổi vị trí, sắp xếp lại thứ tự các trang tài liệu** theo đúng trình tự mong muốn trước khi bấm xuất file PDF A4 hay in ấn!
+
+---
+
 ## 🛠️ II. TỔNG HỢP CÁC SỬA ĐỔI KỸ THUẬT NỔI BẬT
 
 1. **Cấu trúc 3 bước làm việc mượt mà**:
    - **Step 1 (Upload)**: Chọn nhiều ảnh từ máy, Chụp từ Camera trực tiếp, hoặc Ghép 2 mặt CCCD A4.
    - **Step 2 (Editor)**: Căn chỉnh 4 góc neon, xoay ảnh, chọn tỷ lệ nắn phẳng (A4 Dọc/Ngang, CCCD, Vuông).
-   - **Step 3 (Result & Export)**: Áp dụng 6 bộ lọc rõ chữ PRO, nén KB, xem so sánh dung lượng thực tế, xếp dàn trang N-Up & xuất file PDF/Ảnh.
+   - **Step 3 (Result & Export)**: Áp dụng 6 bộ lọc rõ chữ PRO, nén KB, xem so sánh dung lượng thực tế, **sắp xếp thứ tự trang (Move ◀ ▶)**, xếp dàn trang N-Up & xuất file PDF/Ảnh.
 2. **Camera trực tiếp trên Mobile**: Đã tạo riêng thẻ input `<input id="doc-camera-input" capture="environment">` không chứa `multiple`, mở ứng dụng Camera tức thì trên điện thoại.
 3. **Ghép 2 mặt CCCD (1 trang A4)**: Khắc phục lệch ID modal, bổ sung tự động chuyển ngay sang Step 3 sau khi ghép xong.
 
@@ -58,5 +68,6 @@ Dựa trên phản hồi và các hình ảnh chụp màn hình thực tế, đ�
 ## 📋 III. TRẠNG THÁI TRIỂN KHAI
 
 - **File nguồn**: `PWA_QTDYENTHO.html` & `index.html`
-- **Git Commit**: `1754ff3` ➔ `main`
+- **File báo cáo chi tiết**: `SCAN_ZIP_PRO_REPORT.md`
+- **Git Commit**: `main`
 - **Trạng thái**: ✅ Đã kiểm tra 6/6 khối JS Script Valid 100%, sẵn sàng vận hành sản xuất.

@@ -4361,6 +4361,28 @@
             });
         }
 
+        
+        function moveDocBatchItem(index, direction) {
+            const targetIdx = index + direction;
+            if (targetIdx < 0 || targetIdx >= docBatchQueue.length) return;
+            const temp = docBatchQueue[index];
+            docBatchQueue[index] = docBatchQueue[targetIdx];
+            docBatchQueue[targetIdx] = temp;
+            docBatchActiveIndex = targetIdx;
+            switchDocBatchItem(targetIdx);
+            showToast(`Đã di chuyển Ảnh sang vị trí ${targetIdx + 1}!`);
+        }
+
+        function moveDocStagedPage(index, direction) {
+            const targetIdx = index + direction;
+            if (targetIdx < 0 || targetIdx >= docStagedPages.length) return;
+            const temp = docStagedPages[index];
+            docStagedPages[index] = docStagedPages[targetIdx];
+            docStagedPages[targetIdx] = temp;
+            renderDocStagingList();
+            showToast(`Đã sắp xếp Trang PDF sang vị trí ${targetIdx + 1}!`);
+        }
+
         function renderDocBatchBar() {
             const bar = document.getElementById('doc-batch-bar');
             const listEl = document.getElementById('doc-batch-list');
@@ -4385,10 +4407,15 @@
                 }`;
                 thumb.onclick = () => switchDocBatchItem(idx);
 
+                const canMoveLeft = idx > 0;
+                const canMoveRight = idx < docBatchQueue.length - 1;
+
                 thumb.innerHTML = `
                     <img src="${item.dataUrl}" class="w-full h-16 object-contain rounded bg-slate-50">
                     <span class="text-[10px] font-extrabold ${isActive ? 'text-purple-700' : 'text-slate-600'}">Ảnh ${idx + 1}</span>
-                    <button onclick="event.stopPropagation(); removeDocBatchItem(${idx})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold flex items-center justify-center shadow">✕</button>
+                    ${canMoveLeft ? `<button onclick="event.stopPropagation(); moveDocBatchItem(${idx}, -1)" class="absolute top-0.5 left-0.5 w-4 h-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow" title="Chuyển sang trái">◀</button>` : ''}
+                    ${canMoveRight ? `<button onclick="event.stopPropagation(); moveDocBatchItem(${idx}, 1)" class="absolute top-0.5 ${canMoveLeft ? 'left-5' : 'left-0.5'} w-4 h-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow" title="Chuyển sang phải">▶</button>` : ''}
+                    <button onclick="event.stopPropagation(); removeDocBatchItem(${idx})" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold flex items-center justify-center shadow" title="Xóa ảnh">✕</button>
                 `;
                 listEl.appendChild(thumb);
             });
@@ -5708,12 +5735,17 @@
 
             docStagedPages.forEach((item, idx) => {
                 const src = typeof item === 'string' ? item : item.dataUrl;
+                const canMoveLeft = idx > 0;
+                const canMoveRight = idx < docStagedPages.length - 1;
+
                 const itemDiv = document.createElement('div');
                 itemDiv.className = "relative w-20 h-24 border border-purple-300 rounded-lg overflow-hidden shadow-sm flex-shrink-0 bg-white group";
                 itemDiv.innerHTML = `
                     <img src="${src}" class="w-full h-full object-cover">
                     <span class="absolute bottom-0 inset-x-0 bg-slate-900/80 text-white text-[9px] text-center font-bold py-0.5">Trang ${idx + 1}</span>
-                    <button onclick="event.stopPropagation(); removeDocStagedPage(${idx})" class="absolute top-0.5 right-0.5 w-4 h-4 bg-rose-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition">&times;</button>
+                    ${canMoveLeft ? `<button onclick="event.stopPropagation(); moveDocStagedPage(${idx}, -1)" class="absolute top-0.5 left-0.5 w-4 h-4 bg-amber-500 hover:bg-amber-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow" title="Di chuyển lên trước">◀</button>` : ''}
+                    ${canMoveRight ? `<button onclick="event.stopPropagation(); moveDocStagedPage(${idx}, 1)" class="absolute top-0.5 ${canMoveLeft ? 'left-5' : 'left-0.5'} w-4 h-4 bg-amber-500 hover:bg-amber-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow" title="Di chuyển xuống sau">▶</button>` : ''}
+                    <button onclick="event.stopPropagation(); removeDocStagedPage(${idx})" class="absolute top-0.5 right-0.5 w-4 h-4 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow" title="Xóa trang">&times;</button>
                 `;
                 stagedListEl.appendChild(itemDiv);
             });
