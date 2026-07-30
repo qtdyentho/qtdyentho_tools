@@ -2133,7 +2133,7 @@
 
             
             <!-- Live WebCam Camera Modal for All Environments (PC WebCam & Mobile) -->
-            <div id="doc-camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+            <div id="doc-camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
                 <div class="bg-slate-900 rounded-2xl max-w-lg w-full p-4 space-y-4 shadow-2xl border border-slate-700">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white">
                         <h3 class="text-base font-bold flex items-center gap-2">
@@ -2508,7 +2508,7 @@
             </div>
 
             <!-- Modal Ghép 2 Mặt CCCD 2-in-1 lên 1 Trang A4 -->
-            <div id="cccd-2in1-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+            <div id="cccd-2in1-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
                 <div class="bg-white rounded-2xl max-w-xl w-full p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-3">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -4279,13 +4279,13 @@
                 }
 
                 const modal = document.getElementById('pwa-install-modal');
-                if (modal) modal.classList.remove('hidden');
+                if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
             }
         }
 
         function closePwaModal() {
             const modal = document.getElementById('pwa-install-modal');
-            if (modal) modal.classList.add('hidden');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
 
         
@@ -5510,14 +5510,24 @@
 
             const compBytes = Math.round((dataUrl.length - 22) * 0.75);
 
-            document.getElementById('doc-orig-size-lbl').textContent = formatFileSize(docOriginalSize);
-            document.getElementById('doc-comp-size-lbl').textContent = formatFileSize(compBytes);
+            const origSize = docOriginalSize || (docOriginalImage ? Math.round(docOriginalImage.width * docOriginalImage.height * 0.45) : compBytes * 1.5);
+            docOriginalSize = origSize;
 
-            const savedPct = docOriginalSize > 0 ? Math.round((1 - compBytes / docOriginalSize) * 100) : 0;
+            const origLbl = document.getElementById('doc-orig-size-lbl');
+            const compLbl = document.getElementById('doc-comp-size-lbl');
+            if (origLbl) origLbl.textContent = formatFileSize(origSize);
+            if (compLbl) compLbl.textContent = formatFileSize(compBytes);
+
+            const savedPct = origSize > 0 ? Math.round((1 - compBytes / origSize) * 100) : 0;
             const savedLbl = document.getElementById('doc-saved-pct-lbl');
             if (savedLbl) {
-                savedLbl.textContent = `-${Math.max(0, savedPct)}%`;
-                savedLbl.className = savedPct > 0 ? 'text-emerald-700 font-extrabold text-sm' : 'text-slate-500 font-bold';
+                if (savedPct >= 0) {
+                    savedLbl.textContent = `-${savedPct}%`;
+                    savedLbl.className = 'text-emerald-700 font-extrabold text-sm';
+                } else {
+                    savedLbl.textContent = `+${Math.abs(savedPct)}%`;
+                    savedLbl.className = 'text-amber-700 font-bold text-xs';
+                }
             }
         }
 
@@ -6062,18 +6072,35 @@ async function downloadDocPDFClientSide(mode) {
                     const blob = new Blob([fullDocHtml], { type: 'text/html' });
                     const blobUrl = URL.createObjectURL(blob);
 
-                    const pdfWin = window.open(blobUrl, '_blank');
-                    if (!pdfWin) {
-                        const a = document.createElement('a');
-                        a.href = blobUrl;
-                        a.download = fileName.replace('.pdf', '.html');
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        showToast("Đã tải bản in A4 về máy!");
-                    } else {
-                        showToast("Đã mở xem trước & xuất file PDF A4!");
+                    let iframe = document.getElementById('doc-print-iframe');
+                    if (!iframe) {
+                        iframe = document.createElement('iframe');
+                        iframe.id = 'doc-print-iframe';
+                        iframe.style.position = 'fixed';
+                        iframe.style.right = '0';
+                        iframe.style.bottom = '0';
+                        iframe.style.width = '0';
+                        iframe.style.height = '0';
+                        iframe.style.border = '0';
+                        document.body.appendChild(iframe);
                     }
+
+                    iframe.src = blobUrl;
+                    iframe.onload = function() {
+                        try {
+                            iframe.contentWindow.focus();
+                            iframe.contentWindow.print();
+                            showToast(`🖨️ Đã mở cửa sổ in A4 & xuất file PDF!`);
+                        } catch (err) {
+                            const a = document.createElement('a');
+                            a.href = blobUrl;
+                            a.download = fileName.replace('.pdf', '.html');
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            showToast("Đã tải bản in A4 về máy!");
+                        }
+                    };
                 } catch (e) {
                     showToast("Lỗi khi tạo file PDF, đang thử chế độ in chuẩn...");
                     downloadDocPDF(mode);

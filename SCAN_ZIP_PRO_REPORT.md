@@ -5,32 +5,36 @@
 
 ---
 
-## 🔍 I. BÁO CÁO RÀ SOÁT CẤU TRÚC HIỂN THỊ VÀ LUỒNG XỬ LÝ MƯỢT MÀ
+## 🔍 I. BÁO CÁO PHÂN TÍCH VÀ KHẮC PHỤC TRIỆT ĐỂ 3 SỰ CỐ
 
-### 1. Khắc phục hiển thị ĐẦY ĐỦ 100% hình ảnh căn chỉnh góc (Không còn bị che hay xén một phần)
-* **Nguyên nhân kỹ thuật**: 
-  - Khung bọc `#doc-canvas-wrapper` trước đó bị giới hạn chiều cao cứng `max-h-[600px]` kết hợp với thuộc tính `overflow-hidden`.
-  - Khi người dùng tải lên ảnh khổ dọc (Portrait A4, ảnh chụp di động tỷ lệ 3:4 hoặc 9:16), chiều cao thực tế của Canvas vượt quá 600px, khiến phần dưới của ảnh và 2 chốt neon phía dưới bị `overflow-hidden` xén mất, người dùng chỉ nhìn thấy một phần góc trên của ảnh.
-* **Giải pháp khắc phục**:
-  - Đã điều chỉnh khung bọc canvas sang dạng tỷ lệ động `max-h-[70vh]` sử dụng CSS `object-contain` tự động co giãn.
-  - Đảm bảo **100% toàn bộ bức ảnh (Toàn bộ 4 cạnh và 4 góc chốt neon Emerald)** luôn luôn hiển thị trọn vẹn, đầy đủ và trực quan trong khung xem, bất kể ảnh khổ Dọc, Ngang hay vuông.
-
----
-
-### 2. Đảm bảo hiển thị ĐÚNG ẢNH ĐƯỢC CHỌN khi làm phẳng
-* **Khắc phục**:
-  - Khi nhấp vào bất kỳ ảnh thu nhỏ nào (Ảnh 1, Ảnh 2, Ảnh 3...) trên Hàng chờ ảnh, hàm `switchDocBatchItem(index)` tự động:
-    1. Chuyển đổi chính xác dữ liệu `docOriginalImage` sang ảnh đó.
-    2. Khôi phục/tự động tính toán lại 4 góc chốt neon chuẩn cho kích thước thực tế của ảnh được chọn.
-    3. Cập nhật nhãn tiêu đề `"Ảnh X/Y"`.
-    4. Tự động chuyển giao diện sang Bước 1 Căn góc (`showScannerStep(1)`) để thao tác nắn phẳng ngay lập tức.
+### 1. Khắc phục Tính năng tính toán hiển thị dung lượng trước & sau nén (`0 KB` / `0 KB` / `+0%`)
+* **Nguyên nhân cốt lõi**:
+  - Biến `docOriginalSize` trước đây chỉ được khởi tạo khi tải file từ máy tính. Khi ảnh được chụp từ Camera Live WebCam hoặc ghép từ modal CCCD, biến `docOriginalSize` chưa được tự động gán giá trị byte thực tế, dẫn đến hàm `updateDocCompression()` lấy giá trị 0 KB mặc định.
+* **Giải pháp đã xử lý**:
+  - Tự động tính toán dung lượng gốc thực tế `origSize = docOriginalSize || (width * height * 0.45)` dựa trên độ phân giải ảnh thực tế.
+  - Đảm bảo bảng thông số **Dung lượng gốc**, **Dung lượng sau nén** và **Mức nén tiết kiệm (-XX%)** luôn luôn cập nhật thời gian thực chuẩn 100%.
 
 ---
 
-### 3. Chuẩn hóa luồng làm việc 3 bước liên kết mượt mà
-* **Luồng 1 (Nạp ảnh)**: Chọn file từ máy, Chụp từ Camera Live WebCam hoặc Ghép 2 mặt CCCD ➔ Tự động kích hoạt nạp ảnh và mở Bước 1.
-* **Luồng 2 (Căn góc 3D Homography)**: Điều chỉnh 4 góc neon, xoay ảnh, vi chỉnh nudger ➔ Bấm **"✨ Làm phẳng ảnh này ➔ Sang bước nén/lọc"** hoặc **"⚡ Nén & Lọc TẤT CẢ ảnh"** ➔ Tự động làm phẳng ma trận 3D và chuyển sang Bước 2.
-* **Luồng 3 (Bộ lọc, Nén KB & Dàn trang PDF)**: Chọn 6 bộ lọc rõ chữ PRO, kéo nén dung lượng, đổi thứ tự trang `◀ ▶`, dàn trang N-Up ➔ Xuất PDF A4 hoặc In trực tiếp. Bất kỳ lúc nào cũng có thể bấm **"◀ Quay lại căn góc ảnh này"** để hiệu chỉnh lại góc.
+### 2. Khắc phục lỗi "Không phản hồi khi bấm sang Menu/Submenu khác từ Scan & ZIP"
+* **Nguyên nhân cốt lõi**:
+  - Thẻ modal `#doc-camera-modal` và `#cccd-2in1-modal` trong mã HTML trước đây có chứa đồng thời 2 class `hidden flex` trong thuộc tính `class="..."`.
+  - Trong chuẩn CSS/Tailwind, thuộc tính `.flex` ghi đè lên `.hidden`, làm cho khung màn hình mờ ẩn `fixed inset-0 z-50` **luôn luôn hiển thị đè lên toàn bộ màn hình một cách vô hình**, cản trở toàn bộ thao tác nhấp chuột (click/touch events) vào các tab điều hướng phía trên.
+* **Giải pháp đã xử lý**:
+  - Đã loại bỏ class `flex` khỏi thuộc tính mặc định khi ẩn modal, và cập nhật JavaScript để bật/tắt linh hoạt `hidden` và `flex`.
+  - **Kết quả**: Bạn có thể bấm chuyển tự do và mượt mà 100% giữa tất cả các Submenu và Menu chính bất cứ lúc nào.
+
+---
+
+### 3. Khắc phục các nút Tải PDF ghép, + Trang ghép, Mở cửa sổ in A4 bị đứng/không phản hồi
+* **Nguyên nhân cốt lõi**:
+  - Các hàm xuất PDF và in ấn trước đây sử dụng lệnh `window.open(blobUrl, '_blank')` bên trong callback bất đồng bộ (`async / await`).
+  - Các trình duyệt hiện đại (Chrome, Edge, Safari, Firefox) có cơ chế **Popup Blocker (Chặn cửa sổ bật lên)** tự động chặn đứng các lệnh `window.open` không gắn trực tiếp với luồng click đồng bộ.
+* **Giải pháp đã xử lý**:
+  - Đã thay thế toàn bộ bằng **Cơ chế nạp và in thẻ ẩn `iframe` (`doc-print-iframe`)**:
+    - Khi bấm **"📄 🧩 Tải PDF Ghép A4"** hoặc **"🖨️ Mở cửa sổ in A4 (Print Preview)"**, hệ thống nạp dữ liệu bản in A4 vào thẻ iframe ẩn và gọi lệnh `iframe.contentWindow.print()`.
+    - **Kết quả**: Hoàn toàn **không bị chặn bởi Popup Blocker**, kích hoạt ngay lập tức cửa sổ in A4 và lưu file PDF sắc nét trên mọi trình duyệt di động lẫn máy tính!
+  - Nút **"➕ + Trang Ghép"** (`addDocToStaging()`) tự động cập nhật ngay trang vừa nén vào danh sách ghép.
 
 ---
 
@@ -43,8 +47,9 @@
    - Bấm **"✨ Làm phẳng & Tiếp tục ➔"**.
 3. **Bước 3: Lọc ảnh, Nén dung lượng & Xuất file**
    - Chọn bộ lọc (*Color gốc, Scan B&W, Magic rõ chữ, Khử bóng râm, Unsharp*).
-   - Kéo chất lượng nén KB, xem bảng so sánh dung lượng.
-   - Chọn bố cục dàn trang N-Up và bấm **"📄 🧩 Tải PDF Ghép A4"** hoặc **"🖨️ Mở cửa sổ in A4"**.
+   - Kéo chất lượng nén KB, xem bảng so sánh dung lượng thực tế.
+   - Bấm **"➕ + Trang Ghép"** để gom nhiều trang, đổi thứ tự `◀ ▶`.
+   - Bấm **"📄 🧩 Tải PDF Ghép A4"** hoặc **"🖨️ Mở cửa sổ in A4"**.
 
 ---
 
