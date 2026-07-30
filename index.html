@@ -2495,6 +2495,7 @@
                                     <span>📚 Danh sách trang PDF chờ ghép (<span id="doc-staged-count">0</span> trang)</span>
                                 </h4>
                                 <div class="flex items-center gap-2">
+                                    <button onclick="addAllDocBatchToStaging()" class="px-2.5 py-1 text-xs text-purple-700 bg-purple-100 hover:bg-purple-200 font-bold rounded-lg transition flex items-center gap-1"><span>➕ Gom tất cả trang</span></button>
                                     <button onclick="clearDocStaging()" class="px-2.5 py-1 text-xs text-rose-600 hover:bg-rose-50 font-bold rounded-lg transition">Xóa tất cả</button>
                                     <button onclick="downloadDocPDFClientSide('multi')" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
                                         <span>📄 Tải File PDF nhiều trang</span>
@@ -5975,21 +5976,56 @@
         }
 
         function addDocToStaging() {
+            let src = '';
             const previewImg = document.getElementById('doc-preview-img');
-            if (!previewImg || !previewImg.src) {
-                showToast("Vui lòng xử lý ảnh tài liệu trước khi thêm vào danh sách ghép!");
+
+            if (previewImg && previewImg.src && previewImg.src.startsWith('data:image')) {
+                src = previewImg.src;
+            } else if (docBatchQueue && docBatchQueue[docBatchActiveIndex]) {
+                const item = docBatchQueue[docBatchActiveIndex];
+                src = item.dataUrl || (item.originalImage ? item.originalImage.src : '');
+            }
+
+            if (!src) {
+                if (docBatchQueue && docBatchQueue.length > 0) {
+                    addAllDocBatchToStaging();
+                    return;
+                }
+                showToast("Vui lòng tải hoặc nắn phẳng ảnh tài liệu trước khi thêm vào trang ghép!");
                 return;
             }
 
-            const pageData = previewImg.src;
             docStagedPages.push({
-                dataUrl: pageData,
-                size: formatFileSize(Math.round((pageData.length - 22) * 0.75)),
+                dataUrl: src,
+                size: formatFileSize(Math.round((src.length - 22) * 0.75)),
                 name: `Trang ${docStagedPages.length + 1}`
             });
 
             renderDocStagingList();
             showToast(`➕ Đã thêm Trang ${docStagedPages.length} vào danh sách ghép PDF!`);
+        }
+
+        function addAllDocBatchToStaging() {
+            if (!docBatchQueue || docBatchQueue.length === 0) {
+                showToast("Chưa có ảnh nào trong hàng đợi!");
+                return;
+            }
+
+            let addedCount = 0;
+            docBatchQueue.forEach((item) => {
+                const src = item.dataUrl || (item.originalImage ? item.originalImage.src : '');
+                if (src) {
+                    docStagedPages.push({
+                        dataUrl: src,
+                        size: formatFileSize(Math.round((src.length - 22) * 0.75)),
+                        name: `Trang ${docStagedPages.length + 1}`
+                    });
+                    addedCount++;
+                }
+            });
+
+            renderDocStagingList();
+            showToast(`➕ Đã gom ${addedCount} trang vào danh sách ghép PDF!`);
         }
 
         function removeDocStagedPage(index) {
