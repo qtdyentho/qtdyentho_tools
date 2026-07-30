@@ -5464,12 +5464,6 @@
             // Vẽ Mặt Sau
             drawCardToContext(ctx, cccdBackImg, posX, posYBack, cardW, cardH);
 
-            // Ghi chú tỷ lệ ở chân trang
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = 'italic 18px Arial, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(`* Kích thước thẻ hiển thị: ${scale.toFixed(2)}x tỷ lệ gốc chuẩn ISO/IEC 7810 ID-1 (85.6 x 53.98 mm).`, a4Canvas.width / 2, a4Canvas.height - 80);
-
             // Chuyển kết quả sang Flattened Canvas chính
             docFlattenedCanvas = a4Canvas;
             docOriginalSize = 2500000;
