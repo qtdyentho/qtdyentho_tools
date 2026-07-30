@@ -2471,33 +2471,51 @@
                         <button onclick="closeCCCD2in1Modal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
                     </div>
 
-                    <p class="text-xs text-slate-500">Tải lên hoặc chụp 2 ảnh (Mặt trước & Mặt sau) của CCCD/Thẻ để tự động ghép dọc chuẩn trên 1 trang PDF A4.</p>
+                    <p class="text-xs text-slate-500">Tải lên 2 mặt CCCD. Ảnh sẽ tự động được khóa chuẩn tỷ lệ thẻ ISO/IEC (85.6 x 53.98mm) và hỗ trợ phóng đại.</p>
 
                     <div class="grid grid-cols-2 gap-3">
                         <!-- Front side upload -->
                         <div class="border-2 border-dashed border-purple-200 bg-purple-50/40 rounded-xl p-3 text-center space-y-2">
                             <span class="text-xs font-bold text-purple-900 block">Mặt Trước CCCD</span>
-                            <div id="cccd-front-preview" class="w-full h-28 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 overflow-hidden">
+                            <div id="cccd-front-preview" class="w-full aspect-[856/540] bg-slate-100 rounded-lg flex items-center justify-center border border-slate-300 overflow-hidden shadow-inner">
                                 <span class="text-[11px] text-slate-400">Chưa chọn</span>
                             </div>
                             <input type="file" id="cccd-front-input" accept="image/*" class="hidden" onchange="handleCCCDSideUpload(event, 'front')">
-                            <button onclick="document.getElementById('cccd-front-input').click()" class="w-full py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold">Chọn Mặt Trước</button>
+                            <button onclick="document.getElementById('cccd-front-input').click()" class="w-full py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition">Chọn Mặt Trước</button>
                         </div>
 
                         <!-- Back side upload -->
                         <div class="border-2 border-dashed border-purple-200 bg-purple-50/40 rounded-xl p-3 text-center space-y-2">
                             <span class="text-xs font-bold text-purple-900 block">Mặt Sau CCCD</span>
-                            <div id="cccd-back-preview" class="w-full h-28 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 overflow-hidden">
+                            <div id="cccd-back-preview" class="w-full aspect-[856/540] bg-slate-100 rounded-lg flex items-center justify-center border border-slate-300 overflow-hidden shadow-inner">
                                 <span class="text-[11px] text-slate-400">Chưa chọn</span>
                             </div>
                             <input type="file" id="cccd-back-input" accept="image/*" class="hidden" onchange="handleCCCDSideUpload(event, 'back')">
-                            <button onclick="document.getElementById('cccd-back-input').click()" class="w-full py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold">Chọn Mặt Sau</button>
+                            <button onclick="document.getElementById('cccd-back-input').click()" class="w-full py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition">Chọn Mặt Sau</button>
                         </div>
                     </div>
 
-                    <div class="pt-2 flex justify-end gap-2 border-t border-slate-100">
+                    <!-- Scale Slider & Controls (Only >= 1.0x) -->
+                    <div class="pt-3 border-t border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                            <span class="flex items-center gap-1 text-purple-950">📏 Tỷ lệ phóng đại thẻ (Khóa tỷ lệ chuẩn 85.6x54mm):</span>
+                            <span id="cccd-scale-lbl" class="text-purple-700 font-extrabold bg-purple-100 px-2 py-0.5 rounded-lg text-xs">1.0x (85.6 x 54mm)</span>
+                        </div>
+                        <input type="range" id="cccd-scale-slider" min="1.0" max="1.8" step="0.05" value="1.0" oninput="updateCCCDScaleLabel(this.value)" class="w-full accent-purple-600 cursor-pointer">
+                        <div class="flex items-center justify-between gap-1 pt-1 flex-wrap">
+                            <span class="text-[11px] text-slate-500 font-semibold">Phóng nhanh:</span>
+                            <div class="flex gap-1 flex-wrap">
+                                <button onclick="setCCCDScale(1.0)" class="px-2 py-0.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-md text-[11px] font-bold">1.0x (1:1 Gốc)</button>
+                                <button onclick="setCCCDScale(1.2)" class="px-2 py-0.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-md text-[11px] font-bold">1.2x (+20%)</button>
+                                <button onclick="setCCCDScale(1.4)" class="px-2 py-0.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-md text-[11px] font-bold">1.4x (+40%)</button>
+                                <button onclick="setCCCDScale(1.6)" class="px-2 py-0.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-md text-[11px] font-bold">1.6x (+60%)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 flex justify-end gap-2 border-t border-slate-100">
                         <button onclick="closeCCCD2in1Modal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Hủy</button>
-                        <button onclick="generateCCCD2in1Page()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md">Tạo & Ghép Trang A4</button>
+                        <button onclick="generateCCCD2in1Page()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition">Tạo & Ghép Trang A4</button>
                     </div>
                 </div>
             </div>
@@ -5298,18 +5316,104 @@
             reader.readAsDataURL(file);
         }
 
+        function updateCCCDScaleLabel(val) {
+            const scale = parseFloat(val || '1.0');
+            const lbl = document.getElementById('cccd-scale-lbl');
+            const widthMm = (85.6 * scale).toFixed(1);
+            const heightMm = (53.98 * scale).toFixed(1);
+            
+            if (lbl) {
+                if (scale === 1.0) {
+                    lbl.innerHTML = `1.0x (85.6 x 54mm)`;
+                } else {
+                    const percent = Math.round((scale - 1.0) * 100);
+                    lbl.innerHTML = `${scale.toFixed(2)}x (+${percent}%: ${widthMm}x${heightMm}mm)`;
+                }
+            }
+        }
+
+        function setCCCDScale(val) {
+            const slider = document.getElementById('cccd-scale-slider');
+            if (slider) {
+                slider.value = val;
+                updateCCCDScaleLabel(val);
+            }
+        }
+
+        function drawRoundRectPath(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(x, y, w, h, r);
+            } else {
+                ctx.moveTo(x + r, y);
+                ctx.arcTo(x + w, y, x + w, y + h, r);
+                ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y, r);
+                ctx.arcTo(x, y, x + w, y, r);
+                ctx.closePath();
+            }
+        }
+
+        function drawCardToContext(ctx, img, x, y, targetW, targetH) {
+            ctx.save();
+            const cornerRadius = Math.round(18 * (targetW / 652));
+            
+            // Nền trắng cho ô thẻ
+            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            // Clip theo viền bo góc thẻ
+            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
+            ctx.clip();
+
+            // Cắt ảnh khớp tỷ lệ chuẩn thẻ ID-1 ISO/IEC (1.58577)
+            const imgRatio = img.width / img.height;
+            const targetRatio = targetW / targetH;
+            let sx, sy, sWidth, sHeight;
+
+            if (imgRatio > targetRatio) {
+                sHeight = img.height;
+                sWidth = img.height * targetRatio;
+                sx = (img.width - sWidth) / 2;
+                sy = 0;
+            } else {
+                sWidth = img.width;
+                sHeight = img.width / targetRatio;
+                sx = 0;
+                sy = (img.height - sHeight) / 2;
+            }
+
+            ctx.drawImage(img, sx, sy, sWidth, sHeight, x, y, targetW, targetH);
+            ctx.restore();
+
+            // Vẽ viền thẻ sắc nét chuẩn
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2.5;
+            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
+            ctx.stroke();
+        }
+
         function generateCCCD2in1Page() {
             if (!cccdFrontImg || !cccdBackImg) {
                 showToast("Vui lòng tải đủ cả 2 mặt (Mặt trước & Mặt sau) CCCD!");
                 return;
             }
 
-            showToast("Đang ghép 2 mặt CCCD lên 1 trang A4...");
+            const scale = Math.max(1.0, parseFloat(document.getElementById('cccd-scale-slider')?.value || '1.0'));
+            showToast(`Đang ghép 2 mặt CCCD (Scale ${scale}x - Kích thước chuẩn) lên trang A4...`);
 
-            // Kích thước A4 canvas chuẩn 300DPI (2100 x 2970 px)
+            // Kích thước A4 canvas chuẩn (1600 x 2262 px)
+            // 1mm = 1600 / 210 = 7.619 px
+            // 85.60 mm -> 652 px, 53.98 mm -> 411 px (Kích thước gốc 1:1 chuẩn ISO 7810 ID-1)
+            const baseW = 652;
+            const baseH = 411;
+            const cardW = Math.round(baseW * scale);
+            const cardH = Math.round(baseH * scale);
+
             const a4Canvas = document.createElement('canvas');
             a4Canvas.width = 1600;
-            a4Canvas.height = 2262; // A4 portrait scale
+            a4Canvas.height = 2262;
             const ctx = a4Canvas.getContext('2d');
 
             // Nền trắng A4
@@ -5327,32 +5431,44 @@
             ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', a4Canvas.width / 2, 160);
 
             // Đường gạch ngang phân cách
-            ctx.strokeStyle = '#e2e8f0';
+            ctx.strokeStyle = '#cbd5e1';
             ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(100, 190);
             ctx.lineTo(a4Canvas.width - 100, 190);
             ctx.stroke();
 
-            // Vẽ Mặt Trước CCCD
-            const cardW = 1200;
-            const cardH = 757; // Tỷ lệ chuẩn CCCD 1.585
-            const posX = (a4Canvas.width - cardW) / 2;
+            // Tính vị trí căn giữa canvas A4
+            const posX = Math.round((a4Canvas.width - cardW) / 2);
+            
+            // Khoảng cách Y tự điều chỉnh hợp lý theo scale
+            const posYFront = 250;
+            const gapY = Math.max(70, Math.round(110 - (scale - 1.0) * 80));
+            const posYBack = posYFront + cardH + gapY;
 
-            ctx.fillStyle = '#475569';
+            const widthMm = (85.6 * scale).toFixed(1);
+            const heightMm = (53.98 * scale).toFixed(1);
+
+            // Nhãn Mặt Trước
+            ctx.fillStyle = '#334155';
             ctx.font = 'bold 24px Arial, sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText('1. Mặt trước CCCD:', posX, 240);
+            ctx.fillText(`1. Mặt trước CCCD (${widthMm} x ${heightMm} mm):`, posX, posYFront - 15);
 
-            ctx.drawImage(cccdFrontImg, posX, 260, cardW, cardH);
-            ctx.strokeStyle = '#cbd5e1';
-            ctx.strokeRect(posX, 260, cardW, cardH);
+            // Vẽ Mặt Trước
+            drawCardToContext(ctx, cccdFrontImg, posX, posYFront, cardW, cardH);
 
-            // Vẽ Mặt Sau CCCD
-            ctx.fillText('2. Mặt sau CCCD:', posX, 1120);
+            // Nhãn Mặt Sau
+            ctx.fillText(`2. Mặt sau CCCD (${widthMm} x ${heightMm} mm):`, posX, posYBack - 15);
 
-            ctx.drawImage(cccdBackImg, posX, 1140, cardW, cardH);
-            ctx.strokeRect(posX, 1140, cardW, cardH);
+            // Vẽ Mặt Sau
+            drawCardToContext(ctx, cccdBackImg, posX, posYBack, cardW, cardH);
+
+            // Ghi chú tỷ lệ ở chân trang
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = 'italic 18px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`* Kích thước thẻ hiển thị: ${scale.toFixed(2)}x tỷ lệ gốc chuẩn ISO/IEC 7810 ID-1 (85.6 x 53.98 mm).`, a4Canvas.width / 2, a4Canvas.height - 80);
 
             // Chuyển kết quả sang Flattened Canvas chính
             docFlattenedCanvas = a4Canvas;
@@ -5365,7 +5481,7 @@
             document.getElementById('doc-result-step').classList.remove('hidden');
 
             applyDocFilter('original');
-            showToast("🎉 Đã tạo thành công trang ghép 2 mặt CCCD 1 trang A4!");
+            showToast(`🎉 Đã ghép thành công 2 mặt CCCD tỉ lệ ${widthMm}x${heightMm}mm lên 1 trang A4!`);
         }
 
         // ==================== BỘ DÀN TRANG LƯỚI N-UP (1, 2, 4, 6, 8 ẢNH / TRANG A4) ====================
