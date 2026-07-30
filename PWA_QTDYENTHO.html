@@ -2681,10 +2681,14 @@
                             </div>
 
                             <div>
-                                <label class="block font-semibold text-slate-600 text-xs mb-1">Nội dung chuyển khoản
-                                    chuẩn hóa tự động (Tiếng Việt Không Dấu)</label>
-                                <textarea id="qr-memo-text" readonly rows="2"
-                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-xs bg-slate-100 font-bold text-slate-700"></textarea>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="font-semibold text-slate-600 text-xs">Nội dung chuyển khoản (Tùy chỉnh trực tiếp):</label>
+                                    <span id="qr-memo-count" class="text-[11px] font-bold text-emerald-700">0/50 ký tự</span>
+                                </div>
+                                <textarea id="qr-memo-text" rows="2" oninput="updateCustomQRMemo(true)"
+                                    class="w-full px-3 py-2 border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-lg font-mono text-xs bg-white font-bold text-slate-800"
+                                    placeholder="Nội dung chuyển tiền..."></textarea>
+                                <p class="text-[10px] text-slate-500 mt-1">💡 Hỗ trợ gõ/sửa trực tiếp. Nên giữ <b>dưới 50 ký tự</b> để không bị App Ngân Hàng cắt ngắn khi quét QR.</p>
                             </div>
 
                             <div>
@@ -2801,10 +2805,14 @@
                             </div>
 
                             <div>
-                                <label class="block font-semibold text-slate-600 text-xs mb-1">Nội dung gửi tiền chuẩn
-                                    hóa tự động</label>
-                                <textarea id="qr-sav-memo-text" readonly rows="2"
-                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-xs bg-slate-100 font-bold text-slate-700"></textarea>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="font-semibold text-slate-600 text-xs">Nội dung gửi tiền (Tùy chỉnh trực tiếp):</label>
+                                    <span id="qr-sav-memo-count" class="text-[11px] font-bold text-emerald-700">0/50 ký tự</span>
+                                </div>
+                                <textarea id="qr-sav-memo-text" rows="2" oninput="updateCustomQRMemo(false)"
+                                    class="w-full px-3 py-2 border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-lg font-mono text-xs bg-white font-bold text-slate-800"
+                                    placeholder="Nội dung gửi tiền..."></textarea>
+                                <p class="text-[10px] text-slate-500 mt-1">💡 Hỗ trợ gõ/sửa trực tiếp. Nên giữ <b>dưới 50 ký tự</b> để không bị App Ngân Hàng cắt ngắn khi quét QR.</p>
                             </div>
 
                             <div>
@@ -5282,6 +5290,86 @@
             ctx.stroke();
         }
 
+        function openCCCD2in1Modal() {
+            const modal = document.getElementById('modal-cccd-2in1');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeCCCD2in1Modal() {
+            const modal = document.getElementById('modal-cccd-2in1');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function switchCCCDPersonMode(count) {
+            cccdPersonCount = count;
+            const btn1 = document.getElementById('btn-cccd-mode-1');
+            const btn2 = document.getElementById('btn-cccd-mode-2');
+            const sec2 = document.getElementById('cccd-person2-section');
+
+            if (count === 1) {
+                if (btn1) btn1.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition bg-white text-purple-900 shadow-sm border border-purple-200';
+                if (btn2) btn2.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                if (sec2) sec2.classList.add('hidden');
+            } else {
+                if (btn1) btn1.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                if (btn2) btn2.className = 'flex-1 py-2 rounded-lg text-xs font-bold transition bg-white text-purple-900 shadow-sm border border-purple-200';
+                if (sec2) sec2.classList.remove('hidden');
+            }
+        }
+
+        function handleCCCDSideUpload(event, side) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    if (side === 'front') {
+                        cccdFrontImg = img;
+                        const prev = document.getElementById('cccd-front-preview');
+                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    } else if (side === 'back') {
+                        cccdBackImg = img;
+                        const prev = document.getElementById('cccd-back-preview');
+                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    } else if (side === 'front2') {
+                        cccd2FrontImg = img;
+                        const prev = document.getElementById('cccd2-front-preview');
+                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    } else if (side === 'back2') {
+                        cccd2BackImg = img;
+                        const prev = document.getElementById('cccd2-back-preview');
+                        if (prev) prev.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateCCCDScaleLabel(val) {
+            const scale = parseFloat(val || '1.0');
+            const lbl = document.getElementById('cccd-scale-lbl');
+            
+            if (lbl) {
+                if (scale === 1.0) {
+                    lbl.innerHTML = `1.0x (Chuẩn thẻ)`;
+                } else {
+                    const percent = Math.round((scale - 1.0) * 100);
+                    lbl.innerHTML = `${scale.toFixed(2)}x (+${percent}%)`;
+                }
+            }
+        }
+
+        function setCCCDScale(val) {
+            const slider = document.getElementById('cccd-scale-slider');
+            if (slider) {
+                slider.value = val;
+                updateCCCDScaleLabel(val);
+            }
+        }
+
         function generateCCCD2in1Page() {
             if (cccdPersonCount === 1) {
                 if (!cccdFrontImg || !cccdBackImg) {
@@ -5389,197 +5477,6 @@
                 ctx.fillStyle = '#1e293b';
                 ctx.font = 'bold 26px Arial, sans-serif';
                 ctx.fillText('II. HỒ SƠ CCCD NGƯỜI THỨ 2:', posX1, posYRow2 - 25);
-
-                ctx.fillStyle = '#475569';
-                ctx.font = 'bold 20px Arial, sans-serif';
-                ctx.fillText('1. Mặt trước:', posX1, posYRow2 - 5);
-                drawCardToContext(ctx, cccd2FrontImg, posX1, posYRow2, cardW, cardH);
-
-                ctx.fillText('2. Mặt sau:', posX2, posYRow2 - 5);
-                drawCardToContext(ctx, cccd2BackImg, posX2, posYRow2, cardW, cardH);
-            }
-
-            // Chuyển kết quả sang Flattened Canvas chính
-            docFlattenedCanvas = a4Canvas;
-            docOriginalSize = 2500000;
-
-            closeCCCD2in1Modal();
-
-            document.getElementById('doc-upload-step').classList.add('hidden');
-            document.getElementById('doc-editor-step').classList.add('hidden');
-            document.getElementById('doc-result-step').classList.remove('hidden');
-
-            applyDocFilter('original');
-            showToast(`🎉 Đã ghép thành công ${cccdPersonCount === 1 ? '2 mặt CCCD (1 người)' : '4 mặt CCCD (2 người)'} lên 1 trang A4!`);
-        }
-
-        function drawRoundRectPath(ctx, x, y, w, h, r) {
-            ctx.beginPath();
-            if (ctx.roundRect) {
-                ctx.roundRect(x, y, w, h, r);
-            } else {
-                ctx.moveTo(x + r, y);
-                ctx.arcTo(x + w, y, x + w, y + h, r);
-                ctx.arcTo(x + w, y + h, x, y + h, r);
-                ctx.arcTo(x, y + h, x, y, r);
-                ctx.arcTo(x, y, x + w, y, r);
-                ctx.closePath();
-            }
-        }
-
-        function drawCardToContext(ctx, img, x, y, targetW, targetH) {
-            ctx.save();
-            const cornerRadius = Math.round(18 * (targetW / 652));
-            
-            // Nền trắng cho ô thẻ
-            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-
-            // Clip theo viền bo góc thẻ
-            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
-            ctx.clip();
-
-            // Cắt ảnh khớp tỷ lệ chuẩn thẻ ID-1 ISO/IEC (1.58577)
-            const imgRatio = img.width / img.height;
-            const targetRatio = targetW / targetH;
-            let sx, sy, sWidth, sHeight;
-
-            if (imgRatio > targetRatio) {
-                sHeight = img.height;
-                sWidth = img.height * targetRatio;
-                sx = (img.width - sWidth) / 2;
-                sy = 0;
-            } else {
-                sWidth = img.width;
-                sHeight = img.width / targetRatio;
-                sx = 0;
-                sy = (img.height - sHeight) / 2;
-            }
-
-            ctx.drawImage(img, sx, sy, sWidth, sHeight, x, y, targetW, targetH);
-            ctx.restore();
-
-            // Vẽ viền thẻ sắc nét chuẩn
-            ctx.strokeStyle = '#94a3b8';
-            ctx.lineWidth = 2.5;
-            drawRoundRectPath(ctx, x, y, targetW, targetH, cornerRadius);
-            ctx.stroke();
-        }
-
-        function generateCCCD2in1Page() {
-            if (cccdPersonCount === 1) {
-                if (!cccdFrontImg || !cccdBackImg) {
-                    showToast("Vui lòng tải đủ cả 2 mặt (Mặt trước & Mặt sau) của Người 1!");
-                    return;
-                }
-            } else {
-                if (!cccdFrontImg || !cccdBackImg || !cccd2FrontImg || !cccd2BackImg) {
-                    showToast("Vui lòng tải đủ cả 4 mặt CCCD của 2 người (Người 1 & Người 2)!");
-                    return;
-                }
-            }
-
-            const scale = Math.max(1.0, parseFloat(document.getElementById('cccd-scale-slider')?.value || '1.0'));
-            showToast(`Đang ghép ${cccdPersonCount === 1 ? '2 mặt (1 người)' : '4 mặt (2 người)'} CCCD lên trang A4...`);
-
-            // Kích thước A4 canvas chuẩn (1600 x 2262 px)
-            const baseW = 652;
-            const baseH = 411;
-
-            const a4Canvas = document.createElement('canvas');
-            a4Canvas.width = 1600;
-            a4Canvas.height = 2262;
-            const ctx = a4Canvas.getContext('2d');
-
-            // Nền trắng A4
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, a4Canvas.width, a4Canvas.height);
-
-            // Tiêu đề đầu trang
-            ctx.fillStyle = '#1e293b';
-            ctx.font = 'bold 36px Arial, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('BẢN SAO CĂN CƯỚC CÔNG DÂN / GIẤY TỜ THÀNH VIÊN', a4Canvas.width / 2, 110);
-
-            ctx.fillStyle = '#64748b';
-            ctx.font = '22px Arial, sans-serif';
-            ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', a4Canvas.width / 2, 150);
-
-            // Đường gạch ngang phân cách
-            ctx.strokeStyle = '#cbd5e1';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(100, 180);
-            ctx.lineTo(a4Canvas.width - 100, 180);
-            ctx.stroke();
-
-            if (cccdPersonCount === 1) {
-                // CHẾ ĐỘ 1 NGƯỜI: 2 Mặt xếp dọc căn giữa
-                const cardW = Math.round(baseW * scale);
-                const cardH = Math.round(baseH * scale);
-                const posX = Math.round((a4Canvas.width - cardW) / 2);
-                
-                const posYFront = 250;
-                const gapY = Math.max(70, Math.round(110 - (scale - 1.0) * 80));
-                const posYBack = posYFront + cardH + gapY;
-
-                const widthMm = (85.6 * scale).toFixed(1);
-                const heightMm = (53.98 * scale).toFixed(1);
-
-                ctx.fillStyle = '#334155';
-                ctx.font = 'bold 24px Arial, sans-serif';
-                ctx.textAlign = 'left';
-                ctx.fillText(`1. Mặt trước CCCD (${widthMm} x ${heightMm} mm):`, posX, posYFront - 15);
-                drawCardToContext(ctx, cccdFrontImg, posX, posYFront, cardW, cardH);
-
-                ctx.fillText(`2. Mặt sau CCCD (${widthMm} x ${heightMm} mm):`, posX, posYBack - 15);
-                drawCardToContext(ctx, cccdBackImg, posX, posYBack, cardW, cardH);
-
-            } else {
-                // CHẾ ĐỘ 2 NGƯỜI (4 MẶT CCCD): Xếp 2 Hàng x 2 Cột (Mặt trước bên trái, Mặt sau bên phải)
-                const adjustedScale = Math.min(scale, 1.15); 
-                const cardW = Math.round(baseW * adjustedScale);
-                const cardH = Math.round(baseH * adjustedScale);
-                
-                const spacingX = Math.round((a4Canvas.width - cardW * 2) / 3);
-                const posX1 = spacingX;
-                const posX2 = spacingX * 2 + cardW;
-
-                const posYRow1 = 265;
-                const posYRow2 = posYRow1 + cardH + 140;
-
-                const widthMm = (85.6 * adjustedScale).toFixed(1);
-                const heightMm = (53.98 * adjustedScale).toFixed(1);
-
-                // HÀNG 1: NGƯỜI THỨ 1
-                ctx.fillStyle = '#1e293b';
-                ctx.font = 'bold 26px Arial, sans-serif';
-                ctx.textAlign = 'left';
-                ctx.fillText(`I. HỒ SƠ CCCD NGƯỜI THỨ 1 (${widthMm} x ${heightMm} mm):`, posX1, posYRow1 - 25);
-
-                ctx.fillStyle = '#475569';
-                ctx.font = 'bold 20px Arial, sans-serif';
-                ctx.fillText('1. Mặt trước:', posX1, posYRow1 - 5);
-                drawCardToContext(ctx, cccdFrontImg, posX1, posYRow1, cardW, cardH);
-
-                ctx.fillText('2. Mặt sau:', posX2, posYRow1 - 5);
-                drawCardToContext(ctx, cccdBackImg, posX2, posYRow1, cardW, cardH);
-
-                // Đường gạch nét đứt phân cách 2 người
-                ctx.strokeStyle = '#cbd5e1';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([10, 10]);
-                ctx.beginPath();
-                ctx.moveTo(100, posYRow1 + cardH + 68);
-                ctx.lineTo(a4Canvas.width - 100, posYRow1 + cardH + 68);
-                ctx.stroke();
-                ctx.setLineDash([]); // Reset line dash
-
-                // HÀNG 2: NGƯỜI THỨ 2
-                ctx.fillStyle = '#1e293b';
-                ctx.font = 'bold 26px Arial, sans-serif';
-                ctx.fillText(`II. HỒ SƠ CCCD NGƯỜI THỨ 2 (${widthMm} x ${heightMm} mm):`, posX1, posYRow2 - 25);
 
                 ctx.fillStyle = '#475569';
                 ctx.font = 'bold 20px Arial, sans-serif';
@@ -8113,7 +8010,6 @@
         function updateQRImageOnly() {
             const nameEl = document.getElementById('qr-loan-name');
             const contractEl = document.getElementById('qr-loan-contract');
-            const addressEl = document.getElementById('qr-loan-address');
             const principalPayEl = document.getElementById('qr-principal-pay');
             const finalAmountEl = document.getElementById('qr-final-amount');
 
@@ -8121,79 +8017,79 @@
 
             const rawName = nameEl.value;
             const rawContract = contractEl.value;
-            const rawAddress = addressEl ? addressEl.value : "THON TAN LOC X QUY LOC";
             const principalPay = parseVND(principalPayEl.value);
-            const finalAmount = parseVND(finalAmountEl.value);
 
             const nameClean = removeVietnameseTones(rawName);
             const contractClean = removeVietnameseTones(rawContract);
-            const addressClean = removeVietnameseTones(rawAddress);
 
-            let prefix = (principalPay > 0) ? "TRA LAI VA GOC" : "TRA LAI";
-            let memoRaw = `${prefix} HDTD SO ${contractClean} KH ${nameClean} ${addressClean}`;
-            let memo = removeVietnameseTones(memoRaw);
+            let prefix = (principalPay > 0) ? "TRA LAI GOC" : "TRA LAI";
+            let memoRaw = `${prefix} HD ${contractClean} KH ${nameClean}`;
+            let memo = removeVietnameseTones(memoRaw).trim();
 
             const memoTextEl = document.getElementById('qr-memo-text');
-            const cardMemoEl = document.getElementById('qr-card-memo');
-            const cardAmountEl = document.getElementById('qr-card-amount');
-            const codeImgEl = document.getElementById('qr-code-img');
-
             if (memoTextEl) memoTextEl.value = memo;
-            if (cardMemoEl) cardMemoEl.textContent = memo;
-            if (cardAmountEl) cardAmountEl.textContent = `${formatVND(finalAmount)} đ`;
 
-            if (codeImgEl) {
-                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${finalAmount}&des=${encodeURIComponent(memo)}&template=qr_only`;
-                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${finalAmount}&addInfo=${encodeURIComponent(memo)}`;
-                codeImgEl.onerror = function () {
-                    this.onerror = null;
-                    this.src = fallbackUrl || generateQRDataURI(FIXED_ACC_NUMBER, memo, finalAmount);
-                };
-                codeImgEl.src = primaryUrl;
-            }
+            updateCustomQRMemo(true);
         }
 
         // 2. QR SAVINGS DEPOSIT LOGIC
         function calcQRSavings() {
             const nameEl = document.getElementById('qr-sav-name');
             const cccdEl = document.getElementById('qr-sav-cccd');
-            const addrEl = document.getElementById('qr-sav-address');
             const amountEl = document.getElementById('qr-sav-amount');
             const termEl = document.getElementById('qr-sav-term');
-            const typeEl = document.getElementById('qr-sav-type');
 
-            if (!nameEl || !cccdEl || !addrEl || !amountEl || !termEl || !typeEl) return;
+            if (!nameEl || !cccdEl || !amountEl || !termEl) return;
 
             const rawName = nameEl.value;
             const rawCccd = cccdEl.value;
-            const rawAddr = addrEl.value;
-            const amount = parseVND(amountEl.value);
             const term = termEl.value;
-            const type = typeEl.value;
 
             const nameClean = removeVietnameseTones(rawName);
             const cccdClean = removeVietnameseTones(rawCccd);
-            const addrClean = removeVietnameseTones(rawAddr);
-            const typeClean = removeVietnameseTones(type);
 
-            const memoRaw = `${nameClean} CCCD ${cccdClean} ${addrClean} GUI TK KY HAN ${term} THANG SO TIEN ${Math.round(amount)} ${typeClean}`;
-            const memo = removeVietnameseTones(memoRaw);
+            let memoRaw = `GUI TK ${term}TH KH ${nameClean} CCCD ${cccdClean}`;
+            let memo = removeVietnameseTones(memoRaw).trim();
 
             const memoTextEl = document.getElementById('qr-sav-memo-text');
-            const cardMemoEl = document.getElementById('qr-sav-card-memo');
-            const cardAmountEl = document.getElementById('qr-sav-card-amount');
-            const codeImgEl = document.getElementById('qr-sav-code-img');
-
             if (memoTextEl) memoTextEl.value = memo;
-            if (cardMemoEl) cardMemoEl.textContent = memo;
+
+            updateCustomQRMemo(false);
+        }
+
+        function updateCustomQRMemo(isLoan) {
+            const memoTextEl = document.getElementById(isLoan ? 'qr-memo-text' : 'qr-sav-memo-text');
+            const cardMemoEl = document.getElementById(isLoan ? 'qr-card-memo' : 'qr-sav-card-memo');
+            const cardAmountEl = document.getElementById(isLoan ? 'qr-card-amount' : 'qr-sav-card-amount');
+            const codeImgEl = document.getElementById(isLoan ? 'qr-code-img' : 'qr-sav-code-img');
+            const countEl = document.getElementById(isLoan ? 'qr-memo-count' : 'qr-sav-memo-count');
+            const amountEl = document.getElementById(isLoan ? 'qr-final-amount' : 'qr-sav-amount');
+
+            if (!memoTextEl || !amountEl) return;
+
+            const rawMemo = memoTextEl.value || "";
+            const memoClean = removeVietnameseTones(rawMemo).trim();
+            const amount = parseVND(amountEl.value);
+            const charLen = memoClean.length;
+
+            if (countEl) {
+                countEl.textContent = `${charLen}/50 ký tự`;
+                if (charLen > 50) {
+                    countEl.className = "text-[11px] font-extrabold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded";
+                } else {
+                    countEl.className = "text-[11px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded";
+                }
+            }
+
+            if (cardMemoEl) cardMemoEl.textContent = memoClean;
             if (cardAmountEl) cardAmountEl.textContent = `${formatVND(amount)} đ`;
 
             if (codeImgEl) {
-                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memo)}&template=qr_only`;
-                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
+                const primaryUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
+                const fallbackUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoClean)}`;
                 codeImgEl.onerror = function () {
                     this.onerror = null;
-                    this.src = fallbackUrl || generateQRDataURI(FIXED_ACC_NUMBER, memo, amount);
+                    this.src = fallbackUrl || generateQRDataURI(FIXED_ACC_NUMBER, memoClean, amount);
                 };
                 codeImgEl.src = primaryUrl;
             }
