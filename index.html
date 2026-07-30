@@ -22,7 +22,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.30-v22.00';
+            const CURRENT_VERSION = 'v2026.07.30-v23.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             // 1. Unregister all stale Service Workers
@@ -4027,7 +4027,7 @@
             <p class="text-slate-500 text-[10px] flex items-center justify-center gap-2">
                 <span>Công cụ hỗ trợ công việc nội bộ</span>
                 <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
-                <span id="app-version-badge" class="font-mono text-emerald-500/70">v2026.07.30 (v22.00)</span>
+                <span id="app-version-badge" class="font-mono text-emerald-400 font-bold">v2026.07.30-v23.00</span>
             </p>
         </div>
     </footer>
@@ -4057,10 +4057,17 @@
             showToast("Đã sao chép nội dung mẫu!");
         }
 
+        // Sync all Version UI elements across the application
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.app-version-lbl, #app-version-badge').forEach(el => {
+                el.textContent = CURRENT_APP_VERSION;
+            });
+        });
+
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = "2026.07.29-v21.0";
+        const CURRENT_APP_VERSION = 'v2026.07.30-v23.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -4107,7 +4114,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v13.0';
+                        const CACHE_NAME = 'qtd-tools-cache-v2026.07.30-v23.00';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -4142,9 +4149,10 @@
         // Hàm thử fetch code HTML từ đường dẫn GitHub (với cơ chế Fallback Raw -> Pages)
         async function fetchLatestHtmlFromGitHub() {
             const customUrl = localStorage.getItem('qtdnd_update_url');
+            const VERCEL_URL = 'https://qtdyentho-tools.vercel.app/PWA_QTDYENTHO.html';
             const urlsToTry = customUrl
-                ? [customUrl, GITHUB_RAW_URL, GITHUB_PAGES_URL]
-                : [GITHUB_RAW_URL, GITHUB_PAGES_URL];
+                ? [customUrl, GITHUB_RAW_URL, VERCEL_URL, GITHUB_PAGES_URL]
+                : [GITHUB_RAW_URL, VERCEL_URL, GITHUB_PAGES_URL];
 
             for (const url of urlsToTry) {
                 try {
