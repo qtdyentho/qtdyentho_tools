@@ -4764,21 +4764,25 @@
             const canvas = document.getElementById('doc-crop-canvas');
             if (!canvas || !docOriginalImage) return;
 
-            const w = docOriginalImage.width;
-            const h = docOriginalImage.height;
+            if (!docOriginalImage.complete || (docOriginalImage.naturalWidth === 0 && docOriginalImage.width === 0)) {
+                docOriginalImage.onload = function() { setupDocCropCanvas(); };
+                return;
+            }
+
+            const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
+            const h = docOriginalImage.naturalHeight || docOriginalImage.height || 600;
 
             canvas.width = w;
             canvas.height = h;
 
-            // Đặt 4 góc mặc định (tự động ôm 95% viền)
             const marginX = w * 0.05;
             const marginY = h * 0.05;
 
             docCorners = [
-                { x: marginX, y: marginY },           // Top-Left
-                { x: w - marginX, y: marginY },       // Top-Right
-                { x: w - marginX, y: h - marginY },   // Bottom-Right
-                { x: marginX, y: h - marginY }        // Bottom-Left
+                { x: marginX, y: marginY },
+                { x: w - marginX, y: marginY },
+                { x: w - marginX, y: h - marginY },
+                { x: marginX, y: h - marginY }
             ];
 
             selectDocCorner(0);
@@ -4918,16 +4922,43 @@
         function drawDocCropCanvas() {
             const canvas = document.getElementById('doc-crop-canvas');
             if (!canvas || !docOriginalImage) return;
+
+            if (!docOriginalImage.complete || (docOriginalImage.naturalWidth === 0 && docOriginalImage.width === 0)) {
+                docOriginalImage.onload = function() { drawDocCropCanvas(); };
+                return;
+            }
+
+            const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
+            const h = docOriginalImage.naturalHeight || docOriginalImage.height || 600;
+
+            if (canvas.width !== w || canvas.height !== h) {
+                canvas.width = w;
+                canvas.height = h;
+            }
+
+            // Ensure valid docCorners
+            if (!docCorners || docCorners.length !== 4 || isNaN(docCorners[0].x) || (docCorners[0].x === 0 && docCorners[1].x === 0)) {
+                const marginX = w * 0.05;
+                const marginY = h * 0.05;
+                docCorners = [
+                    { x: marginX, y: marginY },
+                    { x: w - marginX, y: marginY },
+                    { x: w - marginX, y: h - marginY },
+                    { x: marginX, y: h - marginY }
+                ];
+            }
+
             const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, w, h);
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(docOriginalImage, 0, 0);
+            // Base image draw
+            ctx.drawImage(docOriginalImage, 0, 0, w, h);
 
-            // Lớp phủ mờ ngoài vùng chọn
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Dim mask
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.45)';
+            ctx.fillRect(0, 0, w, h);
 
-            // Khung tứ giác chọn
+            // Highlight crop region
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(docCorners[0].x, docCorners[0].y);
@@ -4937,8 +4968,7 @@
             ctx.closePath();
             ctx.clip();
 
-            // Hiển thị ảnh sáng rõ bên trong
-            ctx.drawImage(docOriginalImage, 0, 0);
+            ctx.drawImage(docOriginalImage, 0, 0, w, h);
             ctx.restore();
 
             // Vẽ viền Neon Emerald
