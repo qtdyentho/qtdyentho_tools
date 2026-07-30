@@ -2795,11 +2795,11 @@
                                     <label class="block font-semibold text-slate-600 mb-1">Hình thức trả lãi</label>
                                     <select id="qr-sav-type" onchange="calcQRSavings()"
                                         class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800 bg-slate-50">
-                                        <option value="LAI CUOI KY" selected>Lãi Cuối Kỳ</option>
-                                        <option value="LAI TRUOC">Lãi Trước</option>
-                                        <option value="LAI HANG THANG">Lãi Hàng Tháng</option>
-                                        <option value="LAI HANG QUY">Lãi Hàng Quý</option>
-                                        <option value="GUI GOP THANG">Gửi Góp Hàng Tháng</option>
+                                        <option value="LCK" selected>Lãi Cuối Kỳ (LCK)</option>
+                                        <option value="LTR">Lãi Trước (LTR)</option>
+                                        <option value="LHT">Lãi Hàng Tháng (LHT)</option>
+                                        <option value="LHQ">Lãi Hàng Quý (LHQ)</option>
+                                        <option value="GGHT">Gửi Góp Hàng Tháng (GGHT)</option>
                                     </select>
                                 </div>
                             </div>
@@ -8022,7 +8022,7 @@
             const contractClean = removeVietnameseTones(rawContract);
 
             let prefix = (principalPay > 0) ? "TRA LAI GOC" : "TRA LAI";
-            let memoRaw = `${prefix} HD ${contractClean} KH ${nameClean}`;
+            let memoRaw = `${prefix} HD ${contractClean} ${nameClean}`;
             let memo = removeVietnameseTones(memoRaw).trim();
 
             const memoTextEl = document.getElementById('qr-memo-text');
@@ -8037,17 +8037,37 @@
             const cccdEl = document.getElementById('qr-sav-cccd');
             const amountEl = document.getElementById('qr-sav-amount');
             const termEl = document.getElementById('qr-sav-term');
+            const typeEl = document.getElementById('qr-sav-type');
+            const addressEl = document.getElementById('qr-sav-address');
 
             if (!nameEl || !cccdEl || !amountEl || !termEl) return;
 
             const rawName = nameEl.value;
             const rawCccd = cccdEl.value;
             const term = termEl.value;
+            const rawType = typeEl ? typeEl.value : "";
+            const rawAddress = addressEl ? addressEl.value : "";
 
             const nameClean = removeVietnameseTones(rawName);
             const cccdClean = removeVietnameseTones(rawCccd);
+            const addressClean = removeVietnameseTones(rawAddress);
 
-            let memoRaw = `GUI TK ${term}TH KH ${nameClean} CCCD ${cccdClean}`;
+            const typeCodeMap = {
+                "LAI CUOI KY": "LCK",
+                "LAI TRUOC": "LTR",
+                "LAI HANG THANG": "LHT",
+                "LAI HANG QUY": "LHQ",
+                "GUI GOP THANG": "GGHT",
+                "LCK": "LCK",
+                "LTR": "LTR",
+                "LHT": "LHT",
+                "LHQ": "LHQ",
+                "GGHT": "GGHT"
+            };
+
+            const typeCode = typeCodeMap[rawType] || removeVietnameseTones(rawType);
+
+            let memoRaw = `${nameClean} ${cccdClean} GUITK ${term}T ${typeCode} ${addressClean}`;
             let memo = removeVietnameseTones(memoRaw).trim();
 
             const memoTextEl = document.getElementById('qr-sav-memo-text');
