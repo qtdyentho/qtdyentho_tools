@@ -4316,6 +4316,15 @@
             return Math.max(0, Math.floor((utc2 - utc1) / 86400000));
         }
 
+        /**
+         * Lấy đối tượng Date tương ứng thời gian hiện tại theo đúng khung giờ Việt Nam (Asia/Ho_Chi_Minh GMT+7)
+         */
+        function getVNNow() {
+            const now = new Date();
+            const vnStr = now.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" });
+            return new Date(vnStr);
+        }
+
         function formatVietnameseDateStr(dObj) {
             if (!dObj || isNaN(dObj.getTime())) return '';
             const day = String(dObj.getDate()).padStart(2, '0');
@@ -4699,9 +4708,9 @@
                 initCompareDatePickers();
             }
 
-            const now = new Date();
+            const now = getVNNow();
             const todayVN = formatVietnameseDateStr(now);
-            const defaultStartObj = new Date();
+            const defaultStartObj = getVNNow();
             defaultStartObj.setMonth(defaultStartObj.getMonth() - 6);
             const defaultStartVN = formatVietnameseDateStr(defaultStartObj);
 
