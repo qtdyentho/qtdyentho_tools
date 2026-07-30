@@ -521,15 +521,7 @@
                         </svg>
                         <span>Công cụ ▾</span>
                     </button>
-                    <button onclick="switchTab('tool-scanner')" id="nav-tool-scanner"
-                        class="py-2 px-4 rounded-xl text-emerald-100/90 hover:bg-white/15 hover:text-white transition-all duration-200 whitespace-nowrap flex items-center gap-2">
-                        <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <span>📸 Quét & Nén TL</span>
-                    </button>
+
                     <button onclick="switchTab('tabQR')" id="nav-tabQR"
                         class="py-2 px-4 rounded-xl text-emerald-100/90 hover:bg-white/15 hover:text-white transition-all duration-200 whitespace-nowrap flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -574,13 +566,7 @@
             </svg>
             <span>Công cụ</span>
         </button>
-        <button onclick="switchTab('tool-scanner')" id="mob-nav-tool-scanner"
-            class="flex flex-col items-center py-1.5 px-2 rounded-lg transition">
-            <svg class="w-5 h-5 mb-0.5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-            </svg>
-            <span>Quét ảnh</span>
-        </button>
+
         <button onclick="switchTab('tabQR')" id="mob-nav-tabQR"
             class="flex flex-col items-center py-1.5 px-2 rounded-lg transition">
             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -9839,14 +9825,8 @@
             if (qrId === 'qr-standee') updateStandeePreview();
         }
 
-        // Tab Navigation (Smart Navigation Engine)
+        // Tab Navigation
         function switchTab(tabId) {
-            let isScannerDirect = false;
-            if (tabId === 'tool-scanner' || tabId === 'scanner') {
-                tabId = 'tabTools';
-                isScannerDirect = true;
-            }
-
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(tabId);
             if (target) target.classList.remove('hidden');
@@ -9857,8 +9837,7 @@
                 btn.classList.add('text-emerald-100/90');
             });
 
-            const targetNavId = isScannerDirect ? 'nav-tool-scanner' : `nav-${tabId}`;
-            const activeBtn = document.getElementById(targetNavId);
+            const activeBtn = document.getElementById(`nav-${tabId}`);
             if (activeBtn) {
                 activeBtn.classList.add('tab-active');
                 activeBtn.classList.remove('text-emerald-100/90');
@@ -9870,19 +9849,18 @@
                 btn.classList.add('text-emerald-200');
             });
 
-            const targetMobNavId = isScannerDirect ? 'mob-nav-tool-scanner' : `mob-nav-${tabId}`;
-            const activeMobBtn = document.getElementById(targetMobNavId);
+            const activeMobBtn = document.getElementById(`mob-nav-${tabId}`);
             if (activeMobBtn) {
                 activeMobBtn.classList.add('text-white', 'font-bold', 'bg-emerald-800/80');
                 activeMobBtn.classList.remove('text-emerald-200');
             }
 
-            if (isScannerDirect) {
-                switchSubTab('tool-scanner');
-            } else if (tabId === 'tabTools') {
-                // Default to first subtab if no subtab is active
-                const currentActiveSub = document.querySelector('#tabTools .subtab-content:not(.hidden)');
-                if (!currentActiveSub) switchSubTab('tool-sav');
+            if (tabId === 'tabTools') {
+                // Check if any subtab is active, if not activate default tool-sav
+                const activeSub = document.querySelector('#tabTools .subtab-content:not(.hidden)');
+                if (!activeSub) {
+                    switchSubTab('tool-sav');
+                }
             }
 
             if (tabId === 'tab1') {
