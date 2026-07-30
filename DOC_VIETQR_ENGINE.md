@@ -1,6 +1,6 @@
 # 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ — PHÂN HỆ TẠO MÃ VIETQR EMVCo 247
 > **Tài Liệu Chi Tiết Kỹ Thuật & Cấu Trúc Mã VietQR (QTD_Tools)**  
-> **Phiên bản:** `v2026.07.29-v21.1`  
+> **Phiên bản:** `v2026.07.30-v22.00`  
 > **Phát triển cho:** Cán bộ nghiệp vụ Quỹ Tín Dụng Nhân Dân Yên Thọ
 
 ---
@@ -33,6 +33,8 @@ Mã VietQR tuân thủ chuẩn EMVCo QRCode Specification. Chuỗi payload đư�
 ## 📱 3. CÁC PHÂN HỆ TẠO MÃ QR VÀ QUY TẮC NGHIỆP VỤ
 
 ### 3.1. 🏦 QR Tiền Vay (`qr-loan`)
+- **Tối ưu hóa Nội dung chuyển tiền NAPAS 247**: Chuẩn hóa cú pháp nội dung ngắn gọn dưới 50 ký tự ASCII không dấu, tích hợp bộ đếm số ký tự thời gian thực (`X/50 ký tự`) và hỗ trợ chỉnh sửa trực tiếp ô nội dung.
+
 - **Tài khoản thụ hưởng cố định**: `3800001234567899`
 - **Tên đơn vị thụ hưởng**: `QUY TIN DUNG NHAN DAN YEN THO`
 - **Ngân hàng**: `Co-opBank` (BIN `970446`)

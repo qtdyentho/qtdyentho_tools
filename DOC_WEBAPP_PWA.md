@@ -1,6 +1,6 @@
 # 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ — BỘ CÔNG CỤ NGHIỆP VỤ QTD_TOOLS
 > **Tài Liệu Chi Tiết Chức Năng WebApp Offline (PWA)**  
-> **Phiên bản:** `v2026.07.29-v21.1`  
+> **Phiên bản:** `v2026.07.30-v22.00`  
 > **Phát triển cho:** Cán bộ nghiệp vụ Quỹ Tín Dụng Nhân Dân Yên Thọ
 
 ---
@@ -60,6 +60,12 @@
   - **QR Tiết kiệm**: Nạp tiền gửi tiết kiệm vào tài khoản Quỹ.
   - **Thẻ Standee QR**: Xuất file ảnh Thẻ Standee để bàn khổ A4.
   - **Thẻ QR LOA Thanh toán**: Xuất file ảnh Thẻ QR khổ vuông dán loa thông báo thanh toán.
+
+
+### 3.6. 📸 Phân Hệ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO
+- **Tính năng 4-CornerPerspective Crop**: Thuật toán làm phẳng ảnh biến dạng góc chụp, kính lúp loupe soi góc chính xác từng pixel.
+- **Động cơ nén & Khử nhiễu**: Cho phép chuyển đổi ảnh scan màu/B&W, nén dung lượng file ảnh xuống dưới 500KB - 2MB trực tiếp trên Client.
+- **Dàn trang PDF N-Up & Ghép CCCD**: Hỗ trợ xuất file PDF A4 ghép 1-8 ảnh/trang và Modal ghép 2-4 mặt thẻ CCCD/CMND chuẩn kích thước A4 in ấn.
 
 ### 3.5. 🖨️ In Báo Cáo Chính Thức & Xuất File Excel
 - **Chế độ In Báo Cáo**: Tự động ẩn các công cụ điều hướng, format trang in A4 chuẩn có khung chữ ký 3 bên (*Người lập*, *Kiểm soát viên*, *Ban Giám đốc*).

@@ -22,7 +22,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.29-v21.9';
+            const CURRENT_VERSION = 'v2026.07.30-v22.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             // 1. Unregister all stale Service Workers
@@ -3979,7 +3979,7 @@
             <p class="text-slate-500 text-[10px] flex items-center justify-center gap-2">
                 <span>Công cụ hỗ trợ công việc nội bộ</span>
                 <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
-                <span id="app-version-badge" class="font-mono text-emerald-500/70">v2026.07.29</span>
+                <span id="app-version-badge" class="font-mono text-emerald-500/70">v2026.07.30 (v22.00)</span>
             </p>
         </div>
     </footer>
@@ -4012,7 +4012,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = "2026.07.29-v21.0";
+        const CURRENT_APP_VERSION = "2026.07.30-v22.00";
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 

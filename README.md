@@ -1,4 +1,4 @@
-# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.07.30-v21.17)
+# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.07.30-v22.00)
 
 > **Bộ Công Cụ Nghiệp Vụ Tín Dụng & Tiền Gửi Ngoại Tuyến (Offline PWA WebApp)**  
 > **Repository chính thức:** [https://github.com/qtdyentho/qtdyentho_tools.git](https://github.com/qtdyentho/qtdyentho_tools.git)  
@@ -36,6 +36,14 @@
 * Chế độ in báo cáo chính thức có chữ ký 3 bên (*Người lập*, *Kiểm soát viên*, *Ban Giám đốc*).
 * Xuất bảng dữ liệu lãi suất ra file Excel (`.xls`).
 
+
+### 7. 📸 Công Cụ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO (v22.00)
+* **Quét & Căn chỉnh 4 góc (Perspective Warp)**: Tự động/thủ công kéo thả 4 góc nắn tài liệu vuông vắn, hỗ trợ kính lúp soi chi tiết và nút tinh chỉnh Nudger.
+* **Bộ lọc hình ảnh chuyên sâu**: Scan B&W, Rõ chữ (Magic Color), Khử bóng râm, Tăng tương phản, Tăng độ nét.
+* **Nén dung lượng thông minh**: Slider chất lượng JPEG & Nút chọn nhanh dung lượng đích (<500KB, <1MB, <2MB) đáp ứng tiêu chuẩn lưu trữ của Quỹ.
+* **Bố cục lưới A4 (N-Up PDF Layout)**: Dàn 1, 2, 4, 6, 8 ảnh trên 1 trang A4 sắc nét.
+* **Tạo ảnh CCCD 2-in-1 chuyên nghiệp**: Tự động ghép 2 mặt CCCD 1 người (2 mặt) hoặc 2 người (4 mặt Vợ/Chồng) lên 1 trang A4 chuẩn ISO scale có thể điều chỉnh tỷ lệ từ 1.0x đến 1.8x.
+
 ### 6. 📱 Cài Đặt PWA Màn Hình Chính & Cập Nhật Online
 * Hỗ trợ Modal hướng dẫn cài đặt lối tắt màn hình chính cho iPhone/iPad (Safari) và Android/PC (Chrome, Edge).
 * Tích hợp nút **"Cập Nhật"** (`checkAppUpdate()`) kết nối trực tiếp đến GitHub Raw để nâng cấp phiên bản mới khi có Internet.
@@ -58,7 +66,7 @@ Mở file `index.html` hoặc `PWA_QTDYENTHO.html` bằng bất kỳ trình duy�
 ```text
 QTD_Tools/
 ├── index.html            # File chính (GitHub Pages & PWA Offline App)
-├── PWA_QTDYENTHO.html    # Bản nâng cấp v2026.07.28-v1.3 chính thức
+├── PWA_QTDYENTHO.html    # Bản nâng cấp v2026.07.30-v22.00 chính thức
 ├── PWA_QTDYENTHO2.html   # Bản dự phòng 6 tab
 └── README.md             # Tài liệu giới thiệu & Hướng dẫn sử dụng
 ```
