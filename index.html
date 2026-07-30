@@ -2748,13 +2748,9 @@
                         <!-- Display QR Code & Share Controls Right (5 Cols) -->
                         <div
                             class="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
-                            <div class="text-center space-y-1">
+                            <div class="text-center w-full pb-1">
                                 <span
-                                    class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR
-                                    SePay Auto-Gen</span>
-                                <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span
-                                        id="qr-disp-acc">3800001234567899</span></p>
+                                    class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs uppercase font-bold tracking-wider">Live Preview QR Tiền Vay</span>
                             </div>
 
                             <div
@@ -2872,12 +2868,9 @@
                         <!-- Display QR Code & Share Controls Right (5 Cols) -->
                         <div
                             class="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
-                            <div class="text-center space-y-1">
+                            <div class="text-center w-full pb-1">
                                 <span
-                                    class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 rounded-full text-[10px] uppercase font-bold tracking-wider">VietQR
-                                    Savings Deposit</span>
-                                <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                                <p class="text-xs text-slate-300 font-mono">COOPBANK - <span>3800001234567899</span></p>
+                                    class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs uppercase font-bold tracking-wider">Live Preview QR Gửi Tiết Kiệm</span>
                             </div>
 
                             <div
@@ -3179,28 +3172,16 @@
                     <div
                         class="lg:col-span-5 flex flex-col items-center justify-center p-4 sm:p-5 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
                         <!-- Header - same style as QR Loan panel -->
-                        <div class="text-center space-y-1 w-full">
+                        <div class="text-center w-full pb-1">
                             <span id="standee-preview-badge"
-                                class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">Live
-                                Preview Standee</span>
-                            <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
-                            <p class="text-xs text-slate-300 font-mono">Thẻ QR Thanh Toán Cá Nhân</p>
+                                class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs uppercase font-bold tracking-wider">Live Preview Standee</span>
                         </div>
 
-                        <!-- Canvas preview - Fill container width max max-w-[340px] -->
+                        <!-- Canvas preview - Fill container width max max-w-[400px] -->
                         <div id="standee-preview-wrapper"
                             class="bg-white p-2.5 sm:p-3 rounded-xl shadow-inner border-4 border-emerald-500 flex items-center justify-center w-full transition-colors duration-300">
                             <canvas id="standee-preview-canvas" width="1087" height="1643"
-                                class="w-full max-w-[340px] h-auto object-contain rounded-lg shadow-sm transition-all duration-300"></canvas>
-                        </div>
-
-                        <!-- Info bar - matches QR Loan/Sav info bar style -->
-                        <div class="w-full bg-slate-800 p-3 rounded-xl text-xs space-y-1 text-slate-300">
-                            <div class="flex justify-between"><span>Loại thẻ:</span> <span id="standee-type-label"
-                                    class="font-bold text-emerald-400">🎴 Thẻ Standee QR</span></div>
-                            <div class="flex justify-between"><span>Chủ TK:</span> <span id="standee-name-label"
-                                    class="font-bold text-slate-100 truncate max-w-[180px]">NGUYEN THI NGUYET</span>
-                            </div>
+                                class="w-full max-w-[400px] h-auto object-contain rounded-lg shadow-sm transition-all duration-300"></canvas>
                         </div>
 
                         <!-- Action buttons - full width like QR panels -->
