@@ -4348,10 +4348,11 @@
                         loadedCount++;
 
                         if (loadedCount === fileArray.length) {
+                            event.target.value = '';
                             renderDocBatchBar();
-                            switchDocBatchItem(docBatchQueue.length - fileArray.length);
+                            switchDocBatchItem(Math.max(0, docBatchQueue.length - fileArray.length));
                             initDocEditor();
-                            showToast(`🎉 Đã tải ${fileArray.length} ảnh vào hàng chờ!`);
+                            showToast(`🎉 Đã nạp ${fileArray.length} ảnh vào hàng chờ!`);
                         }
                     };
                     img.src = e.target.result;
@@ -5061,7 +5062,9 @@
                     data[i + 2] = gray;
                 }
                 ctx.putImageData(imgData, 0, 0);
-            } else if (filterType === 'magic') {
+            }
+
+            else if (filterType === 'magic') {
                 for (let i = 0; i < data.length; i += 4) {
                     data[i] = Math.max(0, Math.min(255, (data[i] - 128) * 1.35 + 128 + 12));
                     data[i + 1] = Math.max(0, Math.min(255, (data[i + 1] - 128) * 1.35 + 128 + 12));
@@ -5727,9 +5730,9 @@ async function downloadDocPDFClientSide(mode) {
             } else {
                 // Chế độ tự động hoặc gom tất cả
                 if (docStagedPages && docStagedPages.length > 0) {
-                    pagesToExport = docStagedPages.map(p => p.dataUrl);
+                    pagesToExport = docStagedPages.map(p => typeof p === 'string' ? p : (p.dataUrl || p.src));
                 } else if (docBatchQueue && docBatchQueue.length > 0) {
-                    pagesToExport = docBatchQueue.map(p => p.dataUrl);
+                    pagesToExport = docBatchQueue.map(p => typeof p === 'string' ? p : (p.dataUrl || p.src));
                 } else if (previewImg && previewImg.src) {
                     pagesToExport.push(previewImg.src);
                 }
@@ -5805,9 +5808,9 @@ async function downloadDocPDFClientSide(mode) {
                 pagesToExport.push(previewImg.src);
             } else {
                 if (docStagedPages && docStagedPages.length > 0) {
-                    pagesToExport = docStagedPages.map(p => p.dataUrl);
+                    pagesToExport = docStagedPages.map(p => typeof p === 'string' ? p : (p.dataUrl || p.src));
                 } else if (docBatchQueue && docBatchQueue.length > 0) {
-                    pagesToExport = docBatchQueue.map(p => p.dataUrl);
+                    pagesToExport = docBatchQueue.map(p => typeof p === 'string' ? p : (p.dataUrl || p.src));
                 } else if (previewImg && previewImg.src) {
                     pagesToExport.push(previewImg.src);
                 }
