@@ -4266,9 +4266,11 @@
         let docFlattenedCanvas = null;
         let docFilteredCanvas = null;
         let docCurrentFilter = 'original';
-        let docStagedPages = []; // [{dataUrl, size, name}]
         let cccdFrontImg = null;
         let cccdBackImg = null;
+        let cccd2FrontImg = null;
+        let cccd2BackImg = null;
+        let cccdPersonCount = 1;
 
         // BATCH MULTI-IMAGE QUEUE STATE
         let docBatchQueue = []; // [{ id, file, originalImage, corners, rotation, filter, brightness, contrast, dataUrl, compSize }]
@@ -5327,12 +5329,6 @@
         function closeCCCD2in1Modal() {
             document.getElementById('cccd-2in1-modal').classList.add('hidden');
         }
-
-        let cccdFrontImg = null;
-        let cccdBackImg = null;
-        let cccd2FrontImg = null;
-        let cccd2BackImg = null;
-        let cccdPersonCount = 1;
 
         function switchCCCDPersonMode(count) {
             cccdPersonCount = count;
