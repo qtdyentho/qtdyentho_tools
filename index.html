@@ -2274,8 +2274,8 @@
                         </div>
 
                         <!-- Canvas Editor Container -->
-                        <div class="relative w-full overflow-hidden bg-slate-900 rounded-2xl flex items-center justify-center p-2 min-h-[350px] max-h-[600px] select-none" id="doc-canvas-wrapper">
-                            <canvas id="doc-crop-canvas" class="max-w-full max-h-[550px] object-contain touch-none cursor-crosshair rounded-lg"></canvas>
+                        <div class="relative w-full bg-slate-950 rounded-2xl flex items-center justify-center p-3 select-none min-h-[320px] max-h-[70vh] border border-slate-800 shadow-inner overflow-hidden" id="doc-canvas-wrapper">
+                            <canvas id="doc-crop-canvas" class="block max-w-full max-h-[65vh] w-auto h-auto object-contain touch-none cursor-crosshair rounded-lg shadow-2xl border border-slate-800"></canvas>
                             <!-- Loupe Glass Magnifier -->
                             <canvas id="doc-loupe-canvas" class="absolute w-28 h-28 rounded-full border-2 border-emerald-400 shadow-2xl pointer-events-none hidden z-30 bg-black"></canvas>
                         </div>
@@ -2321,6 +2321,9 @@
                                 <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold">Bước 2</span>
                                 <h3 class="text-sm font-bold text-slate-800">Bộ lọc, Nén dung lượng & Xuất file</h3>
                             </div>
+                            <button onclick="showScannerStep(1)" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition flex items-center gap-1 border border-slate-300 shadow-sm">
+                                <span>◀ Quay lại căn góc ảnh này</span>
+                            </button>
                             <button onclick="backToDocEditor()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
                                 <span>⇠ Chỉnh lại 4 góc</span>
                             </button>
@@ -4575,6 +4578,7 @@
         function switchDocBatchItem(index) {
             if (index < 0 || index >= docBatchQueue.length) return;
 
+            // Save state of current item before switching
             if (docBatchQueue[docBatchActiveIndex] && docOriginalImage) {
                 docBatchQueue[docBatchActiveIndex].corners = docCorners.map(pt => ({ ...pt }));
                 docBatchQueue[docBatchActiveIndex].rotation = docRotationAngle;
@@ -4585,24 +4589,40 @@
 
             docOriginalImage = item.originalImage;
             docOriginalFile = item.file;
-            docOriginalSize = item.size;
+            docOriginalSize = item.size || Math.round(item.originalImage.width * item.originalImage.height * 0.4);
             docRotationAngle = item.rotation || 0;
-            docCorners = item.corners.map(pt => ({ ...pt }));
+
+            const w = docOriginalImage.width;
+            const h = docOriginalImage.height;
+
+            // Ensure corners are valid & within bounds for current image
+            if (!item.corners || item.corners.length !== 4) {
+                const marginX = w * 0.05;
+                const marginY = h * 0.05;
+                item.corners = [
+                    { x: marginX, y: marginY },
+                    { x: w - marginX, y: marginY },
+                    { x: w - marginX, y: h - marginY },
+                    { x: marginX, y: h - marginY }
+                ];
+            }
+
+            docCorners = item.corners.map(pt => ({
+                x: Math.max(0, Math.min(w, pt.x)),
+                y: Math.max(0, Math.min(h, pt.y))
+            }));
 
             const labelEl = document.getElementById('doc-editor-img-label');
             if (labelEl) labelEl.textContent = `Ảnh ${index + 1}/${docBatchQueue.length}`;
 
-            // Unhide scanner editor steps
+            // Unhide upload step and show active step
             document.getElementById('doc-upload-step')?.classList.add('hidden');
             const step1Hidden = document.getElementById('doc-editor-step')?.classList.contains('hidden');
-            const step2Hidden = document.getElementById('doc-result-step')?.classList.contains('hidden');
 
-            if (step1Hidden && step2Hidden) {
+            if (step1Hidden) {
                 showScannerStep(1);
-            } else if (!step1Hidden) {
-                setupDocCropCanvas();
             } else {
-                applyDocFilter(docCurrentFilter || 'original');
+                setupDocCropCanvas();
             }
 
             renderDocBatchBar();

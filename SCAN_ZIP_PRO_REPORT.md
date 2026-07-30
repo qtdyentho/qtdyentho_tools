@@ -5,40 +5,32 @@
 
 ---
 
-## 🔍 I. PHÂN TÍCH NGUYÊN NHÂN GỐC RỄ & NÂNG CẤP THUẬT TOÁN
+## 🔍 I. BÁO CÁO RÀ SOÁT CẤU TRÚC HIỂN THỊ VÀ LUỒNG XỬ LÝ MƯỢT MÀ
 
-### 1. Rà soát & Khắc phục Thuật toán Căn chỉnh góc & Làm phẳng (Perspective Warp)
+### 1. Khắc phục hiển thị ĐẦY ĐỦ 100% hình ảnh căn chỉnh góc (Không còn bị che hay xén một phần)
 * **Nguyên nhân kỹ thuật**: 
-  - Trước đó, hàm `warpPerspectiveBilinear` sử dụng **phương pháp nội suy song tuyến (Bilinear Interpolation / Affine mapping)**.
-  - Khi căn chỉnh nắn thẳng hình ảnh tài liệu chụp nghiêng 3D, thuật toán nội suy phẳng này làm biến dạng các đường thẳng thành các đường cong bị vồng/cong chữ, khiến hình ảnh sau khi nắn bị vặn vẹo, méo mó và không thẳng dòng.
-* **Giải pháp nâng cấp thuật toán chuẩn quốc tế**:
-  - Đã thay thế toàn bộ bằng **Động cơ biến đổi hình học không gian 3D Homography Matrix Inverse Mapper (`3D Homography Matrix Projection`)** — thuật toán chuẩn được sử dụng trên các phần mềm nắn tài liệu chuyên nghiệp như CamScanner, Adobe Scan và Google Drive Scanner.
-  - Tích hợp bộ giải ma trận hệ phương trình tuyến tính $8 \times 8$ (`solveHomography8x8`), tính toán ma trận chiếu 3D $H^{-1}$ dựa trên 4 điểm chốt góc neon.
-  - **Kết quả**: Tất cả các đường nét, viền khung tài liệu và dòng chữ sau khi nắn được **giữ thẳng tuyệt đối 100%**, không còn hiện tượng méo hay cong chữ.
+  - Khung bọc `#doc-canvas-wrapper` trước đó bị giới hạn chiều cao cứng `max-h-[600px]` kết hợp với thuộc tính `overflow-hidden`.
+  - Khi người dùng tải lên ảnh khổ dọc (Portrait A4, ảnh chụp di động tỷ lệ 3:4 hoặc 9:16), chiều cao thực tế của Canvas vượt quá 600px, khiến phần dưới của ảnh và 2 chốt neon phía dưới bị `overflow-hidden` xén mất, người dùng chỉ nhìn thấy một phần góc trên của ảnh.
+* **Giải pháp khắc phục**:
+  - Đã điều chỉnh khung bọc canvas sang dạng tỷ lệ động `max-h-[70vh]` sử dụng CSS `object-contain` tự động co giãn.
+  - Đảm bảo **100% toàn bộ bức ảnh (Toàn bộ 4 cạnh và 4 góc chốt neon Emerald)** luôn luôn hiển thị trọn vẹn, đầy đủ và trực quan trong khung xem, bất kể ảnh khổ Dọc, Ngang hay vuông.
 
 ---
 
-### 2. Nâng cấp Chụp ảnh Camera trực tiếp trên TẤT CẢ môi trường (Desktop WebCam & Di động)
-* **Nguyên nhân cũ**: Thuộc tính `<input capture="environment">` chỉ hỗ trợ trên điện thoại di động, hoàn toàn bị các trình duyệt máy tính (Windows PC, Laptop WebCam, Mac) bỏ qua làm mở hộp thoại chọn file.
-* **Giải pháp nâng cấp mới**:
-  - Đã tích hợp **Cửa sổ Camera Live WebCam (`#doc-camera-modal`)** sử dụng API `navigator.mediaDevices.getUserMedia()`.
-  - Khi người dùng bấm **"Chụp từ Camera"**, cửa sổ xem trực tiếp sẽ hiện ra trên **mọi thiết bị (Laptop, Máy tính bàn có WebCam, Điện thoại, Máy tính bảng)**.
-  - Tích hợp khung định vị tài liệu, nút **"📸 Chụp Ảnh Ngay"** tự động nạp ảnh vào hàng chờ và nút **"🔄 Đổi Camera"** (truyền trước/sau).
-
----
-
-### 3. Khắc phục hiển thị giao diện Tạo, Ghép & Chỉnh sửa trang khi nạp ảnh
+### 2. Đảm bảo hiển thị ĐÚNG ẢNH ĐƯỢC CHỌN khi làm phẳng
 * **Khắc phục**:
-  - Đã bổ sung **Thanh chuyển bước trực quan ngay dưới Hàng chờ ảnh**:
-    - **`[ 📍 Bước 1: Căn 4 góc & Nắn phẳng ]`** ➔ Mở giao diện căn 4 góc neon, xoay ảnh, vi chỉnh nudger, kính lúp.
-    - **`[ ⚡ Bước 2: Lọc ảnh, Nén KB & Dàn trang PDF ]`** ➔ Mở giao diện 6 bộ lọc rõ chữ PRO, kéo slider nén dung lượng, so sánh KB, dàn trang N-Up (1, 2, 4, 6, 8 ảnh/trang A4) & xuất PDF/Ảnh.
+  - Khi nhấp vào bất kỳ ảnh thu nhỏ nào (Ảnh 1, Ảnh 2, Ảnh 3...) trên Hàng chờ ảnh, hàm `switchDocBatchItem(index)` tự động:
+    1. Chuyển đổi chính xác dữ liệu `docOriginalImage` sang ảnh đó.
+    2. Khôi phục/tự động tính toán lại 4 góc chốt neon chuẩn cho kích thước thực tế của ảnh được chọn.
+    3. Cập nhật nhãn tiêu đề `"Ảnh X/Y"`.
+    4. Tự động chuyển giao diện sang Bước 1 Căn góc (`showScannerStep(1)`) để thao tác nắn phẳng ngay lập tức.
 
 ---
 
-### 4. Tự động cập nhật Dung lượng gốc / Sau nén / % Nén tiết kiệm & Sắp xếp trang (Move ◀ ▶)
-* **Khắc phục**: 
-  - Hàm `updateDocCompressionResult()` tự động chạy khi chuyển bước/đổi bộ lọc. Hiển thị thông số dung lượng thực tế chuẩn KB, đổi màu xanh mướt khi dung lượng nén giảm.
-  - Đã trang bị nút **`◀` (Sang trái)**, **`▶` (Sang phải)** và **`✕` (Xóa)** trên từng tấm ảnh thu nhỏ để linh hoạt đổi thứ tự trang.
+### 3. Chuẩn hóa luồng làm việc 3 bước liên kết mượt mà
+* **Luồng 1 (Nạp ảnh)**: Chọn file từ máy, Chụp từ Camera Live WebCam hoặc Ghép 2 mặt CCCD ➔ Tự động kích hoạt nạp ảnh và mở Bước 1.
+* **Luồng 2 (Căn góc 3D Homography)**: Điều chỉnh 4 góc neon, xoay ảnh, vi chỉnh nudger ➔ Bấm **"✨ Làm phẳng ảnh này ➔ Sang bước nén/lọc"** hoặc **"⚡ Nén & Lọc TẤT CẢ ảnh"** ➔ Tự động làm phẳng ma trận 3D và chuyển sang Bước 2.
+* **Luồng 3 (Bộ lọc, Nén KB & Dàn trang PDF)**: Chọn 6 bộ lọc rõ chữ PRO, kéo nén dung lượng, đổi thứ tự trang `◀ ▶`, dàn trang N-Up ➔ Xuất PDF A4 hoặc In trực tiếp. Bất kỳ lúc nào cũng có thể bấm **"◀ Quay lại căn góc ảnh này"** để hiệu chỉnh lại góc.
 
 ---
 
