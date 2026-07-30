@@ -2131,6 +2131,40 @@
             </div>
         </div>
 
+            
+            <!-- Live WebCam Camera Modal for All Environments (PC WebCam & Mobile) -->
+            <div id="doc-camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+                <div class="bg-slate-900 rounded-2xl max-w-lg w-full p-4 space-y-4 shadow-2xl border border-slate-700">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white">
+                        <h3 class="text-base font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+                            <span>📸 Máy Ảnh Chụp Tài Liệu (Camera Live)</span>
+                        </h3>
+                        <button onclick="closeDocCameraModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+                    </div>
+
+                    <div class="relative bg-black rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center border border-slate-800">
+                        <video id="doc-camera-video" autoplay playsinline class="w-full h-full object-cover"></video>
+                        <div class="absolute inset-4 border-2 border-dashed border-emerald-400/60 rounded-lg pointer-events-none flex items-center justify-center">
+                            <span class="text-white/80 text-xs bg-black/60 px-2.5 py-1 rounded font-bold shadow">📸 Đặt tài liệu phẳng vào khung rồi bấm Chụp</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 pt-1">
+                        <button onclick="switchDocCameraFacing()" id="btn-switch-cam" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+                            <span>🔄 Đổi Camera</span>
+                        </button>
+                        <button onclick="takeDocCameraSnapshot()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-extrabold shadow-lg transition flex items-center gap-2 transform active:scale-95">
+                            <span class="w-3.5 h-3.5 bg-white rounded-full"></span>
+                            <span>📸 Chụp Ảnh Ngay</span>
+                        </button>
+                        <button onclick="closeDocCameraModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold border border-slate-700">
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- ==================== SUBTAB: QUÉT, CĂN CHỈNH 4 GÓC & NÉN TÀI LIỆU ==================== -->
             <div id="tool-scanner" class="subtab-content hidden space-y-6">
                 <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
@@ -2186,6 +2220,14 @@
                             </div>
                         </div>
                         <div id="doc-batch-list" class="flex gap-2 overflow-x-auto py-1"></div>
+                        <div class="flex bg-purple-100/70 p-1 rounded-xl gap-1 border border-purple-200 text-xs font-bold pt-2 mt-2">
+                            <button type="button" id="btn-scanner-step-1" onclick="showScannerStep(1)" class="flex-1 py-1.5 rounded-lg bg-purple-600 text-white shadow-sm transition flex items-center justify-center gap-1.5">
+                                <span>📍 Bước 1: Căn 4 góc & Nắn phẳng</span>
+                            </button>
+                            <button type="button" id="btn-scanner-step-2" onclick="showScannerStep(2)" class="flex-1 py-1.5 rounded-lg text-purple-900 hover:bg-purple-200/60 transition flex items-center justify-center gap-1.5">
+                                <span>⚡ Bước 2: Lọc ảnh, Nén KB & Dàn trang PDF</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Step 2: Interactive 4-Corner Crop Editor -->
@@ -4284,18 +4326,126 @@
         let docBatchQueue = []; // [{ id, file, originalImage, corners, rotation, filter, brightness, contrast, dataUrl, compSize }]
         let docBatchActiveIndex = 0;
 
-        function triggerDocCamera() {
-            const camInput = document.getElementById('doc-camera-input');
-            if (camInput) {
-                camInput.click();
-            } else {
-                const fileInput = document.getElementById('doc-file-input');
-                if (fileInput) {
-                    fileInput.setAttribute('capture', 'environment');
-                    fileInput.click();
+
+        let docCameraStream = null;
+        let docCameraFacingMode = 'environment';
+
+        async function triggerDocCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                try {
+                    const modal = document.getElementById('doc-camera-modal');
+                    const video = document.getElementById('doc-camera-video');
+                    if (modal && video) {
+                        if (docCameraStream) {
+                            docCameraStream.getTracks().forEach(track => track.stop());
+                        }
+
+                        docCameraStream = await navigator.mediaDevices.getUserMedia({
+                            video: { facingMode: docCameraFacingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
+                            audio: false
+                        });
+
+                        video.srcObject = docCameraStream;
+                        modal.classList.remove('hidden');
+                        showToast("📷 Đã mở Camera thành công!");
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('getUserMedia failed, falling back to camera file input:', e);
                 }
             }
+
+            const camInput = document.getElementById('doc-camera-input');
+            if (camInput) camInput.click();
         }
+
+        function closeDocCameraModal() {
+            if (docCameraStream) {
+                docCameraStream.getTracks().forEach(track => track.stop());
+                docCameraStream = null;
+            }
+            const modal = document.getElementById('doc-camera-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        async function switchDocCameraFacing() {
+            docCameraFacingMode = (docCameraFacingMode === 'environment') ? 'user' : 'environment';
+            closeDocCameraModal();
+            await triggerDocCamera();
+        }
+
+        function takeDocCameraSnapshot() {
+            const video = document.getElementById('doc-camera-video');
+            if (!video || !video.videoWidth) {
+                showToast("Chờ camera khởi động...");
+                return;
+            }
+
+            const snapCanvas = document.createElement('canvas');
+            snapCanvas.width = video.videoWidth;
+            snapCanvas.height = video.videoHeight;
+            const ctx = snapCanvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+
+            const dataUrl = snapCanvas.toDataURL('image/jpeg', 0.92);
+            closeDocCameraModal();
+
+            const img = new Image();
+            img.onload = function () {
+                const w = img.width;
+                const h = img.height;
+                const marginX = w * 0.05;
+                const marginY = h * 0.05;
+
+                const batchItem = {
+                    id: `cam_${Date.now()}`,
+                    file: null,
+                    size: Math.round((dataUrl.length - 22) * 0.75),
+                    originalImage: img,
+                    rotation: 0,
+                    corners: [
+                        { x: marginX, y: marginY },
+                        { x: w - marginX, y: marginY },
+                        { x: w - marginX, y: h - marginY },
+                        { x: marginX, y: h - marginY }
+                    ],
+                    filter: 'original',
+                    brightness: 0,
+                    contrast: 0,
+                    dataUrl: dataUrl,
+                    compSize: Math.round((dataUrl.length - 22) * 0.75)
+                };
+
+                docBatchQueue.push(batchItem);
+                renderDocBatchBar();
+                switchDocBatchItem(docBatchQueue.length - 1);
+                initDocEditor();
+                showToast("📸 Đã chụp ảnh tài liệu từ Camera!");
+            };
+            img.src = dataUrl;
+        }
+
+        function showScannerStep(step) {
+            const btn1 = document.getElementById('btn-scanner-step-1');
+            const btn2 = document.getElementById('btn-scanner-step-2');
+            const step1 = document.getElementById('doc-editor-step');
+            const step2 = document.getElementById('doc-result-step');
+
+            if (step === 1) {
+                if (step1) step1.classList.remove('hidden');
+                if (step2) step2.classList.add('hidden');
+                if (btn1) btn1.className = "flex-1 py-1.5 rounded-lg bg-purple-600 text-white shadow-sm transition flex items-center justify-center gap-1.5 font-bold";
+                if (btn2) btn2.className = "flex-1 py-1.5 rounded-lg text-purple-900 hover:bg-purple-200/60 transition flex items-center justify-center gap-1.5 font-bold";
+                setupDocCropCanvas();
+            } else {
+                if (step1) step1.classList.add('hidden');
+                if (step2) step2.classList.remove('hidden');
+                if (btn1) btn1.className = "flex-1 py-1.5 rounded-lg text-purple-900 hover:bg-purple-200/60 transition flex items-center justify-center gap-1.5 font-bold";
+                if (btn2) btn2.className = "flex-1 py-1.5 rounded-lg bg-purple-600 text-white shadow-sm transition flex items-center justify-center gap-1.5 font-bold";
+                applyDocFilter(docCurrentFilter || 'original');
+            }
+        }
+
 
         function triggerDocGallery() {
             const fileInput = document.getElementById('doc-file-input');
@@ -4442,8 +4592,20 @@
             const labelEl = document.getElementById('doc-editor-img-label');
             if (labelEl) labelEl.textContent = `Ảnh ${index + 1}/${docBatchQueue.length}`;
 
+            // Unhide scanner editor steps
+            document.getElementById('doc-upload-step')?.classList.add('hidden');
+            const step1Hidden = document.getElementById('doc-editor-step')?.classList.contains('hidden');
+            const step2Hidden = document.getElementById('doc-result-step')?.classList.contains('hidden');
+
+            if (step1Hidden && step2Hidden) {
+                showScannerStep(1);
+            } else if (!step1Hidden) {
+                setupDocCropCanvas();
+            } else {
+                applyDocFilter(docCurrentFilter || 'original');
+            }
+
             renderDocBatchBar();
-            setupDocCropCanvas();
         }
 
         function removeDocBatchItem(index) {

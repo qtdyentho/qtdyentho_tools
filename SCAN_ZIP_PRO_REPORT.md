@@ -5,63 +5,50 @@
 
 ---
 
-## 🔍 I. PHÂN TÍCH NGUYÊN NHÂN GỐC RỄ (ROOT CAUSE ANALYSIS)
+## 🔍 I. PHÂN TÍCH NGUYÊN NHÂN GỐC RỄ & GIẢI PHÁP NÂNG CẤP MỚI
 
-Dựa trên phản hồi và các hình ảnh chụp màn hình thực tế, đội ngũ kỹ thuật đã tiến hành kiểm tra toàn bộ luồng xử lý và xác định nguyên nhân gây lỗi ở từng phần như sau:
-
-### 1. Lỗi không chuyển bước khi tải ảnh / chụp từ Camera
-* **Nguyên nhân**: Trong hàm `handleDocImageUpload(event)`, sự kiện `onchange` của thẻ `<input type="file">` bị vướng do không xóa giá trị `event.target.value` cũ sau khi chọn ảnh. Khi người dùng thao tác lại hoặc chọn tiếp ảnh, trình duyệt không phát tín hiệu `onchange`, dẫn đến luồng nạp `switchDocBatchItem()` và `initDocEditor()` không được kích hoạt để ẩn Step 1 và mở Step 2 (`#doc-editor-step`).
-* **Khắc phục**: Đã bổ sung xóa bộ nhớ đệm input `event.target.value = ''` ngay sau khi nạp ảnh xong và tự động gọi `initDocEditor()` đưa ngay ảnh vào giao diện nắn góc nghiêng Step 2.
-
----
-
-### 2. Lỗi dung lượng gốc / dung lượng sau nén hiển thị `0 KB` và `+0%` (Ảnh 1)
-* **Nguyên nhân**: 
-  1. Trong mã HTML, các thẻ hiển thị có ID lần lượt là `doc-orig-size-lbl`, `doc-comp-size-lbl`, và `doc-saved-pct-lbl`.
-  2. Tuy nhiên, hàm tính toán dung lượng `updateDocCompressionResult()` trước đây **chưa được tự động gọi** mỗi khi áp dụng bộ lọc (`applyDocFilter`) hoặc khi hoàn thành việc nắn góc nghiêng. Dữ liệu vì vậy bị giữ nguyên ở giá trị HTML mặc định ban đầu (`0 KB` / `0 KB` / `+0%`).
-* **Khắc phục**: 
-  - Đã tích hợp tự động gọi `updateDocCompressionResult()` vào cuối mỗi thao tác lọc ảnh/chỉnh màu/thay đổi chất lượng slider.
-  - Tự động tính toán chuẩn dung lượng gốc `docOriginalSize` và dung lượng sau nén `compBytes`, tự động đổi màu hiển thị (Màu xanh `text-emerald-700` khi nén tiết kiệm `-XX%`, màu cam khi dung lượng tăng).
+### 1. Nâng cấp Chụp ảnh Camera trực tiếp trên TẤT CẢ môi trường (Desktop WebCam & Di động)
+* **Nguyên nhân cũ**: Thuộc tính `<input capture="environment">` chỉ hỗ trợ trên điện thoại di động, hoàn toàn bị các trình duyệt máy tính (Windows PC, Laptop WebCam, Mac) bỏ qua làm mở hộp thoại chọn file.
+* **Giải pháp nâng cấp mới**:
+  - Đã tích hợp **Cửa sổ Camera Live WebCam (`#doc-camera-modal`)** sử dụng API `navigator.mediaDevices.getUserMedia()`.
+  - Khi người dùng bấm **"Chụp từ Camera"**, cửa sổ xem trực tiếp sẽ hiện ra trên **mọi thiết bị (Laptop, Máy tính bàn có WebCam, Điện thoại, Máy tính bảng)**.
+  - Tích hợp khung định vị tài liệu, nút **"📸 Chụp Ảnh Ngay"** tự động nạp ảnh vào hàng chờ và nút **"🔄 Đổi Camera"** (truyền trước/sau).
 
 ---
 
-### 3. Lỗi tính năng làm phẳng, căn chỉnh 4 góc không hoạt động
-* **Nguyên nhân**: Do biến tham chiếu ảnh `docOriginalImage` chưa được đồng bộ tức thì khi chuyển đổi ảnh trong hàng chờ `docBatchQueue`, khiến canvas nắn góc nghiêng `doc-crop-canvas` không vẽ được các điểm neon handles.
-* **Khắc phục**: 
-  - Đã chuẩn hóa luồng `setupDocCropCanvas()` và `drawDocCropCanvas()`.
-  - Tích hợp 4 điểm chốt góc neon Emerald, kính lúp phóng to vi chỉnh (Loupe Glass Magnifier) và bàn phím Nudger vi chỉnh từng pixel (`1px`, `5px`, `15px`).
-  - Bổ sung nút **"⚡ Bỏ qua nắn góc ➔ Đến bước nén & Lọc"** giúp người dùng bỏ qua thao tác căn góc nếu ảnh đã thẳng.
+### 2. Khắc phục hiển thị giao diện Tạo, Ghép & Chỉnh sửa trang khi nạp ảnh (Giải quyết Ảnh chụp thực tế)
+* **Nguyên nhân cũ**: Khi chọn/nạp ảnh vào hàng chờ `docBatchQueue`, nếu cả 2 bước Step 1 (`doc-editor-step`) và Step 2 (`doc-result-step`) đang ở trạng thái `hidden`, màn hình chỉ hiện duy nhất thanh hàng chờ ảnh mà không hiện các công cụ chỉnh sửa/nén ở phía dưới.
+* **Giải pháp nâng cấp mới**:
+  - Đã bổ sung **Thanh chuyển bước trực quan ngay dưới Hàng chờ ảnh**:
+    - **`[ 📍 Bước 1: Căn 4 góc & Nắn phẳng ]`** ➔ Mở giao diện căn 4 góc neon, xoay ảnh, vi chỉnh nudger, kính lúp.
+    - **`[ ⚡ Bước 2: Lọc ảnh, Nén KB & Dàn trang PDF ]`** ➔ Mở giao diện 6 bộ lọc rõ chữ PRO, kéo slider nén dung lượng, so sánh KB, dàn trang N-Up (1, 2, 4, 6, 8 ảnh/trang A4) & xuất PDF/Ảnh.
+  - Khi bấm vào bất kỳ ảnh thu nhỏ nào trong hàng chờ, hệ thống tự động hiển thị giao diện tương ứng bên dưới.
 
 ---
 
-### 4. Lỗi các nút Tải PDF ghép A4, Bố cục ghép N-Up, Thêm trang ghép không hoạt động (Ảnh 2)
-* **Nguyên nhân**: 
-  1. Mảng danh sách gom trang `docStagedPages` chứa cả đối tượng `{ dataUrl: ... }` và chuỗi `dataUrl`. Hàm xuất PDF `downloadDocPDFClientSide()` trước đây chỉ truy xuất `.dataUrl`, làm trả về mảng `[undefined]`, khiến PDF bị trắng hoặc đứt đoạn.
-  2. Nút "➕ + Trang Ghép" (`addDocToStaging()`) bị thiếu hàm hỗ trợ cập nhật danh sách hiển thị `renderDocStagingList()`.
-* **Khắc phục**:
-  - Đã chuẩn hóa bộ lọc trích xuất dữ liệu: `pagesToExport = docStagedPages.map(p => typeof p === 'string' ? p : (p.dataUrl || p.src));` xử lý 100% mọi định dạng ảnh đầu vào.
-  - Tải PDF ghép A4 (`downloadDocPDFClientSide`), In A4 (`Print Preview`), Bố cục xếp N-Up (1, 2, 4, 6, 8 ảnh/trang A4) và quản lý danh sách trang ghép đã hoạt động mượt mà 100%.
+### 3. Tự động cập nhật Dung lượng gốc / Sau nén / % Nén tiết kiệm
+* **Khắc phục**: Đã kết nối tự động hàm `updateDocCompressionResult()` khi chuyển bước hoặc đổi bộ lọc. Hiển thị thông số dung lượng thực tế chuẩn KB, đổi màu xanh mướt khi dung lượng nén giảm.
 
 ---
 
-### 5. Bổ sung tính năng Di chuyển & Sắp xếp thứ tự ảnh / trang PDF trước khi xuất
-* **Tính năng mới bổ sung**:
-  - Trên mảng hàng chờ ảnh (`#doc-batch-list`) và danh sách gom trang PDF (`#doc-staged-list`), mỗi hình thu nhỏ (thumbnail) hiện được tích hợp 2 nút điều hướng nhanh:
-    - **`◀` (Di chuyển lên trước/sang trái)**
-    - **`▶` (Di chuyển xuống sau/sang phải)**
-    - **`✕` (Xóa bỏ)**
-  - Cho phép người dùng trực tiếp **thay đổi vị trí, sắp xếp lại thứ tự các trang tài liệu** theo đúng trình tự mong muốn trước khi bấm xuất file PDF A4 hay in ấn!
+### 4. Di chuyển & Sắp xếp thứ tự trang (Move ◀ ▶)
+* **Tính năng**: 
+  - Đã trang bị nút **`◀` (Sang trái)**, **`▶` (Sang phải)** và **`✕` (Xóa)** trên từng tấm ảnh thu nhỏ.
+  - Cho phép người dùng linh hoạt đổi thứ tự trang tài liệu trước khi bấm xuất file PDF A4 hay in ấn.
 
 ---
 
-## 🛠️ II. TỔNG HỢP CÁC SỬA ĐỔI KỸ THUẬT NỔI BẬT
+## 🛠️ II. HƯỚNG DẪN 3 BƯỚC THAO TÁC CHUẨN
 
-1. **Cấu trúc 3 bước làm việc mượt mà**:
-   - **Step 1 (Upload)**: Chọn nhiều ảnh từ máy, Chụp từ Camera trực tiếp, hoặc Ghép 2 mặt CCCD A4.
-   - **Step 2 (Editor)**: Căn chỉnh 4 góc neon, xoay ảnh, chọn tỷ lệ nắn phẳng (A4 Dọc/Ngang, CCCD, Vuông).
-   - **Step 3 (Result & Export)**: Áp dụng 6 bộ lọc rõ chữ PRO, nén KB, xem so sánh dung lượng thực tế, **sắp xếp thứ tự trang (Move ◀ ▶)**, xếp dàn trang N-Up & xuất file PDF/Ảnh.
-2. **Camera trực tiếp trên Mobile**: Đã tạo riêng thẻ input `<input id="doc-camera-input" capture="environment">` không chứa `multiple`, mở ứng dụng Camera tức thì trên điện thoại.
-3. **Ghép 2 mặt CCCD (1 trang A4)**: Khắc phục lệch ID modal, bổ sung tự động chuyển ngay sang Step 3 sau khi ghép xong.
+1. **Bước 1: Nạp ảnh / Chụp Camera / Ghép CCCD**
+   - Bấm **"Chọn nhiều ảnh từ máy"**, **"Chụp từ Camera"** (mở Live WebCam) hoặc **"💳 Ghép 2 mặt CCCD (1 trang A4)"**.
+2. **Bước 2: Căn góc & Nắn phẳng (Tùy chọn)**
+   - Kéo 4 chấm neon để ôm sát mép giấy, dùng phím Nudger vi chỉnh từng pixel hoặc bấm **"🎯 Tự động tìm viền"**.
+   - Bấm **"✨ Làm phẳng & Tiếp tục ➔"**.
+3. **Bước 3: Lọc ảnh, Nén dung lượng & Xuất file**
+   - Chọn bộ lọc (*Color gốc, Scan B&W, Magic rõ chữ, Khử bóng râm, Unsharp*).
+   - Kéo chất lượng nén KB, xem bảng so sánh dung lượng.
+   - Chọn bố cục dàn trang N-Up và bấm **"📄 🧩 Tải PDF Ghép A4"** hoặc **"🖨️ Mở cửa sổ in A4"**.
 
 ---
 
