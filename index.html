@@ -4302,6 +4302,20 @@
             return null;
         }
 
+        /**
+         * daysBetween(d1, d2) — đếm số ngày nguyên giữa hai ngày dùng UTC midnight
+         * Tránh lỗi DST (daylight saving) khi dùng Math.round trên milliseconds.
+         * Quy tắc ngân hàng:
+         *   - Tiền VÀY: Tính ngày CUỐI, bỏ ngày ĐẦU → daysBetween(ngayVay, ngayDaoHan)
+         *   - Tiền GỬI: Tính ngày ĐẦU, bỏ ngày CUỐI → daysBetween(ngayGui, ngayRut)
+         *   Cả hai đều = d2 - d1 tính theo ngày, không cần +1 hay -1.
+         */
+        function daysBetween(d1, d2) {
+            const utc1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+            const utc2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+            return Math.max(0, Math.floor((utc2 - utc1) / 86400000));
+        }
+
         function formatVietnameseDateStr(dObj) {
             if (!dObj || isNaN(dObj.getTime())) return '';
             const day = String(dObj.getDate()).padStart(2, '0');
@@ -4399,7 +4413,8 @@
             const dWithdraw = parseVietnameseDateStr(withdrawDateEl.value) || now;
 
             const diffTime = dWithdraw.getTime() - dStart.getTime();
-            let daysHeld = Math.max(0, Math.round(diffTime / (1000 * 3600 * 24)));
+            // Tiết kiệm: Tính ngày đầu, bỏ ngày cuối → daysBetween(dStart, dWithdraw)
+            let daysHeld = daysBetween(dStart, dWithdraw);
             let formattedStartVN = formatVietnameseDateStr(dStart);
             let formattedWithdrawVN = formatVietnameseDateStr(dWithdraw);
 
@@ -4711,11 +4726,12 @@
             const dDueDate = new Date(dStart.getTime());
             dDueDate.setMonth(dDueDate.getMonth() + nTerm);
 
-            const diffHeldTime = dNeeded.getTime() - dStart.getTime();
-            let daysHeld = Math.max(0, Math.round(diffHeldTime / (1000 * 3600 * 24)));
+            // Tiết kiệm rút KKH (Phương án A): Tính ngày đầu, bỏ ngày cuối → daysBetween(dStart, dNeeded)
+            let daysHeld = daysBetween(dStart, dNeeded);
 
-            const diffRemainingTime = dDueDate.getTime() - dNeeded.getTime();
-            let daysRemaining = Math.max(0, Math.round(diffRemainingTime / (1000 * 3600 * 24)));
+            // Tiền vay cầm cố (Phương án B): Tính ngày cuối, bỏ ngày đầu → daysBetween(dNeeded, dDueDate)
+            let daysRemaining = daysBetween(dNeeded, dDueDate);
+
 
             const interestA = roundToThousand(P * (rDemand / 100) * (daysHeld / 365));
             const netA = interestA;
