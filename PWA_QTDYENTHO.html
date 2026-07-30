@@ -3132,21 +3132,21 @@
 
                     <!-- Right Panel: Live Standee Canvas Preview (5 Cols) - Matches QR loan/sav style -->
                     <div
-                        class="lg:col-span-5 flex flex-col items-center justify-start p-4 sm:p-5 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
+                        class="lg:col-span-5 flex flex-col items-center justify-center p-4 sm:p-5 bg-slate-900 rounded-2xl text-white space-y-4 shadow-md">
                         <!-- Header - same style as QR Loan panel -->
                         <div class="text-center space-y-1 w-full">
-                            <span
+                            <span id="standee-preview-badge"
                                 class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider">Live
                                 Preview Standee</span>
                             <h3 class="font-bold text-base sm:text-lg text-white">QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ</h3>
                             <p class="text-xs text-slate-300 font-mono">Thẻ QR Thanh Toán Cá Nhân</p>
                         </div>
 
-                        <!-- Canvas preview - bigger, with colored border like QR panels -->
-                        <div
-                            class="bg-white p-2 rounded-xl shadow-inner border-4 border-emerald-500 max-w-full overflow-hidden flex items-center justify-center w-full">
+                        <!-- Canvas preview - Compact, matches QR loan/sav size & height -->
+                        <div id="standee-preview-wrapper"
+                            class="bg-white p-2.5 sm:p-3 rounded-xl shadow-inner border-4 border-emerald-500 flex items-center justify-center max-w-full transition-colors duration-300">
                             <canvas id="standee-preview-canvas" width="1087" height="1643"
-                                class="w-full max-w-[260px] sm:max-w-[320px] lg:max-w-full h-auto object-contain rounded-lg shadow-sm"></canvas>
+                                class="h-auto max-h-[220px] sm:max-h-[250px] lg:max-h-[270px] w-auto max-w-full object-contain rounded-lg shadow-sm transition-all duration-300"></canvas>
                         </div>
 
                         <!-- Info bar - matches QR Loan/Sav info bar style -->
@@ -8106,18 +8106,46 @@
         let currentStandeeMode = 'single';
 
         function setStandeeMode(mode) {
-            // Update standee type label in right panel info bar
+            // Update standee type label & colors in right panel
             const typeLabel = document.getElementById('standee-type-label');
             const dlBtn = document.getElementById('standee-download-btn');
             const shareBtn = document.getElementById('standee-share-btn');
+            const wrapper = document.getElementById('standee-preview-wrapper');
+            const badge = document.getElementById('standee-preview-badge');
+
             if (typeLabel) {
                 typeLabel.textContent = mode === 'single' ? '🎴 Standee QR' : '🔊 QR LOA';
+                typeLabel.className = mode === 'single' ? 'font-bold text-emerald-400' : 'font-bold text-purple-400';
+            }
+            if (wrapper) {
+                if (mode === 'single') {
+                    wrapper.classList.remove('border-purple-500');
+                    wrapper.classList.add('border-emerald-500');
+                } else {
+                    wrapper.classList.remove('border-emerald-500');
+                    wrapper.classList.add('border-purple-500');
+                }
+            }
+            if (badge) {
+                if (mode === 'single') {
+                    badge.className = "px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] uppercase font-bold tracking-wider";
+                    badge.textContent = "Live Preview Standee";
+                } else {
+                    badge.className = "px-2.5 py-0.5 bg-purple-500/20 text-purple-300 rounded-full text-[10px] uppercase font-bold tracking-wider";
+                    badge.textContent = "Live Preview QR LOA";
+                }
             }
             if (dlBtn) {
                 dlBtn.onclick = mode === 'single' ? downloadSingleStandeePNG : downloadQRLoaPNG;
+                dlBtn.className = mode === 'single'
+                    ? "py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1"
+                    : "py-2 px-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1";
             }
             if (shareBtn) {
                 shareBtn.onclick = mode === 'single' ? shareSingleStandee : shareQRLoa;
+                shareBtn.className = mode === 'single'
+                    ? "py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1"
+                    : "py-2 px-3 bg-purple-800 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1";
             }
             currentStandeeMode = mode;
             const singleForm = document.getElementById('standee-form-single');
