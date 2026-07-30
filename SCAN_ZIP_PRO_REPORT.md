@@ -5,9 +5,20 @@
 
 ---
 
-## 🔍 I. PHÂN TÍCH NGUYÊN NHÂN GỐC RỄ & GIẢI PHÁP NÂNG CẤP MỚI
+## 🔍 I. PHÂN TÍCH NGUYÊN NHÂN GỐC RỄ & NÂNG CẤP THUẬT TOÁN
 
-### 1. Nâng cấp Chụp ảnh Camera trực tiếp trên TẤT CẢ môi trường (Desktop WebCam & Di động)
+### 1. Rà soát & Khắc phục Thuật toán Căn chỉnh góc & Làm phẳng (Perspective Warp)
+* **Nguyên nhân kỹ thuật**: 
+  - Trước đó, hàm `warpPerspectiveBilinear` sử dụng **phương pháp nội suy song tuyến (Bilinear Interpolation / Affine mapping)**.
+  - Khi căn chỉnh nắn thẳng hình ảnh tài liệu chụp nghiêng 3D, thuật toán nội suy phẳng này làm biến dạng các đường thẳng thành các đường cong bị vồng/cong chữ, khiến hình ảnh sau khi nắn bị vặn vẹo, méo mó và không thẳng dòng.
+* **Giải pháp nâng cấp thuật toán chuẩn quốc tế**:
+  - Đã thay thế toàn bộ bằng **Động cơ biến đổi hình học không gian 3D Homography Matrix Inverse Mapper (`3D Homography Matrix Projection`)** — thuật toán chuẩn được sử dụng trên các phần mềm nắn tài liệu chuyên nghiệp như CamScanner, Adobe Scan và Google Drive Scanner.
+  - Tích hợp bộ giải ma trận hệ phương trình tuyến tính $8 \times 8$ (`solveHomography8x8`), tính toán ma trận chiếu 3D $H^{-1}$ dựa trên 4 điểm chốt góc neon.
+  - **Kết quả**: Tất cả các đường nét, viền khung tài liệu và dòng chữ sau khi nắn được **giữ thẳng tuyệt đối 100%**, không còn hiện tượng méo hay cong chữ.
+
+---
+
+### 2. Nâng cấp Chụp ảnh Camera trực tiếp trên TẤT CẢ môi trường (Desktop WebCam & Di động)
 * **Nguyên nhân cũ**: Thuộc tính `<input capture="environment">` chỉ hỗ trợ trên điện thoại di động, hoàn toàn bị các trình duyệt máy tính (Windows PC, Laptop WebCam, Mac) bỏ qua làm mở hộp thoại chọn file.
 * **Giải pháp nâng cấp mới**:
   - Đã tích hợp **Cửa sổ Camera Live WebCam (`#doc-camera-modal`)** sử dụng API `navigator.mediaDevices.getUserMedia()`.
@@ -16,25 +27,18 @@
 
 ---
 
-### 2. Khắc phục hiển thị giao diện Tạo, Ghép & Chỉnh sửa trang khi nạp ảnh (Giải quyết Ảnh chụp thực tế)
-* **Nguyên nhân cũ**: Khi chọn/nạp ảnh vào hàng chờ `docBatchQueue`, nếu cả 2 bước Step 1 (`doc-editor-step`) và Step 2 (`doc-result-step`) đang ở trạng thái `hidden`, màn hình chỉ hiện duy nhất thanh hàng chờ ảnh mà không hiện các công cụ chỉnh sửa/nén ở phía dưới.
-* **Giải pháp nâng cấp mới**:
+### 3. Khắc phục hiển thị giao diện Tạo, Ghép & Chỉnh sửa trang khi nạp ảnh
+* **Khắc phục**:
   - Đã bổ sung **Thanh chuyển bước trực quan ngay dưới Hàng chờ ảnh**:
     - **`[ 📍 Bước 1: Căn 4 góc & Nắn phẳng ]`** ➔ Mở giao diện căn 4 góc neon, xoay ảnh, vi chỉnh nudger, kính lúp.
     - **`[ ⚡ Bước 2: Lọc ảnh, Nén KB & Dàn trang PDF ]`** ➔ Mở giao diện 6 bộ lọc rõ chữ PRO, kéo slider nén dung lượng, so sánh KB, dàn trang N-Up (1, 2, 4, 6, 8 ảnh/trang A4) & xuất PDF/Ảnh.
-  - Khi bấm vào bất kỳ ảnh thu nhỏ nào trong hàng chờ, hệ thống tự động hiển thị giao diện tương ứng bên dưới.
 
 ---
 
-### 3. Tự động cập nhật Dung lượng gốc / Sau nén / % Nén tiết kiệm
-* **Khắc phục**: Đã kết nối tự động hàm `updateDocCompressionResult()` khi chuyển bước hoặc đổi bộ lọc. Hiển thị thông số dung lượng thực tế chuẩn KB, đổi màu xanh mướt khi dung lượng nén giảm.
-
----
-
-### 4. Di chuyển & Sắp xếp thứ tự trang (Move ◀ ▶)
-* **Tính năng**: 
-  - Đã trang bị nút **`◀` (Sang trái)**, **`▶` (Sang phải)** và **`✕` (Xóa)** trên từng tấm ảnh thu nhỏ.
-  - Cho phép người dùng linh hoạt đổi thứ tự trang tài liệu trước khi bấm xuất file PDF A4 hay in ấn.
+### 4. Tự động cập nhật Dung lượng gốc / Sau nén / % Nén tiết kiệm & Sắp xếp trang (Move ◀ ▶)
+* **Khắc phục**: 
+  - Hàm `updateDocCompressionResult()` tự động chạy khi chuyển bước/đổi bộ lọc. Hiển thị thông số dung lượng thực tế chuẩn KB, đổi màu xanh mướt khi dung lượng nén giảm.
+  - Đã trang bị nút **`◀` (Sang trái)**, **`▶` (Sang phải)** và **`✕` (Xóa)** trên từng tấm ảnh thu nhỏ để linh hoạt đổi thứ tự trang.
 
 ---
 
@@ -42,7 +46,7 @@
 
 1. **Bước 1: Nạp ảnh / Chụp Camera / Ghép CCCD**
    - Bấm **"Chọn nhiều ảnh từ máy"**, **"Chụp từ Camera"** (mở Live WebCam) hoặc **"💳 Ghép 2 mặt CCCD (1 trang A4)"**.
-2. **Bước 2: Căn góc & Nắn phẳng (Tùy chọn)**
+2. **Bước 2: Căn góc & Nắn phẳng 3D Homography**
    - Kéo 4 chấm neon để ôm sát mép giấy, dùng phím Nudger vi chỉnh từng pixel hoặc bấm **"🎯 Tự động tìm viền"**.
    - Bấm **"✨ Làm phẳng & Tiếp tục ➔"**.
 3. **Bước 3: Lọc ảnh, Nén dung lượng & Xuất file**
