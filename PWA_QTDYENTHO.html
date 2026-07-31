@@ -4489,16 +4489,19 @@
                 return;
             }
 
-            showToast(`⚡ Đang tự động nắn phẳng & lọc ${docBatchQueue.length} trang tài liệu...`);
+            showToast(`⚡ Đang tự động nắn phẳng & nén ${docBatchQueue.length} trang tài liệu...`);
 
+            let processedCount = 0;
             for (let i = 0; i < docBatchQueue.length; i++) {
                 docBatchActiveIndex = i;
                 const item = docBatchQueue[i];
-                docOriginalImage = item.originalImage;
-                docOriginalSize = item.size || Math.round(item.originalImage.width * item.originalImage.height * 0.4);
+                if (!item.originalImage) continue;
 
-                const w = docOriginalImage.width || 800;
-                const h = docOriginalImage.height || 600;
+                docOriginalImage = item.originalImage;
+                docOriginalSize = item.size || Math.round((item.originalImage.width || 800) * (item.originalImage.height || 600) * 0.4);
+
+                const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
+                const h = docOriginalImage.naturalHeight || docOriginalImage.height || 600;
 
                 const marginX = w * 0.05;
                 const marginY = h * 0.05;
@@ -4509,22 +4512,24 @@
                     { x: marginX, y: h - marginY }
                 ];
 
-                applyDocPerspectiveWarp();
-                applyDocFilter('magic');
-
-                const previewImg = document.getElementById('doc-preview-img');
-                if (previewImg && previewImg.src) {
-                    docStagedPages.push({
-                        dataUrl: previewImg.src,
-                        size: formatFileSize(Math.round((previewImg.src.length - 22) * 0.75)),
-                        name: `Trang ${docStagedPages.length + 1}`
-                    });
+                const success = applyDocPerspectiveWarpSync();
+                if (success) {
+                    applyDocFilter('magic');
+                    const previewImg = document.getElementById('doc-preview-img');
+                    if (previewImg && previewImg.src) {
+                        docStagedPages.push({
+                            dataUrl: previewImg.src,
+                            size: formatFileSize(Math.round((previewImg.src.length - 22) * 0.75)),
+                            name: `Trang ${docStagedPages.length + 1}`
+                        });
+                        processedCount++;
+                    }
                 }
             }
 
             renderDocStagingList();
             showScannerStep(3);
-            showToast(`🎉 Đã hoàn tất quét tự động ${docBatchQueue.length} trang và đưa vào danh sách xuất PDF!`);
+            showToast(`🎉 Đã nắn phẳng & gom ${processedCount} trang vào danh sách xuất PDF A4!`);
         }
 
         // Global Keyboard Shortcuts for Scan & ZIP
@@ -5486,6 +5491,9 @@
 
         // ==================== BỘ LỌC XỬ LÝ ẢNH NÂNG CAO (FILTERS PRO) ====================
         function applyDocFilter(filterType) {
+            if (!docFlattenedCanvas && docOriginalImage) {
+                applyDocPerspectiveWarpSync();
+            }
             if (!docFlattenedCanvas) return;
             docCurrentFilter = filterType;
 
