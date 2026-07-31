@@ -2145,8 +2145,8 @@
                                 </div>
 
                                 <div className="p-3 bg-emerald-950/50 light:bg-white rounded-2xl border border-emerald-500/20 light:border-emerald-200 text-center shadow-inner">
-                                    <span className="text-[11px] text-emerald-300 light:text-emerald-700 block font-semibold">Mâm Gala Dinner</span>
-                                    <span className="font-black text-emerald-200 light:text-emerald-900 text-base">{Math.ceil(personnelStats.totalDinner / 6)} mâm ({personnelStats.totalDinner} người)</span>
+                                    <span className="text-[11px] text-emerald-300 light:text-emerald-700 block font-semibold">Tham Dự Gala Dinner</span>
+                                    <span className="font-black text-emerald-200 light:text-emerald-900 text-base">{personnelStats.totalDinner} người</span>
                                 </div>
                             </div>
                         </div>
@@ -2187,7 +2187,7 @@
 
                                             <div className="p-2.5 bg-black/20 light:bg-white/80 rounded-2xl">
                                                 <span className="text-[10px] text-emerald-300 light:text-emerald-700 block font-medium">Tiệc Gala Dinner</span>
-                                                <span className="font-extrabold text-emerald-200 light:text-emerald-900">{unit.dinner} người ({Math.ceil(unit.dinner / 6)} mâm)</span>
+                                                <span className="font-extrabold text-emerald-200 light:text-emerald-900">{unit.dinner} người</span>
                                             </div>
                                         </div>
                                     </div>
@@ -2218,7 +2218,7 @@
                                             <td className="py-2 px-3 text-center">{unit.male} Nam / {unit.female} Nữ</td>
                                             <td className="py-2 px-3 text-center">{unit.mensEvent} VĐV ({Math.floor(unit.mensEvent / 2)} đôi)</td>
                                             <td className="py-2 px-3 text-center">{unit.mixedEvent} VĐV ({Math.floor(unit.mixedEvent / 2)} đôi)</td>
-                                            <td className="py-2 px-3 text-center">{unit.dinner} người ({Math.ceil(unit.dinner / 6)} mâm)</td>
+                                            <td className="py-2 px-3 text-center">{unit.dinner} người</td>
                                         </tr>
                                     ))}
                                     <tr className="font-bold border-t-2 border-black">
@@ -2227,7 +2227,7 @@
                                         <td className="py-2.5 px-3 text-center">{personnelStats.totalMale} / {personnelStats.totalFemale}</td>
                                         <td className="py-2.5 px-3 text-center">{personnelStats.totalMensEvent} VĐV ({Math.floor(personnelStats.totalMensEvent / 2)} đôi)</td>
                                         <td className="py-2.5 px-3 text-center">{personnelStats.totalMixedEvent} VĐV ({Math.floor(personnelStats.totalMixedEvent / 2)} đôi)</td>
-                                        <td className="py-2.5 px-3 text-center">{personnelStats.totalDinner} người ({Math.ceil(personnelStats.totalDinner / 6)} mâm)</td>
+                                        <td className="py-2.5 px-3 text-center">{personnelStats.totalDinner} người</td>
                                     </tr>
                                 </tbody>
                             </table>
