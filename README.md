@@ -49,6 +49,7 @@
 
 1. 📄 **[DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md](DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md)**: Cẩm nang chỉ dẫn kỹ thuật, quy tắc kiến trúc và quy trình 4 bước kiểm thử trước khi release để tuyệt đối không tái diễn lại các lỗi đã khắc phục.
 2. 📄 **[SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)**: Bộ tài liệu ghi nhớ kỹ thuật hệ thống và bảng rà soát chi tiết 8 lỗi đã khắc phục tận gốc.
+3. 📄 **[DOC_PICKLEBALL_YENTHO.md](DOC_PICKLEBALL_YENTHO.md)**: Tài liệu hướng dẫn tính năng, kiến trúc công nghệ và giải đáp đồng bộ cho ứng dụng CLB Pickleball Yên Thọ Pro v6.0.
 
 ---
 
