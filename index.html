@@ -4799,32 +4799,62 @@
 
         function setupDocCropCanvas() {
             const canvas = document.getElementById('doc-crop-canvas');
-            if (!canvas || !docOriginalImage) return;
+            if (!canvas) return;
 
-            if (!docOriginalImage.complete || (docOriginalImage.naturalWidth === 0 && docOriginalImage.width === 0)) {
-                docOriginalImage.onload = function() { setupDocCropCanvas(); };
-                return;
+            // Ensure docOriginalImage is fully loaded & decoded
+            getLoadedDocImage(function(img) {
+                const w = img.naturalWidth || img.width || 800;
+                const h = img.naturalHeight || img.height || 600;
+
+                canvas.width = w;
+                canvas.height = h;
+
+                const marginX = w * 0.05;
+                const marginY = h * 0.05;
+
+                if (!docCorners || docCorners.length !== 4 || isNaN(docCorners[0].x) || (docCorners[0].x === 0 && docCorners[1].x === 0)) {
+                    docCorners = [
+                        { x: marginX, y: marginY },
+                        { x: w - marginX, y: marginY },
+                        { x: w - marginX, y: h - marginY },
+                        { x: marginX, y: h - marginY }
+                    ];
+                }
+
+                selectDocCorner(0);
+                attachDocCanvasEvents();
+                drawDocCropCanvas();
+            });
+        }
+
+        function getLoadedDocImage(callback) {
+            if (!docOriginalImage) {
+                if (docBatchQueue && docBatchQueue[docBatchActiveIndex]) {
+                    const item = docBatchQueue[docBatchActiveIndex];
+                    if (item.originalImage) docOriginalImage = item.originalImage;
+                }
             }
 
-            const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
-            const h = docOriginalImage.naturalHeight || docOriginalImage.height || 600;
+            if (!docOriginalImage) return;
 
-            canvas.width = w;
-            canvas.height = h;
-
-            const marginX = w * 0.05;
-            const marginY = h * 0.05;
-
-            docCorners = [
-                { x: marginX, y: marginY },
-                { x: w - marginX, y: marginY },
-                { x: w - marginX, y: h - marginY },
-                { x: marginX, y: h - marginY }
-            ];
-
-            selectDocCorner(0);
-            attachDocCanvasEvents();
-            drawDocCropCanvas();
+            if (docOriginalImage.complete && (docOriginalImage.naturalWidth || docOriginalImage.width) > 0) {
+                callback(docOriginalImage);
+            } else {
+                const img = new Image();
+                img.onload = function() {
+                    docOriginalImage = img;
+                    if (docBatchQueue[docBatchActiveIndex]) {
+                        docBatchQueue[docBatchActiveIndex].originalImage = img;
+                    }
+                    callback(img);
+                };
+                const activeItem = docBatchQueue[docBatchActiveIndex];
+                if (activeItem && activeItem.dataUrl) {
+                    img.src = activeItem.dataUrl;
+                } else if (docOriginalImage.src) {
+                    img.src = docOriginalImage.src;
+                }
+            }
         }
 
         function resetDocCorners() {
@@ -4958,55 +4988,60 @@
 
         function drawDocCropCanvas() {
             const canvas = document.getElementById('doc-crop-canvas');
-            if (!canvas || !docOriginalImage) return;
+            if (!canvas) return;
 
-            if (!docOriginalImage.complete || (docOriginalImage.naturalWidth === 0 && docOriginalImage.width === 0)) {
-                docOriginalImage.onload = function() { drawDocCropCanvas(); };
-                return;
-            }
+            getLoadedDocImage(function(img) {
+                const w = img.naturalWidth || img.width || 800;
+                const h = img.naturalHeight || img.height || 600;
 
-            const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
-            const h = docOriginalImage.naturalHeight || docOriginalImage.height || 600;
+                if (canvas.width !== w || canvas.height !== h) {
+                    canvas.width = w;
+                    canvas.height = h;
+                }
 
-            if (canvas.width !== w || canvas.height !== h) {
-                canvas.width = w;
-                canvas.height = h;
-            }
+                // Ensure valid docCorners
+                if (!docCorners || docCorners.length !== 4 || isNaN(docCorners[0].x) || (docCorners[0].x === 0 && docCorners[1].x === 0)) {
+                    const marginX = w * 0.05;
+                    const marginY = h * 0.05;
+                    docCorners = [
+                        { x: marginX, y: marginY },
+                        { x: w - marginX, y: marginY },
+                        { x: w - marginX, y: h - marginY },
+                        { x: marginX, y: h - marginY }
+                    ];
+                }
 
-            // Ensure valid docCorners
-            if (!docCorners || docCorners.length !== 4 || isNaN(docCorners[0].x) || (docCorners[0].x === 0 && docCorners[1].x === 0)) {
-                const marginX = w * 0.05;
-                const marginY = h * 0.05;
-                docCorners = [
-                    { x: marginX, y: marginY },
-                    { x: w - marginX, y: marginY },
-                    { x: w - marginX, y: h - marginY },
-                    { x: marginX, y: h - marginY }
-                ];
-            }
+                const ctx = canvas.getContext('2d');
+                
+                // White base fill so canvas is NEVER pitch black
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, w, h);
 
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, w, h);
+                // Base image draw
+                try {
+                    ctx.drawImage(img, 0, 0, w, h);
+                } catch(e) {
+                    console.error("drawImage error:", e);
+                }
 
-            // Base image draw
-            ctx.drawImage(docOriginalImage, 0, 0, w, h);
+                // Dim mask
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.35)';
+                ctx.fillRect(0, 0, w, h);
 
-            // Dim mask
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.45)';
-            ctx.fillRect(0, 0, w, h);
+                // Highlight crop region
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(docCorners[0].x, docCorners[0].y);
+                ctx.lineTo(docCorners[1].x, docCorners[1].y);
+                ctx.lineTo(docCorners[2].x, docCorners[2].y);
+                ctx.lineTo(docCorners[3].x, docCorners[3].y);
+                ctx.closePath();
+                ctx.clip();
 
-            // Highlight crop region
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(docCorners[0].x, docCorners[0].y);
-            ctx.lineTo(docCorners[1].x, docCorners[1].y);
-            ctx.lineTo(docCorners[2].x, docCorners[2].y);
-            ctx.lineTo(docCorners[3].x, docCorners[3].y);
-            ctx.closePath();
-            ctx.clip();
-
-            ctx.drawImage(docOriginalImage, 0, 0, w, h);
-            ctx.restore();
+                try {
+                    ctx.drawImage(img, 0, 0, w, h);
+                } catch(e) {}
+                ctx.restore();
 
             // Vẽ viền Neon Emerald
             ctx.lineWidth = Math.max(3, Math.round(canvas.width / 300));
@@ -5037,6 +5072,7 @@
                 ctx.arc(pt.x, pt.y, handleRadius / 3, 0, Math.PI * 2);
                 ctx.fillStyle = '#ffffff';
                 ctx.fill();
+            });
             });
         }
 
