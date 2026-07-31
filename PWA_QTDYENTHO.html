@@ -2115,17 +2115,47 @@
                             </div>
                         </div>
 
-                        <!-- Tổng hợp Xếp hạng -->
+                        <!-- Tổng hợp Xếp hạng Chi tiết TT 42/2016/TT-NHNN -->
                         <div id="fin-rating-box"
-                            class="p-4 bg-gradient-to-r from-teal-900 to-teal-700 text-white rounded-xl shadow-sm">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-sm">📋 Kết quả Xếp hạng (TT 42/2016)</span>
+                            class="p-4 bg-gradient-to-r from-teal-950 via-teal-900 to-teal-800 text-white rounded-2xl shadow-md border border-teal-700/60 space-y-3">
+                            <div class="flex flex-wrap justify-between items-center gap-2 pb-2.5 border-b border-teal-700/60">
+                                <div>
+                                    <span class="font-extrabold text-sm text-teal-200 uppercase tracking-wider flex items-center gap-2">
+                                        <span>📋 KẾT QUẢ XẾP HẠNG TỔNG HỢP QTDND (TT 42/2016/TT-NHNN)</span>
+                                    </span>
+                                    <p class="text-[11px] text-teal-300 mt-0.5">Đánh giá tiêu chuẩn quy định Ngân hàng Nhà nước Việt Nam</p>
+                                </div>
                                 <span id="badge-rating"
-                                    class="px-3 py-1 bg-white/20 text-white text-xs font-bold rounded-lg">✅ Hạng A —
-                                    TỐT</span>
+                                    class="px-3.5 py-1.5 bg-emerald-500 text-white text-xs font-extrabold rounded-xl shadow">✅ HẠNG A — TỐT</span>
                             </div>
-                            <p id="res-rating-note" class="text-[11px] mt-2 text-teal-100">Tất cả chỉ số cốt lõi
-                                đạt/vượt chuẩn theo quy định TT 32/2015 (sđ bởi TT 13/2024) và TT 42/2016/TT-NHNN.</p>
+
+                            <p id="res-rating-note" class="text-xs text-teal-100 font-semibold bg-teal-900/60 p-3 rounded-xl border border-teal-700/50">
+                                Tất cả chỉ số cốt lõi đạt/vượt chuẩn theo quy định TT 32/2015 (sđ bởi TT 13/2024) và TT 42/2016/TT-NHNN.
+                            </p>
+
+                            <!-- Bảng Điểm Chi Tiết 6 Tiêu Chí Xếp Hạng -->
+                            <div class="space-y-2 pt-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-extrabold text-teal-200">📊 BẢNG ĐIỂM CHI TIẾT 6 TIÊU CHÍ XẾP HẠNG:</h4>
+                                    <span id="res-rating-score-total" class="text-xs font-extrabold text-amber-300 bg-teal-950 px-2.5 py-0.5 rounded-lg border border-teal-700">Tổng điểm: 95/100</span>
+                                </div>
+                                <div class="overflow-x-auto rounded-xl border border-teal-700/60 bg-teal-950/80">
+                                    <table class="w-full text-left text-xs">
+                                        <thead class="bg-teal-900/90 text-teal-200 font-bold border-b border-teal-700/60 text-[11px]">
+                                            <tr>
+                                                <th class="py-2 px-3">Tên Tiêu Chí (TT 42/2016)</th>
+                                                <th class="py-2 px-2 text-center">Chuẩn NHNN</th>
+                                                <th class="py-2 px-2 text-center">Thực Tế</th>
+                                                <th class="py-2 px-2 text-center">Đánh Giá</th>
+                                                <th class="py-2 px-3 text-right">Điểm Đạt</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rating-table-body" class="divide-y divide-teal-800/60 text-[11px]">
+                                            <!-- Dynamically populated via calcFinancialRatios() -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -7742,35 +7772,64 @@ async function downloadDocPDFClientSide(mode) {
             // TT 13/2024: cảnh báo nếu tiền gửi > 20 lần VCSH (ngưỡng nguy cơ mất khả năng chi trả)
             updateBadge('badge-deq', deq <= 20.0 ? '✅ An toàn' : '⚠️ Nguy cơ mất khả năng chi trả (TT13)', deq <= 20.0, false);
 
-            // Đánh giá tổng hợp xếp hạng theo TT 42/2016/TT-NHNN (5 tiêu chí)
-            let passCount = 0;
-            if (roa >= 0.8) passCount++;
-            if (roe >= 8.0) passCount++;
-            if (npl <= 3.0) passCount++;
-            if (car >= 8.0) passCount++;
-            if (cir <= 55.0) passCount++;
-            if (stlt <= 30.0) passCount++;
+            // Đánh giá tổng hợp xếp hạng theo TT 42/2016/TT-NHNN (Bảng điểm 6 tiêu chí chi tiết)
+            const criteria = [
+                { name: '1. Tỷ lệ An toàn vốn (CAR)', standard: '≥ 8.0%', value: car.toFixed(2) + '%', pass: car >= 8.0, score: car >= 10.0 ? 20 : (car >= 8.0 ? 16 : 0), maxScore: 20 },
+                { name: '2. Tỷ lệ Nợ xấu (NPL)', standard: '≤ 3.0%', value: npl.toFixed(2) + '%', pass: npl <= 3.0, score: npl <= 1.0 ? 20 : (npl <= 3.0 ? 16 : (npl <= 5.0 ? 8 : 0)), maxScore: 20 },
+                { name: '3. Sinh lời tài sản (ROA)', standard: '≥ 0.8%', value: roa.toFixed(2) + '%', pass: roa >= 0.8, score: roa >= 1.2 ? 15 : (roa >= 0.8 ? 12 : 5), maxScore: 15 },
+                { name: '4. Sinh lời VCSH (ROE)', standard: '≥ 8.0%', value: roe.toFixed(2) + '%', pass: roe >= 8.0, score: roe >= 12.0 ? 15 : (roe >= 8.0 ? 12 : 5), maxScore: 15 },
+                { name: '5. Chi phí / Thu nhập (CIR)', standard: '≤ 55.0%', value: cir.toFixed(2) + '%', pass: cir <= 55.0, score: cir <= 45.0 ? 15 : (cir <= 55.0 ? 12 : 5), maxScore: 15 },
+                { name: '6. Khả năng thanh toán (STLT)', standard: '≤ 30.0%', value: stlt.toFixed(2) + '%', pass: stlt <= 30.0, score: stlt <= 25.0 ? 15 : (stlt <= 30.0 ? 12 : 0), maxScore: 15 }
+            ];
 
-            const totalCriteria = 6;
+            let totalScore = 0;
+            let passCount = 0;
+            let tableHtml = '';
+
+            criteria.forEach(c => {
+                totalScore += c.score;
+                if (c.pass) passCount++;
+                const statusTag = c.pass
+                    ? '<span class="px-2 py-0.5 bg-emerald-500/30 text-emerald-300 font-bold rounded">✅ Đạt</span>'
+                    : '<span class="px-2 py-0.5 bg-rose-500/30 text-rose-300 font-bold rounded">❌ Chưa đạt</span>';
+
+                tableHtml += `
+                    <tr class="hover:bg-teal-900/50">
+                        <td class="py-2 px-3 font-semibold text-teal-100">${c.name}</td>
+                        <td class="py-2 px-2 text-center text-teal-300 font-mono">${c.standard}</td>
+                        <td class="py-2 px-2 text-center font-bold text-white font-mono">${c.value}</td>
+                        <td class="py-2 px-2 text-center">${statusTag}</td>
+                        <td class="py-2 px-3 text-right font-bold text-amber-300">${c.score}/${c.maxScore} điểm</td>
+                    </tr>
+                `;
+            });
+
+            const tbody = document.getElementById('rating-table-body');
+            if (tbody) tbody.innerHTML = tableHtml;
+
+            const totalScoreEl = document.getElementById('res-rating-score-total');
+            if (totalScoreEl) totalScoreEl.textContent = `Tổng điểm: ${totalScore}/100 điểm (${passCount}/6 tiêu chí đạt)`;
+
             const ratingEl = document.getElementById('badge-rating');
             const ratingNoteEl = document.getElementById('res-rating-note');
+
             if (ratingEl && ratingNoteEl) {
-                if (passCount === totalCriteria) {
-                    ratingEl.textContent = '✅ Hạng A — TỐT';
-                    ratingEl.className = 'px-3 py-1 bg-emerald-400 text-white text-xs font-bold rounded-lg';
-                    ratingNoteEl.textContent = 'Tất cả ' + totalCriteria + '/' + totalCriteria + ' chỉ số cốt lõi đều đạt/vượt chuẩn. QTDND hoạt động an toàn, hiệu quả.';
-                } else if (passCount >= 4) {
-                    ratingEl.textContent = '🔶 Hạng B — KHÁ';
-                    ratingEl.className = 'px-3 py-1 bg-amber-400 text-white text-xs font-bold rounded-lg';
-                    ratingNoteEl.textContent = passCount + '/' + totalCriteria + ' chỉ số đạt chuẩn. Cần theo dõi và cải thiện các chỉ số chưa đạt.';
-                } else if (passCount >= 3) {
-                    ratingEl.textContent = '🟠 Hạng C — TRUNG BÌNH';
-                    ratingEl.className = 'px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg';
-                    ratingNoteEl.textContent = passCount + '/' + totalCriteria + ' chỉ số đạt chuẩn. Cần kiểm soát và cải thiện ngay các chỉ số yếu.';
+                if (totalScore >= 85 && passCount === 6) {
+                    ratingEl.textContent = '✅ HẠNG A — TỐT';
+                    ratingEl.className = 'px-3.5 py-1.5 bg-emerald-500 text-white text-xs font-extrabold rounded-xl shadow';
+                    ratingNoteEl.innerHTML = '🏆 <b>Xếp hạng A (Tốt):</b> Tổng điểm <b>' + totalScore + '/100 điểm</b>. Tất cả 6/6 chỉ số cốt lõi đạt/vượt chuẩn quy định TT 42/2016/TT-NHNN & TT 32/2015. Quỹ Tín Dụng Nhân Dân hoạt động an toàn, hiệu quả cao.';
+                } else if (totalScore >= 70 && passCount >= 4) {
+                    ratingEl.textContent = '🔶 HẠNG B — KHÁ';
+                    ratingEl.className = 'px-3.5 py-1.5 bg-amber-500 text-white text-xs font-extrabold rounded-xl shadow';
+                    ratingNoteEl.innerHTML = '🔶 <b>Xếp hạng B (Khá):</b> Tổng điểm <b>' + totalScore + '/100 điểm</b> (' + passCount + '/6 chỉ số đạt). Quỹ hoạt động ổn định, cần tiếp tục cải thiện các tiêu chí chưa đạt tối đa.';
+                } else if (totalScore >= 50) {
+                    ratingEl.textContent = '🟠 HẠNG C — TRUNG BÌNH';
+                    ratingEl.className = 'px-3.5 py-1.5 bg-orange-600 text-white text-xs font-extrabold rounded-xl shadow';
+                    ratingNoteEl.innerHTML = '⚠️ <b>Xếp hạng C (Trung bình):</b> Tổng điểm <b>' + totalScore + '/100 điểm</b> (' + passCount + '/6 chỉ số đạt). Cần tăng cường quản trị rủi ro và khắc phục các chỉ số yếu.';
                 } else {
-                    ratingEl.textContent = '❌ Hạng D — YẾU KÉM';
-                    ratingEl.className = 'px-3 py-1 bg-rose-600 text-white text-xs font-bold rounded-lg';
-                    ratingNoteEl.textContent = 'Chỉ ' + passCount + '/' + totalCriteria + ' chỉ số đạt chuẩn. Cần báo cáo NHNN Chi nhánh và có giải pháp khắc phục ngay.';
+                    ratingEl.textContent = '❌ HẠNG D — YẾU KÉM';
+                    ratingEl.className = 'px-3.5 py-1.5 bg-rose-600 text-white text-xs font-extrabold rounded-xl shadow';
+                    ratingNoteEl.innerHTML = '🚨 <b>Xếp hạng D (Yếu kém):</b> Tổng điểm <b>' + totalScore + '/100 điểm</b>. Chỉ có ' + passCount + '/6 chỉ số đạt chuẩn. Bắt buộc lập phương án khắc phục báo cáo NHNN Chi nhánh.';
                 }
             }
         }
@@ -9081,7 +9140,7 @@ async function downloadDocPDFClientSide(mode) {
 
         function updateStandeePreview() {
             // Sync name label in right panel
-            const nameLabel = document.getElementById('standee-name-label');
+            const nameLabel = document.getElementById('std-res-name');
             if (nameLabel) {
                 const stdName = document.getElementById('std-name')?.value || '';
                 const loaName = document.getElementById('loa-name')?.value || '';
@@ -9149,7 +9208,7 @@ async function downloadDocPDFClientSide(mode) {
                     }
                 }
 
-                const aliasWarnEl = document.getElementById('std-alias-warn');
+                const aliasWarnEl = document.getElementById('std-res-account');
                 if (aliasWarnEl) {
                     if (alias.length > 0) {
                         aliasWarnEl.innerHTML = '<span class="text-emerald-700 font-bold">✅ Đã nhập Alias</span>';
