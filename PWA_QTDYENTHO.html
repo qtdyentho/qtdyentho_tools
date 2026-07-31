@@ -2298,7 +2298,7 @@
 
                         <!-- Canvas Editor Container -->
                         <div class="relative w-full bg-slate-950 rounded-2xl flex items-center justify-center p-2 sm:p-4 select-none min-h-[400px] max-h-[80vh] border border-slate-800 shadow-inner overflow-hidden" id="doc-canvas-wrapper">
-                            <canvas id="doc-crop-canvas" class="block w-full max-w-full max-h-[75vh] h-auto object-contain touch-none cursor-crosshair rounded-lg shadow-2xl border border-slate-800"></canvas>
+                            <canvas id="doc-crop-canvas" class="block w-full max-w-full max-h-[75vh] h-auto cursor-crosshair rounded-lg shadow-2xl border border-slate-800" style="touch-action: none; user-select: none; -webkit-user-select: none;"></canvas>
                             <!-- Loupe Glass Magnifier -->
                             <canvas id="doc-loupe-canvas" class="absolute w-28 h-28 rounded-full border-2 border-emerald-400 shadow-2xl pointer-events-none hidden z-30 bg-black"></canvas>
                         </div>
@@ -5204,7 +5204,9 @@
 
             function onPointerDown(e) {
                 const pos = getCanvasPos(e);
-                const hitRadius = Math.max(50, Math.min(140, canvas.width / 15));
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / (rect.width || 1);
+                const hitRadius = Math.max(45 * scaleX, canvas.width / 12);
 
                 let minDist = Infinity;
                 let closestIdx = -1;
@@ -5217,9 +5219,26 @@
                     }
                 }
 
+                if (closestIdx === -1 && docCorners.length === 4) {
+                    for (let i = 0; i < docCorners.length; i++) {
+                        const dist = Math.hypot(docCorners[i].x - pos.x, docCorners[i].y - pos.y);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            closestIdx = i;
+                        }
+                    }
+                }
+
                 docActiveCornerIdx = closestIdx;
                 if (docActiveCornerIdx !== -1) {
                     selectDocCorner(docActiveCornerIdx);
+                    docCorners[docActiveCornerIdx].x = pos.x;
+                    docCorners[docActiveCornerIdx].y = pos.y;
+
+                    if (e.pointerId && canvas.setPointerCapture) {
+                        try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
+                    }
+
                     if (e.cancelable) e.preventDefault();
                     drawDocCropCanvas();
                     showDocLoupe(pos);
@@ -5240,19 +5259,29 @@
 
             function onPointerUp(e) {
                 if (docActiveCornerIdx !== -1) {
+                    if (e.pointerId && canvas.releasePointerCapture) {
+                        try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+                    }
                     docActiveCornerIdx = -1;
                     drawDocCropCanvas();
                     hideDocLoupe();
                 }
             }
 
-            canvas.addEventListener('mousedown', onPointerDown);
-            window.addEventListener('mousemove', onPointerMove);
-            window.addEventListener('mouseup', onPointerUp);
+            if (window.PointerEvent) {
+                canvas.addEventListener('pointerdown', onPointerDown);
+                canvas.addEventListener('pointermove', onPointerMove);
+                canvas.addEventListener('pointerup', onPointerUp);
+                canvas.addEventListener('pointercancel', onPointerUp);
+            } else {
+                canvas.addEventListener('mousedown', onPointerDown);
+                window.addEventListener('mousemove', onPointerMove);
+                window.addEventListener('mouseup', onPointerUp);
 
-            canvas.addEventListener('touchstart', onPointerDown, { passive: false });
-            window.addEventListener('touchmove', onPointerMove, { passive: false });
-            window.addEventListener('touchend', onPointerUp);
+                canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+                window.addEventListener('touchmove', onPointerMove, { passive: false });
+                window.addEventListener('touchend', onPointerUp);
+            }
         }
 
         // Loupe Glass Magnifier Engine
