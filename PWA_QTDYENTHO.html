@@ -4327,6 +4327,14 @@
         }
 
         
+                function formatFileSize(bytes) {
+            if (!bytes || isNaN(bytes) || bytes <= 0) return '0 KB';
+            if (bytes >= 1048576) {
+                return (bytes / 1048576).toFixed(2) + ' MB';
+            }
+            return Math.round(bytes / 1024) + ' KB';
+        }
+
         // ==================== DOCUMENT SCANNER & COMPRESSOR ENGINE PRO ====================
         let docOriginalImage = null;
         let docOriginalFile = null;
@@ -5705,13 +5713,15 @@
 
             let origSize = (docOriginalSize > 0) ? docOriginalSize : 0;
             if (origSize <= 0) {
+                let w = 1200, h = 1600;
                 if (docOriginalImage && (docOriginalImage.naturalWidth || docOriginalImage.width)) {
-                    const w = docOriginalImage.naturalWidth || docOriginalImage.width;
-                    const h = docOriginalImage.naturalHeight || docOriginalImage.height;
-                    origSize = Math.round(w * h * 0.45);
-                } else {
-                    origSize = Math.round(compBytes * 1.6);
+                    w = docOriginalImage.naturalWidth || docOriginalImage.width;
+                    h = docOriginalImage.naturalHeight || docOriginalImage.height;
+                } else if (docFlattenedCanvas && docFlattenedCanvas.width) {
+                    w = docFlattenedCanvas.width;
+                    h = docFlattenedCanvas.height;
                 }
+                origSize = Math.max(150000, Math.round(w * h * 0.45));
             }
             docOriginalSize = origSize;
 
