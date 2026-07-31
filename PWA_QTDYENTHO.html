@@ -3517,22 +3517,22 @@
         <div id="tab4" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-6">
                 <!-- Subtab Navigation Header - Responsive -->
-                <div class="subtab-bar flex flex-wrap gap-1 border-b border-slate-200 pb-2">
+                <div class="subtab-bar flex flex-wrap gap-1.5 border-b border-slate-200 pb-2.5">
                     <button onclick="switchDocSubTab('doc-formulas')" id="subtab-doc-formulas"
-                        class="py-2 px-3 sm:px-4 font-bold text-xs sm:text-sm doc-subtab-active flex items-center gap-1.5 rounded-xl">
-                        <span>📐 Công thức Tiết kiệm & Tiền vay</span>
+                        class="py-2 px-3.5 font-extrabold text-xs sm:text-sm doc-subtab-active flex items-center gap-1.5 rounded-xl">
+                        <span>📐 Tính lãi</span>
                     </button>
                     <button onclick="switchDocSubTab('doc-financial')" id="subtab-doc-financial"
-                        class="py-2 px-3 sm:px-4 font-bold text-xs sm:text-sm text-slate-500 hover:text-purple-700 transition flex items-center gap-1.5 rounded-xl">
-                        <span>📊 Tài chính (Chỉ số TC)</span>
+                        class="py-2 px-3.5 font-extrabold text-xs sm:text-sm text-slate-500 hover:text-purple-700 transition flex items-center gap-1.5 rounded-xl">
+                        <span>📊 Tài chính</span>
                     </button>
                     <button onclick="switchDocSubTab('doc-rating')" id="subtab-doc-rating"
-                        class="py-2 px-3 sm:px-4 font-bold text-xs sm:text-sm text-slate-500 hover:text-teal-700 transition flex items-center gap-1.5 rounded-xl">
-                        <span>🏆 Xếp hạng QTD (TT 42 & TT 05)</span>
+                        class="py-2 px-3.5 font-extrabold text-xs sm:text-sm text-slate-500 hover:text-teal-700 transition flex items-center gap-1.5 rounded-xl">
+                        <span>🏆 XH QTD</span>
                     </button>
                     <button onclick="switchDocSubTab('doc-operations')" id="subtab-doc-operations"
-                        class="py-2 px-3 sm:px-4 font-bold text-xs sm:text-sm text-slate-500 hover:text-slate-700 transition flex items-center gap-1.5 rounded-xl">
-                        <span>📋 Quy trình Nghiệp vụ</span>
+                        class="py-2 px-3.5 font-extrabold text-xs sm:text-sm text-slate-500 hover:text-slate-700 transition flex items-center gap-1.5 rounded-xl">
+                        <span>📋 Nghiệp vụ</span>
                     </button>
                 </div>
 
@@ -4026,129 +4026,167 @@
                     <div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
                             <span class="w-2.5 h-6 bg-purple-600 rounded-full inline-block"></span>
-                            📊 Chi Tiết Các Công Thức Tính Toán Chỉ Số Tài Chính QTDND (Giải Thích & Ví Dụ)
+                            📊 Chi Tiết Công Thức Chỉ Số Tài Chính, Giải Thích Thông Số & Cách Lấy Số Liệu Thực Tế
                         </h2>
-                        <p class="text-xs text-slate-500 mt-1">Hướng dẫn chi tiết phương pháp tính toán, ý nghĩa kinh tế và ví dụ minh họa thực tế dành cho Cán bộ Quản lý Quỹ Tín Dụng Nhân Dân.</p>
+                        <p class="text-xs text-slate-500 mt-1">Bảng tra cứu phương pháp tính toán, ý nghĩa các ký hiệu thông số và hướng dẫn cách trích xuất số liệu từ Báo cáo tài chính (BCTC) & Bảng Cân đối tài khoản QTDND.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- 1. ROA -->
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
+                            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs">1</span>
+                                    <span class="px-2 py-0.5 bg-purple-600 text-white font-mono rounded text-xs">1</span>
                                     <span>ROA — Tỷ suất Sinh lời trên Tổng Tài Sản</span>
                                 </h3>
-                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn: ≥ 0.8%</span>
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 0.8%</span>
                             </div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 shadow-inner">
-                                $	ext{ROA} = rac{	ext{Lợi nhuận sau thuế}}{	ext{Tổng tài sản bình quân}} 	imes 100%$
+                            <!-- Công thức MathJax sạch 100% không lỗi TeX -->
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center font-mono font-bold text-purple-900 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                                $$	ext{ROA} = rac{	ext{LNST}}{	ext{TSBQ}} 	imes 100%$$
                             </div>
-                            <p class="text-xs text-slate-600"><b>Ý nghĩa:</b> Đo lường năng lực sinh lời của toàn bộ nguồn vốn tài sản mà QTDND đang quản lý sử dụng trong kỳ.</p>
-                            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 text-xs text-purple-950 space-y-1">
-                                <p class="font-bold">💡 Ví dụ minh họa thực tế:</p>
-                                <p>Năm 2025, QTDND Yên Thọ đạt Lợi nhuận sau thuế <b>2,0 tỷ đồng</b>, Tổng tài sản bình quân <b>200 tỷ đồng</b>.</p>
-                                <p class="font-mono font-bold text-purple-800">➔ ROA = (2,0 / 200) × 100% = 1.00% (Đạt chuẩn tối đa 10/10 điểm xếp hạng NHNN).</p>
+                            <!-- Bảng giải thích thông số & cách lấy số liệu -->
+                            <div class="p-3 bg-purple-50/80 rounded-xl border border-purple-200 text-xs space-y-2">
+                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li><b>• $	ext{LNST}$ (Lợi nhuận sau thuế)</b>: Lấy từ <i>Chỉ tiêu 20 (LNST)</i> trên Báo cáo Kết quả HĐKD (Mẫu B03-QTD) hoặc <i>Số dư Cột Có Tài khoản 4212 (LN chưa phân phối năm nay)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
+                                    <li><b>• $	ext{TSBQ}$ (Tổng tài sản bình quân)</b>: Lấy bình quân đầu kỳ & cuối kỳ <i>Chỉ tiêu 100 (Tổng Tài sản)</i> trên Bảng Cân đối Kế toán (Mẫu B01-QTD).</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
+                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
+                                <p class="text-slate-700">QTDND Yên Thọ có LNST năm 2025 là <b>2,0 tỷ đồng</b>, Tổng tài sản bình quân là <b>200 tỷ đồng</b>:</p>
+                                <p class="font-mono font-bold text-purple-800">➔ ROA = (2.000.000.000 / 200.000.000.000) × 100% = 1.00% (Đạt chuẩn tối đa 10/10đ xếp hạng NHNN).</p>
                             </div>
                         </div>
 
                         <!-- 2. ROE -->
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
+                            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs">2</span>
+                                    <span class="px-2 py-0.5 bg-purple-600 text-white font-mono rounded text-xs">2</span>
                                     <span>ROE — Tỷ suất Sinh lời trên Vốn Chủ Sở Hữu</span>
                                 </h3>
-                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn: ≥ 8.0%</span>
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 8.0%</span>
                             </div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 shadow-inner">
-                                $	ext{ROE} = rac{	ext{Lợi nhuận sau thuế}}{	ext{Vốn chủ sở hữu bình quân}} 	imes 100%$
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center font-mono font-bold text-purple-900 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                                $$	ext{ROE} = rac{	ext{LNST}}{	ext{VCSHBQ}} 	imes 100%$$
                             </div>
-                            <p class="text-xs text-slate-600"><b>Ý nghĩa:</b> Thể hiện mức sinh lời trên vốn góp của thành viên và các quỹ dự trữ bảo toàn phát triển vốn.</p>
-                            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 text-xs text-purple-950 space-y-1">
-                                <p class="font-bold">💡 Ví dụ minh họa thực tế:</p>
-                                <p>Lợi nhuận sau thuế <b>2,0 tỷ đồng</b>, Vốn chủ sở hữu bình quân <b>16,0 tỷ đồng</b>.</p>
-                                <p class="font-mono font-bold text-purple-800">➔ ROE = (2,0 / 16,0) × 100% = 12.50% (Đạt chuẩn tối đa 10/10 điểm xếp hạng NHNN).</p>
+                            <div class="p-3 bg-purple-50/80 rounded-xl border border-purple-200 text-xs space-y-2">
+                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li><b>• $	ext{LNST}$ (Lợi nhuận sau thuế)</b>: Lấy từ <i>Chỉ tiêu 20 (LNST)</i> trên Báo cáo KQHĐKD (Mẫu B03-QTD).</li>
+                                    <li><b>• $	ext{VCSHBQ}$ (Vốn chủ sở hữu bình quân)</b>: Lấy từ <i>TK 411 (Vốn điều lệ) + TK 418 (Các quỹ Quỹ QTDND) + TK 421 (Lợi nhuận chưa phân phối)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
+                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
+                                <p class="text-slate-700">LNST năm 2025 là <b>2,0 tỷ đồng</b>, Vốn chủ sở hữu bình quân là <b>16,0 tỷ đồng</b>:</p>
+                                <p class="font-mono font-bold text-purple-800">➔ ROE = (2.000.000.000 / 16.000.000.000) × 100% = 12.50% (Đạt chuẩn tối đa 10/10đ xếp hạng NHNN).</p>
                             </div>
                         </div>
 
                         <!-- 3. CIR -->
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
+                            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs">3</span>
+                                    <span class="px-2 py-0.5 bg-purple-600 text-white font-mono rounded text-xs">3</span>
                                     <span>CIR — Tỷ lệ Chi phí trên Thu nhập</span>
                                 </h3>
-                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn: ≤ 55.0%</span>
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≤ 55.0%</span>
                             </div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 shadow-inner">
-                                $	ext{CIR} = rac{	ext{Tổng chi phí hoạt động (không gồm chi phí lãi)}}{	ext{Tổng thu nhập hoạt động thuần}} 	imes 100%$
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center font-mono font-bold text-purple-900 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                                $$	ext{CIR} = rac{	ext{CPHD}}{	ext{TNHĐ}} 	imes 100%$$
                             </div>
-                            <p class="text-xs text-slate-600"><b>Ý nghĩa:</b> Đo lường hiệu quả quản lý chi phí quản lý vận hành hoạt động của bộ máy Quỹ.</p>
-                            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 text-xs text-purple-950 space-y-1">
-                                <p class="font-bold">💡 Ví dụ minh họa thực tế:</p>
-                                <p>Tổng chi phí hoạt động <b>4,0 tỷ đồng</b>, Tổng thu nhập hoạt động thuần <b>10,0 tỷ đồng</b>.</p>
+                            <div class="p-3 bg-purple-50/80 rounded-xl border border-purple-200 text-xs space-y-2">
+                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li><b>• $	ext{CPHD}$ (Chi phí hoạt động)</b>: Lấy từ <i>TK 851 (Chi phí quản lý) + TK 811 (Chi phí hoạt động nghiệp vụ - không tính chi phí trả lãi tiền gửi)</i>.</li>
+                                    <li><b>• $	ext{TNHĐ}$ (Thu nhập hoạt động thuần)</b>: Lấy từ <i>Chỉ tiêu Thu nhập hoạt động thuần</i> trên Báo cáo KQHĐKD (Mẫu B03-QTD).</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
+                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
+                                <p class="text-slate-700">Chi phí hoạt động <b>4,0 tỷ đồng</b>, Thu nhập hoạt động thuần <b>10,0 tỷ đồng</b>:</p>
                                 <p class="font-mono font-bold text-purple-800">➔ CIR = (4,0 / 10,0) × 100% = 40.00% (Tiết kiệm chi phí xuất sắc, đạt tối đa 5 điểm).</p>
                             </div>
                         </div>
 
                         <!-- 4. NPL -->
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
+                            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-xs">4</span>
+                                    <span class="px-2 py-0.5 bg-amber-600 text-white font-mono rounded text-xs">4</span>
                                     <span>NPL — Tỷ lệ Nợ Xấu Tín Dụng</span>
                                 </h3>
-                                <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Chuẩn: ≤ 3.0%</span>
+                                <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≤ 3.0%</span>
                             </div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 shadow-inner">
-                                $	ext{NPL} = rac{	ext{Dư nợ xấu (Nhóm 3 + Nhóm 4 + Nhóm 5)}}{	ext{Tổng dư nợ cho vay}} 	imes 100%$
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                                $$	ext{NPL} = rac{	ext{Nợ Nhóm 3 + Nhóm 4 + Nhóm 5}}{	ext{Tổng dư nợ cho vay}} 	imes 100%$$
                             </div>
-                            <p class="text-xs text-slate-600"><b>Ý nghĩa:</b> Đánh giá rủi ro tín dụng và chất lượng dư nợ cho vay thành viên của QTDND.</p>
-                            <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-950 space-y-1">
-                                <p class="font-bold">💡 Ví dụ minh họa thực tế:</p>
-                                <p>Tổng nợ xấu (Nhóm 3+4+5) <b>1,8 tỷ đồng</b>, Tổng dư nợ cho vay <b>180 tỷ đồng</b>.</p>
+                            <div class="p-3 bg-amber-50/80 rounded-xl border border-amber-200 text-xs space-y-2">
+                                <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li><b>• $	ext{Nợ xấu (Nhóm 3+4+5)}$</b>: Trích xuất từ <i>Báo cáo Thống kê Phân loại nợ và Dư nợ cho vay NHNN (Mẫu C01/QTD)</i> — Tổng nợ nhóm 3 (Dưới tiêu chuẩn) + nhóm 4 (Nghi ngờ) + nhóm 5 (Có khả năng mất vốn).</li>
+                                    <li><b>• $	ext{Tổng dư nợ cho vay}$</b>: Lấy từ <i>Dư Nợ Cột Có Tài khoản 211 (Cho vay thành viên)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-white border-l-4 border-amber-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
+                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
+                                <p class="text-slate-700">Tổng nợ xấu (Nhóm 3+4+5) <b>1,8 tỷ đồng</b>, Tổng dư nợ cho vay <b>180 tỷ đồng</b>:</p>
                                 <p class="font-mono font-bold text-amber-800">➔ NPL = (1,8 / 180) × 100% = 1.00% (An toàn cao, đạt 15/15 điểm xếp hạng).</p>
                             </div>
                         </div>
 
                         <!-- 5. CAR -->
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
+                            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs">5</span>
+                                    <span class="px-2 py-0.5 bg-emerald-600 text-white font-mono rounded text-xs">5</span>
                                     <span>CAR — Tỷ lệ An toàn Vốn</span>
                                 </h3>
-                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn: ≥ 8.0%</span>
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 8.0%</span>
                             </div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 shadow-inner">
-                                $	ext{CAR} = rac{	ext{Vốn tự có (Cấp 1 + Cấp 2)}}{	ext{Tổng tài sản Có rủi ro (TSCR)}} 	imes 100%$
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center font-mono font-bold text-emerald-900 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                                $$	ext{CAR} = rac{	ext{VTC}}{	ext{TSCR}} 	imes 100%$$
                             </div>
-                            <p class="text-xs text-slate-600"><b>Ý nghĩa:</b> Đo lường năng lực tài chính chống chịu rủi ro và tổn thất ngoài dự kiến của Quỹ.</p>
-                            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-950 space-y-1">
-                                <p class="font-bold">💡 Ví dụ minh họa thực tế:</p>
-                                <p>Vốn tự có <b>24,0 tỷ đồng</b>, Tổng tài sản có rủi ro <b>200 tỷ đồng</b>.</p>
-                                <p class="font-mono font-bold text-emerald-800">➔ CAR = (24,0 / 200) × 100% = 12.00% (Đạt chuẩn tối đa 15/15 điểm NHNN).</p>
+                            <div class="p-3 bg-emerald-50/80 rounded-xl border border-emerald-200 text-xs space-y-2">
+                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li><b>• $	ext{VTC}$ (Vốn tự có)</b>: Lấy từ <i>Tổng Vốn tự có (Vốn cấp 1 + Vốn cấp 2 - Các khoản giảm trừ)</i> trên Bảng Tính Vốn Tự Có (Mẫu B04-QTD).</li>
+                                    <li><b>• $	ext{TSCR}$ (Tài sản Có rủi ro)</b>: Lấy từ <i>Tổng Tài sản Có quy đổi theo hệ số rủi ro (0%, 20%, 50%, 100%, 150%)</i> trên Báo cáo Tỷ lệ an toàn vốn định kỳ NHNN.</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-white border-l-4 border-emerald-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
+                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
+                                <p class="text-slate-700">Vốn tự có <b>24,0 tỷ đồng</b>, Tổng tài sản có rủi ro <b>200 tỷ đồng</b>:</p>
+                                <p class="font-mono font-bold text-emerald-800">➔ CAR = (24,0 / 200) × 100% = 12.00% (Đạt chuẩn tối đa 15/15đ NHNN).</p>
                             </div>
                         </div>
 
                         <!-- 6. STLT -->
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
+                            <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">6</span>
-                                    <span>STLT — Tỷ lệ Nguồn Ngắn Hạn Cho Vay Trung Dài Hạn</span>
+                                    <span class="px-2 py-0.5 bg-blue-600 text-white font-mono rounded text-xs">6</span>
+                                    <span>STLT — Nguồn Ngắn Hạn Cho Vay Trung Dài Hạn</span>
                                 </h3>
-                                <span class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Chuẩn: ≤ 30.0%</span>
+                                <span class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≤ 30.0%</span>
                             </div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 shadow-inner">
-                                $	ext{STLT} = rac{	ext{Vốn ngắn hạn sử dụng cho vay trung dài hạn}}{	ext{Tổng nguồn vốn ngắn hạn}} 	imes 100%$
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-center font-mono font-bold text-blue-900 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                                $$	ext{STLT} = rac{	ext{Vốn ngắn hạn cho vay TDH}}{	ext{Tổng nguồn vốn ngắn hạn}} 	imes 100%$$
                             </div>
-                            <p class="text-xs text-slate-600"><b>Ý nghĩa:</b> Kiểm soát rủi ro kỳ hạn và bảo vệ an toàn khả năng thanh toán tiền gửi thành viên (TT 32/2015 & TT 13/2024).</p>
-                            <div class="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs text-blue-950 space-y-1">
-                                <p class="font-bold">💡 Ví dụ minh họa thực tế:</p>
-                                <p>Vốn ngắn hạn dùng cho vay TDH <b>15 tỷ đồng</b>, Tổng nguồn vốn ngắn hạn <b>120 tỷ đồng</b>.</p>
-                                <p class="font-mono font-bold text-blue-800">➔ STLT = (15 / 120) × 100% = 12.50% (Rất an toàn, đạt 15/15 điểm thanh khoản).</p>
+                            <div class="p-3 bg-blue-50/80 rounded-xl border border-blue-200 text-xs space-y-2">
+                                <p class="font-bold text-blue-950 border-b border-blue-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li><b>• $	ext{Vốn ngắn hạn cho vay TDH}$</b>: Dư nợ cho vay trung & dài hạn minus Nguồn vốn trung & dài hạn (TK 411, Tiền gửi > 12 tháng).</li>
+                                    <li><b>• $	ext{Tổng nguồn vốn ngắn hạn}$</b>: Dư Có <i>TK 421 (Tiền gửi không kỳ hạn và ngắn hạn < 12 tháng)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 bg-white border-l-4 border-blue-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
+                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
+                                <p class="text-slate-700">Vốn ngắn hạn dùng cho vay TDH <b>15 tỷ đồng</b>, Tổng nguồn vốn ngắn hạn <b>120 tỷ đồng</b>:</p>
+                                <p class="font-mono font-bold text-blue-800">➔ STLT = (15 / 120) × 100% = 12.50% (Rất an toàn thanh khoản, đạt 15/15đ).</p>
                             </div>
                         </div>
                     </div>
