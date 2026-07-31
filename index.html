@@ -4452,20 +4452,100 @@
             const step1 = document.getElementById('doc-editor-step');
             const step2 = document.getElementById('doc-result-step');
 
+            const pill1 = document.getElementById('step-pill-1');
+            const pill2 = document.getElementById('step-pill-2');
+            const pill3 = document.getElementById('step-pill-3');
+
+            [pill1, pill2, pill3].forEach(p => {
+                if (p) p.className = "py-1.5 px-2 rounded-lg text-slate-500 hover:text-slate-800 transition flex items-center justify-center gap-1";
+            });
+
             if (step === 1) {
                 if (step1) step1.classList.remove('hidden');
                 if (step2) step2.classList.add('hidden');
                 if (btn1) btn1.className = "flex-1 py-1.5 rounded-lg bg-purple-600 text-white shadow-sm transition flex items-center justify-center gap-1.5 font-bold";
                 if (btn2) btn2.className = "flex-1 py-1.5 rounded-lg text-purple-900 hover:bg-purple-200/60 transition flex items-center justify-center gap-1.5 font-bold";
+                if (pill1) pill1.className = "py-1.5 px-2 rounded-lg bg-purple-600 text-white shadow-xs transition flex items-center justify-center gap-1 font-bold";
                 setupDocCropCanvas();
-            } else {
+            } else if (step === 2) {
                 if (step1) step1.classList.add('hidden');
                 if (step2) step2.classList.remove('hidden');
                 if (btn1) btn1.className = "flex-1 py-1.5 rounded-lg text-purple-900 hover:bg-purple-200/60 transition flex items-center justify-center gap-1.5 font-bold";
                 if (btn2) btn2.className = "flex-1 py-1.5 rounded-lg bg-purple-600 text-white shadow-sm transition flex items-center justify-center gap-1.5 font-bold";
-                applyDocFilter(docCurrentFilter || 'original');
+                if (pill2) pill2.className = "py-1.5 px-2 rounded-lg bg-purple-600 text-white shadow-xs transition flex items-center justify-center gap-1 font-bold";
+                applyDocFilter(docCurrentFilter || 'magic');
+            } else if (step === 3) {
+                if (step1) step1.classList.add('hidden');
+                if (step2) step2.classList.remove('hidden');
+                if (pill3) pill3.className = "py-1.5 px-2 rounded-lg bg-purple-600 text-white shadow-xs transition flex items-center justify-center gap-1 font-bold";
+                document.getElementById('doc-staging-box')?.scrollIntoView({ behavior: 'smooth' });
             }
         }
+
+        // ⚡ Fast Auto-Batch Scan for multi-page documents
+        async function processAutoBatchAllDocs() {
+            if (!docBatchQueue || docBatchQueue.length === 0) {
+                showToast("Vui lòng nạp ảnh tài liệu trước khi chọn chế độ quét tự động!");
+                return;
+            }
+
+            showToast(`⚡ Đang tự động nắn phẳng & lọc ${docBatchQueue.length} trang tài liệu...`);
+
+            for (let i = 0; i < docBatchQueue.length; i++) {
+                docBatchActiveIndex = i;
+                const item = docBatchQueue[i];
+                docOriginalImage = item.originalImage;
+                docOriginalSize = item.size || Math.round(item.originalImage.width * item.originalImage.height * 0.4);
+
+                const w = docOriginalImage.width || 800;
+                const h = docOriginalImage.height || 600;
+
+                const marginX = w * 0.05;
+                const marginY = h * 0.05;
+                docCorners = [
+                    { x: marginX, y: marginY },
+                    { x: w - marginX, y: marginY },
+                    { x: w - marginX, y: h - marginY },
+                    { x: marginX, y: h - marginY }
+                ];
+
+                applyDocPerspectiveWarp();
+                applyDocFilter('magic');
+
+                const previewImg = document.getElementById('doc-preview-img');
+                if (previewImg && previewImg.src) {
+                    docStagedPages.push({
+                        dataUrl: previewImg.src,
+                        size: formatFileSize(Math.round((previewImg.src.length - 22) * 0.75)),
+                        name: `Trang ${docStagedPages.length + 1}`
+                    });
+                }
+            }
+
+            renderDocStagingList();
+            showScannerStep(3);
+            showToast(`🎉 Đã hoàn tất quét tự động ${docBatchQueue.length} trang và đưa vào danh sách xuất PDF!`);
+        }
+
+        // Global Keyboard Shortcuts for Scan & ZIP
+        window.addEventListener('keydown', function(e) {
+            const scannerActive = !document.getElementById('tool-scanner')?.classList.contains('hidden');
+            if (!scannerActive) return;
+
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const step1Active = !document.getElementById('doc-editor-step')?.classList.contains('hidden');
+                if (step1Active) applyDocPerspectiveWarp();
+            } else if (e.key === 'r' || e.key === 'R') {
+                e.preventDefault();
+                rotateDocImage(90);
+            } else if (e.key === 'a' || e.key === 'A') {
+                e.preventDefault();
+                autoDetectDocEdges();
+            }
+        });
 
 
         function triggerDocGallery() {
