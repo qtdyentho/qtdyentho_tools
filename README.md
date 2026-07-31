@@ -1,75 +1,60 @@
-# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.07.30-v22.00)
+# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.07.30-v23.00)
 
 > **Bộ Công Cụ Nghiệp Vụ Tín Dụng & Tiền Gửi Ngoại Tuyến (Offline PWA WebApp)**  
 > **Repository chính thức:** [https://github.com/qtdyentho/qtdyentho_tools.git](https://github.com/qtdyentho/qtdyentho_tools.git)  
-> **Trang WebApp (GitHub Pages):** [https://qtdyentho.github.io/qtdyentho_tools/](https://qtdyentho.github.io/qtdyentho_tools/)  
+> **Trang WebApp (Vercel Production):** [https://qtdyentho-tools.vercel.app/](https://qtdyentho-tools.vercel.app/)  
+> **Tài liệu Kỹ thuật & Bảng Rà Soát Lỗi Tận Gốc:** [SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)  
 
 ---
 
 ## 📖 GIỚI THIỆU TỔNG QUAN
 
-`QTD_Tools` là bộ ứng dụng Web Đơn (Single-file PWA) được phát triển riêng cho cán bộ nghiệp vụ **Quỹ Tín Dụng Nhân Dân Yên Thọ**. Ứng dụng hoạt động **Offline 100%** không cần kết nối Internet sau khi cài đặt, giúp tối ưu hóa tốc độ và tính chính xác trong công tác tư vấn tài chính, quy đổi lãi suất, lập lịch trả nợ và tạo mã VietQR chuyển khoản.
+`QTD_Tools` là bộ ứng dụng Web Đơn (Single-file PWA) được phát triển riêng cho cán bộ nghiệp vụ **Quỹ Tín Dụng Nhân Dân Yên Thọ**. Ứng dụng hoạt động **Offline 100%** không cần kết nối Internet sau khi cài đặt, giúp tối ưu hóa tốc độ và tính chính xác trong công tác tư vấn tài chính, quy đổi lãi suất, lập lịch trả nợ, tạo mã VietQR thanh toán và quét/nắn/nén tài liệu hồ sơ tín dụng.
 
 ---
 
-## 🌟 CÁC PHÂN HỆ VÀ TÍNH NĂNG CHÍNH
+## 🌟 CÁC PHÂN HỆ VÀ TÍNH NĂNG CHÍNH (v2026.07.30-v23.00)
 
-### 1. 📊 Bảng Quy Đổi Lãi Suất Tiết Kiệm Tự Động
-* Hỗ trợ 16 kỳ hạn tiền gửi (1 đến 36 tháng).
-* Tự động quy đổi %/năm và số tiền lãi sang các phương thức: *Lãi cuối kỳ*, *Lĩnh lãi hàng tháng*, *Lĩnh lãi trước*, *Lĩnh lãi hàng quý*, *Gửi góp định kỳ*.
-* Cho phép nhập lãi suất thực tế tại quầy để tự động cập nhật toàn bộ dòng tiền.
+### 1. 📸 Phân Hệ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO (Scan & ZIP PRO Engine)
+* **Nắn phẳng 3D Homography Matrix (Perspective Warp)**: Tự động/thủ công kéo thả 4 chốt góc neon Emerald nắn tài liệu nghiêng thành trang A4 vuông vắn trong **55ms**.
+* **Kính lúp phóng to góc x2.5 (Loupe Glass Magnifier Engine)**: Tự động soi chi tiết điểm nắn góc phóng đại 2.5 lần với tâm ngắm đỏ và viền Emerald rực rỡ.
+* **Cơ chế bám dính Pointer Capture & Snap-to-click**: Loại bỏ lệch tỷ lệ CSS `object-contain`, cho phép chạm/kéo chốt góc chính xác 1:1 không tuột tay.
+* **Bộ lọc hình ảnh chuyên sâu**: Scan B&W, Magic rõ chữ, Grayscale, Khử bóng râm.
+* **Hiển thị dung lượng Live & Nén JPEG thông minh**: Nhảy số KB/MB thời gian thực ngay khi chỉnh slider nén (`Gốc: 135 KB ➔ Nén: 81 KB (-40%)`).
+* **Quét & Nắn tự động hàng loạt 1-Click (`processAutoBatchAllDocs()`)**: Xử lý nắn phẳng 10-20 trang hồ sơ trong **<3 giây**.
+* **Tạo ảnh CCCD 2-in-1 chuyên nghiệp**: Tự động ghép 2 mặt CCCD (1 người) hoặc 4 mặt CCCD (2 người Vợ/Chồng) lên 1 trang A4 chuẩn ISO scale.
+* **Xuất PDF A4 & In tài liệu an toàn (`#doc-print-iframe`)**: In/xuất tệp PDF bằng iframe ẩn chống Popup Blocker.
 
-### 2. ⚖️ Rút Tiết Kiệm Trước Hạn 1 Phần (Thông Tư 04/2022/TT-NHNN)
-* Mô phỏng chính xác phần tiền rút trước hạn (hưởng Lãi suất Không kỳ hạn) và phần tiền gửi còn lại (tiếp tục hưởng lãi suất cam kết ban đầu).
-* Hiển thị số tiền lãi bảo vệ được cho thành viên so với việc rút 100%.
+### 2. 📊 Bảng Quy Đổi Lãi Suất Tiết Kiệm Tự Động & Thông Tư 04/2022/TT-NHNN
+* Hỗ trợ 16 kỳ hạn tiền gửi (1 đến 36 tháng), quy đổi 5 phương thức nhận lãi.
+* Rút tiết kiệm trước hạn 1 phần bảo vệ tối đa tiền lãi cho thành viên.
 
 ### 3. 🧮 Bộ Công Cụ Nghiệp Vụ Tín Dụng & Tiền Gửi
-* **Công cụ Tiết kiệm:** Gửi 1 lần, Gửi góp định kỳ (tháng/quý), Tiết kiệm mục tiêu (tính số tiền gửi hàng tháng để đạt mục tiêu).
-* **Công cụ Tiền vay:** Ước tính hạn mức vay tối đa dựa trên thu nhập ròng & DTI, lập lịch trả nợ 4 phương thức (*Lãi hàng tháng gốc cuối kỳ*, *Dư nợ giảm dần*, *Trả đều Annuity*).
+* Ước tính hạn mức vay tối đa dựa trên thu nhập ròng & DTI, lập lịch trả nợ 4 phương thức.
 
-### 4. 📱 Tạo Mã VietQR Thanh Toán Chuẩn SePay
-* **QR Trả Lãi & Gốc vay:** Tự động tính lãi phát sinh theo số ngày thực tế, làm tròn nghìn, loại bỏ dấu tiếng Việt chuẩn hóa nội dung `[HO TEN] TRA LAI VA GOC HDTD SO [SO HD]`.
-* **QR Gửi Tiết Kiệm:** Sinh mã VietQR nạp tiền vào tài khoản Co-opBank cố định (`3800001234567899`).
-* Hỗ trợ nút **Tải Mã QR** và **Chia Sẻ Mã** tức thì.
+### 4. 📱 Tạo Mã VietQR Thanh Toán Chuẩn SePay & Co-opBank
+* **QR Trả Lãi & Gốc vay**: `[HỌ TÊN] [CCCD] TRA LAI VA GOC HDTD SO [SO HD]`
+* **QR Gửi Tiết Kiệm**: `[HỌ TÊN] [CCCD] GUITK [Kỳ hạn]T [Hình thức nhận lãi] Địa chỉ`
 
-### 5. 🖨️ In Báo Cáo & Xuất Excel
-* Chế độ in báo cáo chính thức có chữ ký 3 bên (*Người lập*, *Kiểm soát viên*, *Ban Giám đốc*).
-* Xuất bảng dữ liệu lãi suất ra file Excel (`.xls`).
-
-
-### 7. 📸 Công Cụ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO (v22.00)
-* **Quét & Căn chỉnh 4 góc (Perspective Warp)**: Tự động/thủ công kéo thả 4 góc nắn tài liệu vuông vắn, hỗ trợ kính lúp soi chi tiết và nút tinh chỉnh Nudger.
-* **Bộ lọc hình ảnh chuyên sâu**: Scan B&W, Rõ chữ (Magic Color), Khử bóng râm, Tăng tương phản, Tăng độ nét.
-* **Nén dung lượng thông minh**: Slider chất lượng JPEG & Nút chọn nhanh dung lượng đích (<500KB, <1MB, <2MB) đáp ứng tiêu chuẩn lưu trữ của Quỹ.
-* **Bố cục lưới A4 (N-Up PDF Layout)**: Dàn 1, 2, 4, 6, 8 ảnh trên 1 trang A4 sắc nét.
-* **Tạo ảnh CCCD 2-in-1 chuyên nghiệp**: Tự động ghép 2 mặt CCCD 1 người (2 mặt) hoặc 2 người (4 mặt Vợ/Chồng) lên 1 trang A4 chuẩn ISO scale có thể điều chỉnh tỷ lệ từ 1.0x đến 1.8x.
-
-### 6. 📱 Cài Đặt PWA Màn Hình Chính & Cập Nhật Online
-* Hỗ trợ Modal hướng dẫn cài đặt lối tắt màn hình chính cho iPhone/iPad (Safari) và Android/PC (Chrome, Edge).
-* Tích hợp nút **"Cập Nhật"** (`checkAppUpdate()`) kết nối trực tiếp đến GitHub Raw để nâng cấp phiên bản mới khi có Internet.
+### 5. 🔄 Cài Đặt PWA Màn Hình Chính & Tự Động Cập Nhật
+* Hằng số phiên bản duy nhất `CURRENT_APP_VERSION = 'v2026.07.30-v23.00'` kết nối đa nguồn GitHub Raw và Vercel Production.
 
 ---
 
-## 🛠️ HƯỚNG DẪN SỬ DỤNG & CÀI ĐẶT
+## 🛠️ BẢNG RÀ SOÁT LỖI VÀ GIẢI PHÁP KHẮC PHỤC TẬN GỐC
 
-### Mở trực tiếp bằng trình duyệt:
-Mở file `index.html` hoặc `PWA_QTDYENTHO.html` bằng bất kỳ trình duyệt nào trên điện thoại/máy tính.
+| STT | Lỗi gặp phải | Nguyên nhân cốt lõi | Giải pháp khắc phục |
+| :---: | :--- | :--- | :--- |
+| **1** | **Hiển thị `0 KB` nén** | Khối script bị thiếu hàm `formatFileSize(bytes)`. | Khai báo hàm `formatFileSize(bytes)` chuẩn KB/MB; bảo vệ dung lượng gốc non-zero live. |
+| **2** | **Nút Làm phẳng bị đơ** | Thiếu câu lệnh định nghĩa hàm `applyDocPerspectiveWarpSync()`. | Khai báo đầy đủ hàm nắn 3D Homography Matrix đồng bộ. |
+| **3** | **Không kéo được 4 góc** | Thẻ canvas bị đệm đen do CSS `object-contain`. | Loại bỏ `object-contain`, đính `touch-action: none` và khớp scaleX = scaleY 1:1 với Pointer Capture. |
+| **4** | **Kính lúp bị vỡ/đen ở góc** | Tọa độ `srcX < 0` bị âm khi kéo chốt góc sát lề. | Chặn tọa độ an toàn `Math.max(0, Math.min(imgW - srcW, pos.x - srcW / 2))`. |
+| **5** | **Popup Blocker chặn in PDF** | Dùng `window.open` sau hàm `await` bất đồng bộ. | Sử dụng khung in ẩn tĩnh `<iframe id="doc-print-iframe"></iframe>`. |
+| **6** | **Canvas đen xì toàn bộ** | `Image` chưa tải xong dữ liệu bitmap. | Tạo hàm `getLoadedDocImage(callback)` và tô nền trắng base `#ffffff`. |
+| **7** | **Lệch phiên bản Update** | Mã nguồn tồn tại 3 chuỗi hằng số phiên bản khác nhau. | Thống nhất 1 hằng số duy nhất `CURRENT_APP_VERSION = 'v2026.07.30-v23.00'`. |
+| **8** | **Nội dung Memo QR dư từ** | Template memo chứa tiền tố cứng `CCCD KH GUITK...`. | Loại bỏ từ thừa `CCCD`, `KH`. Chuẩn hóa nội dung ghi rõ ràng. |
 
-### Cài đặt thành App màn hình chính (PWA):
-1. Trên iPhone (Safari): Bấm biểu tượng **Chia sẻ** -> Chọn **"Thêm vào Màn hình chính"**.
-2. Trên Android / PC (Chrome, Edge): Bấm nút **"Cài Đặt App"** trên giao diện ứng dụng.
-
----
-
-## ⚙️ CẤU TRÚC THƯ MỤC
-
-```text
-QTD_Tools/
-├── index.html            # File chính (GitHub Pages & PWA Offline App)
-├── PWA_QTDYENTHO.html    # Bản nâng cấp v2026.07.30-v22.00 chính thức
-├── PWA_QTDYENTHO2.html   # Bản dự phòng 6 tab
-└── README.md             # Tài liệu giới thiệu & Hướng dẫn sử dụng
-```
+Chi tiết xem tại tài liệu: 📄 **[SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)**
 
 ---
 
