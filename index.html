@@ -4458,7 +4458,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v25.00';
+        const CURRENT_APP_VERSION = 'v2026.07.30-v26.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -11249,6 +11249,10 @@ async function downloadDocPDFClientSide(mode) {
 
             if (tabId === 'tab1') {
                 renderTable1();
+            }
+
+            if (tabId === 'tab-fin' || tabId === 'tool-financial') {
+                calcFinancialIndicators();
             }
 
             if (tabId === 'tabQR') {
