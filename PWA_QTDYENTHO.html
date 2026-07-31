@@ -5178,6 +5178,8 @@
 
             function getCanvasPos(e) {
                 const rect = canvas.getBoundingClientRect();
+                if (!rect.width || !rect.height) return { x: 0, y: 0, screenX: 0, screenY: 0 };
+
                 const scaleX = canvas.width / rect.width;
                 const scaleY = canvas.height / rect.height;
 
@@ -5189,30 +5191,36 @@
                     clientY = e.touches[0].clientY;
                 }
 
+                const x = (clientX - rect.left) * scaleX;
+                const y = (clientY - rect.top) * scaleY;
+
                 return {
-                    x: (clientX - rect.left) * scaleX,
-                    y: (clientY - rect.top) * scaleY,
-                    screenX: clientX,
-                    screenY: clientY
+                    x: isNaN(x) ? 0 : Math.max(0, Math.min(canvas.width, x)),
+                    y: isNaN(y) ? 0 : Math.max(0, Math.min(canvas.height, y)),
+                    screenX: clientX || 0,
+                    screenY: clientY || 0
                 };
             }
 
             function onPointerDown(e) {
                 const pos = getCanvasPos(e);
-                const hitRadius = Math.max(40, canvas.width / 20);
+                const hitRadius = Math.max(50, Math.min(140, canvas.width / 15));
 
-                docActiveCornerIdx = -1;
+                let minDist = Infinity;
+                let closestIdx = -1;
+
                 for (let i = 0; i < docCorners.length; i++) {
                     const dist = Math.hypot(docCorners[i].x - pos.x, docCorners[i].y - pos.y);
-                    if (dist < hitRadius) {
-                        docActiveCornerIdx = i;
-                        selectDocCorner(i);
-                        break;
+                    if (dist < hitRadius && dist < minDist) {
+                        minDist = dist;
+                        closestIdx = i;
                     }
                 }
 
+                docActiveCornerIdx = closestIdx;
                 if (docActiveCornerIdx !== -1) {
-                    e.preventDefault();
+                    selectDocCorner(docActiveCornerIdx);
+                    if (e.cancelable) e.preventDefault();
                     drawDocCropCanvas();
                     showDocLoupe(pos);
                 }
@@ -5220,11 +5228,11 @@
 
             function onPointerMove(e) {
                 if (docActiveCornerIdx === -1) return;
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
 
                 const pos = getCanvasPos(e);
-                docCorners[docActiveCornerIdx].x = Math.max(0, Math.min(canvas.width, pos.x));
-                docCorners[docActiveCornerIdx].y = Math.max(0, Math.min(canvas.height, pos.y));
+                docCorners[docActiveCornerIdx].x = pos.x;
+                docCorners[docActiveCornerIdx].y = pos.y;
 
                 drawDocCropCanvas();
                 showDocLoupe(pos);
@@ -5247,51 +5255,70 @@
             window.addEventListener('touchend', onPointerUp);
         }
 
-        // Loupe Glass
+        // Loupe Glass Magnifier Engine
         function showDocLoupe(pos) {
             const loupe = document.getElementById('doc-loupe-canvas');
             const wrapper = document.getElementById('doc-canvas-wrapper');
             const cropCanvas = document.getElementById('doc-crop-canvas');
             if (!loupe || !wrapper || !cropCanvas || !docOriginalImage) return;
 
+            const img = docOriginalImage;
+            const imgW = img.naturalWidth || img.width || cropCanvas.width;
+            const imgH = img.naturalHeight || img.height || cropCanvas.height;
+
             loupe.classList.remove('hidden');
 
-            const lSize = 120;
+            const lSize = 130;
             loupe.width = lSize;
             loupe.height = lSize;
 
             const ctx = loupe.getContext('2d');
             ctx.clearRect(0, 0, lSize, lSize);
 
+            // Dark background fill for loupe glass
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, lSize, lSize);
+
             const zoom = 2.5;
             const srcW = lSize / zoom;
             const srcH = lSize / zoom;
-            const srcX = pos.x - srcW / 2;
-            const srcY = pos.y - srcH / 2;
+
+            // Safe Clamped Coordinates (prevents negative IndexSizeError)
+            const srcX = Math.max(0, Math.min(imgW - srcW, pos.x - srcW / 2));
+            const srcY = Math.max(0, Math.min(imgH - srcH, pos.y - srcH / 2));
 
             ctx.save();
             ctx.beginPath();
             ctx.arc(lSize / 2, lSize / 2, lSize / 2, 0, Math.PI * 2);
             ctx.clip();
 
-            ctx.drawImage(docOriginalImage, srcX, srcY, srcW, srcH, 0, 0, lSize, lSize);
+            try {
+                ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, lSize, lSize);
+            } catch(e) {}
 
+            // Red Crosshair
             ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(lSize / 2 - 10, lSize / 2);
-            ctx.lineTo(lSize / 2 + 10, lSize / 2);
-            ctx.moveTo(lSize / 2, lSize / 2 - 10);
-            ctx.lineTo(lSize / 2, lSize / 2 + 10);
+            ctx.moveTo(lSize / 2 - 12, lSize / 2);
+            ctx.lineTo(lSize / 2 + 12, lSize / 2);
+            ctx.moveTo(lSize / 2, lSize / 2 - 12);
+            ctx.lineTo(lSize / 2, lSize / 2 + 12);
             ctx.stroke();
 
+            // Emerald Ring
             ctx.restore();
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(lSize / 2, lSize / 2, lSize / 2 - 1.5, 0, Math.PI * 2);
+            ctx.stroke();
 
             const wrapRect = wrapper.getBoundingClientRect();
             let left = pos.screenX - wrapRect.left - lSize / 2;
-            let top = pos.screenY - wrapRect.top - lSize - 30;
+            let top = pos.screenY - wrapRect.top - lSize - 35;
 
-            if (top < 10) top = pos.screenY - wrapRect.top + 30;
+            if (top < 10) top = pos.screenY - wrapRect.top + 35;
             if (left < 10) left = 10;
             if (left > wrapRect.width - lSize - 10) left = wrapRect.width - lSize - 10;
 
@@ -5305,7 +5332,69 @@
         }
 
         // ==================== PERSPECTIVE WARP VỚI ASPECT RATIO PRESETS ====================
+                function applyDocPerspectiveWarpSync() {
+            if (!docOriginalImage || !docCorners || docCorners.length !== 4) return false;
+
+            const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
+            const h = docOriginalImage.naturalHeight || docOriginalImage.height || 600;
+
+            const p0 = docCorners[0]; // TL
+            const p1 = docCorners[1]; // TR
+            const p2 = docCorners[2]; // BR
+            const p3 = docCorners[3]; // BL
+
+            const wTop = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+            const wBot = Math.hypot(p2.x - p3.x, p2.y - p3.y);
+            const targetW = Math.round(Math.max(wTop, wBot)) || w;
+
+            const hLeft = Math.hypot(p3.x - p0.x, p3.y - p0.y);
+            const hRight = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+            let targetH = Math.round(Math.max(hLeft, hRight)) || h;
+
+            const aspectChoice = document.getElementById('doc-aspect-ratio')?.value || 'auto';
+            if (aspectChoice === 'a4_portrait') {
+                targetH = Math.round(targetW * 1.4142);
+            } else if (aspectChoice === 'a4_landscape') {
+                targetH = Math.round(targetW / 1.4142);
+            } else if (aspectChoice === 'cccd') {
+                targetH = Math.round(targetW / 1.585);
+            } else if (aspectChoice === 'square') {
+                targetH = targetW;
+            }
+
+            docFlattenedCanvas = document.createElement('canvas');
+            docFlattenedCanvas.width = targetW;
+            docFlattenedCanvas.height = targetH;
+            const dstCtx = docFlattenedCanvas.getContext('2d');
+
+            const srcCanvas = document.createElement('canvas');
+            srcCanvas.width = w;
+            srcCanvas.height = h;
+            const srcCtx = srcCanvas.getContext('2d');
+            srcCtx.drawImage(docOriginalImage, 0, 0, w, h);
+            const srcData = srcCtx.getImageData(0, 0, w, h);
+
+            const dstData = dstCtx.createImageData(targetW, targetH);
+            warpPerspectiveBilinear(srcData, dstData, targetW, targetH, p0, p1, p2, p3);
+            dstCtx.putImageData(dstData, 0, 0);
+
+            return true;
+        }
+
         function applyDocPerspectiveWarp() {
+            if (!docOriginalImage || !docCorners || docCorners.length !== 4) return;
+
+            showToast("✨ Đang nắn phẳng ảnh chụp nghiêng 3D...");
+
+            const success = applyDocPerspectiveWarpSync();
+            if (success) {
+                showScannerStep(2);
+                resetDocColorAdjustments();
+                applyDocFilter('magic');
+            }
+        }
+
+        function _oldApplyWarp() {
             if (!docOriginalImage || docCorners.length !== 4) return;
 
             showToast("Đang làm phẳng & nắn góc nghiêng...");
