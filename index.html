@@ -2296,8 +2296,8 @@
                         </div>
 
                         <!-- Canvas Editor Container -->
-                        <div class="relative w-full bg-slate-950 rounded-2xl flex items-center justify-center p-3 select-none min-h-[320px] max-h-[70vh] border border-slate-800 shadow-inner overflow-hidden" id="doc-canvas-wrapper">
-                            <canvas id="doc-crop-canvas" class="block max-w-full max-h-[65vh] w-auto h-auto object-contain touch-none cursor-crosshair rounded-lg shadow-2xl border border-slate-800"></canvas>
+                        <div class="relative w-full bg-slate-950 rounded-2xl flex items-center justify-center p-2 sm:p-4 select-none min-h-[400px] max-h-[80vh] border border-slate-800 shadow-inner overflow-hidden" id="doc-canvas-wrapper">
+                            <canvas id="doc-crop-canvas" class="block w-full max-w-full max-h-[75vh] h-auto object-contain touch-none cursor-crosshair rounded-lg shadow-2xl border border-slate-800"></canvas>
                             <!-- Loupe Glass Magnifier -->
                             <canvas id="doc-loupe-canvas" class="absolute w-28 h-28 rounded-full border-2 border-emerald-400 shadow-2xl pointer-events-none hidden z-30 bg-black"></canvas>
                         </div>
@@ -2502,10 +2502,16 @@
                             </div>
 
                             <!-- Right: Flattened & Filtered Preview Canvas -->
-                            <div class="lg:col-span-7 flex flex-col items-center justify-center bg-slate-900 rounded-2xl p-4 min-h-[400px]">
-                                <h4 class="text-xs font-bold text-slate-300 mb-2">Bản xem trước tài liệu đã làm phẳng & nén:</h4>
-                                <div class="relative max-w-full overflow-auto flex items-center justify-center">
-                                    <img id="doc-preview-img" class="max-w-full max-h-[500px] object-contain rounded-lg shadow-2xl border border-slate-700 bg-white" alt="Xem trước tài liệu">
+                            <div class="lg:col-span-7 flex flex-col items-center justify-start bg-slate-900 rounded-2xl p-3 sm:p-5 min-h-[500px] w-full border border-slate-800 shadow-inner">
+                                <div class="w-full flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+                                    <h4 class="text-xs font-extrabold text-purple-300 flex items-center gap-1.5 uppercase tracking-wide">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        📄 Bản xem trước tài liệu đã làm phẳng & nén (FULL SIZE)
+                                    </h4>
+                                    <span class="text-[11px] text-slate-400 italic">Hiển thị sắc nét 100% tỷ lệ A4</span>
+                                </div>
+                                <div class="relative w-full flex-1 flex items-center justify-center overflow-auto rounded-xl bg-slate-950/80 p-2 sm:p-3 border border-slate-800/80">
+                                    <img id="doc-preview-img" class="w-full max-w-full h-auto max-h-[82vh] object-contain rounded-md shadow-2xl border border-slate-700 bg-white transition-all duration-200" alt="Xem trước tài liệu Full Size">
                                 </div>
                             </div>
                         </div>
