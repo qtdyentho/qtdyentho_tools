@@ -1328,10 +1328,34 @@
                 return summary;
             }, [flatExpenseItems]);
 
+            // Dynamic List of all Unique Units across all athletes
+            const allUnitsList = useMemo(() => {
+                const units = new Set();
+                data.athletes.forEach(a => {
+                    if (a.unit && a.unit.trim()) units.add(a.unit.trim());
+                });
+                const list = Array.from(units);
+                list.sort((a, b) => {
+                    if (a === 'CLB Yên Thọ') return -1;
+                    if (b === 'CLB Yên Thọ') return 1;
+                    return a.localeCompare(b, 'vi');
+                });
+                return list;
+            }, [data.athletes]);
+
             const filteredAthletes = useMemo(() => {
                 return data.athletes.filter(a => {
-                    const matchName = a.name.toLowerCase().includes(searchQuery.toLowerCase()) || a.unit.toLowerCase().includes(searchQuery.toLowerCase());
-                    const matchUnit = unitFilter === 'all' || (unitFilter === 'yentho' ? a.unit === 'CLB Yên Thọ' : a.unit !== 'CLB Yên Thọ');
+                    const query = searchQuery.toLowerCase().trim();
+                    const matchName = !query || a.name.toLowerCase().includes(query) || (a.unit && a.unit.toLowerCase().includes(query));
+                    
+                    let matchUnit = true;
+                    if (unitFilter === 'yentho') {
+                        matchUnit = a.unit === 'CLB Yên Thọ';
+                    } else if (unitFilter === 'guest') {
+                        matchUnit = a.unit !== 'CLB Yên Thọ';
+                    } else if (unitFilter !== 'all') {
+                        matchUnit = a.unit === unitFilter;
+                    }
                     return matchName && matchUnit;
                 });
             }, [data.athletes, searchQuery, unitFilter]);
@@ -1514,31 +1538,70 @@
                         </div>
 
                         {/* Search & Filter Toolbar */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div className="relative">
-                                <i className="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 light:text-slate-500 text-xs"></i>
-                                <input 
-                                    type="text" 
-                                    placeholder="Tìm theo tên VĐV hoặc Đơn vị..."
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-900/80 light:bg-white border border-slate-700/60 light:border-sky-200 rounded-2xl text-xs text-white light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 font-medium"
-                                />
+                        <div className="space-y-2.5">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div className="relative">
+                                    <i className="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 light:text-slate-500 text-xs"></i>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Tìm theo tên VĐV hoặc Đơn vị..."
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value)}
+                                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-900/80 light:bg-white border border-slate-700/60 light:border-sky-200 rounded-2xl text-xs text-white light:text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 font-medium"
+                                    />
+                                </div>
+
+                                <div>
+                                    <select 
+                                        value={unitFilter}
+                                        onChange={e => setUnitFilter(e.target.value)}
+                                        className="w-full px-3.5 py-2.5 bg-slate-900/80 light:bg-white border border-slate-700/60 light:border-sky-200 rounded-2xl text-xs text-slate-200 light:text-slate-900 focus:outline-none focus:border-blue-500 font-bold">
+                                        <option value="all">🏆 Tất cả Đơn vị / CLB ({data.athletes.length} VĐV)</option>
+                                        <option value="yentho">🏠 CLB Yên Thọ ({data.athletes.filter(a => a.unit === 'CLB Yên Thọ').length} VĐV)</option>
+                                        <option value="guest">🤝 Tất cả Khách mời ({data.athletes.filter(a => a.unit !== 'CLB Yên Thọ').length} VĐV)</option>
+                                        {allUnitsList.map(unit => {
+                                            const count = data.athletes.filter(a => a.unit === unit).length;
+                                            return (
+                                                <option key={unit} value={unit}>
+                                                    🚩 {unit} ({count} VĐV)
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
+
+                                <div className="text-right text-xs text-slate-400 light:text-slate-600 flex items-center justify-end font-medium">
+                                    <span>Hiển thị <b>{filteredAthletes.length}</b> / {data.athletes.length} VĐV</span>
+                                </div>
                             </div>
 
-                            <div>
-                                <select 
-                                    value={unitFilter}
-                                    onChange={e => setUnitFilter(e.target.value)}
-                                    className="w-full px-3.5 py-2.5 bg-slate-900/80 light:bg-white border border-slate-700/60 light:border-sky-200 rounded-2xl text-xs text-slate-200 light:text-slate-900 focus:outline-none focus:border-blue-500 font-medium">
-                                    <option value="all">🏆 Tất cả Đơn vị / CLB ({data.athletes.length})</option>
-                                    <option value="yentho">🏠 CLB Yên Thọ ({data.athletes.filter(a => a.unit === 'CLB Yên Thọ').length})</option>
-                                    <option value="guest">🤝 Khách mời ({data.athletes.filter(a => a.unit !== 'CLB Yên Thọ').length})</option>
-                                </select>
-                            </div>
-
-                            <div className="text-right text-xs text-slate-400 light:text-slate-600 flex items-center justify-end font-medium">
-                                <span>Hiển thị <b>{filteredAthletes.length}</b> / {data.athletes.length} VĐV</span>
+                            {/* Dynamic Unit Filter Chips */}
+                            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                                <button
+                                    onClick={() => setUnitFilter('all')}
+                                    className={`px-2.5 py-1 rounded-xl text-[11px] font-extrabold transition border ${
+                                        unitFilter === 'all'
+                                        ? 'bg-blue-600 text-white border-blue-400 shadow-md shadow-blue-500/20'
+                                        : 'bg-slate-800/80 light:bg-slate-100 text-slate-400 light:text-slate-700 border-slate-700 light:border-slate-300 hover:border-slate-500'
+                                    }`}>
+                                    Tất cả ({data.athletes.length})
+                                </button>
+                                {allUnitsList.map(unit => {
+                                    const count = data.athletes.filter(a => a.unit === unit).length;
+                                    const isSelected = unitFilter === unit;
+                                    return (
+                                        <button
+                                            key={unit}
+                                            onClick={() => setUnitFilter(unit)}
+                                            className={`px-2.5 py-1 rounded-xl text-[11px] font-extrabold transition border ${
+                                                isSelected
+                                                ? 'bg-emerald-600 text-white border-emerald-400 shadow-md shadow-emerald-500/20'
+                                                : 'bg-slate-800/80 light:bg-white text-slate-300 light:text-slate-800 border-slate-700/80 light:border-sky-200 hover:border-slate-500'
+                                            }`}>
+                                            {unit === 'CLB Yên Thọ' ? '🏠 ' : '🚩 '}{unit} ({count})
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
