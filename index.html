@@ -4896,13 +4896,21 @@
             const canvas = document.getElementById('doc-crop-canvas');
             if (!canvas) return;
 
-            // Ensure docOriginalImage is fully loaded & decoded
             getLoadedDocImage(function(img) {
                 const w = img.naturalWidth || img.width || 800;
                 const h = img.naturalHeight || img.height || 600;
 
                 canvas.width = w;
                 canvas.height = h;
+
+                // Enforce exact 1:1 original image aspect ratio in CSS layout (zero stretching)
+                canvas.style.aspectRatio = `${w} / ${h}`;
+                canvas.style.maxWidth = '100%';
+                canvas.style.maxHeight = '72vh';
+                canvas.style.width = 'auto';
+                canvas.style.height = 'auto';
+                canvas.style.margin = '0 auto';
+                canvas.style.display = 'block';
 
                 const marginX = w * 0.05;
                 const marginY = h * 0.05;
@@ -4920,6 +4928,19 @@
                 attachDocCanvasEvents();
                 drawDocCropCanvas();
             });
+        }
+
+        // Geometric Centroid Vector Corner Sorting (chống xoắn lưới ma trận)
+        function sortCornersClockwise(corners) {
+            if (!corners || corners.length !== 4) return corners;
+            const cx = (corners[0].x + corners[1].x + corners[2].x + corners[3].x) / 4;
+            const cy = (corners[0].y + corners[1].y + corners[2].y + corners[3].y) / 4;
+            const mapped = corners.map(pt => ({
+                pt: pt,
+                angle: Math.atan2(pt.y - cy, pt.x - cx)
+            }));
+            mapped.sort((a, b) => a.angle - b.angle);
+            return mapped.map(m => m.pt);
         }
 
         function getLoadedDocImage(callback) {
