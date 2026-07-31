@@ -4026,11 +4026,41 @@
                     <div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
                             <span class="w-2.5 h-6 bg-purple-600 rounded-full inline-block"></span>
-                            📊 Chi Tiết Công Thức Chỉ Số Tài Chính, Giải Thích Thông Số & Cách Lấy Số Liệu Thực Tế
+                            📊 Hướng Dẫn Chi Tiết Phương Pháp Tính Toán & Trích Xuất Số Liệu Tài Chính QTDND
                         </h2>
-                        <p class="text-xs text-slate-500 mt-1">Bảng tra cứu phương pháp tính toán, ý nghĩa các ký hiệu thông số và hướng dẫn cách trích xuất số liệu từ Báo cáo tài chính (BCTC) & Bảng Cân đối tài khoản QTDND.</p>
+                        <p class="text-xs text-slate-500 mt-1">Cẩm nang hướng dẫn Cán bộ Quản lý & Kế toán QTDND trích xuất chính xác từng số liệu từ Bảng cân đối tài khoản (Mẫu B02-QTD), BCTC (Mẫu B01, B03-QTD) và Báo cáo Thống kê NHNN.</p>
                     </div>
 
+                    <!-- Hướng Dẫn Trích Xuất Số Liệu Kế Toán Đầu Vào (Input Raw Accounting Items) -->
+                    <div class="p-5 bg-purple-950 text-white rounded-2xl border border-purple-800 space-y-3 shadow-md">
+                        <h3 class="font-extrabold text-sm text-purple-200 flex items-center gap-2 uppercase tracking-wide">
+                            <span>📌 BẢNG TRA CỨU TÀI KHOẢN KẾ TOÁN & BÁO CÁO ĐẦU VÀO (MẪU CHUẨN QTDND)</span>
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-purple-100">
+                            <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
+                                <p class="font-bold text-amber-300">1. Lợi nhuận sau thuế (LNST):</p>
+                                <p>• <b>BCTC</b>: Chỉ tiêu 20 (Lợi nhuận sau thuế) trên Mẫu B03-QTD.</p>
+                                <p>• <b>Bảng CĐTK</b>: Dư Có TK 4212 (LN chưa phân phối năm nay) trên Mẫu B02-QTD.</p>
+                            </div>
+                            <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
+                                <p class="font-bold text-amber-300">2. Tổng Tài sản Bình quân (TSBQ):</p>
+                                <p>• <b>Công thức BQ</b>: <span class="font-mono text-emerald-300">TSBQ = (Tổng TS Đầu kỳ + Tổng TS Cuối kỳ) / 2</span></p>
+                                <p>• <b>BCTC</b>: Chỉ tiêu 100 (Tổng cộng Tài sản) trên Bảng CĐKT (Mẫu B01-QTD).</p>
+                            </div>
+                            <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
+                                <p class="font-bold text-amber-300">3. Vốn Chủ Sở Hữu Bình quân (VCSHBQ):</p>
+                                <p>• <b>Công thức BQ</b>: <span class="font-mono text-emerald-300">VCSHBQ = (VCSH Đầu kỳ + VCSH Cuối kỳ) / 2</span></p>
+                                <p>• <b>Bảng CĐTK</b>: TK 411 (Vốn điều lệ) + TK 418 (Các quỹ) + TK 421 (LN chưa phân phối).</p>
+                            </div>
+                            <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
+                                <p class="font-bold text-amber-300">4. Thu nhập Hoạt động Thuần (TNHĐ) & CPHD:</p>
+                                <p>• <b>TNHĐ</b>: (Thu nhập lãi TK 701,702 - Chi phí lãi TK 801,802) + Thu hoạt động khác.</p>
+                                <p>• <b>CPHD</b>: TK 851 (Chi phí quản lý) + TK 811 (Chi phí nghiệp vụ khác).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6 Khối Chỉ Số Tài Chính Chi Tiết -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- 1. ROA -->
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
@@ -4041,7 +4071,6 @@
                                 </h3>
                                 <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 0.8%</span>
                             </div>
-                            <!-- Thẻ Phân số Toán học HTML Siêu Sắc Nét 100% Không Lỗi MathJax -->
                             <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>ROA</span>
                                 <span>=</span>
@@ -4052,16 +4081,16 @@
                                 <span>× 100%</span>
                             </div>
                             <div class="p-3 bg-purple-50/80 rounded-xl border border-purple-200 text-xs space-y-2">
-                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
-                                <ul class="space-y-1 text-slate-700">
-                                    <li><b>• LNST (Lợi nhuận sau thuế)</b>: Lấy từ <i>Chỉ tiêu 20 (LNST)</i> trên Báo cáo Kết quả HĐKD (Mẫu B03-QTD) hoặc <i>Số dư Cột Có Tài khoản 4212 (LN chưa phân phối năm nay)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
-                                    <li><b>• TSBQ (Tổng tài sản bình quân)</b>: Lấy bình quân đầu kỳ & cuối kỳ <i>Chỉ tiêu 100 (Tổng Tài sản)</i> trên Bảng Cân đối Kế toán (Mẫu B01-QTD).</li>
-                                </ul>
+                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Các bước tính số liệu chi tiết:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-slate-700">
+                                    <li><b>Bước 1</b>: Lấy Lợi nhuận sau thuế từ Cột Thực hiện năm nay trên Báo cáo B03-QTD (Ví dụ: 2.000.000.000 đ).</li>
+                                    <li><b>Bước 2</b>: Lấy Tổng tài sản Đầu kỳ (190.000.000.000 đ) và Cuối kỳ (210.000.000.000 đ) từ Mẫu B01-QTD ➔ TSBQ = (190 tỷ + 210 tỷ) / 2 = 200 tỷ đ.</li>
+                                    <li><b>Bước 3</b>: Thực hiện phép chia ➔ ROA = (2 tỷ / 200 tỷ) × 100% = 1.00%.</li>
+                                </ol>
                             </div>
                             <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
-                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
-                                <p class="text-slate-700">QTDND Yên Thọ có LNST năm 2025 là <b>2,0 tỷ đồng</b>, Tổng tài sản bình quân là <b>200 tỷ đồng</b>:</p>
-                                <p class="font-mono font-bold text-purple-800">➔ ROA = (2.000.000.000 / 200.000.000.000) × 100% = 1.00% (Đạt chuẩn tối đa 10/10đ xếp hạng NHNN).</p>
+                                <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
+                                <p class="font-mono font-bold text-purple-800">➔ ROA = 1.00% ≥ 0.8% chuẩn NHNN (Đạt tối đa 10/10đ xếp hạng Hạng A).</p>
                             </div>
                         </div>
 
@@ -4084,16 +4113,16 @@
                                 <span>× 100%</span>
                             </div>
                             <div class="p-3 bg-purple-50/80 rounded-xl border border-purple-200 text-xs space-y-2">
-                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
-                                <ul class="space-y-1 text-slate-700">
-                                    <li><b>• LNST (Lợi nhuận sau thuế)</b>: Lấy từ <i>Chỉ tiêu 20 (LNST)</i> trên Báo cáo KQHĐKD (Mẫu B03-QTD).</li>
-                                    <li><b>• VCSHBQ (Vốn chủ sở hữu BQ)</b>: Lấy từ <i>TK 411 (Vốn điều lệ) + TK 418 (Các quỹ Quỹ QTDND) + TK 421 (Lợi nhuận chưa phân phối)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
-                                </ul>
+                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Các bước tính số liệu chi tiết:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-slate-700">
+                                    <li><b>Bước 1</b>: Lấy LNST = 2.000.000.000 đ.</li>
+                                    <li><b>Bước 2</b>: Tính VCSHBQ = (VCSH Đầu kỳ + VCSH Cuối kỳ) / 2 = (15 tỷ + 17 tỷ) / 2 = 16.000.000.000 đ (Gồm Vốn điều lệ TK 411 + Các quỹ TK 418).</li>
+                                    <li><b>Bước 3</b>: Thực hiện phép chia ➔ ROE = (2 tỷ / 16 tỷ) × 100% = 12.50%.</li>
+                                </ol>
                             </div>
                             <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
-                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
-                                <p class="text-slate-700">LNST năm 2025 là <b>2,0 tỷ đồng</b>, Vốn chủ sở hữu bình quân là <b>16,0 tỷ đồng</b>:</p>
-                                <p class="font-mono font-bold text-purple-800">➔ ROE = (2.000.000.000 / 16.000.000.000) × 100% = 12.50% (Đạt chuẩn tối đa 10/10đ xếp hạng NHNN).</p>
+                                <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
+                                <p class="font-mono font-bold text-purple-800">➔ ROE = 12.50% ≥ 8.0% chuẩn NHNN (Đạt tối đa 10/10đ xếp hạng Hạng A).</p>
                             </div>
                         </div>
 
@@ -4110,22 +4139,22 @@
                                 <span>CIR</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
-                                    <span class="border-b-2 border-purple-800 px-2 pb-0.5">CPHD (Chi phí hoạt động)</span>
+                                    <span class="border-b-2 border-purple-800 px-2 pb-0.5">CPHD (Chi phí quản lý & vận hành)</span>
                                     <span class="pt-0.5 px-2">TNHĐ (Thu nhập hoạt động thuần)</span>
                                 </div>
                                 <span>× 100%</span>
                             </div>
                             <div class="p-3 bg-purple-50/80 rounded-xl border border-purple-200 text-xs space-y-2">
-                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
-                                <ul class="space-y-1 text-slate-700">
-                                    <li><b>• CPHD (Chi phí hoạt động)</b>: Lấy từ <i>TK 851 (Chi phí quản lý) + TK 811 (Chi phí hoạt động nghiệp vụ - không gồm chi phí trả lãi tiền gửi)</i>.</li>
-                                    <li><b>• TNHĐ (Thu nhập hoạt động thuần)</b>: Lấy từ <i>Chỉ tiêu Thu nhập hoạt động thuần</i> trên Báo cáo KQHĐKD (Mẫu B03-QTD).</li>
-                                </ul>
+                                <p class="font-bold text-purple-950 border-b border-purple-200 pb-1">📌 Các bước tính số liệu chi tiết:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-slate-700">
+                                    <li><b>Bước 1</b>: Cộng Chi phí quản lý TK 851 + Chi phí nghiệp vụ TK 811 = 4.000.000.000 đ.</li>
+                                    <li><b>Bước 2</b>: Lấy Thu nhập hoạt động thuần TNHĐ từ Báo cáo B03-QTD = 10.000.000.000 đ.</li>
+                                    <li><b>Bước 3</b>: CIR = (4 tỷ / 10 tỷ) × 100% = 40.00%.</li>
+                                </ol>
                             </div>
                             <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
-                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
-                                <p class="text-slate-700">Chi phí hoạt động <b>4,0 tỷ đồng</b>, Thu nhập hoạt động thuần <b>10,0 tỷ đồng</b>:</p>
-                                <p class="font-mono font-bold text-purple-800">➔ CIR = (4,0 / 10,0) × 100% = 40.00% (Tiết kiệm chi phí xuất sắc, đạt tối đa 5 điểm).</p>
+                                <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
+                                <p class="font-mono font-bold text-purple-800">➔ CIR = 40.00% ≤ 50.0% (Tiết kiệm chi phí xuất sắc, đạt tối đa 5/5đ).</p>
                             </div>
                         </div>
 
@@ -4143,21 +4172,21 @@
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
                                     <span class="border-b-2 border-amber-800 px-2 pb-0.5">Dư nợ xấu (Nhóm 3 + 4 + 5)</span>
-                                    <span class="pt-0.5 px-2">Tổng dư nợ cho vay</span>
+                                    <span class="pt-0.5 px-2">Tổng dư nợ cho vay (TK 211)</span>
                                 </div>
                                 <span>× 100%</span>
                             </div>
                             <div class="p-3 bg-amber-50/80 rounded-xl border border-amber-200 text-xs space-y-2">
-                                <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
-                                <ul class="space-y-1 text-slate-700">
-                                    <li><b>• Nợ xấu (Nhóm 3+4+5)</b>: Trích xuất từ <i>Báo cáo Thống kê Phân loại nợ và Dư nợ cho vay NHNN (Mẫu C01/QTD)</i> — Tổng nợ nhóm 3 + nhóm 4 + nhóm 5.</li>
-                                    <li><b>• Tổng dư nợ cho vay</b>: Lấy từ <i>Dư Nợ Cột Có Tài khoản 211 (Cho vay thành viên)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
-                                </ul>
+                                <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Các bước tính số liệu chi tiết:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-slate-700">
+                                    <li><b>Bước 1</b>: Lấy Dư nợ Nhóm 3 (Dưới tiêu chuẩn) + Nhóm 4 (Nghi ngờ) + Nhóm 5 (Mất vốn) từ Báo cáo C01/QTD NHNN = 1.800.000.000 đ.</li>
+                                    <li><b>Bước 2</b>: Lấy Tổng dư nợ cho vay thành viên từ Cột Dư Nợ TK 211 trên Mẫu B02-QTD = 180.000.000.000 đ.</li>
+                                    <li><b>Bước 3</b>: NPL = (1,8 tỷ / 180 tỷ) × 100% = 1.00%.</li>
+                                </ol>
                             </div>
                             <div class="p-3 bg-white border-l-4 border-amber-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
-                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
-                                <p class="text-slate-700">Tổng nợ xấu (Nhóm 3+4+5) <b>1,8 tỷ đồng</b>, Tổng dư nợ cho vay <b>180 tỷ đồng</b>:</p>
-                                <p class="font-mono font-bold text-amber-800">➔ NPL = (1,8 / 180) × 100% = 1.00% (An toàn cao, đạt 15/15 điểm xếp hạng).</p>
+                                <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
+                                <p class="font-mono font-bold text-amber-800">➔ NPL = 1.00% ≤ 1.0% (Chất lượng nợ xuất sắc, đạt 15/15đ tối đa).</p>
                             </div>
                         </div>
 
@@ -4180,16 +4209,16 @@
                                 <span>× 100%</span>
                             </div>
                             <div class="p-3 bg-emerald-50/80 rounded-xl border border-emerald-200 text-xs space-y-2">
-                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
-                                <ul class="space-y-1 text-slate-700">
-                                    <li><b>• VTC (Vốn tự có)</b>: Lấy từ <i>Tổng Vốn tự có (Vốn cấp 1 + Vốn cấp 2 - Các khoản giảm trừ)</i> trên Bảng Tính Vốn Tự Có (Mẫu B04-QTD).</li>
-                                    <li><b>• TSCR (Tài sản Có rủi ro)</b>: Lấy từ <i>Tổng Tài sản Có quy đổi theo hệ số rủi ro (0%, 20%, 50%, 100%, 150%)</i> trên Báo cáo Tỷ lệ an toàn vốn định kỳ.</li>
-                                </ul>
+                                <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Các bước tính số liệu chi tiết:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-slate-700">
+                                    <li><b>Bước 1</b>: Lấy Vốn tự có VTC từ Bảng Tính Vốn Tự Có Mẫu B04-QTD = 24.000.000.000 đ.</li>
+                                    <li><b>Bước 2</b>: Lấy Tổng Tài sản Có rủi ro TSCR từ Báo cáo An toàn vốn định kỳ NHNN = 200.000.000.000 đ.</li>
+                                    <li><b>Bước 3</b>: CAR = (24 tỷ / 200 tỷ) × 100% = 12.00%.</li>
+                                </ol>
                             </div>
                             <div class="p-3 bg-white border-l-4 border-emerald-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
-                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
-                                <p class="text-slate-700">Vốn tự có <b>24,0 tỷ đồng</b>, Tổng tài sản có rủi ro <b>200 tỷ đồng</b>:</p>
-                                <p class="font-mono font-bold text-emerald-800">➔ CAR = (24,0 / 200) × 100% = 12.00% (Đạt chuẩn tối đa 15/15đ NHNN).</p>
+                                <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
+                                <p class="font-mono font-bold text-emerald-800">➔ CAR = 12.00% ≥ 12.0% (An toàn vốn rất cao, đạt tối đa 15/15đ NHNN).</p>
                             </div>
                         </div>
 
@@ -4212,16 +4241,16 @@
                                 <span>× 100%</span>
                             </div>
                             <div class="p-3 bg-blue-50/80 rounded-xl border border-blue-200 text-xs space-y-2">
-                                <p class="font-bold text-blue-950 border-b border-blue-200 pb-1">📌 Giải thích thông số & Cách lấy số liệu thực tế:</p>
-                                <ul class="space-y-1 text-slate-700">
-                                    <li><b>• Vốn ngắn hạn cho vay TDH</b>: Dư nợ cho vay trung & dài hạn minus Nguồn vốn trung & dài hạn (TK 411, Tiền gửi > 12 tháng).</li>
-                                    <li><b>• Tổng nguồn vốn ngắn hạn</b>: Dư Có <i>TK 421 (Tiền gửi không kỳ hạn & ngắn hạn < 12 tháng)</i> trên Bảng Cân đối Tài khoản (Mẫu B02-QTD).</li>
-                                </ul>
+                                <p class="font-bold text-blue-950 border-b border-blue-200 pb-1">📌 Các bước tính số liệu chi tiết:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-slate-700">
+                                    <li><b>Bước 1</b>: Tính Vốn ngắn hạn cho vay TDH = Dư nợ cho vay TDH (18 tỷ) - Nguồn vốn TDH (3 tỷ) = 15.000.000.000 đ.</li>
+                                    <li><b>Bước 2</b>: Lấy Tổng nguồn vốn ngắn hạn từ Dư Có TK 421 (<12T) trên Mẫu B02-QTD = 120.000.000.000 đ.</li>
+                                    <li><b>Bước 3</b>: STLT = (15 tỷ / 120 tỷ) × 100% = 12.50%.</li>
+                                </ol>
                             </div>
                             <div class="p-3 bg-white border-l-4 border-blue-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
-                                <p class="font-bold text-slate-900">💡 Ví dụ minh họa thực tế:</p>
-                                <p class="text-slate-700">Vốn ngắn hạn dùng cho vay TDH <b>15 tỷ đồng</b>, Tổng nguồn vốn ngắn hạn <b>120 tỷ đồng</b>:</p>
-                                <p class="font-mono font-bold text-blue-800">➔ STLT = (15 / 120) × 100% = 12.50% (Rất an toàn thanh khoản, đạt 15/15đ).</p>
+                                <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
+                                <p class="font-mono font-bold text-blue-800">➔ STLT = 12.50% ≤ 25.0% (Rất an toàn thanh khoản, đạt tối đa 15/15đ NHNN).</p>
                             </div>
                         </div>
                     </div>
