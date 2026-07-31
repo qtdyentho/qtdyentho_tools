@@ -2368,6 +2368,32 @@
                                     </select>
                                 </div>
 
+                                <!-- Straighten & Fine-Tune Tilt Alignment Control Pad -->
+                                <div class="bg-purple-50/70 p-3 rounded-xl border border-purple-200/80 space-y-2 mb-4">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-xs font-bold text-purple-900 flex items-center gap-1">
+                                            <span>📐 Xoay thẳng & Cân vuông tài liệu:</span>
+                                        </label>
+                                        <span id="doc-fine-angle-lbl" class="px-2 py-0.5 bg-purple-600 text-white rounded text-[11px] font-bold shadow-sm">🎯 0.0°</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="rotateDocImageFine(-90)" class="px-2 py-1 bg-white hover:bg-purple-100 text-purple-800 border border-purple-300 rounded text-xs font-bold transition">⏪ -90°</button>
+                                        <input type="range" id="doc-fine-rotate-slider" min="-15" max="15" step="0.1" value="0" oninput="onDocFineRotateInput(this.value)" class="w-full accent-purple-600 cursor-pointer">
+                                        <button onclick="rotateDocImageFine(90)" class="px-2 py-1 bg-white hover:bg-purple-100 text-purple-800 border border-purple-300 rounded text-xs font-bold transition">⏩ +90°</button>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-1.5 pt-1">
+                                        <button onclick="autoStraightenDocImage()" class="flex-1 py-1 px-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center justify-center gap-1">
+                                            <span>📐 Tự động xoay thẳng</span>
+                                        </button>
+                                        <button onclick="straightenA4Doc()" class="flex-1 py-1 px-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center justify-center gap-1">
+                                            <span>📐 Cân vuông A4</span>
+                                        </button>
+                                        <button onclick="resetDocFineRotate()" class="py-1 px-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition">
+                                            <span>🔄 0.0°</span>
+                                        </button>
+                                    </div>
+                                </div>
+
                                 <!-- Filter Selector -->
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-2">1. Chế độ lọc xử lý ảnh & làm rõ chữ:</label>
@@ -5382,7 +5408,62 @@
         }
 
         // ==================== PERSPECTIVE WARP VỚI ASPECT RATIO PRESETS ====================
-                function applyDocPerspectiveWarpSync() {
+                
+        let docFineRotationAngle = 0;
+
+        function onDocFineRotateInput(val) {
+            const angle = parseFloat(val) || 0;
+            docFineRotationAngle = angle;
+            const lbl = document.getElementById('doc-fine-angle-lbl');
+            if (lbl) lbl.textContent = `🎯 ${angle > 0 ? '+' : ''}${angle.toFixed(1)}°`;
+            
+            if (docFlattenedCanvas) {
+                applyDocFilter(docCurrentFilter || 'magic');
+            }
+        }
+
+        function resetDocFineRotate() {
+            docFineRotationAngle = 0;
+            const slider = document.getElementById('doc-fine-rotate-slider');
+            if (slider) slider.value = 0;
+            onDocFineRotateInput(0);
+        }
+
+        function rotateDocImageFine(deg) {
+            const slider = document.getElementById('doc-fine-rotate-slider');
+            let current = parseFloat(slider?.value || '0');
+            current = Math.max(-15, Math.min(15, current + deg));
+            if (slider) slider.value = current;
+            onDocFineRotateInput(current);
+        }
+
+        function autoStraightenDocImage() {
+            if (!docCorners || docCorners.length !== 4) return;
+            const p0 = docCorners[0], p1 = docCorners[1];
+            // Calculate top edge angle relative to horizontal axis
+            const dx = p1.x - p0.x;
+            const dy = p1.y - p0.y;
+            let rad = Math.atan2(dy, dx);
+            let deg = -rad * (180 / Math.PI);
+
+            // Clamp tilt correction to [-15, 15] degrees
+            deg = Math.max(-15, Math.min(15, deg));
+
+            showToast(`📐 Đã tự động xoay thẳng cân lề tài liệu (${deg > 0 ? '+' : ''}${deg.toFixed(1)}°)`);
+            const slider = document.getElementById('doc-fine-rotate-slider');
+            if (slider) slider.value = deg;
+            onDocFineRotateInput(deg);
+        }
+
+        function straightenA4Doc() {
+            const aspectSel = document.getElementById('doc-aspect-ratio');
+            if (aspectSel) aspectSel.value = 'a4_portrait';
+            autoStraightenDocImage();
+            applyDocPerspectiveWarp();
+        }
+
+
+        function applyDocPerspectiveWarpSync() {
             if (!docOriginalImage || !docCorners || docCorners.length !== 4) return false;
 
             const w = docOriginalImage.naturalWidth || docOriginalImage.width || 800;
@@ -5661,7 +5742,16 @@
             docFilteredCanvas.width = docFlattenedCanvas.width;
             docFilteredCanvas.height = docFlattenedCanvas.height;
             const ctx = docFilteredCanvas.getContext('2d');
-            ctx.drawImage(docFlattenedCanvas, 0, 0);
+            
+            if (docFineRotationAngle !== 0) {
+                ctx.save();
+                ctx.translate(docFilteredCanvas.width / 2, docFilteredCanvas.height / 2);
+                ctx.rotate((docFineRotationAngle * Math.PI) / 180);
+                ctx.drawImage(docFlattenedCanvas, -docFlattenedCanvas.width / 2, -docFlattenedCanvas.height / 2);
+                ctx.restore();
+            } else {
+                ctx.drawImage(docFlattenedCanvas, 0, 0);
+            }
 
             const imgData = ctx.getImageData(0, 0, docFilteredCanvas.width, docFilteredCanvas.height);
             const data = imgData.data;
