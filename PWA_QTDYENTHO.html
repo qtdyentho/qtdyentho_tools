@@ -23,7 +23,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.30-v30.00';
+            const CURRENT_VERSION = 'v2026.07.30-v31.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             if (lastVersion !== CURRENT_VERSION) {
@@ -703,7 +703,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                         </svg>
-                        <span>⚖️ So sánh</span>
+                        <span>⚖️ Vay cầm cố</span>
                     </button>
                     
                 </div>
@@ -4500,7 +4500,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v30.00';
+        const CURRENT_APP_VERSION = 'v2026.07.30-v31.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -11195,6 +11195,7 @@ async function downloadDocPDFClientSide(mode) {
 
         // Subtab Navigation Switcher
         function switchSubTab(subId) {
+            window.scrollTo({ top: 0, behavior: 'instant' });
             document.querySelectorAll('.subtab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('button[id^="subtab-tool-"]').forEach(btn => {
                 btn.classList.remove('subtab-active');
@@ -11218,6 +11219,7 @@ async function downloadDocPDFClientSide(mode) {
 
         // Doc Subtab Navigation Switcher
         function switchDocSubTab(docSubId) {
+            window.scrollTo({ top: 0, behavior: 'instant' });
             document.querySelectorAll('.doc-subtab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('button[id^="subtab-doc-"]').forEach(btn => {
                 btn.classList.remove('doc-subtab-active');
@@ -11239,6 +11241,7 @@ async function downloadDocPDFClientSide(mode) {
         }
 
         function switchQRTab(qrId) {
+            window.scrollTo({ top: 0, behavior: 'instant' });
             document.querySelectorAll('.qr-subtab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('button[id^="subtab-qr-"]').forEach(btn => {
                 btn.classList.remove('subtab-active');
@@ -11261,6 +11264,7 @@ async function downloadDocPDFClientSide(mode) {
 
         // Tab Navigation
         function switchTab(tabId) {
+            window.scrollTo({ top: 0, behavior: 'instant' });
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(tabId);
             if (target) target.classList.remove('hidden');
