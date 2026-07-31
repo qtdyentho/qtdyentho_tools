@@ -23,7 +23,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.30-v31.00';
+            const CURRENT_VERSION = 'v2026.07.30-v32.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             if (lastVersion !== CURRENT_VERSION) {
@@ -532,20 +532,23 @@
     </header>
 
     <!-- Mobile Bottom Navigation Bar -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-emerald-800/80 z-50 px-1 py-1 flex justify-around items-center text-[10px] font-medium text-emerald-200 no-print shadow-2xl">
-        <button onclick="switchTab('tab1')" id="mob-nav-tab1" class="flex flex-col items-center py-1 px-1 rounded-lg transition text-white font-bold bg-emerald-800/80">
-            <span>🧮 Lãi suất</span>
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-emerald-800/80 z-50 px-1 py-1 flex justify-around items-center text-[9px] xs:text-[10px] font-medium text-emerald-200 no-print shadow-2xl overflow-x-auto">
+        <button onclick="switchTab('tab1')" id="mob-nav-tab1" class="flex flex-col items-center py-1 px-1 rounded-lg transition text-white font-bold bg-emerald-800/80 whitespace-nowrap">
+            <span>🧮 Tiền gửi</span>
         </button>
-        <button onclick="switchTab('tab-scan')" id="mob-nav-tab-scan" class="flex flex-col items-center py-1 px-1 rounded-lg transition">
+        <button onclick="switchTab('tab-scan')" id="mob-nav-tab-scan" class="flex flex-col items-center py-1 px-1 rounded-lg transition whitespace-nowrap">
             <span>📸 Scan</span>
         </button>
-        <button onclick="switchTab('tab-fin')" id="mob-nav-tab-fin" class="flex flex-col items-center py-1 px-1 rounded-lg transition">
+        <button onclick="switchTab('tab-fin')" id="mob-nav-tab-fin" class="flex flex-col items-center py-1 px-1 rounded-lg transition whitespace-nowrap">
             <span>📊 Chỉ số TC</span>
         </button>
-        <button onclick="switchTab('tabTools')" id="mob-nav-tabTools" class="flex flex-col items-center py-1 px-1 rounded-lg transition">
+        <button onclick="switchTab('tabTools')" id="mob-nav-tabTools" class="flex flex-col items-center py-1 px-1 rounded-lg transition whitespace-nowrap">
             <span>🛠️ Tiện ích</span>
         </button>
-        <button onclick="switchTab('tab4')" id="mob-nav-tab4" class="flex flex-col items-center py-1 px-1 rounded-lg transition">
+        <button onclick="switchTab('tabQR')" id="mob-nav-tabQR" class="flex flex-col items-center py-1 px-1 rounded-lg transition whitespace-nowrap">
+            <span>💳 Tạo QR</span>
+        </button>
+        <button onclick="switchTab('tab4')" id="mob-nav-tab4" class="flex flex-col items-center py-1 px-1 rounded-lg transition whitespace-nowrap">
             <span>📚 Tài liệu</span>
         </button>
     </nav>
@@ -4500,7 +4503,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v31.00';
+        const CURRENT_APP_VERSION = 'v2026.07.30-v32.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
