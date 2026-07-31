@@ -4,6 +4,7 @@
 > **Repository chính thức:** [https://github.com/qtdyentho/qtdyentho_tools.git](https://github.com/qtdyentho/qtdyentho_tools.git)  
 > **Trang WebApp (Vercel Production):** [https://qtdyentho-tools.vercel.app/](https://qtdyentho-tools.vercel.app/)  
 > **Tài liệu Kỹ thuật & Bảng Rà Soát Lỗi Tận Gốc:** [SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)  
+> **Cẩm Nang Chỉ Dẫn Kỹ Thuật & Quy Tắc Tránh Lặp Lỗi:** [DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md](DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md)  
 
 ---
 
@@ -17,13 +18,16 @@
 
 ### 1. 📸 Phân Hệ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO (Scan & ZIP PRO Engine)
 * **Nắn phẳng 3D Homography Matrix (Perspective Warp)**: Tự động/thủ công kéo thả 4 chốt góc neon Emerald nắn tài liệu nghiêng thành trang A4 vuông vắn trong **55ms**.
-* **Kính lúp phóng to góc x2.5 (Loupe Glass Magnifier Engine)**: Tự động soi chi tiết điểm nắn góc phóng đại 2.5 lần với tâm ngắm đỏ và viền Emerald rực rỡ.
-* **Cơ chế bám dính Pointer Capture & Snap-to-click**: Loại bỏ lệch tỷ lệ CSS `object-contain`, cho phép chạm/kéo chốt góc chính xác 1:1 không tuột tay.
-* **Bộ lọc hình ảnh chuyên sâu**: Scan B&W, Magic rõ chữ, Grayscale, Khử bóng râm.
+* **Cân vuông góc 3D & Xoay thẳng dòng chữ (Orthogonal Rectification & Auto-Straighten)**: Ép góc vuông $90^\circ$ tuyệt đối và tự động xoay lề văn bản nằm ngang song song mép màn hình.
+* **Thanh trượt vi chỉnh nghiêng & Xóa nền đen 4 góc**: Thanh trượt vi chỉnh $-15.0^\circ \dots +15.0^\circ$ (bước $0.1^\circ$), tích hợp thuật toán Pure White Base Fill & Auto-Zoom Inscribed Crop xóa sạch $100\%$ vệt đen ở 4 góc khi xoay.
+* **Kính lúp phóng to góc x2.5 (Loupe Glass Magnifier Engine)**: Tự động soi chi tiết điểm nắn góc phóng đại 2.5 lần với tâm ngắm đỏ và viền Emerald rực rỡ, chặn tọa độ âm an toàn.
+* **Cơ chế bám dính Pointer Capture & Snap-to-click**: Loại bỏ lệch tỷ lệ CSS `object-contain`, gán CSS `aspect-ratio` tự nhiên cho phép chạm/kéo chốt góc chính xác 1:1 không tuột tay.
+* **Bộ lọc hình ảnh chuyên sâu & USM Sharpening**: Scan B&W, Magic rõ chữ kết hợp ma trận Unsharp Masking (USM) làm nổi bật nét bút bi và con dấu đỏ.
 * **Hiển thị dung lượng Live & Nén JPEG thông minh**: Nhảy số KB/MB thời gian thực ngay khi chỉnh slider nén (`Gốc: 135 KB ➔ Nén: 81 KB (-40%)`).
 * **Quét & Nắn tự động hàng loạt 1-Click (`processAutoBatchAllDocs()`)**: Xử lý nắn phẳng 10-20 trang hồ sơ trong **<3 giây**.
 * **Tạo ảnh CCCD 2-in-1 chuyên nghiệp**: Tự động ghép 2 mặt CCCD (1 người) hoặc 4 mặt CCCD (2 người Vợ/Chồng) lên 1 trang A4 chuẩn ISO scale.
 * **Xuất PDF A4 & In tài liệu an toàn (`#doc-print-iframe`)**: In/xuất tệp PDF bằng iframe ẩn chống Popup Blocker.
+* **Khóa Containment chống tràn giao diện**: Khóa `w-full max-w-full overflow-x-hidden` giữ giao diện gọn gàng $100\%$.
 
 ### 2. 📊 Bảng Quy Đổi Lãi Suất Tiết Kiệm Tự Động & Thông Tư 04/2022/TT-NHNN
 * Hỗ trợ 16 kỳ hạn tiền gửi (1 đến 36 tháng), quy đổi 5 phương thức nhận lãi.
@@ -41,20 +45,10 @@
 
 ---
 
-## 🛠️ BẢNG RÀ SOÁT LỖI VÀ GIẢI PHÁP KHẮC PHỤC TẬN GỐC
+## 🛠️ BẢNG TÀI LIỆU QUẢN LÝ VÀ CHỈ DẪN KỸ THUẬT
 
-| STT | Lỗi gặp phải | Nguyên nhân cốt lõi | Giải pháp khắc phục |
-| :---: | :--- | :--- | :--- |
-| **1** | **Hiển thị `0 KB` nén** | Khối script bị thiếu hàm `formatFileSize(bytes)`. | Khai báo hàm `formatFileSize(bytes)` chuẩn KB/MB; bảo vệ dung lượng gốc non-zero live. |
-| **2** | **Nút Làm phẳng bị đơ** | Thiếu câu lệnh định nghĩa hàm `applyDocPerspectiveWarpSync()`. | Khai báo đầy đủ hàm nắn 3D Homography Matrix đồng bộ. |
-| **3** | **Không kéo được 4 góc** | Thẻ canvas bị đệm đen do CSS `object-contain`. | Loại bỏ `object-contain`, đính `touch-action: none` và khớp scaleX = scaleY 1:1 với Pointer Capture. |
-| **4** | **Kính lúp bị vỡ/đen ở góc** | Tọa độ `srcX < 0` bị âm khi kéo chốt góc sát lề. | Chặn tọa độ an toàn `Math.max(0, Math.min(imgW - srcW, pos.x - srcW / 2))`. |
-| **5** | **Popup Blocker chặn in PDF** | Dùng `window.open` sau hàm `await` bất đồng bộ. | Sử dụng khung in ẩn tĩnh `<iframe id="doc-print-iframe"></iframe>`. |
-| **6** | **Canvas đen xì toàn bộ** | `Image` chưa tải xong dữ liệu bitmap. | Tạo hàm `getLoadedDocImage(callback)` và tô nền trắng base `#ffffff`. |
-| **7** | **Lệch phiên bản Update** | Mã nguồn tồn tại 3 chuỗi hằng số phiên bản khác nhau. | Thống nhất 1 hằng số duy nhất `CURRENT_APP_VERSION = 'v2026.07.30-v23.00'`. |
-| **8** | **Nội dung Memo QR dư từ** | Template memo chứa tiền tố cứng `CCCD KH GUITK...`. | Loại bỏ từ thừa `CCCD`, `KH`. Chuẩn hóa nội dung ghi rõ ràng. |
-
-Chi tiết xem tại tài liệu: 📄 **[SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)**
+1. 📄 **[DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md](DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md)**: Cẩm nang chỉ dẫn kỹ thuật, quy tắc kiến trúc và quy trình 4 bước kiểm thử trước khi release để tuyệt đối không tái diễn lại các lỗi đã khắc phục.
+2. 📄 **[SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)**: Bộ tài liệu ghi nhớ kỹ thuật hệ thống và bảng rà soát chi tiết 8 lỗi đã khắc phục tận gốc.
 
 ---
 
