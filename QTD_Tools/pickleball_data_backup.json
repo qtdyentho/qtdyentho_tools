@@ -1,0 +1,645 @@
+{
+  "athletes": [
+    {
+      "id": "id_91h4msaon",
+      "name": "Trịnh Đức Anh",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_zte18psh1",
+      "name": "Trịnh Thị Hiền",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_d7pq2ibma",
+      "name": "Hoàng Thị Lan",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_vq6wd3gz5",
+      "name": "Lê Trọng Quân",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_zvrkam0xa",
+      "name": "Trịnh Thị Thương",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_69n6ut7gp",
+      "name": "Nguyễn Thị Hạnh",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_oey18oam9",
+      "name": "Phạm Văn Mạnh",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_etdojf368",
+      "name": "Lê Quang Hùng",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_zs8isspkf",
+      "name": "Nguyễn Văn Sơn",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_yfrfrh9wn",
+      "name": "Đặng Hồng Việt",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_3y5ugx1fg",
+      "name": "Trịnh Xuân Nguyên",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_028q3iwzm",
+      "name": "Lê Như Hiếu",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_k0ie4ykby",
+      "name": "Nguyễn Quang Hiệu",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_gvhhp9q43",
+      "name": "Trịnh Ngọc Hải",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_48h7r3sup",
+      "name": "Nguyễn Thị Thanh Thuỷ",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_m8vmelhq2",
+      "name": "Lâm Thị Loan",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_muc9iq2yk",
+      "name": "Vũ Văn Phúc",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_l2ngju1qo",
+      "name": "Lê Phi Cường",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_dbiv4t4ke",
+      "name": "Đại diện QL 1",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_g9uy2lxei",
+      "name": "Đại diện QL 2",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_2xn3gfugk",
+      "name": "Đại diện QL 3",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_4k9dscy1i",
+      "name": "Đại diện QL 4",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_uv0np1ff5",
+      "name": "Đại diện QL 5",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_ax79ik8cl",
+      "name": "Đại diện QL 6",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_vxm6offk4",
+      "name": "Chủ nhiệm CLB QL",
+      "isGuest": true,
+      "unit": "CLB Quý Lộc",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_tymb7tp6s",
+      "name": "Đại diện TĐ 1",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_p0ho7g8yi",
+      "name": "Đại diện TĐ 2",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_ik7l2q374",
+      "name": "Đại diện TĐ 3",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_4c3y0t3g2",
+      "name": "Đại diện TĐ 4",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_74w98v0oi",
+      "name": "Đại diện TĐ 5",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_1w1nsh8j2",
+      "name": "Đại diện TĐ 6",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_5dl9bs6ve",
+      "name": "Chủ nhiệm CLB TĐ",
+      "isGuest": true,
+      "unit": "CLB Tam Đa",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_qhnrt1nar",
+      "name": "Đại diện CA 1",
+      "isGuest": true,
+      "unit": "Công an xã",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_d19aqhmr7",
+      "name": "Đại diện CA 2",
+      "isGuest": true,
+      "unit": "Công an xã",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_ksf9221tm",
+      "name": "Đại diện CA 3",
+      "isGuest": true,
+      "unit": "Công an xã",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_6eam8ixjl",
+      "name": "Đại diện CA 4",
+      "isGuest": true,
+      "unit": "Công an xã",
+      "gender": "male",
+      "eventMens": true,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_68uyhj24q",
+      "name": "Khách mời CA",
+      "isGuest": true,
+      "unit": "Công an xã",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": false,
+      "joinDinner": true
+    },
+    {
+      "id": "id_c0bpqdc2z",
+      "name": "Khách Khác 1",
+      "isGuest": true,
+      "unit": "Khác",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_692lueiwd",
+      "name": "Khách Khác 2",
+      "isGuest": true,
+      "unit": "Khác",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_v1iqzj1m3",
+      "name": "Khách Khác 3",
+      "isGuest": true,
+      "unit": "Khác",
+      "gender": "male",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_fr6y1plhc",
+      "name": "Khách Khác 4",
+      "isGuest": true,
+      "unit": "Khác",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    }
+  ],
+  "income": [
+    {
+      "id": 1,
+      "name": "Lệ phí thi đấu (Thành viên CLB)",
+      "quantity": 18,
+      "price": 800000,
+      "note": "Tự động tính 18 VĐV CLB",
+      "status": false
+    },
+    {
+      "id": 2,
+      "name": "Lệ phí thi đấu (Khách mời)",
+      "quantity": 0,
+      "price": 0,
+      "note": "Miễn phí VĐV Khách mời",
+      "status": true
+    },
+    {
+      "id": 3,
+      "name": "Tài trợ Quỹ TDND Yên Thọ & Mạnh thường quân",
+      "quantity": 1,
+      "price": 0,
+      "note": "Tài trợ chính giải đấu",
+      "status": true
+    }
+  ],
+  "expenseCategories": [
+    {
+      "id": "cat1",
+      "name": "1. Chi phí công tác tổ chức",
+      "items": [
+        {
+          "id": 101,
+          "name": "Băng rôn, phông bạt (Backdrop)",
+          "quantity": 1,
+          "price": 500000,
+          "note": "Trang trí lễ Khai mạc/Bế mạc",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 102,
+          "name": "Bóng thi đấu Pickleball chuẩn",
+          "quantity": 15,
+          "price": 0,
+          "note": "CLB có sẵn, không mất phí",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 103,
+          "name": "Nước uống, đá lạnh, trái cây",
+          "quantity": 1,
+          "price": 500000,
+          "note": "Dùng trong 2 ngày thi đấu",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 104,
+          "name": "Chi phí phát sinh/Dự phòng",
+          "quantity": 1,
+          "price": 500000,
+          "note": "Dự phòng tổ chức",
+          "payer": "BTC",
+          "status": false
+        }
+      ]
+    },
+    {
+      "id": "cat2",
+      "name": "2. Chi phí Giải thưởng",
+      "items": [
+        {
+          "id": 201,
+          "name": "Cúp Vô địch (2 nội dung)",
+          "quantity": 2,
+          "price": 300000,
+          "note": "2 chiếc cho 2 nội dung",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 202,
+          "name": "Cờ trao giải (Nhất, Nhì, Ba)",
+          "quantity": 6,
+          "price": 60000,
+          "note": "Mỗi VĐV đoạt giải 1 chiếc",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 203,
+          "name": "Tiền thưởng: Giải Nhất",
+          "quantity": 2,
+          "price": 1000000,
+          "note": "Cho 2 nội dung",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 204,
+          "name": "Tiền thưởng: Giải Nhì",
+          "quantity": 2,
+          "price": 600000,
+          "note": "Cho 2 nội dung",
+          "payer": "BTC",
+          "status": false
+        },
+        {
+          "id": 205,
+          "name": "Tiền thưởng: Giải Đồng hạng Ba",
+          "quantity": 2,
+          "price": 400000,
+          "note": "4 giải Ba cho 2 nội dung",
+          "payer": "BTC",
+          "status": false
+        }
+      ]
+    },
+    {
+      "id": "cat3",
+      "name": "3. Chi phí Giao lưu ẩm thực (Gala Dinner)",
+      "items": [
+        {
+          "id": 301,
+          "name": "Mâm cỗ tiệc cho Thành viên CLB",
+          "quantity": 3,
+          "price": 900000,
+          "note": "Cho 18 TV CLB (3 mâm x 6ng)",
+          "payer": "Ban Hậu Cần",
+          "status": false
+        },
+        {
+          "id": 302,
+          "name": "Mâm cỗ tiệc cho Khách mời",
+          "quantity": 4,
+          "price": 900000,
+          "note": "Cho 23 khách mời (4 mâm x 6ng)",
+          "payer": "Ban Hậu Cần",
+          "status": false
+        },
+        {
+          "id": 303,
+          "name": "Đồ uống (Bia, nước ngọt, đá)",
+          "quantity": 1,
+          "price": 1000000,
+          "note": "Chi đồ uống tiệc",
+          "payer": "Ban Hậu Cần",
+          "status": false
+        }
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "id": "m1",
+      "event": "mens",
+      "round": "Bán Kết 1",
+      "pairA": "Trịnh Đức Anh & Lê Trọng Quân",
+      "pairB": "Phạm Văn Mạnh & Lê Quang Hùng",
+      "scoreA": 11,
+      "scoreB": 8,
+      "status": "completed"
+    },
+    {
+      "id": "m2",
+      "event": "mens",
+      "round": "Bán Kết 2",
+      "pairA": "Nguyễn Văn Sơn & Nguyễn Hữu Nhân",
+      "pairB": "Đặng Hồng Việt & Trịnh Xuân Nguyên",
+      "scoreA": 9,
+      "scoreB": 11,
+      "status": "completed"
+    },
+    {
+      "id": "m3",
+      "event": "mens",
+      "round": "Chung Kết",
+      "pairA": "Trịnh Đức Anh & Lê Trọng Quân",
+      "pairB": "Đặng Hồng Việt & Trịnh Xuân Nguyên",
+      "scoreA": 11,
+      "scoreB": 9,
+      "status": "completed"
+    },
+    {
+      "id": "m4",
+      "event": "mixed",
+      "round": "Bán Kết 1",
+      "pairA": "Trịnh Đức Anh & Trịnh Thị Hiền",
+      "pairB": "Lê Trọng Quân & Hoàng Thị Lan",
+      "scoreA": 11,
+      "scoreB": 7,
+      "status": "completed"
+    },
+    {
+      "id": "m5",
+      "event": "mixed",
+      "round": "Bán Kết 2",
+      "pairA": "Phạm Văn Mạnh & Trịnh Thị Thương",
+      "pairB": "Lê Quang Hùng & Vũ Thị Hiền",
+      "scoreA": 11,
+      "scoreB": 8,
+      "status": "completed"
+    },
+    {
+      "id": "m6",
+      "event": "mixed",
+      "round": "Chung Kết",
+      "pairA": "Trịnh Đức Anh & Trịnh Thị Hiền",
+      "pairB": "Phạm Văn Mạnh & Trịnh Thị Thương",
+      "scoreA": 11,
+      "scoreB": 8,
+      "status": "completed"
+    }
+  ],
+  "champions": {
+    "mens": {
+      "first": "Trịnh Đức Anh & Lê Trọng Quân",
+      "second": "Đặng Hồng Việt & Trịnh Xuân Nguyên",
+      "third1": "Phạm Văn Mạnh & Lê Quang Hùng",
+      "third2": "Nguyễn Văn Sơn & Nguyễn Hữu Nhân"
+    },
+    "mixed": {
+      "first": "Trịnh Đức Anh & Trịnh Thị Hiền",
+      "second": "Phạm Văn Mạnh & Trịnh Thị Thương",
+      "third1": "Lê Trọng Quân & Hoàng Thị Lan",
+      "third2": "Lê Quang Hùng & Vũ Thị Hiền"
+    }
+  },
+  "_syncAt": "2026-07-31T16:51:57.379Z"
+}
