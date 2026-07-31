@@ -11,6 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" id="pwa-apple-icon" href="icon-192.png">
     <meta name="apple-mobile-web-app-title" content="QTDND Yên Thọ">
     <meta name="application-name" content="QTDND Yên Thọ">
 
@@ -2537,7 +2538,7 @@
             </div>
 
             <!-- Modal Ghép 2 Mặt CCCD 2-in-1 lên 1 Trang A4 -->
-            <div id="cccd-2in1-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+            <div id="cccd-2in1-modal" data-alias="modal-cccd-2in1" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
                 <div class="bg-white rounded-2xl max-w-xl w-full p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-3">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -4337,6 +4338,7 @@
         let docFlattenedCanvas = null;
         let docFilteredCanvas = null;
         let docCurrentFilter = 'original';
+        let docStagedPages = [];
         let cccdFrontImg = null;
         let cccdBackImg = null;
         let cccd2FrontImg = null;
@@ -6291,7 +6293,8 @@ async function downloadDocPDFClientSide(mode) {
                         <body>
                             ${pagesHtml}
                             <script>window.onload = function() { window.print(); };<\/script>
-                        </body>
+                            <iframe id="doc-print-iframe" class="hidden w-0 h-0 border-0 absolute -left-[9999px]" src="about:blank"></iframe>
+</body>
                         </html>
                     `;
 
