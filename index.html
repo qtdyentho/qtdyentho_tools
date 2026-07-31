@@ -23,28 +23,33 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.30-v23.00';
+            const CURRENT_VERSION = 'v2026.07.30-v28.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
-            // 1. Unregister all stale Service Workers
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                    for (var r of registrations) r.unregister();
-                }).catch(function () { });
-            }
-
-            // 2. Clear CacheStorage
-            if ('caches' in window) {
-                caches.keys().then(function (keys) {
-                    keys.forEach(function (k) { caches.delete(k); });
-                }).catch(function () { });
-            }
-
-            // 3. Purge legacy localStorage HTML cache if version bumped
             if (lastVersion !== CURRENT_VERSION) {
+                // 1. Unregister all stale Service Workers
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                        for (var r of registrations) r.unregister();
+                    }).catch(function () { });
+                }
+
+                // 2. Clear CacheStorage
+                if ('caches' in window) {
+                    caches.keys().then(function (keys) {
+                        keys.forEach(function (k) { caches.delete(k); });
+                    }).catch(function () { });
+                }
+
+                // 3. Purge all legacy cached HTML in localStorage
                 localStorage.setItem('qtdnd_app_version', CURRENT_VERSION);
                 localStorage.removeItem('qtdnd_cached_app_html');
-                console.log('[QTD Tools] Updated to ' + CURRENT_VERSION + '. Stale caches purged.');
+                for (var key in localStorage) {
+                    if (key.includes('cache') || key.includes('html') || key.includes('pwa')) {
+                        localStorage.removeItem(key);
+                    }
+                }
+                console.log('[QTD Tools] Force purged stale cache to version ' + CURRENT_VERSION);
             }
         })();
     </script>
@@ -4493,7 +4498,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v27.00';
+        const CURRENT_APP_VERSION = 'v2026.07.30-v28.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
