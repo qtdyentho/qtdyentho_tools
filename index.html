@@ -5703,7 +5703,16 @@
 
             const compBytes = Math.round((dataUrl.length - 22) * 0.75);
 
-            const origSize = docOriginalSize || (docOriginalImage ? Math.round(docOriginalImage.width * docOriginalImage.height * 0.45) : compBytes * 1.5);
+            let origSize = (docOriginalSize > 0) ? docOriginalSize : 0;
+            if (origSize <= 0) {
+                if (docOriginalImage && (docOriginalImage.naturalWidth || docOriginalImage.width)) {
+                    const w = docOriginalImage.naturalWidth || docOriginalImage.width;
+                    const h = docOriginalImage.naturalHeight || docOriginalImage.height;
+                    origSize = Math.round(w * h * 0.45);
+                } else {
+                    origSize = Math.round(compBytes * 1.6);
+                }
+            }
             docOriginalSize = origSize;
 
             const origLbl = document.getElementById('doc-orig-size-lbl');
