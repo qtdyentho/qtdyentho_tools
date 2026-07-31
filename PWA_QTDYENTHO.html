@@ -507,7 +507,7 @@
                         <span>🧮 Tiền gửi</span>
                     </button>
                     <button onclick="switchTab('tab-scan')" id="nav-tab-scan" class="py-2 px-3.5 rounded-xl text-emerald-100/90 hover:bg-white/15 hover:text-white transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 font-bold">
-                        <span>📸 Scan & Zip PRO</span>
+                        <span>📸 Scan</span>
                     </button>
                     <button onclick="switchTab('tab-fin')" id="nav-tab-fin" class="py-2 px-3.5 rounded-xl text-emerald-100/90 hover:bg-white/15 hover:text-white transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 font-bold">
                         <span>📊 Chỉ số TC</span>
@@ -532,7 +532,7 @@
             <span>🧮 Lãi suất</span>
         </button>
         <button onclick="switchTab('tab-scan')" id="mob-nav-tab-scan" class="flex flex-col items-center py-1 px-1 rounded-lg transition">
-            <span>📸 Scan&Zip</span>
+            <span>📸 Scan</span>
         </button>
         <button onclick="switchTab('tab-fin')" id="mob-nav-tab-fin" class="flex flex-col items-center py-1 px-1 rounded-lg transition">
             <span>📊 Chỉ số TC</span>
@@ -700,27 +700,7 @@
                         </svg>
                         <span>⚖️ So sánh</span>
                     </button>
-                    <button onclick="switchSubTab('tool-fin')" id="subtab-tool-fin"
-                        class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
-                        <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 002-2h2a2 2 0 002 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 002-2h2a2 2 0 002 2v14a2 2 0 002 2h2a2 2 0 002-2z">
-                            </path>
-                        </svg>
-                        <span>📈 Chỉ số TC</span>
-                    </button>
-                    <button onclick="switchSubTab('tool-scanner')" id="subtab-tool-scanner"
-                        class="py-2.5 px-4 font-bold text-sm text-slate-500 hover:text-slate-800 transition flex items-center gap-2 whitespace-nowrap">
-                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                            </path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z">
-                            </path>
-                        </svg>
-                        <span>📸 Scan & ZIP</span>
-                    </button>
+                    
                 </div>
 
                 <!-- SUBTAB 1: TIẾT KIỆM -->
@@ -1836,8 +1816,43 @@
             </div>
 
             <!-- SUBTAB 6: CHỈ SỐ TÀI CHÍNH QUỸ -->
-            <div id="tool-fin" class="subtab-content hidden space-y-6">
-                <div class="border-b border-slate-100 pb-3">
+            <!-- Live WebCam Camera Modal for All Environments (PC WebCam & Mobile) -->
+            <div id="doc-camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+                <div class="bg-slate-900 rounded-2xl max-w-lg w-full p-4 space-y-4 shadow-2xl border border-slate-700">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white">
+                        <h3 class="text-base font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+                            <span>📸 Máy Ảnh Chụp Tài Liệu (Camera Live)</span>
+                        </h3>
+                        <button onclick="closeDocCameraModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+                    </div>
+
+                    <div class="relative bg-black rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center border border-slate-800">
+                        <video id="doc-camera-video" autoplay playsinline class="w-full h-full object-cover"></video>
+                        <div class="absolute inset-4 border-2 border-dashed border-emerald-400/60 rounded-lg pointer-events-none flex items-center justify-center">
+                            <span class="text-white/80 text-xs bg-black/60 px-2.5 py-1 rounded font-bold shadow">📸 Đặt tài liệu phẳng vào khung rồi bấm Chụp</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 pt-1">
+                        <button onclick="switchDocCameraFacing()" id="btn-switch-cam" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+                            <span>🔄 Đổi Camera</span>
+                        </button>
+                        <button onclick="takeDocCameraSnapshot()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-extrabold shadow-lg transition flex items-center gap-2 transform active:scale-95">
+                            <span class="w-3.5 h-3.5 bg-white rounded-full"></span>
+                            <span>📸 Chụp Ảnh Ngay</span>
+                        </button>
+                        <button onclick="closeDocCameraModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold border border-slate-700">
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SUBTAB: QUÉT, CĂN CHỈNH 4 GÓC & NÉN TÀI LIỆU ==================== -->
+            <!-- ==================== TAB MAIN: CHỈ SỐ TÀI CHÍNH QUỶ ==================== -->
+        <div id="tab-fin" data-alias="tool-financial" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-100 pb-3">
                     <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                         <span class="w-2.5 h-5 bg-teal-700 rounded-full inline-block"></span>
                         Phân Hệ Tính Toán & Đánh Giá Chỉ Số Tài Chính Quỹ (ROA, ROE, NPL, CAR, CIR...)
@@ -2136,48 +2151,13 @@
             </div>
         </div>
 
-            
-            <!-- Live WebCam Camera Modal for All Environments (PC WebCam & Mobile) -->
-            <div id="doc-camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
-                <div class="bg-slate-900 rounded-2xl max-w-lg w-full p-4 space-y-4 shadow-2xl border border-slate-700">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white">
-                        <h3 class="text-base font-bold flex items-center gap-2">
-                            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
-                            <span>📸 Máy Ảnh Chụp Tài Liệu (Camera Live)</span>
-                        </h3>
-                        <button onclick="closeDocCameraModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
-                    </div>
-
-                    <div class="relative bg-black rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center border border-slate-800">
-                        <video id="doc-camera-video" autoplay playsinline class="w-full h-full object-cover"></video>
-                        <div class="absolute inset-4 border-2 border-dashed border-emerald-400/60 rounded-lg pointer-events-none flex items-center justify-center">
-                            <span class="text-white/80 text-xs bg-black/60 px-2.5 py-1 rounded font-bold shadow">📸 Đặt tài liệu phẳng vào khung rồi bấm Chụp</span>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between gap-3 pt-1">
-                        <button onclick="switchDocCameraFacing()" id="btn-switch-cam" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
-                            <span>🔄 Đổi Camera</span>
-                        </button>
-                        <button onclick="takeDocCameraSnapshot()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-extrabold shadow-lg transition flex items-center gap-2 transform active:scale-95">
-                            <span class="w-3.5 h-3.5 bg-white rounded-full"></span>
-                            <span>📸 Chụp Ảnh Ngay</span>
-                        </button>
-                        <button onclick="closeDocCameraModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold border border-slate-700">
-                            Đóng
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==================== SUBTAB: QUÉT, CĂN CHỈNH 4 GÓC & NÉN TÀI LIỆU ==================== -->
-            <div id="tab-scan" data-alias="tool-scanner" class="tab-content hidden space-y-6 w-full max-w-full overflow-x-hidden">
+        <div id="tab-scan" data-alias="tool-scanner" class="tab-content hidden space-y-6 w-full max-w-full overflow-x-hidden">
                 <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 w-full max-w-full overflow-hidden">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                         <div>
                             <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
                                 <span class="w-2.5 h-6 bg-purple-600 rounded-full inline-block"></span>
-                                📸 Công Cụ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO
+                                📸 Quét, Căn Chỉnh hồ sơ, tài liệu phục vụ hoạt động
                             </h2>
                             <p class="text-xs text-slate-500 mt-0.5">Xoay phẳng ảnh chụp nghiêng (Perspective Warp), tự động nhận diện mép giấy, làm rõ chữ, khử bóng râm, nén KB chuẩn và xuất PDF A4.</p>
                         </div>
@@ -4478,7 +4458,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v24.00';
+        const CURRENT_APP_VERSION = 'v2026.07.30-v25.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
