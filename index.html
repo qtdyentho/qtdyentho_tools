@@ -23,7 +23,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.30-v29.00';
+            const CURRENT_VERSION = 'v2026.07.30-v30.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             if (lastVersion !== CURRENT_VERSION) {
@@ -1855,7 +1855,9 @@
             </div>
 
             <!-- ==================== SUBTAB: QUÉT, CĂN CHỈNH 4 GÓC & NÉN TÀI LIỆU ==================== -->
-            <!-- ==================== TAB MAIN: CHỈ SỐ TÀI CHÍNH QUỶ ==================== -->
+            </div>
+
+        <!-- ==================== TAB MAIN: CHỈ SỐ TÀI CHÍNH QUỶ ==================== -->
         <!-- Live WebCam Camera Modal for All Environments (PC WebCam & Mobile) -->
             <div id="doc-camera-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
                 <div class="bg-slate-900 rounded-2xl max-w-lg w-full p-4 space-y-4 shadow-2xl border border-slate-700">
@@ -4498,7 +4500,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v29.00';
+        const CURRENT_APP_VERSION = 'v2026.07.30-v30.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
