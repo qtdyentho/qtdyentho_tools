@@ -645,7 +645,7 @@
 
             // ====== SWIPE GESTURE STATE ======
             const swipeTouchStartX = React.useRef(null);
-            const TAB_ORDER = ['athletes', 'budget', 'summary', 'settlement', 'matches'];
+            const TAB_ORDER = ['athletes', 'budget', 'summary', 'settlement'];
 
             const switchTab = (newTab) => {
                 setActiveTab(newTab);
@@ -1419,20 +1419,6 @@
                     "Trạng Thái": item.status ? 'Đã Tất Toán' : 'Chưa Tất Toán'
                 }));
                 exportArrayToExcel(list, "Bang_Quyet_Toan_Thanh_Toan_Pickleball", "Quyết Toán Thanh Toán");
-            };
-
-            const exportMatchesExcel = () => {
-                const list = (data.matches || []).map((m, idx) => ({
-                    "STT": idx + 1,
-                    "Nội Dung": m.event === 'mens' ? 'Đôi Nam' : 'Đôi Nam Nữ',
-                    "Vòng Đấu": m.round,
-                    "Đôi Cặp A": m.pairA,
-                    "Tỷ Số A": m.scoreA,
-                    "Tỷ Số B": m.scoreB,
-                    "Đôi Cặp B": m.pairB,
-                    "Đội Thắng": m.scoreA > m.scoreB ? m.pairA : (m.scoreB > m.scoreA ? m.pairB : 'Hòa')
-                }));
-                exportArrayToExcel(list, "Lich_Thi_Dau_Va_Ket_Qua_Pickleball", "Cặp Đấu & Tỷ Số");
             };
 
             // Unit Color Badge Map
@@ -2605,7 +2591,6 @@
                         </div>
                     </div>
 
-                    {/* SETTLEMENT TABLE 2: SUMMARY SETTLEMENT PER PAYER MEMBER */}
                     <div className="space-y-3 pt-4 border-t border-slate-800 light:border-sky-200">
                         <h3 className="font-extrabold text-sm uppercase text-emerald-400 light:text-emerald-700 flex items-center gap-2 print:text-black">
                             <i className="fa-solid fa-calculator no-print"></i>
@@ -2672,393 +2657,9 @@
                                         <br/><br/><br/>
                                         <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>Lê Trọng Quân</p>
                                     </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             );
-
-            // RENDER TAB 5: QUẢN LÝ GIẢI ĐẤU & VINH DANH ĐỘI VÔ ĐỊCH
-            const renderMatchesTab = () => {
-                const mensMatches  = (data.matches || []).filter(m => m.event === 'mens');
-                const mixedMatches = (data.matches || []).filter(m => m.event === 'mixed');
-
-                const MatchCard = ({ m, idx }) => {
-                    const winA = m.scoreA > m.scoreB;
-                    const winB = m.scoreB > m.scoreA;
-                    const draw = m.scoreA === m.scoreB;
-                    const isMens = m.event === 'mens';
-
-                    return (
-                        <div className={`relative rounded-3xl border shadow-xl overflow-hidden transition-all hover:shadow-2xl hover:-translate-y-0.5 ${
-                            isMens
-                            ? 'bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border-indigo-500/30 light:from-white light:via-sky-50/50 light:to-white light:border-sky-200'
-                            : 'bg-gradient-to-br from-slate-900 via-violet-950/40 to-slate-900 border-violet-500/30 light:from-white light:via-purple-50/50 light:to-white light:border-purple-200'
-                        }`}>
-                            {/* Card Top Header */}
-                            <div className={`px-4 py-2.5 flex items-center justify-between gap-2 ${
-                                isMens 
-                                ? 'bg-indigo-500/10 border-b border-indigo-500/20 light:bg-sky-100/60 light:border-sky-200' 
-                                : 'bg-violet-500/10 border-b border-violet-500/20 light:bg-purple-100/60 light:border-purple-200'
-                            }`}>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-slate-400 light:text-slate-600 font-black text-xs">#{idx + 1}</span>
-                                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                                        isMens ? 'bg-indigo-500/25 text-indigo-300 border border-indigo-400/30 light:bg-sky-200 light:text-sky-900' : 'bg-violet-500/25 text-violet-300 border border-violet-400/30 light:bg-purple-200 light:text-purple-900'
-                                    }`}>
-                                        <i className={`fa-solid ${isMens ? 'fa-mars' : 'fa-venus-mars'} mr-1`}></i>
-                                        {isMens ? 'Đôi Nam' : 'Đôi Nam Nữ'}
-                                    </span>
-                                </div>
-
-                                {/* Compact Group / Round Badge at the Corner */}
-                                <div className="flex items-center gap-2">
-                                    <div className="px-2.5 py-1 bg-amber-500/15 light:bg-amber-100 border border-amber-500/30 light:border-amber-300 rounded-xl text-[11px] font-extrabold text-amber-300 light:text-amber-900 flex items-center gap-1.5 shadow-sm">
-                                        <i className="fa-solid fa-layer-group text-[10px] text-amber-400 light:text-amber-700"></i>
-                                        <input
-                                            type="text"
-                                            value={m.round}
-                                            onChange={e => handleMatchChange(m.id, 'round', e.target.value)}
-                                            placeholder="Bảng A, Tứ kết..."
-                                            className="bg-transparent border-b border-transparent hover:border-amber-400 focus:border-amber-400 focus:outline-none text-amber-300 light:text-amber-900 font-extrabold w-28 sm:w-32 placeholder-amber-500/60 light:placeholder-amber-700/60"
-                                        />
-                                    </div>
-                                    <button onClick={() => removeMatchRow(m.id)} className="text-slate-500 hover:text-rose-400 transition p-1.5 rounded-xl hover:bg-rose-500/10">
-                                        <i className="fa-solid fa-xmark text-xs"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* VS Arena - Full Width Athlete Focus */}
-                            <div className="p-4 grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-3 items-center">
-                                {/* PAIR A BOX */}
-                                <div className={`rounded-2xl p-3.5 flex flex-col gap-2 border transition-all ${
-                                    winA ? 'bg-emerald-500/15 border-emerald-500/40 shadow-md shadow-emerald-500/10 light:bg-emerald-50 light:border-emerald-300' :
-                                    winB ? 'bg-slate-800/40 border-slate-700/30 opacity-60 light:bg-slate-100 light:border-slate-200' :
-                                    'bg-slate-800/60 light:bg-white border-slate-700/40 light:border-sky-200'
-                                }`}>
-                                    <div className="flex items-center justify-between gap-1">
-                                        <span className="w-5 h-5 rounded-lg font-black text-[11px] bg-indigo-500/25 text-indigo-300 border border-indigo-400/40 light:bg-sky-200 light:text-sky-900 flex items-center justify-center shadow-sm">
-                                            A
-                                        </span>
-                                        {winA && (
-                                            <span className="text-[10px] font-black text-emerald-400 light:text-emerald-700 uppercase tracking-wider flex items-center gap-1">
-                                                <i className="fa-solid fa-crown text-amber-400 text-xs animate-bounce"></i> Thắng
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Full Width Athlete Name Input */}
-                                    <input
-                                        type="text"
-                                        value={m.pairA}
-                                        onChange={e => handleMatchChange(m.id, 'pairA', e.target.value)}
-                                        placeholder="Tên VĐV (VD: Đức Anh - Văn Nam)..."
-                                        className={`text-sm sm:text-base font-extrabold bg-transparent border-b border-transparent hover:border-slate-500 focus:outline-none w-full py-1 placeholder-slate-500 light:placeholder-slate-400 ${
-                                            winA ? 'text-emerald-300 light:text-emerald-800 focus:border-emerald-400' : 'text-slate-100 light:text-slate-900 focus:border-sky-400'
-                                        }`}
-                                    />
-                                </div>
-
-                                {/* SCORE CENTER */}
-                                <div className="flex flex-row sm:flex-col items-center justify-center gap-2 py-1">
-                                    <div className="flex items-center gap-2">
-                                        <input
-                                            type="number"
-                                            value={m.scoreA}
-                                            onChange={e => handleMatchChange(m.id, 'scoreA', parseInt(e.target.value, 10) || 0)}
-                                            className={`w-12 h-12 rounded-2xl text-center font-mono font-black text-lg border focus:outline-none shadow-inner transition ${
-                                                winA ? 'bg-emerald-900/80 border-emerald-500 text-emerald-300 light:bg-emerald-100 light:text-emerald-900' : 'bg-slate-800 light:bg-sky-50 border-slate-700 light:border-sky-300 text-white light:text-slate-900'
-                                            }`}
-                                        />
-                                        <div className="flex flex-col items-center px-1">
-                                            <span className="text-amber-400 light:text-sky-700 font-black text-xs tracking-widest">VS</span>
-                                            <span className="text-slate-600 text-[10px]">─</span>
-                                        </div>
-                                        <input
-                                            type="number"
-                                            value={m.scoreB}
-                                            onChange={e => handleMatchChange(m.id, 'scoreB', parseInt(e.target.value, 10) || 0)}
-                                            className={`w-12 h-12 rounded-2xl text-center font-mono font-black text-lg border focus:outline-none shadow-inner transition ${
-                                                winB ? 'bg-emerald-900/80 border-emerald-500 text-emerald-300 light:bg-emerald-100 light:text-emerald-900' : 'bg-slate-800 light:bg-sky-50 border-slate-700 light:border-sky-300 text-white light:text-slate-900'
-                                            }`}
-                                        />
-                                    </div>
-                                    {draw && m.scoreA === 0 && m.scoreB === 0 ? (
-                                        <span className="text-[10px] text-slate-500 light:text-slate-600 font-bold px-2 py-0.5 bg-slate-800/40 light:bg-slate-100 rounded-full border border-slate-700/50">Chưa đấu</span>
-                                    ) : draw ? (
-                                        <span className="text-[10px] text-amber-400 light:text-amber-700 font-bold px-2 py-0.5 bg-amber-500/10 light:bg-amber-100 rounded-full border border-amber-500/20">Hòa</span>
-                                    ) : null}
-                                </div>
-
-                                {/* PAIR B BOX */}
-                                <div className={`rounded-2xl p-3.5 flex flex-col gap-2 border transition-all ${
-                                    winB ? 'bg-emerald-500/15 border-emerald-500/40 shadow-md shadow-emerald-500/10 light:bg-emerald-50 light:border-emerald-300' :
-                                    winA ? 'bg-slate-800/40 border-slate-700/30 opacity-60 light:bg-slate-100 light:border-slate-200' :
-                                    'bg-slate-800/60 light:bg-white border-slate-700/40 light:border-sky-200'
-                                }`}>
-                                    <div className="flex items-center justify-between gap-1">
-                                        <span className="w-5 h-5 rounded-lg font-black text-[11px] bg-violet-500/25 text-violet-300 border border-violet-400/40 light:bg-purple-200 light:text-purple-900 flex items-center justify-center shadow-sm">
-                                            B
-                                        </span>
-                                        {winB && (
-                                            <span className="text-[10px] font-black text-emerald-400 light:text-emerald-700 uppercase tracking-wider flex items-center gap-1">
-                                                <i className="fa-solid fa-crown text-amber-400 text-xs animate-bounce"></i> Thắng
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Full Width Athlete Name Input */}
-                                    <input
-                                        type="text"
-                                        value={m.pairB}
-                                        onChange={e => handleMatchChange(m.id, 'pairB', e.target.value)}
-                                        placeholder="Tên VĐV (VD: Đức Anh - Văn Nam)..."
-                                        className={`text-sm sm:text-base font-extrabold bg-transparent border-b border-transparent hover:border-slate-500 focus:outline-none w-full py-1 placeholder-slate-500 light:placeholder-slate-400 ${
-                                            winB ? 'text-emerald-300 light:text-emerald-800 focus:border-emerald-400' : 'text-slate-100 light:text-slate-900 focus:border-sky-400'
-                                        }`}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    );
-                };
-
-                return (
-                <div className="space-y-8">
-                    {/* SECTION 1: PODIUM & CHAMPIONS HONOR CARDS */}
-                    <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6 shadow-2xl border-amber-500/30 light:border-amber-200">
-                        <div className="text-center space-y-2 border-b border-slate-700/60 light:border-slate-200 pb-4">
-                            <span className="px-4 py-1 bg-amber-500/20 text-amber-300 light:bg-amber-100 light:text-amber-800 border border-amber-500/30 rounded-full text-xs font-black uppercase tracking-widest">
-                                🏆 VINH DANH NHÀ VÔ ĐỊCH GIẢI ĐẤU
-                            </span>
-                            <h2 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 uppercase">
-                                BẢNG VÀNG THÀNH TÍCH CLB PICKLEBALL YÊN THỌ
-                            </h2>
-                            <p className="text-xs text-slate-400 light:text-slate-600 italic">Kỷ niệm 1 năm thành lập CLB Yên Thọ (08/08/2025 - 08/08/2026)</p>
-                        </div>
-
-                        {/* CHAMPIONS PODIUM GRID */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* EVENT 1: MENS DOUBLES CHAMPIONS */}
-                            <div className="glass-card p-5 rounded-3xl bg-gradient-to-br from-amber-950/40 via-slate-900 to-amber-900/20 light:from-amber-50 light:to-sky-50 border border-amber-500/30 light:border-amber-200 space-y-4 shadow-xl">
-                                <div className="flex justify-between items-center border-b border-amber-500/20 pb-3">
-                                    <h3 className="font-black text-amber-300 light:text-amber-800 text-base flex items-center gap-2">
-                                        <i className="fa-solid fa-trophy text-amber-400 text-lg"></i>
-                                        <span>NỘI DUNG ĐÔI NAM</span>
-                                    </h3>
-                                    <span className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-extrabold">Đoạt Cúp Vô Địch</span>
-                                </div>
-
-                                <div className="space-y-3">
-                                    {/* 1st Place - Gold */}
-                                    <div className="p-4 bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/20 light:bg-amber-100/80 rounded-2xl border border-amber-500/40 flex items-center justify-between gap-3 shadow-md">
-                                        <div className="flex items-center gap-3">
-                                            <span className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow">🥇</span>
-                                            <div>
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 light:text-amber-800 block">GIẢI NHẤT - CÚP VÔ ĐỊCH</span>
-                                                <input 
-                                                    type="text" 
-                                                    value={data.champions?.mens?.first || ''}
-                                                    onChange={e => handleChampionChange('mens', 'first', e.target.value)}
-                                                    className="font-black text-white light:text-amber-950 text-sm bg-transparent border-b border-transparent hover:border-amber-400 focus:border-amber-400 focus:outline-none w-full"
-                                                />
-                                            </div>
-                                        </div>
-                                        <i className="fa-solid fa-crown text-amber-400 text-xl animate-pulse"></i>
-                                    </div>
-
-                                    {/* 2nd Place - Silver */}
-                                    <div className="p-3.5 bg-slate-900/80 light:bg-white rounded-2xl border border-slate-700 light:border-slate-300 flex items-center justify-between gap-3">
-                                        <div className="flex items-center gap-3 w-full">
-                                            <span className="w-9 h-9 rounded-2xl bg-slate-300 text-slate-900 flex items-center justify-center font-black text-lg shadow">🥈</span>
-                                            <div className="w-full">
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 light:text-slate-600 block">GIẢI NHÌ</span>
-                                                <input 
-                                                    type="text" 
-                                                    value={data.champions?.mens?.second || ''}
-                                                    onChange={e => handleChampionChange('mens', 'second', e.target.value)}
-                                                    className="font-bold text-slate-200 light:text-slate-900 text-xs bg-transparent border-b border-transparent hover:border-slate-500 focus:outline-none w-full"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* 3rd Place - Bronze 1 & 2 */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                                        <div className="p-3 bg-slate-900/60 light:bg-white rounded-2xl border border-amber-900/30 light:border-amber-200 space-y-1">
-                                            <span className="text-[10px] font-bold text-amber-600 block">🥉 ĐỒNG HẠNG BA 1</span>
-                                            <input 
-                                                type="text" 
-                                                value={data.champions?.mens?.third1 || ''}
-                                                onChange={e => handleChampionChange('mens', 'third1', e.target.value)}
-                                                className="font-semibold text-slate-300 light:text-slate-900 text-xs bg-transparent border-b border-transparent focus:outline-none w-full"
-                                            />
-                                        </div>
-                                        <div className="p-3 bg-slate-900/60 light:bg-white rounded-2xl border border-amber-900/30 light:border-amber-200 space-y-1">
-                                            <span className="text-[10px] font-bold text-amber-600 block">🥉 ĐỒNG HẠNG BA 2</span>
-                                            <input 
-                                                type="text" 
-                                                value={data.champions?.mens?.third2 || ''}
-                                                onChange={e => handleChampionChange('mens', 'third2', e.target.value)}
-                                                className="font-semibold text-slate-300 light:text-slate-900 text-xs bg-transparent border-b border-transparent focus:outline-none w-full"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* EVENT 2: MIXED DOUBLES CHAMPIONS */}
-                            <div className="glass-card p-5 rounded-3xl bg-gradient-to-br from-purple-950/40 via-slate-900 to-purple-900/20 light:from-purple-50 light:to-sky-50 border border-purple-500/30 light:border-purple-200 space-y-4 shadow-xl">
-                                <div className="flex justify-between items-center border-b border-purple-500/20 pb-3">
-                                    <h3 className="font-black text-purple-300 light:text-purple-800 text-base flex items-center gap-2">
-                                        <i className="fa-solid fa-award text-purple-400 text-lg"></i>
-                                        <span>NỘI DUNG ĐÔI NAM NỮ</span>
-                                    </h3>
-                                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-extrabold">Đoạt Cúp Vô Địch</span>
-                                </div>
-
-                                <div className="space-y-3">
-                                    {/* 1st Place - Gold */}
-                                    <div className="p-4 bg-gradient-to-r from-purple-500/20 via-pink-500/10 to-purple-500/20 light:bg-purple-100/80 rounded-2xl border border-purple-500/40 flex items-center justify-between gap-3 shadow-md">
-                                        <div className="flex items-center gap-3">
-                                            <span className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow">🥇</span>
-                                            <div>
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-300 light:text-purple-800 block">GIẢI NHẤT - CÚP VÔ ĐỊCH</span>
-                                                <input 
-                                                    type="text" 
-                                                    value={data.champions?.mixed?.first || ''}
-                                                    onChange={e => handleChampionChange('mixed', 'first', e.target.value)}
-                                                    className="font-black text-white light:text-purple-950 text-sm bg-transparent border-b border-transparent hover:border-purple-400 focus:border-purple-400 focus:outline-none w-full"
-                                                />
-                                            </div>
-                                        </div>
-                                        <i className="fa-solid fa-crown text-amber-400 text-xl animate-pulse"></i>
-                                    </div>
-
-                                    {/* 2nd Place - Silver */}
-                                    <div className="p-3.5 bg-slate-900/80 light:bg-white rounded-2xl border border-slate-700 light:border-slate-300 flex items-center justify-between gap-3">
-                                        <div className="flex items-center gap-3 w-full">
-                                            <span className="w-9 h-9 rounded-2xl bg-slate-300 text-slate-900 flex items-center justify-center font-black text-lg shadow">🥈</span>
-                                            <div className="w-full">
-                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 light:text-slate-600 block">GIẢI NHÌ</span>
-                                                <input 
-                                                    type="text" 
-                                                    value={data.champions?.mixed?.second || ''}
-                                                    onChange={e => handleChampionChange('mixed', 'second', e.target.value)}
-                                                    className="font-bold text-slate-200 light:text-slate-900 text-xs bg-transparent border-b border-transparent hover:border-slate-500 focus:outline-none w-full"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* 3rd Place - Bronze 1 & 2 */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                                        <div className="p-3 bg-slate-900/60 light:bg-white rounded-2xl border border-purple-900/30 light:border-purple-200 space-y-1">
-                                            <span className="text-[10px] font-bold text-amber-600 block">🥉 ĐỒNG HẠNG BA 1</span>
-                                            <input 
-                                                type="text" 
-                                                value={data.champions?.mixed?.third1 || ''}
-                                                onChange={e => handleChampionChange('mixed', 'third1', e.target.value)}
-                                                className="font-semibold text-slate-300 light:text-slate-900 text-xs bg-transparent border-b border-transparent focus:outline-none w-full"
-                                            />
-                                        </div>
-                                        <div className="p-3 bg-slate-900/60 light:bg-white rounded-2xl border border-purple-900/30 light:border-purple-200 space-y-1">
-                                            <span className="text-[10px] font-bold text-amber-600 block">🥉 ĐỒNG HẠNG BA 2</span>
-                                            <input 
-                                                type="text" 
-                                                value={data.champions?.mixed?.third2 || ''}
-                                                onChange={e => handleChampionChange('mixed', 'third2', e.target.value)}
-                                                className="font-semibold text-slate-300 light:text-slate-900 text-xs bg-transparent border-b border-transparent focus:outline-none w-full"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* SECTION 2: MATCH CARDS - Đôi Nam */}
-                    <div className="glass-panel p-5 sm:p-7 rounded-3xl space-y-5 shadow-2xl border-indigo-500/20">
-                        {/* Header Đôi Nam */}
-                        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 pb-4 border-b border-indigo-500/20">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                                    <i className="fa-solid fa-mars text-white text-base"></i>
-                                </div>
-                                <div>
-                                    <h2 className="text-base font-black text-white light:text-slate-900 flex items-center gap-2">
-                                        Nội Dung <span className="text-indigo-400">ĐÔI NAM</span>
-                                        <span className="px-2 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full text-[10px] font-extrabold">{mensMatches.length} Trận</span>
-                                    </h2>
-                                    <p className="text-[11px] text-slate-400 mt-0.5">Nhập tên cặp đấu & điểm số trực tiếp</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <button onClick={exportMatchesExcel} className="px-3 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-2xl font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
-                                    <i className="fa-solid fa-file-excel text-emerald-200"></i>
-                                    <span className="hidden sm:inline">Xuất Excel</span>
-                                </button>
-                                <button onClick={() => addMatchRow('mens')} className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
-                                    <i className="fa-solid fa-plus"></i>
-                                    <span>+ Thêm Trận</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Cards Grid Đôi Nam */}
-                        {mensMatches.length === 0 ? (
-                            <div className="text-center py-10 text-slate-500">
-                                <i className="fa-solid fa-table-tennis-paddle-ball text-4xl mb-3 opacity-30"></i>
-                                <p className="font-bold">Chưa có trận Đôi Nam</p>
-                                <p className="text-xs mt-1">Nhấn "+ Thêm Trận" để thêm cặp đấu mới</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                {mensMatches.map((m, idx) => <MatchCard key={m.id} m={m} idx={idx} />)}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* SECTION 3: MATCH CARDS - Đôi Nam Nữ */}
-                    <div className="glass-panel p-5 sm:p-7 rounded-3xl space-y-5 shadow-2xl border-violet-500/20">
-                        {/* Header Đôi Nam Nữ */}
-                        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 pb-4 border-b border-violet-500/20">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
-                                    <i className="fa-solid fa-venus-mars text-white text-base"></i>
-                                </div>
-                                <div>
-                                    <h2 className="text-base font-black text-white light:text-slate-900 flex items-center gap-2">
-                                        Nội Dung <span className="text-violet-400">ĐÔI NAM NỮ</span>
-                                        <span className="px-2 py-0.5 bg-violet-500/20 text-violet-300 border border-violet-500/30 rounded-full text-[10px] font-extrabold">{mixedMatches.length} Trận</span>
-                                    </h2>
-                                    <p className="text-[11px] text-slate-400 mt-0.5">Nhập tên cặp đấu & điểm số trực tiếp</p>
-                                </div>
-                            </div>
-                            <button onClick={() => addMatchRow('mixed')} className="px-3.5 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-2xl font-bold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95 w-fit">
-                                <i className="fa-solid fa-plus"></i>
-                                <span>+ Thêm Trận</span>
-                            </button>
-                        </div>
-
-                        {/* Cards Grid Đôi Nam Nữ */}
-                        {mixedMatches.length === 0 ? (
-                            <div className="text-center py-10 text-slate-500">
-                                <i className="fa-solid fa-heart text-4xl mb-3 opacity-30"></i>
-                                <p className="font-bold">Chưa có trận Đôi Nam Nữ</p>
-                                <p className="text-xs mt-1">Nhấn "+ Thêm Trận" để thêm cặp đấu mới</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                {mixedMatches.map((m, idx) => <MatchCard key={m.id} m={m} idx={idx} />)}
-                            </div>
-                        )}
-                    </div>
-                </div>
-                );
-            };
 
             return (
                 <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
@@ -3205,13 +2806,6 @@
                                 <i className="fa-solid fa-check-double"></i>
                                 <span>4. Quyết Toán Thanh Toán</span>
                             </button>
-
-                            <button 
-                                onClick={() => setActiveTab('matches')}
-                                className={`px-5 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${activeTab === 'matches' ? 'bg-gradient-to-r from-amber-500 to-yellow-600 light:from-amber-500 light:to-yellow-600 text-white shadow-lg' : 'text-amber-400 light:text-amber-600 hover:text-white light:hover:text-slate-900'}`}>
-                                <i className="fa-solid fa-trophy"></i>
-                                <span>5. 🏆 Giải Đấu & Vinh Danh</span>
-                            </button>
                         </div>
                     </div>
 
@@ -3232,9 +2826,6 @@
                         </div>
                         <div className={activeTab === 'settlement' ? 'block print:block tab-content-enter' : 'hidden print:hidden'}>
                             {renderSettlementTab()}
-                        </div>
-                        <div className={activeTab === 'matches' ? 'block print:hidden tab-content-enter' : 'hidden print:hidden'}>
-                            {renderMatchesTab()}
                         </div>
                     </div>
 
@@ -3296,20 +2887,6 @@
                                         <i className={`fa-solid fa-check-double text-[11px] ${ activeTab === 'settlement' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
                                     </div>
                                     <span className={`text-[9px] font-extrabold tracking-tight ${ activeTab === 'settlement' ? 'text-cyan-400' : 'text-slate-500 light:text-slate-500'}`}>Quyết toán</span>
-                                </button>
-
-                                {/* Tab: Thi đấu */}
-                                <button onClick={() => switchTab('matches')} className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-2xl transition-all duration-200 active:scale-90"
-                                    style={{minWidth: '56px'}}>
-                                    {activeTab === 'matches' && (
-                                        <span className="absolute inset-0 bg-amber-500/15 rounded-2xl border border-amber-500/30"></span>
-                                    )}
-                                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
-                                        activeTab === 'matches' ? 'bg-amber-500 shadow-lg shadow-amber-500/40 scale-110' : 'bg-slate-800/80 light:bg-sky-100'
-                                    }`}>
-                                        <i className={`fa-solid fa-trophy text-[11px] ${ activeTab === 'matches' ? 'text-white' : 'text-amber-400'}`}></i>
-                                    </div>
-                                    <span className={`text-[9px] font-extrabold tracking-tight ${ activeTab === 'matches' ? 'text-amber-400' : 'text-slate-500 light:text-slate-500'}`}>Thi đấu</span>
                                 </button>
 
                             </div>
