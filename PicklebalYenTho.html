@@ -13,7 +13,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster Engine -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.31-v6.0';
+            const CURRENT_VERSION = 'v2026.08.01-v6.1';
             const lastVersion = localStorage.getItem('pickleball_app_version');
 
             if (lastVersion !== CURRENT_VERSION) {
@@ -78,10 +78,10 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
     <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin="anonymous"></script>
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -429,9 +429,11 @@
                 }
             };
             window.addEventListener('error', function(e) {
+                var msg = (e && e.message) ? e.message : String(e);
+                if (!msg || msg === 'Script error.' || msg.indexOf('ResizeObserver') !== -1) return;
                 var root = document.getElementById('root');
-                if (root) {
-                    root.innerHTML = '<div style="color:#f87171; background:#0f172a; border:2px solid #ef4444; padding:24px; margin:20px; border-radius:16px; font-family:monospace; font-size:14px; white-space:pre-wrap; z-index:9999; position:relative;">⚠️ LỖI THỜI GIAN CHẠY (WINDOW ERROR):\n\n' + (e.message || e) + '</div>';
+                if (root && (!root.children || root.children.length === 0 || root.innerHTML.indexOf('BABEL') !== -1)) {
+                    root.innerHTML = '<div style="color:#f87171; background:#0f172a; border:2px solid #ef4444; padding:24px; margin:20px; border-radius:16px; font-family:monospace; font-size:14px; white-space:pre-wrap; z-index:9999; position:relative; max-width:90vw; word-break:break-all;">⚠️ LỖI THỜI GIAN CHẠY (WINDOW ERROR):\n\n' + msg + '</div>';
                 }
             });
         })();
