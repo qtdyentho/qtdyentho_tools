@@ -2252,21 +2252,21 @@
                                                 type="text"
                                                 value={formatNumber(item.quantity)}
                                                 onChange={e => handleIncomeChange(item.id, 'quantity', parseNumber(e.target.value))}
-                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-mono font-medium text-sm"
+                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-medium text-sm"
                                             />
                                         </div>
                                         <div>
-                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Mức thu (VNĐ)</label>
+                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Mức thu</label>
                                             <input 
                                                 type="text"
                                                 value={formatNumber(item.price)}
                                                 onChange={e => handleIncomeChange(item.id, 'price', parseNumber(e.target.value))}
-                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-mono font-medium text-sm"
+                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-medium text-sm"
                                             />
                                         </div>
                                         <div>
                                             <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thành tiền</label>
-                                            <div className="px-2.5 py-2 bg-emerald-950/80 light:bg-emerald-50 border border-emerald-500/40 light:border-emerald-200 rounded-xl text-emerald-400 light:text-emerald-700 font-semibold text-right font-mono text-sm truncate shadow-inner">
+                                            <div className="px-2.5 py-2 bg-emerald-950/80 light:bg-emerald-50 border border-emerald-500/40 light:border-emerald-200 rounded-xl text-emerald-400 light:text-emerald-700 font-semibold text-right text-sm truncate shadow-inner">
                                                 {formatCurrency(item.quantity * item.price)}
                                             </div>
                                         </div>
@@ -2428,21 +2428,21 @@
                                                             type="text"
                                                             value={formatNumber(item.quantity)}
                                                             onChange={e => handleExpenseChange(cat.id, item.id, 'quantity', parseNumber(e.target.value))}
-                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-mono font-medium text-sm"
+                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-medium text-sm"
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Đơn giá (VNĐ)</label>
+                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Đơn giá</label>
                                                         <input 
                                                             type="text"
                                                             value={formatNumber(item.price)}
                                                             onChange={e => handleExpenseChange(cat.id, item.id, 'price', parseNumber(e.target.value))}
-                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-mono font-medium text-sm"
+                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-medium text-sm"
                                                         />
                                                     </div>
                                                     <div>
                                                         <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thành tiền</label>
-                                                        <div className="px-2.5 py-2 bg-rose-950/80 light:bg-rose-50 border border-rose-500/40 light:border-rose-200 rounded-xl text-rose-300 light:text-rose-700 font-semibold text-right font-mono text-sm truncate shadow-inner">
+                                                        <div className="px-2.5 py-2 bg-rose-950/80 light:bg-rose-50 border border-rose-500/40 light:border-rose-200 rounded-xl text-rose-300 light:text-rose-700 font-semibold text-right text-sm truncate shadow-inner">
                                                             {formatCurrency(item.quantity * item.price)}
                                                         </div>
                                                     </div>
