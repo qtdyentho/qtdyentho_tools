@@ -23,10 +23,10 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.07.30-v32.00';
+            const CURRENT_APP_VERSION = 'v2026.08.01-v33.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
-            if (lastVersion !== CURRENT_VERSION) {
+            if (lastVersion !== CURRENT_APP_VERSION) {
                 // 1. Unregister all stale Service Workers
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.getRegistrations().then(function (registrations) {
@@ -42,14 +42,14 @@
                 }
 
                 // 3. Purge all legacy cached HTML in localStorage
-                localStorage.setItem('qtdnd_app_version', CURRENT_VERSION);
+                localStorage.setItem('qtdnd_app_version', CURRENT_APP_VERSION);
                 localStorage.removeItem('qtdnd_cached_app_html');
                 for (var key in localStorage) {
                     if (key.includes('cache') || key.includes('html') || key.includes('pwa')) {
                         localStorage.removeItem(key);
                     }
                 }
-                console.log('[QTD Tools] Force purged stale cache to version ' + CURRENT_VERSION);
+                console.log('[QTD Tools] Force purged stale cache to version ' + CURRENT_APP_VERSION);
             }
         })();
     </script>
@@ -85,11 +85,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
         /* Flatpickr Custom Emerald Theme */
         .flatpickr-calendar {
-            font-family: 'Be Vietnam Pro', 'Inter', sans-serif !important;
+            font-family: 'Be Vietnam Pro', sans-serif !important;
             border-radius: 12px !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
             border: 1px solid #cbd5e1 !important;
@@ -132,7 +132,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Be Vietnam Pro', sans-serif;
             background-color: #f8fafc;
             color: #0f172a;
             -webkit-tap-highlight-color: transparent;
@@ -570,8 +570,7 @@
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi giả định
-                                (VNĐ)</label>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi giả định</label>
                             <input type="text" id="principal-input" value="100.000.000"
                                 oninput="formatVNDInput(this); renderTable1();"
                                 class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-bold text-emerald-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none w-40 sm:w-48 text-right bg-slate-50">
@@ -584,7 +583,7 @@
                                 </option>
                                 <option value="both">📐 Quy Đổi Lý Thuyết & Số Tiền (Tham Chiếu Trần)</option>
                                 <option value="rates">Chỉ xem Lãi suất (%/năm)</option>
-                                <option value="amount">Chỉ xem Số tiền lãi (VNĐ)</option>
+                                <option value="amount">Chỉ xem Số tiền lãi</option>
                             </select>
                         </div>
                         <div class="flex items-end gap-2 self-end">
@@ -720,7 +719,7 @@
                                 <h3 class="font-bold text-emerald-900 text-sm mb-3">1. Tiết Kiệm Gửi 1 Lần</h3>
                                 <div class="space-y-3 text-xs">
                                     <div>
-                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi</label>
                                         <input type="text" id="sav1-amount" value="50.000.000"
                                             oninput="formatVNDInput(this); calcSavingsTool1();"
                                             class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
@@ -761,8 +760,7 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi mỗi kỳ
-                                            (VNĐ)</label>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi mỗi kỳ</label>
                                         <input type="text" id="sav2-amount" value="5.000.000"
                                             oninput="formatVNDInput(this); calcSavingsTool2();"
                                             class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
@@ -799,8 +797,7 @@
                                 <h3 class="font-bold text-indigo-900 text-sm mb-3">3. Tiết Kiệm Mục Tiêu</h3>
                                 <div class="space-y-3 text-xs">
                                     <div>
-                                        <label class="block font-medium text-slate-600 mb-1">Số tiền mục tiêu cần có
-                                            (VNĐ)</label>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền mục tiêu cần có</label>
                                         <input type="text" id="sav3-goal" value="200.000.000"
                                             oninput="formatVNDInput(this); calcSavingsGoal();"
                                             class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-indigo-900">
@@ -844,7 +841,7 @@
                                 </h3>
                                 <div class="space-y-3 text-xs">
                                     <div>
-                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền gửi</label>
                                         <input type="text" id="sav4-amount" value="100.000.000"
                                             oninput="formatVNDInput(this); calcSavingsTool4();"
                                             class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
@@ -907,8 +904,7 @@
                                 </h3>
                                 <div class="space-y-3 text-xs">
                                     <div>
-                                        <label class="block font-medium text-slate-600 mb-1">Số tiền vốn ban đầu
-                                            (VNĐ)</label>
+                                        <label class="block font-medium text-slate-600 mb-1">Số tiền vốn ban đầu</label>
                                         <input type="text" id="sav5-amount" value="100.000.000"
                                             oninput="formatVNDInput(this); calcSavingsTool5();"
                                             class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
@@ -965,15 +961,13 @@
                             </h3>
                             <div class="space-y-3 text-xs">
                                 <div>
-                                    <label class="block font-medium text-slate-600 mb-1">Thu nhập ròng hàng tháng
-                                        (VNĐ)</label>
+                                    <label class="block font-medium text-slate-600 mb-1">Thu nhập ròng hàng tháng</label>
                                     <input type="text" id="loan-est-income" value="25.000.000"
                                         oninput="formatVNDInput(this); calcLoanEstimate();"
                                         class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
                                 </div>
                                 <div>
-                                    <label class="block font-medium text-slate-600 mb-1">Chi phí sinh hoạt & trả nợ khác
-                                        (VNĐ)</label>
+                                    <label class="block font-medium text-slate-600 mb-1">Chi phí sinh hoạt & trả nợ khác</label>
                                     <input type="text" id="loan-est-expense" value="10.000.000"
                                         oninput="formatVNDInput(this); calcLoanEstimate();"
                                         class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
@@ -1043,7 +1037,7 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                                 <div>
-                                    <label class="block font-medium text-slate-600 mb-1">Số tiền vay (VNĐ)</label>
+                                    <label class="block font-medium text-slate-600 mb-1">Số tiền vay</label>
                                     <input type="text" id="loan-sched-amount" value="300.000.000"
                                         oninput="formatVNDInput(this); calcRepaymentSchedule();"
                                         class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800">
@@ -1301,8 +1295,7 @@
                                 </h3>
                                 <div class="space-y-3 text-xs">
                                     <div>
-                                        <label class="block font-medium text-slate-600 mb-1">Dư nợ gốc còn lại tất toán
-                                            (VNĐ)</label>
+                                        <label class="block font-medium text-slate-600 mb-1">Dư nợ gốc còn lại tất toán</label>
                                         <input type="text" id="loan4-remain-p" value="200.000.000"
                                             oninput="formatVNDInput(this); calcLoanTool4Prepay();"
                                             class="w-full px-3 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
@@ -1361,7 +1354,7 @@
                         </div>
                         <div class="flex flex-wrap items-center gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi</label>
                                 <input type="text" id="detail-principal-input" value="100.000.000"
                                     oninput="formatVNDInput(this); renderTab2Detail();"
                                     class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold text-emerald-900 bg-emerald-50 focus:ring-2 focus:ring-emerald-500 w-36 sm:w-44 text-right">
@@ -1438,8 +1431,7 @@
                             <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Thông tin khoản
                                 tiền gửi</h3>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi ban đầu
-                                    (VNĐ)</label>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền gửi ban đầu</label>
                                 <input type="text" id="tt04-principal" value="100.000.000"
                                     oninput="formatVNDInput(this); calculatePartialWithdrawal();"
                                     class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
@@ -1516,8 +1508,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền rút trước hạn
-                                    (VNĐ)</label>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số tiền rút trước hạn</label>
                                 <input type="text" id="tt04-withdraw-amount" value="30.000.000"
                                     oninput="formatVNDInput(this); calculatePartialWithdrawal();"
                                     class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-amber-900 focus:ring-2 focus:ring-amber-500">
@@ -1645,7 +1636,7 @@
 
                         <div class="space-y-3 text-xs">
                             <div>
-                                <label class="block font-semibold text-slate-700 mb-1">Số tiền gốc trên sổ (VNĐ)</label>
+                                <label class="block font-semibold text-slate-700 mb-1">Số tiền gốc trên sổ</label>
                                 <input type="text" id="cmp-principal" value="100.000.000"
                                     oninput="formatVNDInput(this); calcWithdrawVsCollateralLoan();"
                                     class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800 bg-white focus:ring-2 focus:ring-emerald-500">
@@ -1913,7 +1904,7 @@
                     <!-- Input Form -->
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Số Liệu Tài Chính
-                            Quỹ (VNĐ)</h3>
+                            Quỹ</h3>
 
                         <div class="space-y-2 text-xs">
                             <p class="text-[10px] text-slate-400 italic border-b border-slate-100 pb-1">📌 Căn cứ: TT
@@ -2208,9 +2199,9 @@
                         </div>
                         <div class="flex items-center gap-2 bg-purple-50/80 px-3 py-1.5 rounded-xl border border-purple-100">
                             <span class="text-[11px] font-bold text-purple-700">⚡ Phím tắt nhanh:</span>
-                            <span class="text-[10px] bg-white text-slate-700 px-1.5 py-0.5 rounded shadow-xs font-mono font-semibold">Enter</span><span class="text-[10px] text-slate-500">Nắn phẳng</span>
-                            <span class="text-[10px] bg-white text-slate-700 px-1.5 py-0.5 rounded shadow-xs font-mono font-semibold">R</span><span class="text-[10px] text-slate-500">Xoay</span>
-                            <span class="text-[10px] bg-white text-slate-700 px-1.5 py-0.5 rounded shadow-xs font-mono font-semibold">A</span><span class="text-[10px] text-slate-500">Tự động viền</span>
+                            <span class="text-[10px] bg-white text-slate-700 px-1.5 py-0.5 rounded shadow-xs  font-semibold">Enter</span><span class="text-[10px] text-slate-500">Nắn phẳng</span>
+                            <span class="text-[10px] bg-white text-slate-700 px-1.5 py-0.5 rounded shadow-xs  font-semibold">R</span><span class="text-[10px] text-slate-500">Xoay</span>
+                            <span class="text-[10px] bg-white text-slate-700 px-1.5 py-0.5 rounded shadow-xs  font-semibold">A</span><span class="text-[10px] text-slate-500">Tự động viền</span>
                         </div>
                     </div>
 
@@ -2767,8 +2758,7 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                                 <div>
-                                    <label class="block font-semibold text-slate-600 mb-1">Dư nợ vay tính lãi
-                                        (VNĐ)</label>
+                                    <label class="block font-semibold text-slate-600 mb-1">Dư nợ vay tính lãi</label>
                                     <input type="text" id="qr-loan-amount" value="100.000.000"
                                         oninput="formatVNDInput(this); calcQRPayment();"
                                         class="w-full px-3 py-2 border border-slate-300 rounded-lg font-bold text-slate-800">
@@ -2817,7 +2807,7 @@
                                     <span id="qr-memo-count" class="text-[11px] font-bold text-emerald-700">0/50 ký tự</span>
                                 </div>
                                 <textarea id="qr-memo-text" rows="2" oninput="updateCustomQRMemo(true)"
-                                    class="w-full px-3 py-2 border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-lg font-mono text-xs bg-white font-bold text-slate-800"
+                                    class="w-full px-3 py-2 border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-lg  text-xs bg-white font-bold text-slate-800"
                                     placeholder="Nội dung chuyển tiền..."></textarea>
                                 <p class="text-[10px] text-slate-500 mt-1">💡 Hỗ trợ gõ/sửa trực tiếp. Nên giữ <b>dưới 50 ký tự</b> để không bị App Ngân Hàng cắt ngắn khi quét QR.</p>
                             </div>
@@ -2826,7 +2816,7 @@
                                 <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền
                                     (Mặc Định Cố Định)</label>
                                 <input type="text" id="qr-acc-number" value="3800001234567899" readonly
-                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg  font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
                             </div>
                         </div>
 
@@ -2908,7 +2898,7 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                                 <div>
-                                    <label class="block font-semibold text-slate-600 mb-1">Số tiền gửi (VNĐ)</label>
+                                    <label class="block font-semibold text-slate-600 mb-1">Số tiền gửi</label>
                                     <input type="text" id="qr-sav-amount" value="50.000.000"
                                         oninput="formatVNDInput(this); calcQRSavings();"
                                         class="w-full px-3 py-2 border border-slate-300 rounded-lg font-extrabold text-emerald-900">
@@ -2937,7 +2927,7 @@
                                     <span id="qr-sav-memo-count" class="text-[11px] font-bold text-emerald-700">0/50 ký tự</span>
                                 </div>
                                 <textarea id="qr-sav-memo-text" rows="2" oninput="updateCustomQRMemo(false)"
-                                    class="w-full px-3 py-2 border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-lg font-mono text-xs bg-white font-bold text-slate-800"
+                                    class="w-full px-3 py-2 border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-lg  text-xs bg-white font-bold text-slate-800"
                                     placeholder="Nội dung gửi tiền..."></textarea>
                                 <p class="text-[10px] text-slate-500 mt-1">💡 Hỗ trợ gõ/sửa trực tiếp. Nên giữ <b>dưới 50 ký tự</b> để không bị App Ngân Hàng cắt ngắn khi quét QR.</p>
                             </div>
@@ -2946,7 +2936,7 @@
                                 <label class="block font-semibold text-slate-600 text-xs mb-1">Số Tài Khoản Nhận Tiền
                                     (Mặc Định Cố Định)</label>
                                 <input type="text" value="3800001234567899" readonly
-                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
+                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg  font-bold text-slate-600 bg-slate-100 cursor-not-allowed">
                             </div>
                         </div>
 
@@ -3050,7 +3040,7 @@
                                                 thoại / Biệt danh)</label>
                                             <input type="text" id="std-alias" value="0348741868"
                                                 oninput="updateStandeePreview()"
-                                                class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-amber-800 bg-white">
+                                                class="w-full px-3 py-2 border border-slate-300 rounded-lg  font-bold text-amber-800 bg-white">
                                         </div>
                                         <div>
                                             <div class="flex items-center justify-between mb-1">
@@ -3061,7 +3051,7 @@
                                             </div>
                                             <input type="text" id="std-acc" value="380020" maxlength="16"
                                                 oninput="updateStandeePreview()"
-                                                class="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono font-bold text-emerald-800 bg-white">
+                                                class="w-full px-3 py-2 border border-slate-300 rounded-lg  font-bold text-emerald-800 bg-white">
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-2 pt-1">
@@ -3179,7 +3169,7 @@
                                         </div>
                                         <input type="text" id="loa-acc" value="380020" maxlength="16"
                                             oninput="updateStandeePreview()"
-                                            class="w-full px-3 py-2 border border-purple-300 rounded-lg font-mono font-bold text-purple-900 bg-white">
+                                            class="w-full px-3 py-2 border border-purple-300 rounded-lg  font-bold text-purple-900 bg-white">
                                     </div>
                                     <div class="flex items-center gap-2 pt-1">
                                         <input type="checkbox" id="loa-use-alias" onchange="updateStandeePreview()"
@@ -3303,7 +3293,7 @@
                             📌 THÔNG TIN TÀI KHOẢN CHUYỂN KHOẢN CHÍNH THỨC QTDND YÊN THỌ
                         </h2>
                         <span
-                            class="text-xs px-2.5 py-1 bg-emerald-800 text-emerald-100 rounded-lg font-mono font-bold border border-emerald-500/40">Co-opBank
+                            class="text-xs px-2.5 py-1 bg-emerald-800 text-emerald-100 rounded-lg  font-bold border border-emerald-500/40">Co-opBank
                             VietQR</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
@@ -3317,7 +3307,7 @@
                         </div>
                         <div class="bg-white/10 p-3 rounded-xl border border-white/10 space-y-0.5">
                             <span class="text-slate-300">Số tài khoản thụ hưởng:</span>
-                            <p class="font-extrabold text-teal-300 text-sm font-mono tracking-wider">3800001234567899
+                            <p class="font-extrabold text-teal-300 text-sm  tracking-wider">3800001234567899
                             </p>
                         </div>
                     </div>
@@ -3342,13 +3332,13 @@
                                     tố: TRA LAI</span>
                             </div>
                             <div
-                                class="p-2.5 bg-white rounded-lg border border-emerald-300 font-mono font-bold text-emerald-900">
+                                class="p-2.5 bg-white rounded-lg border border-emerald-300  font-bold text-emerald-900">
                                 Cú pháp: TRA LAI HDTD SO [SỐ HĐTD] KH [HỌ TÊN KH] [ĐỊA CHỈ KH hoặc SỐ CCCD KH]
                             </div>
                             <div class="space-y-1.5 pt-1">
                                 <p class="font-bold text-slate-700">📌 Ví dụ mẫu chuẩn:</p>
                                 <div
-                                    class="flex items-center justify-between p-2 bg-slate-900 text-emerald-300 font-mono rounded-lg">
+                                    class="flex items-center justify-between p-2 bg-slate-900 text-emerald-300  rounded-lg">
                                     <span class="truncate">TRA LAI HDTD SO 2026 1 00365 KH NGUYEN VAN A THON TAN LOC X
                                         QUY LOC</span>
                                     <button
@@ -3357,7 +3347,7 @@
                                         chép</button>
                                 </div>
                                 <div
-                                    class="flex items-center justify-between p-2 bg-slate-900 text-teal-300 font-mono rounded-lg">
+                                    class="flex items-center justify-between p-2 bg-slate-900 text-teal-300  rounded-lg">
                                     <span class="truncate">TRA LAI HDTD SO 2026 1 00365 KH NGUYEN VAN A CCCD
                                         038086789789</span>
                                     <button
@@ -3377,13 +3367,13 @@
                                     tố: TRA GOC</span>
                             </div>
                             <div
-                                class="p-2.5 bg-white rounded-lg border border-teal-300 font-mono font-bold text-teal-900">
+                                class="p-2.5 bg-white rounded-lg border border-teal-300  font-bold text-teal-900">
                                 Cú pháp: TRA GOC HDTD SO [SỐ HĐTD] KH [HỌ TÊN KH] [ĐỊA CHỈ KH hoặc SỐ CCCD KH]
                             </div>
                             <div class="space-y-1.5 pt-1">
                                 <p class="font-bold text-slate-700">📌 Ví dụ mẫu chuẩn:</p>
                                 <div
-                                    class="flex items-center justify-between p-2 bg-slate-900 text-teal-300 font-mono rounded-lg">
+                                    class="flex items-center justify-between p-2 bg-slate-900 text-teal-300  rounded-lg">
                                     <span class="truncate">TRA GOC HDTD SO 2026 1 00365 KH NGUYEN VAN A THON TAN LOC X
                                         QUY LOC</span>
                                     <button
@@ -3392,7 +3382,7 @@
                                         chép</button>
                                 </div>
                                 <div
-                                    class="flex items-center justify-between p-2 bg-slate-900 text-emerald-300 font-mono rounded-lg">
+                                    class="flex items-center justify-between p-2 bg-slate-900 text-emerald-300  rounded-lg">
                                     <span class="truncate">TRA GOC HDTD SO 2026 1 00365 KH NGUYEN VAN A CCCD
                                         038086789789</span>
                                     <button
@@ -3412,13 +3402,13 @@
                                     tố: TRA GOC VA LAI</span>
                             </div>
                             <div
-                                class="p-2.5 bg-white rounded-lg border border-amber-300 font-mono font-bold text-amber-900">
+                                class="p-2.5 bg-white rounded-lg border border-amber-300  font-bold text-amber-900">
                                 Cú pháp: TRA GOC VA LAI HDTD SO [SỐ HĐTD] KH [HỌ TÊN KH] [ĐỊA CHỈ KH hoặc SỐ CCCD KH]
                             </div>
                             <div class="space-y-1.5 pt-1">
                                 <p class="font-bold text-slate-700">📌 Ví dụ mẫu chuẩn:</p>
                                 <div
-                                    class="flex items-center justify-between p-2 bg-slate-900 text-amber-300 font-mono rounded-lg">
+                                    class="flex items-center justify-between p-2 bg-slate-900 text-amber-300  rounded-lg">
                                     <span class="truncate">TRA GOC VA LAI HDTD SO 2026 1 00365 KH NGUYEN VAN A THON TAN
                                         LOC X QUY LOC</span>
                                     <button
@@ -3427,7 +3417,7 @@
                                         chép</button>
                                 </div>
                                 <div
-                                    class="flex items-center justify-between p-2 bg-slate-900 text-yellow-300 font-mono rounded-lg">
+                                    class="flex items-center justify-between p-2 bg-slate-900 text-yellow-300  rounded-lg">
                                     <span class="truncate">TRA GOC VA LAI HDTD SO 2026 1 00365 KH NGUYEN VAN A CCCD
                                         038086789789</span>
                                     <button
@@ -3454,14 +3444,14 @@
                             <span class="px-2 py-0.5 bg-blue-200 text-blue-950 font-bold rounded text-[10px]">Cú pháp:
                                 GUI TK</span>
                         </div>
-                        <div class="p-2.5 bg-white rounded-lg border border-blue-300 font-mono font-bold text-blue-900">
+                        <div class="p-2.5 bg-white rounded-lg border border-blue-300  font-bold text-blue-900">
                             Cú pháp: [TÊN KHÁCH HÀNG] CCCD [SỐ CCCD KH] [ĐỊA CHỈ KH] GUI TK KY HAN [KỲ HẠN GỬI] SO TIEN
                             [SỐ TIỀN GỬI] [HÌNH THỨC NHẬN LÃI]
                         </div>
                         <div class="space-y-1.5 pt-1">
                             <p class="font-bold text-slate-700">📌 Ví dụ mẫu chuẩn:</p>
                             <div
-                                class="flex items-center justify-between p-2.5 bg-slate-900 text-blue-300 font-mono rounded-lg">
+                                class="flex items-center justify-between p-2.5 bg-slate-900 text-blue-300  rounded-lg">
                                 <span class="truncate">NGUYEN VAN A CCCD 038086789789 THON TAN LOC X QUY LOC GUI TK KY
                                     HAN 12THANG SO TIEN 100000000 LAI CUOI KY</span>
                                 <button
@@ -3481,15 +3471,15 @@
                     <ul class="list-disc list-inside space-y-1 text-slate-700 font-medium">
                         <li>Nội dung chuyển khoản hỗ trợ <b>Chữ IN HOA KHÔNG DẤU</b> hoặc <b>Chữ in thường KHÔNG DẤU</b>
                             (Ví dụ: <code
-                                class="font-mono bg-white px-1 py-0.5 rounded border border-amber-300">TRA LAI HDTD SO...</code>
+                                class=" bg-white px-1 py-0.5 rounded border border-amber-300">TRA LAI HDTD SO...</code>
                             hoặc <code
-                                class="font-mono bg-white px-1 py-0.5 rounded border border-amber-300">tra lai hdtd so...</code>).
+                                class=" bg-white px-1 py-0.5 rounded border border-amber-300">tra lai hdtd so...</code>).
                         </li>
                         <li>Tuyệt đối <b>KHÔNG VIẾT DẤU TIẾNG VIỆT</b> (Tránh lỗi mã hóa hiển thị tên khách hàng/địa chỉ
                             trên ứng dụng Ngân hàng).</li>
                         <li><b>KHÔNG DÙNG DẤU CHẤM (`.`) HOẶC PHẨY (`,`)</b> trong số tiền (Ví dụ số tiền 100 triệu viết
                             chập liền: <code
-                                class="font-mono bg-white px-1 py-0.5 rounded border border-amber-300">100000000</code>).
+                                class=" bg-white px-1 py-0.5 rounded border border-amber-300">100000000</code>).
                         </li>
                     </ul>
                 </div>
@@ -3545,18 +3535,18 @@
                             <p class="text-xs text-slate-600">Lãi tính cố định trên vốn gốc ban đầu, không nhập lãi vào
                                 gốc qua từng kỳ:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-sm sm:text-base shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-emerald-800 text-sm sm:text-base shadow-sm overflow-x-auto">
                                 $I = P \times r \times t \quad \implies \quad A = P \times (1 + r \times t)$
                             </div>
                             <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
                                 <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích
                                     thông số:</p>
                                 <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                    <li><b>$P$</b>: Số tiền gốc ban đầu (VNĐ).</li>
+                                    <li><b>$P$</b>: Số tiền gốc ban đầu.</li>
                                     <li><b>$r$</b>: Lãi suất năm (%/năm).</li>
                                     <li><b>$t$</b>: Thời gian gửi/vay ($t = \text{số tháng} / 12$ hoặc $\text{số ngày} /
                                         365$).</li>
-                                    <li><b>$I$</b>: Số tiền lãi phát sinh (VNĐ).</li>
+                                    <li><b>$I$</b>: Số tiền lãi phát sinh.</li>
                                     <li><b>$A$</b>: Tổng số tiền nhận được/phải trả cuối kỳ ($A = P + I$).</li>
                                 </ul>
                             </div>
@@ -3566,7 +3556,7 @@
                                 </p>
                                 <p class="text-slate-700">Thành viên gửi <b>100.000.000 VNĐ</b> tại QTDND Yên Thọ, lãi
                                     suất đơn <b>6,0%/năm</b>, kỳ hạn <b>6 tháng</b> ($t = 0,5$ năm):</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Tiền lãi: $I = 100.000.000 \times 6\% \times 0,5 = 3.000.000 \text{ đ}$</p>
                                     <p>• Tổng nhận đáo hạn: $A = 100.000.000 + 3.000.000 = 103.000.000 \text{ đ}$</p>
                                 </div>
@@ -3582,14 +3572,14 @@
                             <p class="text-xs text-slate-600">Tiền lãi mỗi kỳ được cộng dồn vào gốc để tiếp tục sinh lãi
                                 cho các kỳ sau:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-sm sm:text-base shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-emerald-800 text-sm sm:text-base shadow-sm overflow-x-auto">
                                 $A = P \times \left(1 + \frac{r}{m}\right)^{m \times t} \quad \implies \quad I = A - P$
                             </div>
                             <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
                                 <p class="font-bold text-emerald-950 border-b border-emerald-200 pb-1">📌 Giải thích
                                     thông số:</p>
                                 <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                    <li><b>$P$</b>: Số tiền gốc ban đầu (VNĐ).</li>
+                                    <li><b>$P$</b>: Số tiền gốc ban đầu.</li>
                                     <li><b>$r$</b>: Lãi suất danh nghĩa (%/năm).</li>
                                     <li><b>$m$</b>: Số lần nhập gốc trong 1 năm ($m=12$ nếu nhập gốc hàng tháng, $m=4$
                                         nếu hàng quý).</li>
@@ -3602,7 +3592,7 @@
                                 </p>
                                 <p class="text-slate-700">Gửi <b>100.000.000 VNĐ</b> kỳ hạn 12 tháng, lãi suất
                                     <b>6,5%/năm</b>, nhập gốc dồn lãi hàng tháng ($m=12, t=1$):</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Tổng gốc + lãi: $A = 100.000.000 \times (1 + \frac{0,065}{12})^{12} \approx
                                         106.697.194 \text{ đ}$</p>
                                     <p>• Tiền lãi dồn: $I = 106.697.194 - 100.000.000 = 6.697.194 \text{ đ}$ (nhiều hơn
@@ -3623,11 +3613,11 @@
                                 tất khoản vay:</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div
-                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
                                     $\text{Trả hàng tháng: } M = P \times \frac{r_m (1 + r_m)^n}{(1 + r_m)^n - 1}$
                                 </div>
                                 <div
-                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
                                     $\text{Dư nợ còn nợ sau kỳ } k: B_k = P \times \frac{(1 + r_m)^n - (1 + r_m)^k}{(1 +
                                     r_m)^n - 1}$
                                 </div>
@@ -3636,7 +3626,7 @@
                                 <p class="font-bold text-teal-950 border-b border-teal-200 pb-1">📌 Giải thích thông số:
                                 </p>
                                 <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                    <li><b>$P$</b>: Số tiền vay ban đầu (VNĐ).</li>
+                                    <li><b>$P$</b>: Số tiền vay ban đầu.</li>
                                     <li><b>$r_m$</b>: Lãi suất vay hàng tháng ($r_m = r_{\text{năm}} / 12$).</li>
                                     <li><b>$n$</b>: Tổng số kỳ (tháng) vay nợ theo hợp đồng.</li>
                                     <li><b>$k$</b>: Kỳ trả nợ hiện tại ($1 \le k \le n$).</li>
@@ -3650,7 +3640,7 @@
                                 </p>
                                 <p class="text-slate-700">Thành viên vay <b>120.000.000 VNĐ</b> tại QTDND Yên Thọ, thời
                                     hạn <b>12 tháng</b>, lãi suất <b>12%/năm</b> ($r_m = 1\%/\text{tháng}$):</p>
-                                <div class="font-mono bg-slate-100 p-2.5 rounded text-slate-800 space-y-1">
+                                <div class=" bg-slate-100 p-2.5 rounded text-slate-800 space-y-1">
                                     <p>• Trả cố định hàng tháng: $M = 120.000.000 \times
                                         \frac{0,01(1,01)^{12}}{(1,01)^{12} - 1} = 10.661.854 \text{ đ}$</p>
                                     <p>• <b>Dư nợ còn lại sau 6 tháng ($k=6$)</b>: $B_6 = 120.000.000 \times
@@ -3671,7 +3661,7 @@
                             <p class="text-xs text-slate-600">Mỗi tháng trả cố định 1 phần gốc, lãi tính theo dư nợ thực
                                 tế còn lại:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-teal-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
                                 $G = \frac{P}{n}, \quad I_k = \left[P - (k-1)G\right] \times r_m, \quad T_k = G + I_k$
                             </div>
                             <div class="p-3 bg-teal-50/70 border border-teal-200/80 rounded-lg text-xs space-y-1">
@@ -3689,7 +3679,7 @@
                                 </p>
                                 <p class="text-slate-700">Vay <b>120.000.000 VNĐ</b>, 12 tháng, lãi 1%/tháng ($G =
                                     10.000.000 \text{ đ/tháng}$):</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Tháng 1 ($k=1$): Lãi $I_1 = 120tr \times 1\% = 1.200.000 \text{ đ} \implies T_1
                                         = 11.200.000 \text{ đ}$</p>
                                     <p>• Tháng 2 ($k=2$): Lãi $I_2 = 110tr \times 1\% = 1.100.000 \text{ đ} \implies T_2
@@ -3707,7 +3697,7 @@
                             <p class="text-xs text-slate-600">Quy đổi lãi suất tương đương khi trả lãi định kỳ mỗi
                                 tháng:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
                                 $r_m = \frac{r}{1 + r \times \frac{n-1}{24}}$
                             </div>
                             <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
@@ -3725,7 +3715,7 @@
                                 </p>
                                 <p class="text-slate-700">Gửi <b>100.000.000 VNĐ</b> kỳ hạn 12 tháng ($n=12$), lãi suất
                                     cuối kỳ <b>6,5%/năm</b>:</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Lãi suất tháng: $r_m = \frac{6,5\%}{1 + 0,065 \times \frac{11}{24}} =
                                         6,31\%/\text{năm}$</p>
                                     <p>• Lãi lĩnh mỗi tháng: $100tr \times \frac{6,31\%}{12} = 525.833 \text{ đ/tháng}$
@@ -3743,7 +3733,7 @@
                             <p class="text-xs text-slate-600">Nhận toàn bộ tiền lãi ngay thời điểm mở sổ tiết kiệm
                                 ($t=0$):</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
                                 $r_{pre} = \frac{r}{1 + r \times \frac{n}{12}}$
                             </div>
                             <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
@@ -3761,7 +3751,7 @@
                                 </p>
                                 <p class="text-slate-700">Gửi <b>100.000.000 VNĐ</b> kỳ hạn 12 tháng, lãi suất cuối kỳ
                                     <b>6,5%/năm</b>:</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Lãi suất trước: $r_{pre} = \frac{6,5\%}{1 + 0,065 \times \frac{12}{12}} =
                                         6,10\%/\text{năm}$</p>
                                     <p>• Tiền lãi nhận ngay khi gửi: $100tr \times 6,10\% = 6.100.000 \text{ đ}$</p>
@@ -3778,7 +3768,7 @@
                             <p class="text-xs text-slate-600">Nhận lãi định kỳ 3 tháng/lần (Áp dụng kỳ hạn $n \ge 3$
                                 tháng):</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
                                 $r_q = \frac{r}{1 + r \times \frac{n-3}{24}}$
                             </div>
                             <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
@@ -3796,7 +3786,7 @@
                                 </p>
                                 <p class="text-slate-700">Gửi <b>100.000.000 VNĐ</b> kỳ hạn 12 tháng, lãi suất cuối kỳ
                                     <b>6,5%/năm</b>:</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Lãi suất quý: $r_q = \frac{6,5\%}{1 + 0,065 \times \frac{9}{24}} =
                                         6,34\%/\text{năm}$</p>
                                     <p>• Tiền lãi nhận mỗi quý (3 tháng): $100tr \times 6,34\% \times \frac{3}{12} =
@@ -3813,7 +3803,7 @@
                             </h3>
                             <p class="text-xs text-slate-600">Tích lũy tiền gửi cố định $S$ vào đầu mỗi tháng:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-emerald-800 text-sm shadow-sm overflow-x-auto">
                                 $\text{Lãi Tích Lũy} = S \times r \times \frac{n(n+1)}{24}$
                             </div>
                             <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-xs space-y-1">
@@ -3831,7 +3821,7 @@
                                 </p>
                                 <p class="text-slate-700">Mỗi tháng gửi <b>5.000.000 VNĐ</b> vào đầu tháng, liên tục 12
                                     tháng ($n=12$), lãi <b>6,0%/năm</b>:</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Tổng lãi nhận được: $5tr \times 6\% \times \frac{12 \times 13}{24} = 1.950.000
                                         \text{ đ}$</p>
                                     <p>• Tổng gốc + lãi thu về: $60.000.000 + 1.950.000 = 61.950.000 \text{ đ}$</p>
@@ -3849,7 +3839,7 @@
                             <p class="text-xs text-slate-600">Phân tách chính xác phần tiền rút trước hạn (hưởng lãi
                                 không kỳ hạn) và phần tiền gửi còn lại (giữ nguyên lãi suất cam kết ban đầu):</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-amber-900 text-xs sm:text-sm shadow-sm overflow-x-auto">
                                 $\text{Tổng Lãi} = P_{\text{rút}} \times r_{\text{kkh}} \times \frac{d}{365} +
                                 P_{\text{còn}} \times r_{\text{ck}} \times \frac{n}{12}$
                             </div>
@@ -3857,7 +3847,7 @@
                                 <p class="font-bold text-amber-950 border-b border-amber-200 pb-1">📌 Giải thích thông
                                     số:</p>
                                 <ul class="list-disc list-inside space-y-1 text-slate-700">
-                                    <li><b>$P_{\text{rút}}$</b>: Số tiền tiết kiệm thành viên rút trước hạn (VNĐ).</li>
+                                    <li><b>$P_{\text{rút}}$</b>: Số tiền tiết kiệm thành viên rút trước hạn.</li>
                                     <li><b>$r_{\text{kkh}}$</b>: Lãi suất Không kỳ hạn (%/năm) áp dụng cho phần rút.
                                     </li>
                                     <li><b>$d$</b>: Số ngày thực tế từ lúc gửi đến khi rút trước hạn.</li>
@@ -3873,7 +3863,7 @@
                                 <p class="text-slate-700">Sổ <b>100.000.000 VNĐ</b>, kỳ hạn 12 tháng, lãi cam kết
                                     <b>6,0%/năm</b>. Sau 180 ngày, khách rút trước hạn <b>30.000.000 VNĐ</b> (Lãi KKH =
                                     <b>0,3%/năm</b>):</p>
-                                <div class="font-mono bg-slate-100 p-2.5 rounded text-slate-800 space-y-1">
+                                <div class=" bg-slate-100 p-2.5 rounded text-slate-800 space-y-1">
                                     <p>• Lãi phần rút trước hạn (30tr): $30tr \times 0,3\% \times \frac{180}{365} =
                                         44.384 \text{ đ}$</p>
                                     <p>• Lãi phần 70tr giữ lại hết 12 tháng: $70tr \times 6,0\% \times 1 = 4.200.000
@@ -3893,7 +3883,7 @@
                             <p class="text-xs text-slate-600">Lãi suất thực tế nhận được hoặc phải trả trong 1 năm sau
                                 khi tính đến tần suất ghép lãi:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-indigo-900 text-sm shadow-sm overflow-x-auto">
                                 $\text{EAR} = \left(1 + \frac{r}{m}\right)^m - 1$
                             </div>
                             <div class="p-3 bg-indigo-50/70 border border-indigo-200/80 rounded-lg text-xs space-y-1">
@@ -3911,7 +3901,7 @@
                                 </p>
                                 <p class="text-slate-700">Hợp đồng vay ghi lãi suất danh nghĩa <b>12%/năm</b>, ghép lãi
                                     hàng tháng ($m=12$):</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• $\text{EAR} = (1 + \frac{0,12}{12})^{12} - 1 = (1,01)^{12} - 1 \approx
                                         12,68\%/\text{năm}$</p>
                                     <p>• Lãi suất thực tế khách hàng trả là <b>12,68%/năm</b>.</p>
@@ -3928,7 +3918,7 @@
                             <p class="text-xs text-slate-600">Chỉ số đánh giá khả năng trả nợ và an toàn tài chính của
                                 người vay vốn:</p>
                             <div
-                                class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-sm shadow-sm overflow-x-auto">
+                                class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-indigo-900 text-sm shadow-sm overflow-x-auto">
                                 $\text{DTI} = \frac{\text{Tổng tiền trả nợ hàng tháng}}{\text{Tổng thu nhập ròng hàng
                                 tháng}} \times 100\%$
                             </div>
@@ -3948,7 +3938,7 @@
                                 </p>
                                 <p class="text-slate-700">Thu nhập ròng <b>20.000.000 VNĐ/tháng</b>, tổng trả gốc+lãi
                                     vay dự kiến <b>8.000.000 VNĐ/tháng</b>:</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• $\text{DTI} = \frac{8.000.000}{20.000.000} \times 100\% = 40\%$</p>
                                     <p>• Đạt chuẩn an toàn ($40\% \le 50\%$), đủ điều kiện cấp tín dụng.</p>
                                 </div>
@@ -3966,17 +3956,17 @@
                                 = 30 ngày, 1 năm = 365 ngày) và tính lãi theo số ngày thực tế gửi/vay:</p>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div
-                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-xs shadow-sm overflow-x-auto">
+                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-indigo-900 text-xs shadow-sm overflow-x-auto">
                                     $\text{Chuẩn NH (Tháng}\rightarrow\text{Năm)}: r_{\text{năm}} = r_m \times
                                     \frac{365}{30}$
                                 </div>
                                 <div
-                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-xs shadow-sm overflow-x-auto">
+                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-indigo-900 text-xs shadow-sm overflow-x-auto">
                                     $\text{Chuẩn NH (Năm}\rightarrow\text{Tháng)}: r_m = r_{\text{năm}} \times
                                     \frac{30}{365}$
                                 </div>
                                 <div
-                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center font-mono font-bold text-indigo-900 text-xs shadow-sm overflow-x-auto">
+                                    class="p-3 bg-white border border-slate-200 rounded-lg text-center  font-bold text-indigo-900 text-xs shadow-sm overflow-x-auto">
                                     $\text{Lãi ngày thực tế}: I = \frac{P \times r \times d}{365}$
                                 </div>
                             </div>
@@ -3995,7 +3985,7 @@
                                 </p>
                                 <p class="text-slate-700">Vay <b>50.000.000 VNĐ</b>, lãi <b>10%/năm</b>, thời gian vay
                                     thực tế <b>45 ngày</b>:</p>
-                                <div class="font-mono bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
+                                <div class=" bg-slate-100 p-2 rounded text-slate-800 space-y-0.5">
                                     <p>• Số tiền lãi phải trả: $I = \frac{50.000.000 \times 10\% \times 45}{365} =
                                         616.438 \text{ VNĐ}$</p>
                                 </div>
@@ -4028,12 +4018,12 @@
                             </div>
                             <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
                                 <p class="font-bold text-amber-300">2. Tổng Tài sản Bình quân (TSBQ):</p>
-                                <p>• <b>Công thức BQ</b>: <span class="font-mono text-emerald-300">TSBQ = (Tổng TS Đầu kỳ + Tổng TS Cuối kỳ) / 2</span></p>
+                                <p>• <b>Công thức BQ</b>: <span class=" text-emerald-300">TSBQ = (Tổng TS Đầu kỳ + Tổng TS Cuối kỳ) / 2</span></p>
                                 <p>• <b>BCTC</b>: Chỉ tiêu 100 (Tổng cộng Tài sản) trên Bảng CĐKT (Mẫu B01-QTD).</p>
                             </div>
                             <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
                                 <p class="font-bold text-amber-300">3. Vốn Chủ Sở Hữu Bình quân (VCSHBQ):</p>
-                                <p>• <b>Công thức BQ</b>: <span class="font-mono text-emerald-300">VCSHBQ = (VCSH Đầu kỳ + VCSH Cuối kỳ) / 2</span></p>
+                                <p>• <b>Công thức BQ</b>: <span class=" text-emerald-300">VCSHBQ = (VCSH Đầu kỳ + VCSH Cuối kỳ) / 2</span></p>
                                 <p>• <b>Bảng CĐTK</b>: TK 411 (Vốn điều lệ) + TK 418 (Các quỹ) + TK 421 (LN chưa phân phối).</p>
                             </div>
                             <div class="p-3 bg-purple-900/60 rounded-xl border border-purple-700 space-y-1">
@@ -4050,12 +4040,12 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
                             <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-purple-600 text-white font-mono rounded text-xs">1</span>
+                                    <span class="px-2 py-0.5 bg-purple-600 text-white  rounded text-xs">1</span>
                                     <span>ROA — Tỷ suất Sinh lời trên Tổng Tài Sản</span>
                                 </h3>
                                 <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 0.8%</span>
                             </div>
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3  font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>ROA</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
@@ -4074,7 +4064,7 @@
                             </div>
                             <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
                                 <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
-                                <p class="font-mono font-bold text-purple-800">➔ ROA = 1.00% ≥ 0.8% chuẩn NHNN (Đạt tối đa 10/10đ xếp hạng Hạng A).</p>
+                                <p class=" font-bold text-purple-800">➔ ROA = 1.00% ≥ 0.8% chuẩn NHNN (Đạt tối đa 10/10đ xếp hạng Hạng A).</p>
                             </div>
                         </div>
 
@@ -4082,12 +4072,12 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
                             <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-purple-600 text-white font-mono rounded text-xs">2</span>
+                                    <span class="px-2 py-0.5 bg-purple-600 text-white  rounded text-xs">2</span>
                                     <span>ROE — Tỷ suất Sinh lời trên Vốn Chủ Sở Hữu</span>
                                 </h3>
                                 <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 8.0%</span>
                             </div>
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3  font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>ROE</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
@@ -4106,7 +4096,7 @@
                             </div>
                             <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
                                 <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
-                                <p class="font-mono font-bold text-purple-800">➔ ROE = 12.50% ≥ 8.0% chuẩn NHNN (Đạt tối đa 10/10đ xếp hạng Hạng A).</p>
+                                <p class=" font-bold text-purple-800">➔ ROE = 12.50% ≥ 8.0% chuẩn NHNN (Đạt tối đa 10/10đ xếp hạng Hạng A).</p>
                             </div>
                         </div>
 
@@ -4114,12 +4104,12 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
                             <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-purple-600 text-white font-mono rounded text-xs">3</span>
+                                    <span class="px-2 py-0.5 bg-purple-600 text-white  rounded text-xs">3</span>
                                     <span>CIR — Tỷ lệ Chi phí trên Thu nhập</span>
                                 </h3>
                                 <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≤ 55.0%</span>
                             </div>
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3  font-extrabold text-purple-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>CIR</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
@@ -4138,7 +4128,7 @@
                             </div>
                             <div class="p-3 bg-white border-l-4 border-purple-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
                                 <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
-                                <p class="font-mono font-bold text-purple-800">➔ CIR = 40.00% ≤ 50.0% (Tiết kiệm chi phí xuất sắc, đạt tối đa 5/5đ).</p>
+                                <p class=" font-bold text-purple-800">➔ CIR = 40.00% ≤ 50.0% (Tiết kiệm chi phí xuất sắc, đạt tối đa 5/5đ).</p>
                             </div>
                         </div>
 
@@ -4146,12 +4136,12 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
                             <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-amber-600 text-white font-mono rounded text-xs">4</span>
+                                    <span class="px-2 py-0.5 bg-amber-600 text-white  rounded text-xs">4</span>
                                     <span>NPL — Tỷ lệ Nợ Xấu Tín Dụng</span>
                                 </h3>
                                 <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≤ 3.0%</span>
                             </div>
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-amber-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3  font-extrabold text-amber-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>NPL</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
@@ -4170,7 +4160,7 @@
                             </div>
                             <div class="p-3 bg-white border-l-4 border-amber-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
                                 <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
-                                <p class="font-mono font-bold text-amber-800">➔ NPL = 1.00% ≤ 1.0% (Chất lượng nợ xuất sắc, đạt 15/15đ tối đa).</p>
+                                <p class=" font-bold text-amber-800">➔ NPL = 1.00% ≤ 1.0% (Chất lượng nợ xuất sắc, đạt 15/15đ tối đa).</p>
                             </div>
                         </div>
 
@@ -4178,12 +4168,12 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
                             <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-emerald-600 text-white font-mono rounded text-xs">5</span>
+                                    <span class="px-2 py-0.5 bg-emerald-600 text-white  rounded text-xs">5</span>
                                     <span>CAR — Tỷ lệ An toàn Vốn</span>
                                 </h3>
                                 <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≥ 8.0%</span>
                             </div>
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-emerald-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3  font-extrabold text-emerald-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>CAR</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
@@ -4202,7 +4192,7 @@
                             </div>
                             <div class="p-3 bg-white border-l-4 border-emerald-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
                                 <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
-                                <p class="font-mono font-bold text-emerald-800">➔ CAR = 12.00% ≥ 12.0% (An toàn vốn rất cao, đạt tối đa 15/15đ NHNN).</p>
+                                <p class=" font-bold text-emerald-800">➔ CAR = 12.00% ≥ 12.0% (An toàn vốn rất cao, đạt tối đa 15/15đ NHNN).</p>
                             </div>
                         </div>
 
@@ -4210,12 +4200,12 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3.5 shadow-xs">
                             <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                                 <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                                    <span class="px-2 py-0.5 bg-blue-600 text-white font-mono rounded text-xs">6</span>
+                                    <span class="px-2 py-0.5 bg-blue-600 text-white  rounded text-xs">6</span>
                                     <span>STLT — Nguồn Ngắn Hạn Cho Vay Trung Dài Hạn</span>
                                 </h3>
                                 <span class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Chuẩn NHNN: ≤ 30.0%</span>
                             </div>
-                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3 font-mono font-extrabold text-blue-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
+                            <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-center gap-2 sm:gap-3  font-extrabold text-blue-950 text-xs sm:text-sm shadow-inner overflow-x-auto">
                                 <span>STLT</span>
                                 <span>=</span>
                                 <div class="inline-flex flex-col items-center">
@@ -4234,7 +4224,7 @@
                             </div>
                             <div class="p-3 bg-white border-l-4 border-blue-600 rounded-r-xl text-xs space-y-1 shadow-2xs">
                                 <p class="font-bold text-slate-900">💡 Kết quả đánh giá:</p>
-                                <p class="font-mono font-bold text-blue-800">➔ STLT = 12.50% ≤ 25.0% (Rất an toàn thanh khoản, đạt tối đa 15/15đ NHNN).</p>
+                                <p class=" font-bold text-blue-800">➔ STLT = 12.50% ≤ 25.0% (Rất an toàn thanh khoản, đạt tối đa 15/15đ NHNN).</p>
                             </div>
                         </div>
                     </div>
@@ -4259,7 +4249,7 @@
                                 <span class="px-2.5 py-1 bg-teal-800 text-teal-200 text-xs font-bold rounded-lg border border-teal-700">Trọng số 15%</span>
                             </div>
                             <p class="text-xs text-teal-100">Đánh giá quy mô và tỷ lệ an toàn vốn tự có CAR theo Thông tư 32/2015/TT-NHNN:</p>
-                            <ul class="text-xs text-teal-200 list-disc list-inside space-y-1 pt-1 font-mono">
+                            <ul class="text-xs text-teal-200 list-disc list-inside space-y-1 pt-1 ">
                                 <li>CAR ≥ 12.0%: <b>15 điểm</b> (Đạt tối đa)</li>
                                 <li>8.0% ≤ CAR < 12.0%: <b>10 điểm</b> (Đạt chuẩn)</li>
                                 <li>CAR < 8.0%: <b>0 điểm</b> (Vi phạm an toàn vốn)</li>
@@ -4276,7 +4266,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs text-amber-200">
                                 <div class="p-3 bg-amber-900/60 rounded-xl border border-amber-800">
                                     <p class="font-bold text-amber-300">Tiêu chí 2.1: Tỷ lệ Nợ xấu (NPL):</p>
-                                    <ul class="list-disc list-inside font-mono mt-1 space-y-0.5">
+                                    <ul class="list-disc list-inside  mt-1 space-y-0.5">
                                         <li>NPL ≤ 1.0%: 15 điểm</li>
                                         <li>1.0% < NPL ≤ 3.0%: 10 điểm</li>
                                         <li>3.0% < NPL ≤ 5.0%: 5 điểm</li>
@@ -4285,7 +4275,7 @@
                                 </div>
                                 <div class="p-3 bg-amber-900/60 rounded-xl border border-amber-800">
                                     <p class="font-bold text-amber-300">Tiêu chí 2.2: Trích lập DPRR:</p>
-                                    <ul class="list-disc list-inside font-mono mt-1 space-y-0.5">
+                                    <ul class="list-disc list-inside  mt-1 space-y-0.5">
                                         <li>Trích lập 100% nhu cầu: 10 điểm</li>
                                         <li>80% ≤ DPRR < 100%: 5 điểm</li>
                                         <li>Trích lập < 80%: 0 điểm</li>
@@ -4301,7 +4291,7 @@
                                 <span class="px-2.5 py-1 bg-indigo-900 text-indigo-200 text-xs font-bold rounded-lg border border-indigo-800">Trọng số 20%</span>
                             </div>
                             <p class="text-xs text-indigo-100">Đánh giá tính tuân thủ pháp luật, quy chế hoạt động và kết quả kiểm toán BCTC:</p>
-                            <ul class="text-xs text-indigo-200 list-disc list-inside space-y-1 pt-1 font-mono">
+                            <ul class="text-xs text-indigo-200 list-disc list-inside space-y-1 pt-1 ">
                                 <li>Không có vi phạm hành chính, BCTC kiểm toán chấp nhận toàn phần: <b>20 điểm</b></li>
                                 <li>Tuân thủ tốt, đã khắc phục các kiến nghị của Thanh tra NHNN: <b>15 điểm</b></li>
                                 <li>Có vi phạm nhỏ bị nhắc nhở bằng văn bản: <b>10 điểm</b></li>
@@ -4316,7 +4306,7 @@
                                 <span class="px-2.5 py-1 bg-slate-800 text-purple-200 text-xs font-bold rounded-lg border border-slate-700">Trọng số 25%</span>
                             </div>
                             <p class="text-xs text-slate-300">Đo lường năng lực sinh lời ROA (10đ), ROE (10đ) và hiệu quả quản lý chi phí CIR (5đ):</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs font-mono text-slate-200">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs  text-slate-200">
                                 <div class="p-2.5 bg-slate-800 rounded-xl border border-slate-700">
                                     <p class="font-bold text-purple-300">ROA (Lợi nhuận/TS):</p>
                                     <p>• ROA ≥ 1.0%: 10đ</p>
@@ -4345,7 +4335,7 @@
                                 <span class="px-2.5 py-1 bg-blue-900 text-blue-200 text-xs font-bold rounded-lg border border-blue-800">Trọng số 15%</span>
                             </div>
                             <p class="text-xs text-blue-100">Đánh giá tỷ lệ sử dụng nguồn vốn ngắn hạn cho vay trung dài hạn (STLT) đảm bảo an toàn thanh khoản:</p>
-                            <ul class="text-xs text-blue-200 list-disc list-inside space-y-1 pt-1 font-mono">
+                            <ul class="text-xs text-blue-200 list-disc list-inside space-y-1 pt-1 ">
                                 <li>STLT ≤ 25.0%: <b>15 điểm</b> (An toàn cao)</li>
                                 <li>25.0% < STLT ≤ 30.0%: <b>10 điểm</b> (Đạt chuẩn TT32)</li>
                                 <li>STLT > 30.0%: <b>0 điểm</b> (Vi phạm quy định thanh khoản)</li>
@@ -4463,7 +4453,7 @@
             <p class="text-slate-500 text-[10px] flex items-center justify-center gap-2">
                 <span>Công cụ hỗ trợ công việc nội bộ</span>
                 <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
-                <span id="app-version-badge" class="font-mono text-emerald-400 font-bold">v2026.07.30-v23.00</span>
+                <span id="app-version-badge" class=" text-emerald-400 font-bold">v2026.08.01-v33.00</span>
             </p>
         </div>
     </footer>
@@ -4503,7 +4493,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.07.30-v32.00';
+        const CURRENT_APP_VERSION = 'v2026.08.01-v33.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -4550,7 +4540,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2026.07.30-v23.00';
+                        const CACHE_NAME = 'qtd-tools-cache-v2026.08.01-v33.00';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -7754,7 +7744,7 @@ async function downloadDocPDFClientSide(mode) {
                 'prepaid': 'Chỉ xem Lĩnh Lãi Trước',
                 'quarterly': 'Chỉ xem Lĩnh Lãi Hàng Quý',
                 'installment': 'Chỉ xem Gửi Góp Định Kỳ',
-                'amount': 'Chỉ xem Số Tiền Lãi (VNĐ)'
+                'amount': 'Chỉ xem Số Tiền Lãi'
             };
 
             const modeTitle = modeLabels[viewMode] || 'Tất Cả Kỳ Hạn';
@@ -7827,7 +7817,7 @@ async function downloadDocPDFClientSide(mode) {
                 'prepaid': 'Chỉ xem Lĩnh Lãi Trước',
                 'quarterly': 'Chỉ xem Lĩnh Lãi Hàng Quý',
                 'installment': 'Chỉ xem Gửi Góp Định Kỳ',
-                'amount': 'Chỉ xem Số Tiền Lãi (VNĐ)'
+                'amount': 'Chỉ xem Số Tiền Lãi'
             };
 
             const modeTitle = modeLabels[viewMode] || 'Tất Cả Kỳ Hạn';
@@ -8240,8 +8230,8 @@ async function downloadDocPDFClientSide(mode) {
                     tableHtml += `
                         <tr class="hover:bg-teal-900/40">
                             <td class="py-1.5 px-3 font-semibold text-teal-100 pl-5">${c.name}</td>
-                            <td class="py-1.5 px-2 text-center text-teal-300 font-mono">${c.standard}</td>
-                            <td class="py-1.5 px-2 text-center font-bold text-white font-mono">${c.value}</td>
+                            <td class="py-1.5 px-2 text-center text-teal-300 ">${c.standard}</td>
+                            <td class="py-1.5 px-2 text-center font-bold text-white ">${c.value}</td>
                             <td class="py-1.5 px-2 text-center">${statusTag}</td>
                             <td class="py-1.5 px-3 text-right font-bold text-teal-200">${c.score}/${c.maxScore} đ</td>
                         </tr>
@@ -8610,11 +8600,11 @@ async function downloadDocPDFClientSide(mode) {
                     <table border="1">
                         <tr style="background-color: #065f46; color: white; font-weight: bold;">
                             <th>Kỳ</th>
-                            <th>Dư Nợ Đầu Kỳ (VNĐ)</th>
-                            <th>Tiền Gốc Trả (VNĐ)</th>
-                            <th>Tiền Lãi Trả (VNĐ)</th>
-                            <th>Tổng Cộng Trả (VNĐ)</th>
-                            <th>Dư Nợ Cuối Kỳ (VNĐ)</th>
+                            <th>Dư Nợ Đầu Kỳ</th>
+                            <th>Tiền Gốc Trả</th>
+                            <th>Tiền Lãi Trả</th>
+                            <th>Tổng Cộng Trả</th>
+                            <th>Dư Nợ Cuối Kỳ</th>
                         </tr>
             `;
 
@@ -8861,11 +8851,11 @@ async function downloadDocPDFClientSide(mode) {
                         <thead>
                             <tr>
                                 <th>Kỳ Trả Nợ</th>
-                                <th>Dư Nợ Đầu Kỳ (VNĐ)</th>
-                                <th>Tiền Gốc Trả (VNĐ)</th>
-                                <th>Tiền Lãi Trả (VNĐ)</th>
-                                <th>Tổng Phải Trả (VNĐ)</th>
-                                <th>Dư Nợ Còn Lại (VNĐ)</th>
+                                <th>Dư Nợ Đầu Kỳ</th>
+                                <th>Tiền Gốc Trả</th>
+                                <th>Tiền Lãi Trả</th>
+                                <th>Tổng Phải Trả</th>
+                                <th>Dư Nợ Còn Lại</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -8994,11 +8984,11 @@ async function downloadDocPDFClientSide(mode) {
                         <tr><td colspan="6"></td></tr>
                         <tr style="background-color: #047857; color: #ffffff; font-weight: bold; text-align: center;">
                             <th style="border: 1px solid #94a3b8;">Kỳ Trả Nợ</th>
-                            <th style="border: 1px solid #94a3b8;">Dư Nợ Đầu Kỳ (VNĐ)</th>
-                            <th style="border: 1px solid #94a3b8;">Tiền Gốc Trả (VNĐ)</th>
-                            <th style="border: 1px solid #94a3b8;">Tiền Lãi Trả (VNĐ)</th>
-                            <th style="border: 1px solid #94a3b8;">Tổng Phải Trả (VNĐ)</th>
-                            <th style="border: 1px solid #94a3b8;">Dư Nợ Còn Lại (VNĐ)</th>
+                            <th style="border: 1px solid #94a3b8;">Dư Nợ Đầu Kỳ</th>
+                            <th style="border: 1px solid #94a3b8;">Tiền Gốc Trả</th>
+                            <th style="border: 1px solid #94a3b8;">Tiền Lãi Trả</th>
+                            <th style="border: 1px solid #94a3b8;">Tổng Phải Trả</th>
+                            <th style="border: 1px solid #94a3b8;">Dư Nợ Còn Lại</th>
                         </tr>
                         ${rowsHtml}
                         <tr style="font-weight: bold; background-color: #f1f5f9;">
@@ -10439,7 +10429,7 @@ async function downloadDocPDFClientSide(mode) {
             ctx.fillText('QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ', W / 2, 95);
 
             ctx.fillStyle = '#cbd5e1';
-            ctx.font = 'bold 18px "Courier New", monospace';
+            ctx.font = 'bold 18px "Be Vietnam Pro", Arial, sans-serif';
             ctx.fillText(`COOPBANK - ${FIXED_ACC_NUMBER}`, W / 2, 130);
 
             // 4. Khung QR Trắng (Border 8px)
