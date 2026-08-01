@@ -311,18 +311,17 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 18mm 15mm 22mm 15mm;
-                /* Footer with page numbers */
+                margin: 15mm 12mm 18mm 12mm;
                 @bottom-center {
                     content: "Trang " counter(page) " / " counter(pages);
                     font-size: 9pt;
-                    color: #555;
+                    color: #444;
                     font-family: 'Times New Roman', serif;
                 }
                 @bottom-right {
-                    content: "CLB Pickleball Yên Thọ - Tài liệu nội bộ";
+                    content: "CLB Pickleball Yên Thọ - Báo cáo chính thức";
                     font-size: 8pt;
-                    color: #888;
+                    color: #666;
                     font-family: 'Times New Roman', serif;
                 }
             }
@@ -334,9 +333,9 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%) rotate(-35deg);
-                font-size: 52pt;
+                font-size: 48pt;
                 font-weight: 900;
-                color: rgba(0, 100, 50, 0.045);
+                color: rgba(0, 80, 40, 0.04);
                 white-space: nowrap;
                 pointer-events: none;
                 z-index: 0;
@@ -344,9 +343,27 @@
                 letter-spacing: 2px;
             }
 
-            .no-print { display: none !important; }
+            .no-print,
             .bottom-sheet-overlay,
-            .bottom-sheet-panel { display: none !important; }
+            .bottom-sheet-panel,
+            .md\:hidden,
+            button,
+            .toast-container { display: none !important; }
+
+            .hidden.md\:block,
+            div.hidden.md\:block {
+                display: block !important;
+            }
+
+            table.hidden.md\:table,
+            div.hidden.md\:block table,
+            table {
+                display: table !important;
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin-bottom: 12pt !important;
+                page-break-inside: auto !important;
+            }
 
             body { 
                 background: #ffffff !important; 
@@ -355,6 +372,7 @@
                 font-size: 11pt !important;
                 line-height: 1.4 !important;
             }
+
             .print-container {
                 padding: 0 !important;
                 margin: 0 !important;
@@ -363,58 +381,65 @@
                 box-shadow: none !important;
                 border: none !important;
             }
-            /* Smart print: only show the active tab content */
-            .print-tab-athletes,
-            .print-tab-budget,
-            .print-tab-summary,
-            .print-tab-settlement { display: block !important; }
 
-            .print-table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                margin-bottom: 14pt !important;
-                page-break-inside: auto !important;
+            /* Form inputs in print mode behave like clean text */
+            input, select, textarea {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                color: #000000 !important;
+                font-family: 'Times New Roman', Times, serif !important;
+                font-size: 11pt !important;
+                font-weight: normal !important;
             }
-            .print-table tr { page-break-inside: avoid; }
-            .print-table th, .print-table td {
-                border: 0.75pt solid #333333 !important;
-                padding: 5pt 7pt !important;
+            input::placeholder { color: transparent !important; }
+
+            tr { page-break-inside: avoid; }
+            th, td {
+                border: 0.75pt solid #000000 !important;
+                padding: 4pt 6pt !important;
                 color: #000000 !important;
                 font-size: 10pt !important;
+                font-family: 'Times New Roman', Times, serif !important;
                 vertical-align: middle !important;
             }
-            .print-table th {
-                background-color: #e8f0e8 !important;
+            th {
+                background-color: #f0f4f0 !important;
                 font-weight: bold !important;
                 text-align: center !important;
-                border-bottom: 1.5pt solid #000 !important;
+                border-bottom: 1.5pt solid #000000 !important;
+                font-size: 10.5pt !important;
             }
-            .print-table tbody tr:nth-child(even) td {
-                background-color: #f9fcf9 !important;
+            tbody tr:nth-child(even) td {
+                background-color: #fcfdfe !important;
             }
-            .print-table tfoot td, .print-table tr.font-black td {
-                background-color: #d4edda !important;
+            tfoot td, tr.font-black td, tr.font-bold td {
+                background-color: #e6f4ea !important;
                 font-weight: bold !important;
-                border-top: 1.5pt solid #000 !important;
+                border-top: 1.5pt solid #000000 !important;
             }
             .print-header-title {
-                font-size: 14pt !important;
+                font-size: 15pt !important;
                 font-weight: bold !important;
                 text-transform: uppercase !important;
                 text-align: center !important;
-                margin-top: 8pt !important;
+                margin-top: 10pt !important;
                 margin-bottom: 4pt !important;
-                letter-spacing: 0.5pt !important;
+                font-family: 'Times New Roman', serif !important;
             }
             .print-subtitle {
-                font-size: 10.5pt !important;
+                font-size: 11pt !important;
                 font-style: italic !important;
                 text-align: center !important;
-                margin-bottom: 14pt !important;
-                color: #333 !important;
+                margin-bottom: 16pt !important;
+                color: #222 !important;
+                font-family: 'Times New Roman', serif !important;
             }
             .print-section-title {
-                font-size: 11pt !important;
+                font-size: 12pt !important;
                 font-weight: bold !important;
                 text-transform: uppercase !important;
                 margin-top: 14pt !important;
@@ -422,20 +447,11 @@
                 border-bottom: 1.5pt solid #000 !important;
                 padding-bottom: 3pt !important;
                 page-break-after: avoid !important;
+                font-family: 'Times New Roman', serif !important;
             }
             .print-signature-box {
-                margin-top: 24pt !important;
+                margin-top: 30pt !important;
                 page-break-inside: avoid !important;
-            }
-            /* Print page number footer via CSS counter */
-            .print-page-info {
-                display: block !important;
-                text-align: center;
-                font-size: 9pt;
-                color: #555;
-                margin-top: 16pt;
-                border-top: 0.5pt solid #ccc;
-                padding-top: 6pt;
             }
         }
     </style>
@@ -1468,12 +1484,13 @@
                     "STT": idx + 1,
                     "Tên Hạng Mục Thu": item.name,
                     "Số Lượng": item.quantity,
-                    "Mức Thu (VNĐ)": item.price,
-                    "Thành Tiền (VNĐ)": item.quantity * item.price,
+                    "Mức Thu": item.price,
+                    "Thành Tiền": item.quantity * item.price,
                     "Trạng Thái Thu": item.status ? 'Đã Thu' : 'Chưa Thu',
                     "Ghi Chú Căn Cứ": item.note || ''
                 }));
                 const wsIncome = XLSX.utils.json_to_sheet(incomeData);
+                wsIncome['!cols'] = [{ wch: 6 }, { wch: 32 }, { wch: 12 }, { wch: 18 }, { wch: 20 }, { wch: 16 }, { wch: 30 }];
                 XLSX.utils.book_append_sheet(wb, wsIncome, "1. Dự Kiến Khoản Thu");
 
                 // Sheet 2: Expense
@@ -1486,14 +1503,15 @@
                             "Danh Mục Chi": cat.name,
                             "Tên Hạng Mục Chi": item.name,
                             "SL / Mâm": item.quantity,
-                            "Đơn Giá (VNĐ)": item.price,
-                            "Thành Tiền (VNĐ)": item.quantity * item.price,
+                            "Đơn Giá": item.price,
+                            "Thành Tiền": item.quantity * item.price,
                             "Người Chi / Ứng Chi": item.payer || 'BTC',
                             "Trạng Thái Thanh Toán": item.status ? 'Đã Thanh Toán' : 'Chưa Thanh Toán'
                         });
                     });
                 });
                 const wsExpense = XLSX.utils.json_to_sheet(expenseData);
+                wsExpense['!cols'] = [{ wch: 6 }, { wch: 24 }, { wch: 32 }, { wch: 12 }, { wch: 18 }, { wch: 20 }, { wch: 22 }, { wch: 22 }];
                 XLSX.utils.book_append_sheet(wb, wsExpense, "2. Dự Kiến Khoản Chi");
 
                 XLSX.writeFile(wb, `Du_Tru_Thu_Chi_Pickleball_YenTho_${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -1508,12 +1526,13 @@
                     "STT": idx + 1,
                     "Tên Hạng Mục Thu": item.name,
                     "Số Lượng": item.quantity,
-                    "Mức Thu (VNĐ)": item.price,
-                    "Thành Tiền (VNĐ)": item.quantity * item.price,
+                    "Mức Thu": item.price,
+                    "Thành Tiền": item.quantity * item.price,
                     "Trạng Thái Thu": item.status ? 'Đã Thu' : 'Chưa Thu',
                     "Ghi Chú Căn Cứ": item.note || ''
                 }));
                 const ws = XLSX.utils.json_to_sheet(exportData);
+                ws['!cols'] = [{ wch: 6 }, { wch: 32 }, { wch: 12 }, { wch: 18 }, { wch: 20 }, { wch: 16 }, { wch: 30 }];
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Dự Kiến Khoản Thu");
                 XLSX.writeFile(wb, `Danh_Muc_Khoan_Thu_Pickleball_${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -1533,14 +1552,15 @@
                             "Danh Mục Chi": cat.name,
                             "Tên Hạng Mục Chi": item.name,
                             "SL / Mâm": item.quantity,
-                            "Đơn Giá (VNĐ)": item.price,
-                            "Thành Tiền (VNĐ)": item.quantity * item.price,
+                            "Đơn Giá": item.price,
+                            "Thành Tiền": item.quantity * item.price,
                             "Người Chi / Ứng Chi": item.payer || 'BTC',
                             "Trạng Thái Thanh Toán": item.status ? 'Đã Thanh Toán' : 'Chưa Thanh Toán'
                         });
                     });
                 });
                 const ws = XLSX.utils.json_to_sheet(list);
+                ws['!cols'] = [{ wch: 6 }, { wch: 24 }, { wch: 32 }, { wch: 12 }, { wch: 18 }, { wch: 20 }, { wch: 22 }, { wch: 22 }];
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Dự Kiến Khoản Chi");
                 XLSX.writeFile(wb, `Danh_Muc_Khoan_Chi_Pickleball_${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -1575,15 +1595,17 @@
                     "Gala Dinner": personnelStats.totalDinner
                 });
                 const wsUnits = XLSX.utils.json_to_sheet(unitStatsData);
+                wsUnits['!cols'] = [{ wch: 12 }, { wch: 28 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 14 }];
                 XLSX.utils.book_append_sheet(wb, wsUnits, "Thống Kê Nhân Sự Đơn Vị");
 
                 // Sheet 2: Financial Balance Summary
                 const balanceData = [
-                    { "Hạng Mục Báo Cáo": "1. Tổng Dự Kiến Thu", "Mức Dư Trù Báo Cáo (VNĐ)": totalIncome, "Thực Tế Đã Thu (VNĐ)": totalActualIncome, "Ghi Chú": "Đóng góp VĐV & Tài trợ" },
-                    { "Hạng Mục Báo Cáo": "2. Tổng Dự Kiến Chi", "Mức Dư Trù Báo Cáo (VNĐ)": totalExpense, "Thực Tế Đã Chi (VNĐ)": data.expenseCategories.reduce((s, cat) => s + cat.items.reduce((ss, i) => i.status ? ss + (i.quantity*i.price) : ss, 0), 0), "Ghi Chú": "Kinh phí giải đấu & Gala dinner" },
-                    { "Hạng Mục Báo Cáo": "3. Cân Đối Thu - Chi", "Mức Dư Trù Báo Cáo (VNĐ)": netBalance, "Thực Tế Đã Chi (VNĐ)": totalActualIncome - data.expenseCategories.reduce((s, cat) => s + cat.items.reduce((ss, i) => i.status ? ss + (i.quantity*i.price) : ss, 0), 0), "Ghi Chú": netBalance >= 0 ? "Dư kinh phí" : "Bội chi kinh phí" }
+                    { "Hạng Mục Báo Cáo": "1. Tổng Dự Kiến Thu", "Mức Dư Trù Báo Cáo": totalIncome, "Thực Tế Đã Thu": totalActualIncome, "Ghi Chú": "Đóng góp VĐV & Tài trợ" },
+                    { "Hạng Mục Báo Cáo": "2. Tổng Dự Kiến Chi", "Mức Dư Trù Báo Cáo": totalExpense, "Thực Tế Đã Chi": data.expenseCategories.reduce((s, cat) => s + cat.items.reduce((ss, i) => i.status ? ss + (i.quantity*i.price) : ss, 0), 0), "Ghi Chú": "Kinh phí giải đấu & Gala dinner" },
+                    { "Hạng Mục Báo Cáo": "3. Cân Đối Thu - Chi", "Mức Dư Trù Báo Cáo": netBalance, "Thực Tế Đã Chi": totalActualIncome - data.expenseCategories.reduce((s, cat) => s + cat.items.reduce((ss, i) => i.status ? ss + (i.quantity*i.price) : ss, 0), 0), "Ghi Chú": netBalance >= 0 ? "Dư kinh phí" : "Bội chi kinh phí" }
                 ];
                 const wsBalance = XLSX.utils.json_to_sheet(balanceData);
+                wsBalance['!cols'] = [{ wch: 28 }, { wch: 22 }, { wch: 22 }, { wch: 30 }];
                 XLSX.utils.book_append_sheet(wb, wsBalance, "Tổng Hợp Cân Đối Kinh Phí");
 
                 XLSX.writeFile(wb, `Bao_Cao_Tong_Hop_Pickleball_YenTho_${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -1602,12 +1624,13 @@
                     "Tên Hạng Mục Chi": item.name,
                     "Danh Mục Chi": item.catName,
                     "Người Chi / Ứng Chi": item.payer || 'BTC',
-                    "Tổng Tiền Ứng Chi (VNĐ)": item.total,
-                    "Đã Nhận Hoàn Trả (VNĐ)": item.paidAmount,
-                    "Số Tiền Còn Được Nhận (VNĐ)": item.unpaidAmount,
+                    "Tổng Tiền Ứng Chi": item.total,
+                    "Đã Nhận Hoàn Trả": item.paidAmount,
+                    "Số Tiền Còn Được Nhận": item.unpaidAmount,
                     "Trạng Thái Quyết Toán": item.status ? 'Đã Tất Toán' : 'Chưa Tất Toán'
                 }));
                 const wsDetail = XLSX.utils.json_to_sheet(detailList);
+                wsDetail['!cols'] = [{ wch: 6 }, { wch: 32 }, { wch: 24 }, { wch: 22 }, { wch: 20 }, { wch: 20 }, { wch: 24 }, { wch: 22 }];
                 XLSX.utils.book_append_sheet(wb, wsDetail, "I. Chi Tiết Quyết Toán");
 
                 // Sheet 2: Payer Summary
@@ -1615,12 +1638,13 @@
                     "STT": idx + 1,
                     "Người Chi / Ứng Chi": payer,
                     "Số Mục Đã Chi": `${info.count} hạng mục`,
-                    "Tổng Tiền Ứng Chi (VNĐ)": info.total,
-                    "Đã Nhận Hoàn Trả (VNĐ)": info.paid,
-                    "Số Tiền Còn Được Nhận (VNĐ)": info.unpaid,
+                    "Tổng Tiền Ứng Chi": info.total,
+                    "Đã Nhận Hoàn Trả": info.paid,
+                    "Số Tiền Còn Được Nhận": info.unpaid,
                     "Trạng Thái Tất Toán": info.unpaid === 0 ? 'Đã tất toán hoàn toàn' : `Còn nợ ${info.unpaid.toLocaleString('vi-VN')} VNĐ`
                 }));
                 const wsPayer = XLSX.utils.json_to_sheet(payerList);
+                wsPayer['!cols'] = [{ wch: 6 }, { wch: 24 }, { wch: 18 }, { wch: 20 }, { wch: 20 }, { wch: 24 }, { wch: 30 }];
                 XLSX.utils.book_append_sheet(wb, wsPayer, "II. Tổng Hợp Theo Người Chi");
 
                 XLSX.writeFile(wb, `Bang_Quyet_Toan_Thanh_Toan_Pickleball_${new Date().toISOString().slice(0,10)}.xlsx`);
