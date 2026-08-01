@@ -2222,7 +2222,7 @@
                                             onClick={() => handleIncomeChange(item.id, 'status', !item.status)}
                                             className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition shadow-md ${item.status ? 'bg-emerald-600 text-white shadow-emerald-500/30' : 'bg-slate-800 light:bg-slate-200 text-slate-400 light:text-slate-600 border border-slate-700'}`}>
                                             {item.status ? '✓ Đã Thu' : 'Chưa Thu'}
-                                    </div>
+                                        </button>
                                 </div>
                             ))}
                         </div>
@@ -3125,10 +3125,10 @@
                         </div>
                     </div>
 
-                    {/* MOBILE BOTTOM NAVIGATION BAR - PREMIUM */}
-                    <div className="no-print md:hidden fixed bottom-0 left-0 right-0 z-50" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
-                        {/* Blur backdrop */}
-                        <div className="bg-slate-950/90 light:bg-white/92 backdrop-blur-2xl border-t border-slate-800/60 light:border-sky-200/80 shadow-2xl">
+                    {/* BOTTOM NAVIGATION BAR - ALWAYS VISIBLE FLOATING DOCK */}
+                    <div className="no-print fixed bottom-0 left-0 right-0 z-50 md:bottom-4 md:max-w-xl md:mx-auto md:px-4" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
+                        {/* Blur backdrop container */}
+                        <div className="bg-slate-950/95 light:bg-white/95 backdrop-blur-2xl border-t md:border border-slate-800/80 light:border-sky-300 md:rounded-3xl shadow-2xl overflow-hidden">
                             <div className="flex justify-around items-center px-1 py-1.5">
 
                                 {/* Tab: VĐV */}
