@@ -714,6 +714,25 @@
             const [unitFilter, setUnitFilter] = useState('all');
             const [showAddModal, setShowAddModal] = useState(false);
 
+            // Back to Top State & Scroll Listener
+            const [showBackToTop, setShowBackToTop] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    if (window.scrollY > 200) {
+                        setShowBackToTop(true);
+                    } else {
+                        setShowBackToTop(false);
+                    }
+                };
+                window.addEventListener('scroll', handleScroll, { passive: true });
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const scrollToTop = () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
             // New Athlete Modal State
             const [newAthleteName, setNewAthleteName] = useState('');
             const [newAthleteUnit, setNewAthleteUnit] = useState('CLB Yên Thọ');
@@ -3193,6 +3212,17 @@
                             </div>
                         </div>
                     </div>
+
+                    {/* FLOATING BACK TO TOP BUTTON */}
+                    {showBackToTop && (
+                        <button
+                            onClick={scrollToTop}
+                            aria-label="Back to Top"
+                            className="no-print fixed bottom-20 right-4 sm:bottom-24 sm:right-8 z-50 w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-xl shadow-blue-500/30 border border-blue-400/40 flex items-center justify-center transition-all duration-300 transform active:scale-90 hover:scale-110 group"
+                            title="Về đầu trang">
+                            <i className="fa-solid fa-arrow-up text-lg group-hover:-translate-y-0.5 transition-transform"></i>
+                        </button>
+                    )}
 
                     {/* MODAL: ADD ATHLETE - BOTTOM SHEET ON MOBILE, CENTER ON DESKTOP */}
                     {showAddModal && (
