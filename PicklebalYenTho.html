@@ -150,22 +150,35 @@
         }
 
         .light .glass-panel {
-            background: rgba(255, 255, 255, 0.92) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(186, 230, 253, 0.8) !important;
+            border: 1px solid rgba(186, 230, 253, 0.9) !important;
             box-shadow: 0 10px 30px -5px rgba(14, 165, 233, 0.12) !important;
         }
 
         .light .glass-card {
-            background: rgba(255, 255, 255, 0.96) !important;
+            background: #ffffff !important;
+            background-image: none !important;
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(186, 230, 253, 0.8) !important;
+            border: 1px solid rgba(186, 230, 253, 0.9) !important;
             box-shadow: 0 4px 15px -2px rgba(14, 165, 233, 0.1) !important;
         }
 
-        .light input, .light select, .light textarea {
-            color: #0f172a;
+        .light input[type="text"], 
+        .light select,
+        .light textarea {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .light label {
+            color: #475569 !important;
+        }
+
+        .light .mobile-card-title {
+            color: #0f172a !important;
         }
 
         .light ::placeholder {
@@ -1839,7 +1852,7 @@
                         {/* MOBILE CARDS VIEW */}
                         <div className="md:hidden space-y-4 pt-1">
                             {filteredAthletes.map((a, idx) => (
-                                <div key={a.id} className="p-4 sm:p-5 bg-gradient-to-br from-slate-900/95 via-slate-900 to-slate-950/95 light:bg-white border border-slate-700/80 light:border-sky-200 rounded-3xl space-y-3.5 shadow-xl transition-all">
+                                <div key={a.id} className="glass-card p-4 sm:p-5 bg-slate-900/95 light:bg-white border border-slate-700/80 light:border-sky-200 rounded-3xl space-y-3.5 shadow-xl transition-all">
                                     {/* Header: Number Badge, Name Input, Delete */}
                                     <div className="flex justify-between items-center pb-2 border-b border-slate-800/80 light:border-slate-100">
                                         <div className="flex items-center gap-2.5 flex-1 mr-2">
@@ -2192,7 +2205,7 @@
                         {/* MOBILE CARDS FOR INCOME */}
                         <div className="md:hidden space-y-3.5">
                             {data.income.map(item => (
-                                <div key={item.id} className="p-4 bg-gradient-to-br from-slate-900/90 via-slate-900 to-slate-950/90 light:bg-white border border-slate-700/80 light:border-emerald-200 rounded-3xl space-y-3 shadow-lg">
+                                <div key={item.id} className="glass-card p-4 bg-slate-900/90 light:bg-white border border-slate-700/80 light:border-emerald-200 rounded-3xl space-y-3 shadow-lg">
                                     <div className="flex justify-between items-center gap-2 pb-2 border-b border-slate-800 light:border-slate-100">
                                         <input 
                                             type="text" 
@@ -2368,7 +2381,7 @@
                                     {/* MOBILE CARDS FOR EXPENSES */}
                                     <div className="md:hidden space-y-3.5">
                                         {cat.items.map(item => (
-                                            <div key={item.id} className="p-4 bg-gradient-to-br from-slate-900/90 via-slate-900 to-slate-950/90 light:bg-white border border-slate-700/80 light:border-rose-200 rounded-3xl space-y-3 shadow-lg">
+                                            <div key={item.id} className="glass-card p-4 bg-slate-900/90 light:bg-white border border-slate-700/80 light:border-rose-200 rounded-3xl space-y-3 shadow-lg">
                                                 <div className="flex justify-between items-center gap-2 pb-2 border-b border-slate-800 light:border-slate-100">
                                                     <input 
                                                         type="text" 
