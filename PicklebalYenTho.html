@@ -111,6 +111,34 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
+        /* ====== GLOBAL UI/UX TYPOGRAPHY BOOST ====== */
+        html {
+            font-size: 15.5px;
+        }
+        @media (min-width: 640px) {
+            html { font-size: 16px; }
+        }
+        body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+        }
+        input, select, textarea, button {
+            font-size: 0.9rem;
+        }
+        /* Table Typography Legibility Enhancements */
+        table th {
+            font-size: 0.82rem !important;
+            letter-spacing: 0.04em;
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+        table td {
+            font-size: 0.9rem !important;
+            padding-top: 0.65rem !important;
+            padding-bottom: 0.65rem !important;
+        }
+
         /* Light Mode Ocean Blue Palette & Overrides */
         .light body {
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%) !important;
@@ -1631,14 +1659,14 @@
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div className="glass-card p-4 rounded-3xl border border-blue-500/20 bg-blue-950/20 light:bg-white light:border-sky-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-400 light:text-sky-600">Tổng Số VĐV</span>
+                                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 light:text-sky-600">Tổng Số VĐV</span>
                                 <i className="fa-solid fa-users text-blue-400 light:text-sky-600 text-base"></i>
                             </div>
                             <div className="mt-2">
                                 <span className="text-3xl font-black text-white light:text-slate-900">{personnelStats.total}</span>
-                                <span className="text-xs text-blue-300/80 light:text-sky-700 ml-1 font-semibold">người</span>
+                                <span className="text-sm text-blue-300/80 light:text-sky-700 ml-1 font-semibold">người</span>
                             </div>
-                            <div className="text-[11px] text-slate-400 light:text-slate-600 mt-1 flex justify-between font-medium">
+                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 flex justify-between font-medium">
                                 <span>♂ {personnelStats.totalMale} Nam</span>
                                 <span>♀ {personnelStats.totalFemale} Nữ</span>
                             </div>
@@ -1646,38 +1674,38 @@
 
                         <div className="glass-card p-4 rounded-3xl border border-indigo-500/20 bg-indigo-950/20 light:bg-white light:border-indigo-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400 light:text-indigo-600">Đôi Nam</span>
+                                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-indigo-400 light:text-indigo-600">Đôi Nam</span>
                                 <i className="fa-solid fa-mars-double text-indigo-400 light:text-indigo-600 text-base"></i>
                             </div>
                             <div className="mt-2">
                                 <span className="text-3xl font-black text-white light:text-slate-900">{Math.floor(personnelStats.totalMensEvent / 2)}</span>
-                                <span className="text-xs text-indigo-300/80 light:text-indigo-700 ml-1 font-semibold">đôi ({personnelStats.totalMensEvent} VĐV)</span>
+                                <span className="text-sm text-indigo-300/80 light:text-indigo-700 ml-1 font-semibold">đôi ({personnelStats.totalMensEvent} VĐV)</span>
                             </div>
-                            <div className="text-[11px] text-slate-400 light:text-slate-600 mt-1 font-medium">Đấu loại trực tiếp</div>
+                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 font-medium">Đấu loại trực tiếp</div>
                         </div>
 
                         <div className="glass-card p-4 rounded-3xl border border-purple-500/20 bg-purple-950/20 light:bg-white light:border-purple-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-purple-400 light:text-purple-600">Đôi Nam Nữ</span>
+                                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-purple-400 light:text-purple-600">Đôi Nam Nữ</span>
                                 <i className="fa-solid fa-venus-mars text-purple-400 light:text-purple-600 text-base"></i>
                             </div>
                             <div className="mt-2">
                                 <span className="text-3xl font-black text-white light:text-slate-900">{Math.floor(personnelStats.totalMixedEvent / 2)}</span>
-                                <span className="text-xs text-purple-300/80 light:text-purple-700 ml-1 font-semibold">đôi ({personnelStats.totalMixedEvent} VĐV)</span>
+                                <span className="text-sm text-purple-300/80 light:text-purple-700 ml-1 font-semibold">đôi ({personnelStats.totalMixedEvent} VĐV)</span>
                             </div>
-                            <div className="text-[11px] text-slate-400 light:text-slate-600 mt-1 font-medium">Vòng bảng & Chung kết</div>
+                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 font-medium">Vòng bảng & Chung kết</div>
                         </div>
 
                         <div className="glass-card p-4 rounded-3xl border border-emerald-500/20 bg-emerald-950/20 light:bg-white light:border-emerald-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 light:text-emerald-600">Tiệc Gala Dinner</span>
+                                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-400 light:text-emerald-600">Tiệc Gala Dinner</span>
                                 <i className="fa-solid fa-utensils text-emerald-400 light:text-emerald-600 text-base"></i>
                             </div>
                             <div className="mt-2">
                                 <span className="text-3xl font-black text-emerald-400 light:text-emerald-600">{Math.ceil(personnelStats.totalDinner / 6)}</span>
-                                <span className="text-xs text-emerald-300/80 light:text-emerald-700 ml-1 font-semibold">mâm ({personnelStats.totalDinner} người)</span>
+                                <span className="text-sm text-emerald-300/80 light:text-emerald-700 ml-1 font-semibold">mâm ({personnelStats.totalDinner} người)</span>
                             </div>
-                            <div className="text-[11px] text-slate-400 light:text-slate-600 mt-1 font-medium">6 người / mâm tiệc</div>
+                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 font-medium">6 người / mâm tiệc</div>
                         </div>
                     </div>
 
@@ -3091,16 +3119,16 @@
                                 {/* Tab: VĐV */}
                                 <button onClick={() => switchTab('athletes')} className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-2xl transition-all duration-200 active:scale-90"
                                     style={{minWidth: '56px'}}>
-                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-blue-500 text-white text-[8px] font-black flex items-center justify-center shadow">{data.athletes.filter(a => a.unit === 'CLB Yên Thọ').length}</span>
+                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-blue-500 text-white text-[9px] font-black flex items-center justify-center shadow">{data.athletes.filter(a => a.unit === 'CLB Yên Thọ').length}</span>
                                     {activeTab === 'athletes' && (
                                         <span className="absolute inset-0 bg-emerald-500/15 rounded-2xl border border-emerald-500/30"></span>
                                     )}
-                                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${
                                         activeTab === 'athletes' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40 scale-110' : 'bg-slate-800/80 light:bg-sky-100'
                                     }`}>
-                                        <i className={`fa-solid fa-users text-[11px] ${ activeTab === 'athletes' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
+                                        <i className={`fa-solid fa-users text-xs ${ activeTab === 'athletes' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
                                     </div>
-                                    <span className={`text-[9px] font-extrabold tracking-tight ${ activeTab === 'athletes' ? 'text-emerald-400' : 'text-slate-500 light:text-slate-500'}`}>VĐV</span>
+                                    <span className={`text-[11px] font-black tracking-tight ${ activeTab === 'athletes' ? 'text-emerald-400' : 'text-slate-400 light:text-slate-600'}`}>VĐV</span>
                                 </button>
 
                                 {/* Tab: Thu-Chi */}
@@ -3109,23 +3137,23 @@
                                     {activeTab === 'budget' && (
                                         <span className="absolute inset-0 bg-blue-500/15 rounded-2xl border border-blue-500/30"></span>
                                     )}
-                                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${
                                         activeTab === 'budget' ? 'bg-blue-500 shadow-lg shadow-blue-500/40 scale-110' : 'bg-slate-800/80 light:bg-sky-100'
                                     }`}>
-                                        <i className={`fa-solid fa-wallet text-[11px] ${ activeTab === 'budget' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
+                                        <i className={`fa-solid fa-wallet text-xs ${ activeTab === 'budget' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
                                     </div>
-                                    <span className={`text-[9px] font-extrabold tracking-tight ${ activeTab === 'budget' ? 'text-blue-400' : 'text-slate-500 light:text-slate-500'}`}>Thu-Chi</span>
+                                    <span className={`text-[11px] font-black tracking-tight ${ activeTab === 'budget' ? 'text-blue-400' : 'text-slate-400 light:text-slate-600'}`}>Thu-Chi</span>
                                 </button>
 
                                 {/* Tab: Báo cáo - Center FAB style */}
                                 <button onClick={() => switchTab('summary')} className="relative flex flex-col items-center gap-0.5 px-2 py-1 rounded-2xl transition-all duration-200 active:scale-90"
                                     style={{minWidth: '60px'}}>
-                                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all shadow-lg -mt-3 ${
+                                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all shadow-lg -mt-3.5 ${
                                         activeTab === 'summary' ? 'bg-gradient-to-br from-emerald-500 to-blue-600 shadow-emerald-500/40 scale-110' : 'bg-gradient-to-br from-slate-700 to-slate-800 light:from-sky-400 light:to-blue-500 shadow-slate-900/40'
                                     }`}>
-                                        <i className={`fa-solid fa-chart-pie text-sm ${ activeTab === 'summary' ? 'text-white' : 'text-slate-300 light:text-white'}`}></i>
+                                        <i className={`fa-solid fa-chart-pie text-base ${ activeTab === 'summary' ? 'text-white' : 'text-slate-300 light:text-white'}`}></i>
                                     </div>
-                                    <span className={`text-[9px] font-extrabold tracking-tight ${ activeTab === 'summary' ? 'text-emerald-400' : 'text-slate-500 light:text-slate-500'}`}>Báo cáo</span>
+                                    <span className={`text-[11px] font-black tracking-tight ${ activeTab === 'summary' ? 'text-emerald-400' : 'text-slate-400 light:text-slate-600'}`}>Báo cáo</span>
                                 </button>
 
                                 {/* Tab: Quyết toán */}
@@ -3134,12 +3162,12 @@
                                     {activeTab === 'settlement' && (
                                         <span className="absolute inset-0 bg-cyan-500/15 rounded-2xl border border-cyan-500/30"></span>
                                     )}
-                                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${
                                         activeTab === 'settlement' ? 'bg-cyan-500 shadow-lg shadow-cyan-500/40 scale-110' : 'bg-slate-800/80 light:bg-sky-100'
                                     }`}>
-                                        <i className={`fa-solid fa-check-double text-[11px] ${ activeTab === 'settlement' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
+                                        <i className={`fa-solid fa-check-double text-xs ${ activeTab === 'settlement' ? 'text-white' : 'text-slate-400 light:text-slate-600'}`}></i>
                                     </div>
-                                    <span className={`text-[9px] font-extrabold tracking-tight ${ activeTab === 'settlement' ? 'text-cyan-400' : 'text-slate-500 light:text-slate-500'}`}>Quyết toán</span>
+                                    <span className={`text-[11px] font-black tracking-tight ${ activeTab === 'settlement' ? 'text-cyan-400' : 'text-slate-400 light:text-slate-600'}`}>Quyết toán</span>
                                 </button>
 
                             </div>
