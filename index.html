@@ -91,6 +91,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
+        
+        .fin-subtab-active {
+            background-color: #ffffff !important;
+            color: #064e3b !important;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+        }
+
         /* Flatpickr Custom Emerald Theme */
         .flatpickr-calendar {
             font-family: 'Be Vietnam Pro', sans-serif !important;
@@ -1893,133 +1900,142 @@
             <!-- ==================== TAB MAIN: CHỈ SỐ TÀI CHÍNH QUỶ ==================== -->
         <div id="tab-fin" data-alias="tool-financial" class="tab-content hidden space-y-6">
             <div class="border-b border-slate-100 pb-3">
-                    <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
-                        <span class="w-2.5 h-5 bg-teal-700 rounded-full inline-block"></span>
-                        Phân Hệ Tính Toán & Đánh Giá Chỉ Số Tài Chính Quỹ (ROA, ROE, NPL, CAR, CIR...)
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-1">Đánh giá các chỉ số an toàn hoạt động, tỷ lệ nợ xấu và hiệu
-                        quả tài chính của QTDND Yên Thọ theo <span class="font-semibold text-teal-700">TT
-                            32/2015/TT-NHNN (sửa đổi bởi TT 13/2024/TT-NHNN)</span> & xếp hạng theo <span
-                            class="font-semibold text-teal-700">TT 42/2016/TT-NHNN (sửa đổi bởi TT
-                            05/2021/TT-NHNN)</span>.</p>
+                <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-5 bg-teal-700 rounded-full inline-block"></span>
+                    Phân Hệ Tính Toán & Đánh Giá Chỉ Số Tài Chính Quỹ (ROA, ROE, NPL, CAR, CIR...)
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">Đánh giá các chỉ số an toàn hoạt động, tỷ lệ nợ xấu và hiệu quả tài chính của QTDND Yên Thọ theo <span class="font-semibold text-teal-700">TT 32/2015/TT-NHNN (sửa đổi bởi TT 13/2024/TT-NHNN)</span> & xếp hạng theo <span class="font-semibold text-teal-700">TT 42/2016/TT-NHNN (sửa đổi bởi TT 05/2021/TT-NHNN)</span>.</p>
+            </div>
+
+            <!-- 📄 ĐỌC BẢNG CÂN ĐỐI TÀI KHOẢN KẾ TOÁN (CV 1687 & TT 13/2024) - NGUỒN CẤP DỮ LIỆU CHÍNH -->
+            <div class="bg-gradient-to-br from-teal-950 via-slate-900 to-emerald-950 text-white rounded-2xl p-4 sm:p-6 shadow-md border border-teal-700/60 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-teal-700/50 pb-3">
+                    <div>
+                        <h3 class="font-extrabold text-base text-teal-100 flex items-center gap-2">
+                            <span>📄 ĐỌC BẢNG CÂN ĐỐI TÀI KHOẢN KẾ TOÁN (CÔNG VĂN 1687/NHNN-KTTC)</span>
+                        </h3>
+                        <p class="text-xs text-teal-300/90 mt-0.5">Tải file PDF, Markdown (.md), Excel (.xlsx/.xls) hoặc dán văn bản để tự động trích xuất các tài khoản kế toán QTDND và truyền dữ liệu cho các Menu bên dưới.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="loadSampleBalanceCV1687()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition shadow flex items-center gap-1.5">
+                            <span>📊 Nạp Mẫu B02-QTD (CV 1687)</span>
+                        </button>
+                        <button onclick="openPasteMarkdownModal()" class="px-3 py-1.5 bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition shadow flex items-center gap-1.5">
+                            <span>📝 Dán Văn Bản / Markdown</span>
+                        </button>
+                    </div>
                 </div>
 
+                <!-- Dropzone -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    <div class="md:col-span-8 relative">
+                        <label for="pdf-balance-upload" class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-teal-500/60 hover:border-emerald-400 bg-teal-950/50 hover:bg-teal-900/60 rounded-2xl cursor-pointer transition p-3 text-center group">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2.5 bg-emerald-800/60 text-emerald-300 rounded-xl group-hover:scale-105 transition">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-xs font-extrabold text-white">Nhấp chọn hoặc kéo thả file <span class="text-emerald-300">.PDF / .MD / .XLSX / .TXT</span> vào đây</p>
+                                    <p class="text-[11px] text-teal-300/80">Hỗ trợ Bảng cân đối tài khoản kế toán QTDND chuẩn Công văn 1687/NHNN-KTTC</p>
+                                </div>
+                            </div>
+                            <input id="pdf-balance-upload" type="file" accept=".pdf,.md,.markdown,.xlsx,.xls,.txt" onchange="handleBalanceFileUpload(event)" class="hidden">
+                        </label>
+                    </div>
+                    <div class="md:col-span-4 bg-teal-900/40 p-3 rounded-xl border border-teal-700/40 space-y-1.5 text-xs">
+                        <span class="font-bold text-amber-300">📌 Trạng thái trích xuất CV 1687:</span>
+                        <div id="parse-status-box" class="text-[11px] text-teal-200">
+                            Chưa nạp file. Hãy chọn file PDF/Markdown/Excel hoặc ấn nút <b>Nạp Mẫu B02-QTD</b> ở trên!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🔖 THANH MENU SUBTAB TÀI CHÍNH TÁCH BIỆT -->
+            <div class="subtab-bar flex flex-wrap gap-1.5 border-b border-slate-200 pb-2.5 bg-slate-100/60 p-1.5 rounded-2xl">
+                <button onclick="switchFinSubTab('fin-sub-overview')" id="subtab-fin-sub-overview" class="py-2 px-4 font-extrabold text-xs sm:text-sm fin-subtab-active flex items-center gap-1.5 rounded-xl shadow-xs transition">
+                    <span>📊 Tài chính</span>
+                </button>
+                <button onclick="switchFinSubTab('fin-sub-rating')" id="subtab-fin-sub-rating" class="py-2 px-4 font-extrabold text-xs sm:text-sm text-slate-600 hover:text-teal-800 hover:bg-white transition flex items-center gap-1.5 rounded-xl">
+                    <span>🏆 XH QTD</span>
+                </button>
+                <button onclick="switchFinSubTab('fin-sub-worksheets')" id="subtab-fin-sub-worksheets" class="py-2 px-4 font-extrabold text-xs sm:text-sm text-slate-600 hover:text-blue-800 hover:bg-white transition flex items-center gap-1.5 rounded-xl">
+                    <span>🛡️ Tỷ lệ an toàn</span>
+                </button>
+            </div>
+
+            <!-- ==================== SUBTAB 1: 📊 TÀI CHÍNH (SỐ LIỆU & THẺ CHỈ SỐ) ==================== -->
+            <div id="fin-sub-overview" class="fin-subtab-content space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Input Form -->
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
-                        <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Số Liệu Tài Chính
-                            Quỹ</h3>
-
+                        <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2">Số Liệu Tài Chính Quỹ</h3>
                         <div class="space-y-2 text-xs">
-                            <p class="text-[10px] text-slate-400 italic border-b border-slate-100 pb-1">📌 Căn cứ: TT
-                                32/2015/TT-NHNN (sửa đổi bởi TT 13/2024/TT-NHNN) & TT 42/2016/TT-NHNN</p>
+                            <p class="text-[10px] text-slate-400 italic border-b border-slate-100 pb-1">📌 Được trích xuất tự động từ Bảng cân đối (có thể điều chỉnh)</p>
 
                             <!-- Nhóm: Lợi nhuận & Hiệu quả -->
-                            <div class="pt-1">
-                                <span class="text-[10px] font-bold text-teal-700 uppercase tracking-wide">📊 Lợi nhuận &
-                                    Hiệu quả</span>
-                            </div>
+                            <div class="pt-1"><span class="text-[10px] font-bold text-teal-700 uppercase tracking-wide">📊 Lợi nhuận & Hiệu quả</span></div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Lợi nhuận sau thuế</label>
-                                <input type="text" id="fin-net-profit" value="2.500.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-net-profit" value="2.500.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng tài sản bình quân</label>
-                                <input type="text" id="fin-avg-assets" value="250.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-avg-assets" value="250.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
-                                <label class="block font-semibold text-slate-600 mb-0.5">Vốn chủ sở hữu bình
-                                    quân</label>
-                                <input type="text" id="fin-avg-equity" value="25.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <label class="block font-semibold text-slate-600 mb-0.5">Vốn chủ sở hữu bình quân</label>
+                                <input type="text" id="fin-avg-equity" value="25.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Chi phí hoạt động</label>
-                                <input type="text" id="fin-operating-expenses" value="4.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-operating-expenses" value="4.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng thu nhập hoạt động</label>
-                                <input type="text" id="fin-operating-income" value="10.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-operating-income" value="10.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
 
                             <!-- Nhóm: Chất lượng tài sản & An toàn vốn -->
-                            <div class="pt-1">
-                                <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wide">🛡️ Chất
-                                    lượng tài sản & An toàn vốn</span>
-                            </div>
+                            <div class="pt-1"><span class="text-[10px] font-bold text-amber-700 uppercase tracking-wide">🛡️ Chất lượng tài sản & An toàn vốn</span></div>
                             <div>
-                                <label class="block font-semibold text-slate-600 mb-0.5">Tổng nợ xấu (Nhóm
-                                    3+4+5)</label>
-                                <input type="text" id="fin-npl-loans" value="1.800.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-amber-300 rounded font-bold text-amber-950 bg-amber-50">
+                                <label class="block font-semibold text-slate-600 mb-0.5">Tổng nợ xấu (Nhóm 3+4+5)</label>
+                                <input type="text" id="fin-npl-loans" value="1.800.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-amber-300 rounded font-bold text-amber-950 bg-amber-50">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng dư nợ cho vay</label>
-                                <input type="text" id="fin-total-loans" value="180.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-total-loans" value="180.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
-                                <label class="block font-semibold text-slate-600 mb-0.5">Vốn tự có (Vốn cấp 1 + Vốn cấp
-                                    2)</label>
-                                <input type="text" id="fin-capital-equity" value="22.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-emerald-300 rounded font-bold text-emerald-950 bg-emerald-50">
+                                <label class="block font-semibold text-slate-600 mb-0.5">Vốn tự có (Vốn cấp 1 + Vốn cấp 2)</label>
+                                <input type="text" id="fin-capital-equity" value="22.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-emerald-300 rounded font-bold text-emerald-950 bg-emerald-50">
                             </div>
                             <div>
-                                <label class="block font-semibold text-slate-600 mb-0.5">Tổng tài sản Có rủi ro
-                                    (TSCR)</label>
-                                <input type="text" id="fin-risk-assets" value="200.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <label class="block font-semibold text-slate-600 mb-0.5">Tổng tài sản Có rủi ro (TSCR)</label>
+                                <input type="text" id="fin-risk-assets" value="200.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
 
                             <!-- Nhóm: Khả năng thanh khoản (TT 13/2024) -->
-                            <div class="pt-1">
-                                <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wide">💧 Thanh khoản
-                                    (TT 13/2024)</span>
-                            </div>
+                            <div class="pt-1"><span class="text-[10px] font-bold text-blue-700 uppercase tracking-wide">💧 Thanh khoản (TT 13/2024)</span></div>
                             <div>
-                                <label class="block font-semibold text-slate-600 mb-0.5">Nguồn vốn ngắn hạn sử dụng cho
-                                    vay TDH</label>
-                                <input type="text" id="fin-st-funds-used-for-lt" value="15.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-blue-300 rounded font-bold text-blue-950 bg-blue-50">
+                                <label class="block font-semibold text-slate-600 mb-0.5">Nguồn vốn ngắn hạn sử dụng cho vay TDH</label>
+                                <input type="text" id="fin-st-funds-used-for-lt" value="15.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-blue-300 rounded font-bold text-blue-950 bg-blue-50">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng nguồn vốn ngắn hạn</label>
-                                <input type="text" id="fin-total-st-funds" value="120.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-total-st-funds" value="120.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng mức nhận tiền gửi</label>
-                                <input type="text" id="fin-total-deposits" value="220.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-total-deposits" value="220.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
-                                <label class="block font-semibold text-slate-600 mb-0.5">Vốn chủ sở hữu (cuối
-                                    kỳ)</label>
-                                <input type="text" id="fin-equity-end" value="25.000.000.000"
-                                    oninput="formatVNDInput(this); calcFinancialIndicators();"
-                                    class="w-full px-2.5 py-1.5 border border-emerald-300 rounded font-bold text-emerald-950 bg-emerald-50">
+                                <label class="block font-semibold text-slate-600 mb-0.5">Vốn chủ sở hữu (cuối kỳ)</label>
+                                <input type="text" id="fin-equity-end" value="25.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-emerald-300 rounded font-bold text-emerald-950 bg-emerald-50">
                             </div>
-                            
+
                             <!-- Nhóm 3: Quản trị, Điều hành & Tuân thủ (TT 42/2016 & TT 05/2021) -->
-                            <div class="pt-1">
-                                <span class="text-[10px] font-bold text-indigo-700 uppercase tracking-wide">🏛️ Quản trị & Tuân thủ (TT 42 & TT 05)</span>
-                            </div>
+                            <div class="pt-1"><span class="text-[10px] font-bold text-indigo-700 uppercase tracking-wide">🏛️ Quản trị & Tuân thủ (TT 42 & TT 05)</span></div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Mức độ tuân thủ quy định NHNN</label>
                                 <select id="fin-governance-score" onchange="calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-indigo-300 rounded font-bold text-indigo-950 bg-indigo-50">
@@ -2033,52 +2049,119 @@
                         </div>
                     </div>
 
-                    
-                <!-- 📥 PHÂN HỆ ĐỌC BẢNG CÂN ĐỐI TÀI KHOẢN KẾ TOÁN (CV 1687 & TT 13/2024) -->
-                <div class="bg-gradient-to-br from-teal-950 via-slate-900 to-emerald-950 text-white rounded-2xl p-4 sm:p-6 shadow-md border border-teal-700/60 space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-teal-700/50 pb-3">
+                    <!-- Indicators Display Cards -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <!-- Nhóm 1: Hiệu quả tài chính -->
                         <div>
-                            <h3 class="font-extrabold text-base text-teal-100 flex items-center gap-2">
-                                <span>📄 ĐỌC BẢNG CÂN ĐỐI TÀI KHOẢN KẾ TOÁN (CÔNG VĂN 1687/NHNN-KTTC)</span>
-                            </h3>
-                            <p class="text-xs text-teal-300/90 mt-0.5">Tải file PDF, Markdown (.md), Excel (.xlsx/.xls) hoặc dán văn bản để tự động trích xuất các tài khoản kế toán QTDND và nạp vào Bảng tính toán trực quan TT 13/2024 & TT 32/2015.</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <button onclick="loadSampleBalanceCV1687()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition shadow flex items-center gap-1.5">
-                                <span>📊 Nạp Mẫu B02-QTD (CV 1687)</span>
-                            </button>
-                            <button onclick="openPasteMarkdownModal()" class="px-3 py-1.5 bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition shadow flex items-center gap-1.5">
-                                <span>📝 Dán Văn Bản / Markdown</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Dropzone -->
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                        <div class="md:col-span-8 relative">
-                            <label for="pdf-balance-upload" class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-teal-500/60 hover:border-emerald-400 bg-teal-950/50 hover:bg-teal-900/60 rounded-2xl cursor-pointer transition p-3 text-center group">
-                                <div class="flex items-center gap-3">
-                                    <div class="p-2.5 bg-emerald-800/60 text-emerald-300 rounded-xl group-hover:scale-105 transition">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                    </div>
-                                    <div class="text-left">
-                                        <p class="text-xs font-extrabold text-white">Nhấp chọn hoặc kéo thả file <span class="text-emerald-300">.PDF / .MD / .XLSX / .TXT</span> vào đây</p>
-                                        <p class="text-[11px] text-teal-300/80">Hỗ trợ Bảng cân đối tài khoản kế toán QTDND chuẩn Công văn 1687/NHNN-KTTC</p>
-                                    </div>
+                            <p class="text-[10px] font-bold text-teal-700 uppercase tracking-wide mb-2">📊 Hiệu quả tài chính — (TT 42/2016/TT-NHNN, Tiêu chí Kết quả HĐKD)</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <!-- ROA -->
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">ROA (Lợi nhuận/TS)</span><span id="badge-roa" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Đạt</span></div>
+                                    <p id="res-roa" class="text-xl font-black text-emerald-800">1.00 %</p>
+                                    <p class="text-[10px] text-slate-500">Chuẩn QTDND: ≥ 0,8%/năm. Đo lường hiệu quả quản lý tổng tài sản.</p>
                                 </div>
-                                <input id="pdf-balance-upload" type="file" accept=".pdf,.md,.markdown,.xlsx,.xls,.txt" onchange="handleBalanceFileUpload(event)" class="hidden">
-                            </label>
+                                <!-- ROE -->
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">ROE (Lợi nhuận/VCSH)</span><span id="badge-roe" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Tốt</span></div>
+                                    <p id="res-roe" class="text-xl font-black text-emerald-800">10.00 %</p>
+                                    <p class="text-[10px] text-slate-500">Chuẩn tham chiếu QTDND: ≥ 8%. Sinh lời trên vốn góp thành viên.</p>
+                                </div>
+                                <!-- CIR -->
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">CIR (Chi phí/Thu nhập)</span><span id="badge-cir" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Tốt</span></div>
+                                    <p id="res-cir" class="text-xl font-black text-teal-800">40.00 %</p>
+                                    <p class="text-[10px] text-slate-500">Chuẩn tham chiếu QTDND: ≤ 55%. Tỷ lệ chi phí / thu nhập hoạt động.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="md:col-span-4 bg-teal-900/40 p-3 rounded-xl border border-teal-700/40 space-y-1.5 text-xs">
-                            <span class="font-bold text-amber-300">📌 Trạng thái trích xuất CV 1687:</span>
-                            <div id="parse-status-box" class="text-[11px] text-teal-200">
-                                Chưa nạp file. Hãy chọn file PDF/Markdown/Excel hoặc ấn nút <b>Nạp Mẫu B02-QTD</b> ở trên!
+
+                        <!-- Nhóm 2: Chất lượng tài sản & An toàn vốn -->
+                        <div>
+                            <p class="text-[10px] font-bold text-amber-700 uppercase tracking-wide mb-2">🛡️ Chất lượng tài sản & An toàn vốn — (TT 32/2015/TT-NHNN, Điều 4–7)</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- NPL -->
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">NPL (Tỷ lệ nợ xấu)</span><span id="badge-npl" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ An toàn</span></div>
+                                    <p id="res-npl" class="text-xl font-black text-emerald-800">1.00 %</p>
+                                    <p class="text-[10px] text-slate-500">NHNN yêu cầu QTDND: NPL ≤ 3%. Nhóm nợ 3 + 4 + 5 / Tổng dư nợ cho vay.</p>
+                                </div>
+                                <!-- CAR -->
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">CAR (An toàn vốn TT 32/2015)</span><span id="badge-car" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Vượt chuẩn</span></div>
+                                    <p id="res-car" class="text-xl font-black text-emerald-800">11.00 %</p>
+                                    <p class="text-[10px] text-slate-500">TT 32/2015/TT-NHNN Điều 5: CAR ≥ 8%. Vốn tự có / Tổng tài sản Có rủi ro.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nhóm 3: Thanh khoản (TT 13/2024) -->
+                        <div>
+                            <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wide mb-2">💧 Chỉ số Thanh khoản — (TT 32/2015 sửa đổi bởi TT 13/2024/TT-NHNN, Điều 6–8a)</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- STLT Ratio -->
+                                <div class="p-3 bg-white border border-blue-100 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">Vốn NH → Cho vay TDH</span><span id="badge-stlt" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ An toàn</span></div>
+                                    <p id="res-stlt" class="text-xl font-black text-blue-800">12.50 %</p>
+                                    <p class="text-[10px] text-slate-500">TT 32/2015 Điều 7: Tỷ lệ tối đa ≤ 30%. Vốn ngắn hạn dùng để cho vay trung-dài hạn.</p>
+                                </div>
+                                <!-- Deposit/Equity Ratio (TT 13/2024) -->
+                                <div class="p-3 bg-white border border-blue-100 rounded-xl space-y-1.5 shadow-sm">
+                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">Tiền gửi / Vốn CSH</span><span id="badge-deq" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ An toàn</span></div>
+                                    <p id="res-deq" class="text-xl font-black text-blue-800">8.80 lần</p>
+                                    <p class="text-[10px] text-slate-500">TT 13/2024/TT-NHNN (bổ sung Điều 8a): Tỷ lệ tổng tiền gửi / Vốn chủ sở hữu. Giám sát nguy cơ mất khả năng chi trả.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 🧮 BẢNG HƯỚNG DẪN TÍNH TOÁN TRỰC QUAN THEO THÔNG TƯ 13/2024 & TT 32/2015 -->
+            <!-- ==================== SUBTAB 2: 🏆 XẾP HẠNG QUỸ (TT 42/2016 & TT 05/2021) ==================== -->
+            <div id="fin-sub-rating" class="fin-subtab-content hidden space-y-6">
+                <div id="fin-rating-box" class="p-4 sm:p-6 bg-gradient-to-r from-teal-950 via-teal-900 to-teal-800 text-white rounded-2xl shadow-md border border-teal-700/60 space-y-4">
+                    <div class="flex flex-wrap justify-between items-center gap-2 pb-3 border-b border-teal-700/60">
+                        <div>
+                            <span class="font-extrabold text-base text-teal-200 uppercase tracking-wider flex items-center gap-2">
+                                <span>📋 BẢNG ĐIỂM XẾP HẠNG CHUẨN THÔNG TƯ 42/2016 & TT 05/2021/TT-NHNN</span>
+                            </span>
+                            <p class="text-xs text-teal-300 mt-0.5">Quy định Chấm điểm Xếp hạng Quỹ Tín Dụng Nhân Dân (Thang điểm 100)</p>
+                        </div>
+                        <span id="badge-rating" class="px-4 py-2 bg-emerald-500 text-white text-sm font-extrabold rounded-xl shadow">✅ HẠNG A — TỐT</span>
+                    </div>
+
+                    <p id="res-rating-note" class="text-xs text-teal-100 font-semibold bg-teal-900/60 p-3.5 rounded-xl border border-teal-700/50">
+                        Tất cả chỉ số cốt lõi đạt/vượt chuẩn theo quy định TT 32/2015 (sđ bởi TT 13/2024) và TT 42/2016/TT-NHNN.
+                    </p>
+
+                    <!-- Bảng Điểm Chi Tiết 6 Tiêu Chí Xếp Hạng -->
+                    <div class="space-y-2 pt-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs sm:text-sm font-extrabold text-teal-200">📊 BẢNG ĐIỂM CHI TIẾT 6 TIÊU CHÍ XẾP HẠNG:</h4>
+                            <span id="res-rating-score-total" class="text-xs sm:text-sm font-extrabold text-amber-300 bg-teal-950 px-3 py-1 rounded-lg border border-teal-700">Tổng điểm: 95/100</span>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-teal-700/60 bg-teal-950/80 min-w-[580px]">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-teal-900/90 text-teal-200 font-bold border-b border-teal-700/60 text-[11px]">
+                                    <tr>
+                                        <th class="py-2.5 px-3">Tên Tiêu Chí (TT 42/2016)</th>
+                                        <th class="py-2.5 px-2 text-center">Chuẩn NHNN</th>
+                                        <th class="py-2.5 px-2 text-center">Thực Tế</th>
+                                        <th class="py-2.5 px-2 text-center">Đánh Giá</th>
+                                        <th class="py-2.5 px-3 text-right">Điểm Đạt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rating-table-body" class="divide-y divide-teal-800/60 text-[11px]">
+                                    <!-- Dynamically populated via calcFinancialRatios() -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SUBTAB 3: 🛡️ TỶ LỆ AN TOÀN (BẢNG TRỰC QUAN TT 13 & TT 32) ==================== -->
+            <div id="fin-sub-worksheets" class="fin-subtab-content hidden space-y-6">
                 <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
                         <div>
@@ -2158,166 +2241,8 @@
                         </div>
                     </div>
                 </div>
-
-                    <!-- Indicators Display Cards -->
-                    <div class="lg:col-span-2 space-y-4">
-                        <!-- Nhóm 1: Hiệu quả tài chính -->
-                        <div>
-                            <p class="text-[10px] font-bold text-teal-700 uppercase tracking-wide mb-2">📊 Hiệu quả tài
-                                chính — (TT 42/2016/TT-NHNN, Tiêu chí Kết quả HĐKD)</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <!-- ROA -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">ROA (Lợi nhuận/TS)</span>
-                                        <span id="badge-roa"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            Đạt</span>
-                                    </div>
-                                    <p id="res-roa" class="text-xl font-black text-emerald-800">1.00 %</p>
-                                    <p class="text-[10px] text-slate-500">Chuẩn QTDND: ≥ 0,8%/năm. Đo lường hiệu quả
-                                        quản lý tổng tài sản.</p>
-                                </div>
-                                <!-- ROE -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">ROE (Lợi nhuận/VCSH)</span>
-                                        <span id="badge-roe"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            Tốt</span>
-                                    </div>
-                                    <p id="res-roe" class="text-xl font-black text-emerald-800">10.00 %</p>
-                                    <p class="text-[10px] text-slate-500">Chuẩn tham chiếu QTDND: ≥ 8%. Sinh lời trên
-                                        vốn góp thành viên.</p>
-                                </div>
-                                <!-- CIR -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">CIR (Chi phí/Thu nhập)</span>
-                                        <span id="badge-cir"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            Tốt</span>
-                                    </div>
-                                    <p id="res-cir" class="text-xl font-black text-teal-800">40.00 %</p>
-                                    <p class="text-[10px] text-slate-500">Chuẩn tham chiếu QTDND: ≤ 55%. Tỷ lệ chi phí /
-                                        thu nhập hoạt động.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Nhóm 2: Chất lượng tài sản & An toàn vốn -->
-                        <div>
-                            <p class="text-[10px] font-bold text-amber-700 uppercase tracking-wide mb-2">🛡️ Chất lượng
-                                tài sản & An toàn vốn — (TT 32/2015/TT-NHNN, Điều 4–7)</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <!-- NPL -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">NPL (Tỷ lệ nợ xấu)</span>
-                                        <span id="badge-npl"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            An toàn</span>
-                                    </div>
-                                    <p id="res-npl" class="text-xl font-black text-emerald-800">1.00 %</p>
-                                    <p class="text-[10px] text-slate-500">NHNN yêu cầu QTDND: NPL ≤ 3%. Nhóm nợ 3 + 4 +
-                                        5 / Tổng dư nợ cho vay.</p>
-                                </div>
-                                <!-- CAR -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">CAR (An toàn vốn TT
-                                            32/2015)</span>
-                                        <span id="badge-car"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            Vượt chuẩn</span>
-                                    </div>
-                                    <p id="res-car" class="text-xl font-black text-emerald-800">11.00 %</p>
-                                    <p class="text-[10px] text-slate-500">TT 32/2015/TT-NHNN Điều 5: CAR ≥ 8%. Vốn tự có
-                                        / Tổng tài sản Có rủi ro.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Nhóm 3: Thanh khoản (TT 13/2024) -->
-                        <div>
-                            <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wide mb-2">💧 Chỉ số Thanh
-                                khoản — (TT 32/2015 sửa đổi bởi TT 13/2024/TT-NHNN, Điều 6–8a)</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <!-- STLT Ratio -->
-                                <div class="p-3 bg-white border border-blue-100 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">Vốn NH → Cho vay TDH</span>
-                                        <span id="badge-stlt"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            An toàn</span>
-                                    </div>
-                                    <p id="res-stlt" class="text-xl font-black text-blue-800">12.50 %</p>
-                                    <p class="text-[10px] text-slate-500">TT 32/2015 Điều 7: Tỷ lệ tối đa ≤ 30%. Vốn
-                                        ngắn hạn dùng để cho vay trung-dài hạn.</p>
-                                </div>
-                                <!-- Deposit/Equity Ratio (TT 13/2024) -->
-                                <div class="p-3 bg-white border border-blue-100 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-bold text-slate-700 text-xs">Tiền gửi / Vốn CSH</span>
-                                        <span id="badge-deq"
-                                            class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅
-                                            An toàn</span>
-                                    </div>
-                                    <p id="res-deq" class="text-xl font-black text-blue-800">8.80 lần</p>
-                                    <p class="text-[10px] text-slate-500">TT 13/2024/TT-NHNN (bổ sung Điều 8a): Tỷ lệ
-                                        tổng tiền gửi / Vốn chủ sở hữu. Giám sát nguy cơ mất khả năng chi trả.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tổng hợp Xếp hạng Chi tiết TT 42/2016 & TT 05/2021 -->
-                        <div id="fin-rating-box"
-                            class="p-4 bg-gradient-to-r from-teal-950 via-teal-900 to-teal-800 text-white rounded-2xl shadow-md border border-teal-700/60 space-y-3">
-                            <div class="flex flex-wrap justify-between items-center gap-2 pb-2.5 border-b border-teal-700/60">
-                                <div>
-                                    <span class="font-extrabold text-sm text-teal-200 uppercase tracking-wider flex items-center gap-2">
-                                        <span>📋 BẢNG ĐIỂM XẾP HẠNG CHUẨN THÔNG TƯ 42/2016 & TT 05/2021/TT-NHNN</span>
-                                    </span>
-                                    <p class="text-[11px] text-teal-300 mt-0.5">Quy định Chấm điểm Xếp hạng Quỹ Tín Dụng Nhân Dân (Thang điểm 100)</p>
-                                </div>
-                                <span id="badge-rating"
-                                    class="px-3.5 py-1.5 bg-emerald-500 text-white text-xs font-extrabold rounded-xl shadow">✅ HẠNG A — TỐT</span>
-                            </div>
-
-                            <p id="res-rating-note" class="text-xs text-teal-100 font-semibold bg-teal-900/60 p-3 rounded-xl border border-teal-700/50">
-                                Tất cả chỉ số cốt lõi đạt/vượt chuẩn theo quy định TT 32/2015 (sđ bởi TT 13/2024) và TT 42/2016/TT-NHNN.
-                            </p>
-
-                            <!-- Bảng Điểm Chi Tiết 6 Tiêu Chí Xếp Hạng -->
-                            <div class="space-y-2 pt-1">
-                                <div class="flex items-center justify-between">
-                                    <h4 class="text-xs font-extrabold text-teal-200">📊 BẢNG ĐIỂM CHI TIẾT 6 TIÊU CHÍ XẾP HẠNG:</h4>
-                                    <span id="res-rating-score-total" class="text-xs font-extrabold text-amber-300 bg-teal-950 px-2.5 py-0.5 rounded-lg border border-teal-700">Tổng điểm: 95/100</span>
-                                </div>
-                                <div class="overflow-x-auto rounded-xl border border-teal-700/60 bg-teal-950/80">
-                                    <table class="w-full text-left text-xs">
-                                        <thead class="bg-teal-900/90 text-teal-200 font-bold border-b border-teal-700/60 text-[11px]">
-                                            <tr>
-                                                <th class="py-2 px-3">Tên Tiêu Chí (TT 42/2016)</th>
-                                                <th class="py-2 px-2 text-center">Chuẩn NHNN</th>
-                                                <th class="py-2 px-2 text-center">Thực Tế</th>
-                                                <th class="py-2 px-2 text-center">Đánh Giá</th>
-                                                <th class="py-2 px-3 text-right">Điểm Đạt</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="rating-table-body" class="divide-y divide-teal-800/60 text-[11px]">
-                                            <!-- Dynamically populated via calcFinancialRatios() -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </div>
-
-        <div id="tab-scan" data-alias="tool-scanner" class="tab-content hidden space-y-6 w-full max-w-full overflow-x-hidden">
+        </div><div id="tab-scan" data-alias="tool-scanner" class="tab-content hidden space-y-6 w-full max-w-full overflow-x-hidden">
                 <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 w-full max-w-full overflow-hidden">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                         <div>
@@ -11497,6 +11422,28 @@ async function downloadDocPDFClientSide(mode) {
         }
 
         // Tab Navigation
+        
+        // ==================== SUBTAB SWITCHER FOR TAB FINANCIAL ====================
+        function switchFinSubTab(subId) {
+            const contents = document.querySelectorAll('.fin-subtab-content');
+            contents.forEach(el => el.classList.add('hidden'));
+
+            const target = document.getElementById(subId);
+            if (target) target.classList.remove('hidden');
+
+            const buttons = document.querySelectorAll('[id^="subtab-fin-sub-"]');
+            buttons.forEach(btn => {
+                btn.classList.remove('fin-subtab-active', 'bg-white', 'text-emerald-900', 'shadow-xs');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeBtn = document.getElementById('subtab-' + subId);
+            if (activeBtn) {
+                activeBtn.classList.add('fin-subtab-active', 'bg-white', 'text-emerald-900', 'shadow-xs');
+                activeBtn.classList.remove('text-slate-600');
+            }
+        }
+
         function switchTab(tabId) {
             window.scrollTo({ top: 0, behavior: 'instant' });
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
