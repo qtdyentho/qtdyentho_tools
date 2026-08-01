@@ -3023,88 +3023,37 @@
                                 </div>
                             </div>
 
-                            {/* CONTROL ACTIONS */}
-                            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                                <button 
-                                    onClick={checkAppUpdateFromGitHub}
-                                    className="px-3.5 py-2.5 bg-emerald-800/90 hover:bg-emerald-700 text-white rounded-2xl text-xs font-extrabold border border-emerald-500/50 shadow-md transition flex items-center gap-1.5 active:scale-95"
-                                    title="Tải & kiểm tra bản cập nhật mới nhất từ GitHub">
-                                    <i className="fa-brands fa-github text-emerald-300 text-sm"></i>
-                                    <span className="hidden md:inline">Cập nhật</span>
-                                </button>
-
-                                {/* SAO LƯU DATA: Tải máy + Push GitHub */}
-                                <button 
-                                    onClick={exportDataBackupJSON}
-                                    disabled={githubPushStatus === 'pushing'}
-                                    className={`px-3 py-2.5 rounded-2xl text-xs font-extrabold border transition flex items-center gap-1.5 active:scale-95 ${
-                                        githubPushStatus === 'pushing' ? 'bg-blue-700/80 border-blue-400 text-white animate-pulse cursor-wait' :
-                                        githubPushStatus === 'success' ? 'bg-emerald-700 border-emerald-400 text-white' :
-                                        githubPushStatus === 'error'   ? 'bg-rose-700/80 border-rose-400 text-white' :
-                                        'bg-slate-800/90 hover:bg-blue-900/80 light:bg-sky-100 light:hover:bg-sky-200 text-slate-200 light:text-sky-900 border-slate-700 light:border-sky-300'
-                                    }`}
-                                    title={githubPAT ? '☁️ Tải xuống & Đẩy lên GitHub' : '💾 Tải xuống (Cần cấu hình GitHub PAT để tự động đẩy lên GitHub)'}>
-                                    <i className={`fa-solid ${
-                                        githubPushStatus === 'pushing' ? 'fa-spinner fa-spin' :
-                                        githubPushStatus === 'success' ? 'fa-cloud-arrow-up' :
-                                        githubPushStatus === 'error'   ? 'fa-triangle-exclamation' :
-                                        githubPAT ? 'fa-cloud-arrow-up' : 'fa-download'
-                                    } ${githubPushStatus === 'success' ? 'text-emerald-200' : 'text-blue-300'}`}></i>
-                                    <span className="hidden md:inline">
-                                        {githubPushStatus === 'pushing' ? 'Đang lưu...' :
-                                         githubPushStatus === 'success' ? 'Đã lưu GitHub!' :
-                                         githubPushStatus === 'error'   ? 'Lỗi!' :
-                                         githubPAT ? 'Lưu & Push GitHub' : 'Sao lưu Data'}
-                                    </span>
-                                </button>
-
-                                {/* Nút Đồng Bộ jsonbin.io Realtime */}
+                            {/* MINIMAL CONTROL ACTIONS: ONLY REALTIME SYNC + THEME TOGGLE */}
+                            <div className="flex items-center gap-2">
+                                {/* Realtime Sync Button / Indicator */}
                                 <button
                                     onClick={handleHeaderSyncClick}
                                     onContextMenu={(e) => { e.preventDefault(); setShowSyncModal(true); }}
-                                    className={`px-3 py-2.5 rounded-2xl text-xs font-extrabold border transition flex items-center gap-1.5 active:scale-95 ${
+                                    className={`px-3 py-2 rounded-2xl text-xs font-extrabold border transition flex items-center gap-2 active:scale-95 shadow-sm ${
                                         isSyncEnabled
-                                        ? syncStatus === 'syncing' ? 'bg-amber-800/80 border-amber-400 text-amber-200 animate-pulse'
-                                          : syncStatus === 'error'   ? 'bg-rose-800/80 border-rose-400 text-rose-200'
-                                          : 'bg-emerald-900/80 border-emerald-500/50 text-emerald-300 hover:bg-emerald-800'
-                                        : 'bg-slate-800/80 border-slate-700 text-slate-300 light:bg-sky-50 light:border-sky-200 light:text-sky-700 hover:bg-slate-700'
+                                        ? syncStatus === 'syncing' ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 animate-pulse'
+                                          : syncStatus === 'error'   ? 'bg-rose-500/20 border-rose-500/50 text-rose-300'
+                                          : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 light:bg-emerald-50 light:border-emerald-300 light:text-emerald-700'
+                                        : 'bg-slate-800/80 border-slate-700 text-slate-300 light:bg-sky-50 light:border-sky-200 light:text-sky-700'
                                     }`}
-                                    title={isSyncEnabled ? `📡 Đã bật đồng bộ thời gian thực! (Nhấp để Sync ngay, Chuột phải để Cài đặt Bin ID: ${syncBinId.slice(-8)})` : '📡 Cài đặt đồng bộ realtime giữa thiết bị'}>
+                                    title={isSyncEnabled ? `📡 Đang tự động Sync thời gian thực! (Bấm để Sync ngay. Chuột phải để cài đặt)` : '📡 Cài đặt đồng bộ thời gian thực'}>
                                     <i className={`fa-solid ${
                                         syncStatus === 'syncing' ? 'fa-rotate fa-spin' :
-                                        syncStatus === 'error' ? 'fa-triangle-exclamation' :
-                                        isSyncEnabled ? 'fa-tower-broadcast' : 'fa-tower-broadcast'
+                                        syncStatus === 'error' ? 'fa-triangle-exclamation' : 'fa-tower-broadcast'
                                     } text-sm`}></i>
-                                    <span className="hidden md:inline">
-                                        {syncStatus === 'syncing' ? 'Đang sync...' :
-                                         syncStatus === 'error' ? 'Lỗi sync' :
-                                         isSyncEnabled ? `Sync • ${syncLastTime ? syncLastTime.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit'}) : 'Đang chờ'}` :
+                                    <span className="font-extrabold">
+                                        {syncStatus === 'syncing' ? 'Syncing...' :
+                                         syncStatus === 'error' ? 'Lỗi Sync' :
+                                         isSyncEnabled ? `Sync • ${syncLastTime ? syncLastTime.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit'}) : 'Live'}` :
                                          'Đồng bộ'}
                                     </span>
                                 </button>
 
-                                {/* Nut Cai dat GitHub PAT */}
-
-                                <button
-                                    onClick={() => setShowGithubModal(true)}
-                                    className={`p-2.5 rounded-2xl text-xs font-bold border transition active:scale-95 ${
-                                        githubPAT
-                                        ? 'bg-emerald-900/70 border-emerald-500/50 text-emerald-300 hover:bg-emerald-800/80'
-                                        : 'bg-slate-800/80 border-slate-700 text-amber-400 hover:bg-amber-900/40'
-                                    }`}
-                                    title={githubPAT ? '✅ Đã kết nối GitHub - Nhấp để thay đổi PAT' : '⚙️ Cài đặt GitHub PAT để tự động đẩy backup'}>
-                                    <i className={`fa-solid ${githubPAT ? 'fa-circle-check' : 'fa-key'} text-sm`}></i>
-                                </button>
-
-                                <label className="p-2.5 bg-slate-800/80 light:bg-sky-100 hover:bg-slate-700 light:hover:bg-sky-200 text-amber-400 light:text-amber-600 rounded-2xl text-xs font-bold border border-slate-700 light:border-sky-200 transition cursor-pointer active:scale-95" title="Phục hồi dữ liệu từ file sao lưu (.json)">
-                                    <i className="fa-solid fa-upload text-sm"></i>
-                                    <input type="file" accept=".json" onChange={importDataBackupJSON} className="hidden" />
-                                </label>
-
+                                {/* Theme Switcher Button */}
                                 <button 
                                     onClick={() => setIsDarkMode(!isDarkMode)} 
-                                    className="p-2.5 bg-slate-800/80 light:bg-sky-100 hover:bg-slate-700 light:hover:bg-sky-200 text-amber-400 light:text-amber-600 rounded-2xl text-xs font-bold border border-slate-700 light:border-sky-200 transition active:scale-95"
-                                    title="Chuyển đổi Chế độ Tối / Sáng">
+                                    className="p-2.5 bg-slate-800/90 light:bg-sky-100 hover:bg-slate-700 light:hover:bg-sky-200 text-amber-400 light:text-indigo-600 rounded-2xl text-xs font-extrabold border border-slate-700 light:border-sky-300 transition active:scale-95 shadow-sm"
+                                    title="Chuyển đổi Giao diện Tối / Sáng">
                                     <i className={`fa-solid ${isDarkMode ? 'fa-sun text-amber-400' : 'fa-moon text-indigo-600'} text-base`}></i>
                                 </button>
                             </div>
