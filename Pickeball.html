@@ -1693,13 +1693,13 @@
 
                     {/* ATHLETES SUMMARY METRICS */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <div className="glass-card p-4 rounded-3xl border border-blue-500/20 bg-blue-950/20 light:bg-white light:border-sky-200 flex flex-col justify-between shadow-lg">
+                        <div className="glass-card p-4 sm:p-5 rounded-3xl border border-blue-500/20 bg-blue-950/20 light:bg-white light:border-sky-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
                                 <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-400 light:text-sky-600">Tổng Số VĐV</span>
                                 <i className="fa-solid fa-users text-blue-400 light:text-sky-600 text-base"></i>
                             </div>
                             <div className="mt-2">
-                                <span className="text-3xl font-black text-white light:text-slate-900">{personnelStats.total}</span>
+                                <span className="text-3xl font-bold text-white light:text-slate-900">{personnelStats.total}</span>
                                 <span className="text-sm text-blue-300/80 light:text-sky-700 ml-1 font-semibold">người</span>
                             </div>
                             <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 flex justify-between font-medium">
@@ -1708,40 +1708,37 @@
                             </div>
                         </div>
 
-                        <div className="glass-card p-4 rounded-3xl border border-indigo-500/20 bg-indigo-950/20 light:bg-white light:border-indigo-200 flex flex-col justify-between shadow-lg">
+                        <div className="glass-card p-4 sm:p-5 rounded-3xl border border-indigo-500/20 bg-indigo-950/20 light:bg-white light:border-indigo-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
                                 <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-indigo-400 light:text-indigo-600">Đôi Nam</span>
                                 <i className="fa-solid fa-mars-double text-indigo-400 light:text-indigo-600 text-base"></i>
                             </div>
                             <div className="mt-2">
-                                <span className="text-3xl font-black text-white light:text-slate-900">{Math.floor(personnelStats.totalMensEvent / 2)}</span>
+                                <span className="text-3xl font-bold text-white light:text-slate-900">{Math.floor(personnelStats.totalMensEvent / 2)}</span>
                                 <span className="text-sm text-indigo-300/80 light:text-indigo-700 ml-1 font-semibold">đôi ({personnelStats.totalMensEvent} VĐV)</span>
                             </div>
-                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 font-medium">Đấu loại trực tiếp</div>
                         </div>
 
-                        <div className="glass-card p-4 rounded-3xl border border-purple-500/20 bg-purple-950/20 light:bg-white light:border-purple-200 flex flex-col justify-between shadow-lg">
+                        <div className="glass-card p-4 sm:p-5 rounded-3xl border border-purple-500/20 bg-purple-950/20 light:bg-white light:border-purple-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
                                 <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-purple-400 light:text-purple-600">Đôi Nam Nữ</span>
                                 <i className="fa-solid fa-venus-mars text-purple-400 light:text-purple-600 text-base"></i>
                             </div>
                             <div className="mt-2">
-                                <span className="text-3xl font-black text-white light:text-slate-900">{Math.floor(personnelStats.totalMixedEvent / 2)}</span>
+                                <span className="text-3xl font-bold text-white light:text-slate-900">{Math.floor(personnelStats.totalMixedEvent / 2)}</span>
                                 <span className="text-sm text-purple-300/80 light:text-purple-700 ml-1 font-semibold">đôi ({personnelStats.totalMixedEvent} VĐV)</span>
                             </div>
-                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 font-medium">Vòng bảng & Chung kết</div>
                         </div>
 
-                        <div className="glass-card p-4 rounded-3xl border border-emerald-500/20 bg-emerald-950/20 light:bg-white light:border-emerald-200 flex flex-col justify-between shadow-lg">
+                        <div className="glass-card p-4 sm:p-5 rounded-3xl border border-emerald-500/20 bg-emerald-950/20 light:bg-white light:border-emerald-200 flex flex-col justify-between shadow-lg">
                             <div className="flex justify-between items-start">
                                 <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-400 light:text-emerald-600">Tiệc Gala Dinner</span>
                                 <i className="fa-solid fa-utensils text-emerald-400 light:text-emerald-600 text-base"></i>
                             </div>
                             <div className="mt-2">
-                                <span className="text-3xl font-black text-emerald-400 light:text-emerald-600">{Math.ceil(personnelStats.totalDinner / 6)}</span>
+                                <span className="text-3xl font-bold text-emerald-400 light:text-emerald-600">{Math.ceil(personnelStats.totalDinner / 6)}</span>
                                 <span className="text-sm text-emerald-300/80 light:text-emerald-700 ml-1 font-semibold">mâm ({personnelStats.totalDinner} người)</span>
                             </div>
-                            <div className="text-xs sm:text-sm text-slate-300 light:text-slate-600 mt-1 font-medium">6 người / mâm tiệc</div>
                         </div>
                     </div>
 
@@ -2136,7 +2133,7 @@
                                         <th className="py-3 px-3 text-center w-12">STT</th>
                                         <th className="py-3 px-3 w-1/3">Tên Hạng Mục Thu</th>
                                         <th className="py-3 px-3 text-center w-28">Số Lượng</th>
-                                        <th className="py-3 px-3 text-right w-40">Mức Thu (VNĐ)</th>
+                                        <th className="py-3 px-3 text-right w-40">Mức Thu</th>
                                         <th className="py-3 px-3 text-right w-44 font-bold">Thành Tiền</th>
                                         <th className="py-3 px-3 text-center w-36">Trạng Thái</th>
                                         <th className="py-3 px-3">Ghi Chú Căn Cứ</th>
@@ -2152,7 +2149,7 @@
                                                     type="text" 
                                                     value={item.name}
                                                     onChange={e => handleIncomeChange(item.id, 'name', e.target.value)}
-                                                    className="w-full px-3 py-1.5 bg-slate-900/60 light:bg-white border border-slate-700/60 light:border-emerald-200 rounded-xl text-slate-200 light:text-slate-900 font-extrabold focus:outline-none focus:border-emerald-500"
+                                                    className="w-full px-3 py-1.5 bg-slate-900/60 light:bg-white border border-slate-700/60 light:border-emerald-200 rounded-xl text-slate-200 light:text-slate-900 font-semibold focus:outline-none focus:border-emerald-500"
                                                 />
                                             </td>
                                             <td className="py-2 px-3 text-center">
@@ -2160,7 +2157,7 @@
                                                     type="text"
                                                     value={formatNumber(item.quantity)}
                                                     onChange={e => handleIncomeChange(item.id, 'quantity', parseNumber(e.target.value))}
-                                                    className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-emerald-50/80 border border-slate-700 light:border-emerald-200 rounded-xl text-slate-200 light:text-slate-900 text-center font-mono font-bold"
+                                                    className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-emerald-50/80 border border-slate-700 light:border-emerald-200 rounded-xl text-slate-200 light:text-slate-900 text-center font-semibold"
                                                 />
                                             </td>
                                             <td className="py-2 px-3 text-right">
@@ -2168,10 +2165,10 @@
                                                     type="text"
                                                     value={formatNumber(item.price)}
                                                     onChange={e => handleIncomeChange(item.id, 'price', parseNumber(e.target.value))}
-                                                    className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-emerald-50/80 border border-slate-700 light:border-emerald-200 rounded-xl text-slate-200 light:text-slate-900 text-right font-mono font-bold"
+                                                    className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-emerald-50/80 border border-slate-700 light:border-emerald-200 rounded-xl text-slate-200 light:text-slate-900 text-right font-semibold"
                                                 />
                                             </td>
-                                            <td className="py-2 px-3 text-right font-black text-emerald-400 light:text-emerald-700 font-mono text-sm">
+                                            <td className="py-2 px-3 text-right font-bold text-emerald-400 light:text-emerald-700 text-sm">
                                                 {formatCurrency(item.quantity * item.price)}
                                             </td>
                                             <td className="py-2 px-3 text-center">
@@ -2311,7 +2308,7 @@
                                                     <th className="py-3 px-3 text-center w-12">STT</th>
                                                     <th className="py-3 px-3 w-1/3">Tên Hạng Mục Chi</th>
                                                     <th className="py-3 px-3 text-center w-24">SL / Mâm</th>
-                                                    <th className="py-3 px-3 text-right w-36">Đơn Giá (VNĐ)</th>
+                                                    <th className="py-3 px-3 text-right w-36">Đơn giá</th>
                                                     <th className="py-3 px-3 text-right w-40 font-bold">Thành Tiền</th>
                                                     <th className="py-3 px-3 text-center w-48">Người chi</th>
                                                     <th className="py-3 px-3 text-center w-36">Trạng Thái</th>
@@ -2327,7 +2324,7 @@
                                                                 type="text" 
                                                                 value={item.name}
                                                                 onChange={e => handleExpenseChange(cat.id, item.id, 'name', e.target.value)}
-                                                                className="w-full px-3 py-1.5 bg-slate-900/60 light:bg-white border border-slate-700/60 light:border-rose-200 rounded-xl text-slate-200 light:text-slate-900 font-extrabold focus:outline-none focus:border-rose-500"
+                                                                className="w-full px-3 py-1.5 bg-slate-900/60 light:bg-white border border-slate-700/60 light:border-rose-200 rounded-xl text-slate-200 light:text-slate-900 font-semibold focus:outline-none focus:border-rose-500"
                                                             />
                                                         </td>
                                                         <td className="py-2 px-3 text-center">
@@ -2335,7 +2332,7 @@
                                                                 type="text"
                                                                 value={formatNumber(item.quantity)}
                                                                 onChange={e => handleExpenseChange(cat.id, item.id, 'quantity', parseNumber(e.target.value))}
-                                                                className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-200 light:text-slate-900 text-center font-mono font-bold"
+                                                                className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-200 light:text-slate-900 text-center font-semibold"
                                                             />
                                                         </td>
                                                         <td className="py-2 px-3 text-right">
@@ -2343,10 +2340,10 @@
                                                                 type="text"
                                                                 value={formatNumber(item.price)}
                                                                 onChange={e => handleExpenseChange(cat.id, item.id, 'price', parseNumber(e.target.value))}
-                                                                className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-200 light:text-slate-900 text-right font-mono font-bold"
+                                                                className="w-full px-2.5 py-1.5 bg-slate-800 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-200 light:text-slate-900 text-right font-semibold"
                                                             />
                                                         </td>
-                                                        <td className="py-2 px-3 text-right font-black text-rose-400 light:text-rose-700 font-mono text-sm">
+                                                        <td className="py-2 px-3 text-right font-bold text-rose-300 light:text-rose-700 text-sm">
                                                             {formatCurrency(item.quantity * item.price)}
                                                         </td>
                                                         <td className="py-2 px-3 text-center">
@@ -3006,7 +3003,6 @@
                                 <div>
                                     <h1 className="text-lg sm:text-xl font-black text-white light:text-slate-900 tracking-tight flex items-center gap-2">
                                         <span>CLB Pickleball Yên Thọ</span>
-                                        <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 light:bg-sky-100 light:text-sky-800 border border-emerald-500/30 light:border-sky-300 rounded-full text-[10px] font-extrabold">Pro v6.0</span>
                                         {isSyncEnabled && (
                                             <span className={`w-2.5 h-2.5 rounded-full inline-block ml-0.5 flex-shrink-0 ${
                                                 syncStatus === 'syncing' ? 'bg-amber-400 sync-active' :
