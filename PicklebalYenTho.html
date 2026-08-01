@@ -1562,6 +1562,27 @@
                 XLSX.writeFile(wb, `Bang_Quyet_Toan_Thanh_Toan_Pickleball_${new Date().toISOString().slice(0,10)}.xlsx`);
             };
 
+            const exportMatchesExcel = () => {
+                if (!window.XLSX) {
+                    alert("Đang tải thư viện Excel, vui lòng thử lại sau 2 giây...");
+                    return;
+                }
+                const list = (data.matches || []).map((m, idx) => ({
+                    "STT": idx + 1,
+                    "Nội Dung": m.event === 'mens' ? 'Đôi Nam' : 'Đôi Nam Nữ',
+                    "Vòng Đấu": m.round,
+                    "Đôi Cặp A": m.pairA,
+                    "Tỷ Số A": m.scoreA,
+                    "Tỷ Số B": m.scoreB,
+                    "Đôi Cặp B": m.pairB,
+                    "Đội Thắng": m.scoreA > m.scoreB ? m.pairA : (m.scoreB > m.scoreA ? m.pairB : 'Hòa')
+                }));
+                const ws = XLSX.utils.json_to_sheet(list);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Lịch Thi Đấu & Kết Quả");
+                XLSX.writeFile(wb, `Lich_Thi_Dau_Va_Ket_Qua_Pickleball_${new Date().toISOString().slice(0,10)}.xlsx`);
+            };
+
             // Bind to window for global access
             useEffect(() => {
                 window.exportAthletesExcel = exportAthletesExcel;
