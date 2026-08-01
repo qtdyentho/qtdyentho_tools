@@ -86,8 +86,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { 
-            font-family: 'Be Vietnam Pro', sans-serif; 
+        /* Strictly apply Be Vietnam Pro across all UI components and input elements */
+        * {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        body, input, select, textarea, button, table, td, th, h1, h2, h3, h4, h5, h6, span, label, p { 
+            font-family: 'Be Vietnam Pro', sans-serif !important; 
             transition: background-color 0.3s ease, color 0.3s ease;
             letter-spacing: -0.01em;
         }
