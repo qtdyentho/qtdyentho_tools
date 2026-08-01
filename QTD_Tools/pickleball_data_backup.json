@@ -1,7 +1,7 @@
 {
   "athletes": [
     {
-      "id": "id_91h4msaon",
+      "id": "id_s1ck5lqoc",
       "name": "Trịnh Đức Anh",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -11,7 +11,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_zte18psh1",
+      "id": "id_eblg1qjk3",
       "name": "Trịnh Thị Hiền",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -21,7 +21,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_d7pq2ibma",
+      "id": "id_k6g6xsunx",
       "name": "Hoàng Thị Lan",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -31,17 +31,17 @@
       "joinDinner": true
     },
     {
-      "id": "id_vq6wd3gz5",
+      "id": "id_3rtiomqew",
       "name": "Lê Trọng Quân",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
       "gender": "male",
       "eventMens": true,
-      "eventMixed": false,
+      "eventMixed": true,
       "joinDinner": true
     },
     {
-      "id": "id_zvrkam0xa",
+      "id": "id_033hieu6f",
       "name": "Trịnh Thị Thương",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -51,7 +51,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_69n6ut7gp",
+      "id": "id_4sl4yd36z",
       "name": "Nguyễn Thị Hạnh",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -61,7 +61,17 @@
       "joinDinner": true
     },
     {
-      "id": "id_oey18oam9",
+      "id": "id_yi732im6p",
+      "name": "Vũ Thị Hiền",
+      "isGuest": false,
+      "unit": "CLB Yên Thọ",
+      "gender": "female",
+      "eventMens": false,
+      "eventMixed": true,
+      "joinDinner": true
+    },
+    {
+      "id": "id_gngzx73gr",
       "name": "Phạm Văn Mạnh",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -71,7 +81,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_etdojf368",
+      "id": "id_staztd80d",
       "name": "Lê Quang Hùng",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -81,7 +91,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_zs8isspkf",
+      "id": "id_ogxhpotaj",
       "name": "Nguyễn Văn Sơn",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -91,7 +101,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_yfrfrh9wn",
+      "id": "id_xr3f84jll",
       "name": "Đặng Hồng Việt",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -101,7 +111,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_3y5ugx1fg",
+      "id": "id_kq01vy023",
       "name": "Trịnh Xuân Nguyên",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -111,7 +121,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_028q3iwzm",
+      "id": "id_2v3wqgrt4",
       "name": "Lê Như Hiếu",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -121,7 +131,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_k0ie4ykby",
+      "id": "id_oldbbt6ph",
       "name": "Nguyễn Quang Hiệu",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -131,7 +141,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_gvhhp9q43",
+      "id": "id_i63y5q1ma",
       "name": "Trịnh Ngọc Hải",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -141,7 +151,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_48h7r3sup",
+      "id": "id_zhgin8dvb",
       "name": "Nguyễn Thị Thanh Thuỷ",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -151,7 +161,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_m8vmelhq2",
+      "id": "id_1wm84au12",
       "name": "Lâm Thị Loan",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -161,17 +171,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_muc9iq2yk",
-      "name": "Vũ Văn Phúc",
-      "isGuest": false,
-      "unit": "CLB Yên Thọ",
-      "gender": "male",
-      "eventMens": true,
-      "eventMixed": false,
-      "joinDinner": true
-    },
-    {
-      "id": "id_l2ngju1qo",
+      "id": "id_pa8fxb6t0",
       "name": "Lê Phi Cường",
       "isGuest": false,
       "unit": "CLB Yên Thọ",
@@ -181,7 +181,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_dbiv4t4ke",
+      "id": "id_3d6pw7b3o",
       "name": "Đại diện QL 1",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -191,7 +191,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_g9uy2lxei",
+      "id": "id_yua1ti9sq",
       "name": "Đại diện QL 2",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -201,7 +201,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_2xn3gfugk",
+      "id": "id_43ca9qadc",
       "name": "Đại diện QL 3",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -211,7 +211,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_4k9dscy1i",
+      "id": "id_4s1deqbj9",
       "name": "Đại diện QL 4",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -221,7 +221,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_uv0np1ff5",
+      "id": "id_i13sux8vv",
       "name": "Đại diện QL 5",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -231,7 +231,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_ax79ik8cl",
+      "id": "id_ovp4z6byn",
       "name": "Đại diện QL 6",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -241,7 +241,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_vxm6offk4",
+      "id": "id_3vtgbxop8",
       "name": "Chủ nhiệm CLB QL",
       "isGuest": true,
       "unit": "CLB Quý Lộc",
@@ -251,7 +251,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_tymb7tp6s",
+      "id": "id_weq62eduh",
       "name": "Đại diện TĐ 1",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -261,7 +261,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_p0ho7g8yi",
+      "id": "id_yaqsgwr86",
       "name": "Đại diện TĐ 2",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -271,7 +271,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_ik7l2q374",
+      "id": "id_01tx9y64t",
       "name": "Đại diện TĐ 3",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -281,7 +281,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_4c3y0t3g2",
+      "id": "id_zxvr6v1i5",
       "name": "Đại diện TĐ 4",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -291,7 +291,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_74w98v0oi",
+      "id": "id_zy7mbsdj5",
       "name": "Đại diện TĐ 5",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -301,7 +301,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_1w1nsh8j2",
+      "id": "id_kchhi5a71",
       "name": "Đại diện TĐ 6",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -311,7 +311,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_5dl9bs6ve",
+      "id": "id_qbi9wq9y5",
       "name": "Chủ nhiệm CLB TĐ",
       "isGuest": true,
       "unit": "CLB Tam Đa",
@@ -321,7 +321,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_qhnrt1nar",
+      "id": "id_6g5gybnra",
       "name": "Đại diện CA 1",
       "isGuest": true,
       "unit": "Công an xã",
@@ -331,7 +331,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_d19aqhmr7",
+      "id": "id_xyfl9ulic",
       "name": "Đại diện CA 2",
       "isGuest": true,
       "unit": "Công an xã",
@@ -341,7 +341,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_ksf9221tm",
+      "id": "id_q8bn0goar",
       "name": "Đại diện CA 3",
       "isGuest": true,
       "unit": "Công an xã",
@@ -351,7 +351,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_6eam8ixjl",
+      "id": "id_sq8uzd0rv",
       "name": "Đại diện CA 4",
       "isGuest": true,
       "unit": "Công an xã",
@@ -361,7 +361,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_68uyhj24q",
+      "id": "id_3naxc7sge",
       "name": "Khách mời CA",
       "isGuest": true,
       "unit": "Công an xã",
@@ -371,7 +371,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_c0bpqdc2z",
+      "id": "id_cbu2yocmp",
       "name": "Khách Khác 1",
       "isGuest": true,
       "unit": "Khác",
@@ -381,7 +381,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_692lueiwd",
+      "id": "id_9as1jokei",
       "name": "Khách Khác 2",
       "isGuest": true,
       "unit": "Khác",
@@ -391,7 +391,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_v1iqzj1m3",
+      "id": "id_f44683l0a",
       "name": "Khách Khác 3",
       "isGuest": true,
       "unit": "Khác",
@@ -401,7 +401,7 @@
       "joinDinner": true
     },
     {
-      "id": "id_fr6y1plhc",
+      "id": "id_d3utceyyg",
       "name": "Khách Khác 4",
       "isGuest": true,
       "unit": "Khác",
@@ -430,7 +430,7 @@
     },
     {
       "id": 3,
-      "name": "Tài trợ Quỹ TDND Yên Thọ & Mạnh thường quân",
+      "name": "Tài trợ Mạnh thường quân",
       "quantity": 1,
       "price": 0,
       "note": "Tài trợ chính giải đấu",
@@ -491,7 +491,7 @@
           "price": 300000,
           "note": "2 chiếc cho 2 nội dung",
           "payer": "BTC",
-          "status": false
+          "status": true
         },
         {
           "id": 202,
@@ -500,7 +500,7 @@
           "price": 60000,
           "note": "Mỗi VĐV đoạt giải 1 chiếc",
           "payer": "BTC",
-          "status": false
+          "status": true
         },
         {
           "id": 203,
@@ -522,8 +522,8 @@
         },
         {
           "id": 205,
-          "name": "Tiền thưởng: Giải Đồng hạng Ba",
-          "quantity": 2,
+          "name": "Tiền thưởng: Giải  Ba",
+          "quantity": 3,
           "price": 400000,
           "note": "4 giải Ba cho 2 nội dung",
           "payer": "BTC",
@@ -539,7 +539,7 @@
           "id": 301,
           "name": "Mâm cỗ tiệc cho Thành viên CLB",
           "quantity": 3,
-          "price": 900000,
+          "price": 1000000,
           "note": "Cho 18 TV CLB (3 mâm x 6ng)",
           "payer": "Ban Hậu Cần",
           "status": false
@@ -548,7 +548,7 @@
           "id": 302,
           "name": "Mâm cỗ tiệc cho Khách mời",
           "quantity": 4,
-          "price": 900000,
+          "price": 1000000,
           "note": "Cho 23 khách mời (4 mâm x 6ng)",
           "payer": "Ban Hậu Cần",
           "status": false
@@ -641,5 +641,5 @@
       "third2": "Lê Quang Hùng & Vũ Thị Hiền"
     }
   },
-  "_syncAt": "2026-07-31T16:51:57.379Z"
+  "_syncAt": "2026-08-01T01:15:20.705Z"
 }
