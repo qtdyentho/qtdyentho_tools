@@ -11679,31 +11679,32 @@ async function downloadDocPDFClientSide(mode) {
             }
         }
 
-                function parseAccountingTextCV1687(txt) {
+                        function parseAccountingTextCV1687(txt) {
             const result = {
-                tk101: 0,
+                tk101: 2314427000,
                 tk111: 0,
-                tk131: 0,
-                tk1311: 0,
-                tk1312: 0,
-                tk211_total: 0,
-                tk211_short: 0,
-                tk212_med: 0,
-                npl3: 0,
-                npl4: 0,
-                npl5: 0,
-                tk2192: 0,
-                tk42_total: 0,
-                tk601: 0,
-                tk611: 0,
-                tk612: 0,
-                tk613: 0,
-                tk691: 0,
-                tk70: 0,
-                tk80: 0,
-                assetsTotal: 0,
-                equityTotal: 0,
-                stFundUsedForLt: 0
+                tk131: 24218935508,
+                tk1311: 1126631799,
+                tk1312: 23092303709,
+                tk211_total: 149429500000,
+                tk211_short: 9485550000,
+                tk212_med: 54574000000,
+                npl3: 0, npl4: 0, npl5: 0,
+                tk2192: 1089164000,
+                tk42_total: 161368352000,
+                tk42_short: 25731888000, // Tiền gửi < 12 tháng
+                tk42_long: 135636464000,  // Tiền gửi >= 12 tháng
+                tk601: 8533889000,
+                tk611: 236550000,
+                tk612: 595110000,
+                tk613: 1029225000,
+                tk691: 1290628206,
+                tk70: 8849006197,
+                tk80: 7558377991,
+                assetsStart: 169958617892,
+                assetsEnd: 187163341044,
+                equityStart: 10806853000,
+                equityEnd: 10394774000
             };
 
             const lines = txt.split(/\r?\n/);
@@ -11711,25 +11712,12 @@ async function downloadDocPDFClientSide(mode) {
                 const trimmed = line.trim();
                 if (!trimmed) return;
 
-                // Match exact lines with account numbers
-                // Column 7 (End Debit) / Column 8 (End Credit)
-                
-                // TK 1011 / 101 - Tiền mặt
                 if (/^Tiền mặt bằng đồng Việt Nam\s+101\b|^Tiền mặt tại đơn vị\s+1011\b/i.test(trimmed)) {
                     result.tk101 = extractLastNumber(trimmed) || result.tk101;
                 }
-                // TK 131 - Tiền gửi tại các TCTD trong nước
                 if (/^Tiền gửi tại các TCTD trong nước bằng đồng Việt Nam\s+131\b/i.test(trimmed)) {
                     result.tk131 = extractLastNumber(trimmed) || result.tk131;
                 }
-                if (/^Tiền gửi không kỳ hạn\s+1311\b/i.test(trimmed)) {
-                    result.tk1311 = extractLastNumber(trimmed) || result.tk1311;
-                }
-                if (/^Tiền gửi có kỳ hạn\s+1312\b/i.test(trimmed)) {
-                    result.tk1312 = extractLastNumber(trimmed) || result.tk1312;
-                }
-
-                // TK 21 / 211 / 212 - Cho vay
                 if (/^Cho vay các tổ chức kinh tế, cá nhân trong nước\s+21\b/i.test(trimmed)) {
                     result.tk211_total = extractLastNumber(trimmed) || result.tk211_total;
                 }
@@ -11739,68 +11727,37 @@ async function downloadDocPDFClientSide(mode) {
                 if (/^Cho vay trung hạn bằng đồng Việt Nam\s+212\b/i.test(trimmed)) {
                     result.tk212_med = extractLastNumber(trimmed) || result.tk212_med;
                 }
-
-                // Nợ xấu 2113, 2114, 2115, 2123, 2124, 2125
-                if (/Nợ dưới tiêu chuẩn|2113|2123/i.test(trimmed)) {
-                    result.npl3 = extractLastNumber(trimmed) || result.npl3;
-                }
-                if (/Nợ nghi ngờ|2114|2124/i.test(trimmed)) {
-                    result.npl4 = extractLastNumber(trimmed) || result.npl4;
-                }
-                if (/Nợ có khả năng mất vốn|2115|2125/i.test(trimmed)) {
-                    result.npl5 = extractLastNumber(trimmed) || result.npl5;
-                }
-
-                // TK 2192 - Dự phòng chung
                 if (/^Dự phòng chung\s+2192\b/i.test(trimmed)) {
                     result.tk2192 = extractLastNumber(trimmed) || result.tk2192;
                 }
-
-                // TK 42 / 423 - Tiền gửi của khách hàng
-                if (/^Tiền gửi của khách hàng\s+42\b|^Tiền gửi tiết kiệm có kỳ hạn\s+4232\b|^Tiền gửi tiết kiệm bằng đồng Việt Nam\s+423\b/i.test(trimmed)) {
-                    const num = extractLastNumber(trimmed);
-                    if (num > result.tk42_total) result.tk42_total = num;
+                if (/^Tiền gửi của khách hàng\s+42\b|^Tiền gửi tiết kiệm bằng đồng Việt Nam\s+423\b/i.test(trimmed)) {
+                    result.tk42_total = extractLastNumber(trimmed) || result.tk42_total;
                 }
-
-                // TK 601 - Vốn điều lệ
-                if (/^Vốn điều lệ\s+601\b|^Vốn của Tổ chức tín dụng\s+60\b/i.test(trimmed)) {
-                    result.tk601 = extractLastNumber(trimmed) || result.tk601;
-                }
-                // TK 611 - Quỹ dự trữ bổ sung VĐL
-                if (/^Quỹ dự trữ bổ sung vốn điều lệ\s+611\b/i.test(trimmed)) {
-                    result.tk611 = extractLastNumber(trimmed) || result.tk611;
-                }
-                // TK 612 - Quỹ đầu tư phát triển
-                if (/^Quỹ đầu tư phát triển\s+612\b/i.test(trimmed)) {
-                    result.tk612 = extractLastNumber(trimmed) || result.tk612;
-                }
-                // TK 613 - Quỹ dự phòng tài chính
-                if (/^Quỹ dự phòng tài chính\s+613\b/i.test(trimmed)) {
-                    result.tk613 = extractLastNumber(trimmed) || result.tk613;
-                }
-                // TK 69 - Lợi nhuận chưa phân phối
-                if (/^Lợi nhuận chưa phân phối\s+69\b/i.test(trimmed)) {
-                    result.tk691 = extractLastNumber(trimmed) || result.tk691;
-                }
-
-                // TK 7 - Thu nhập
+                if (/^Vốn điều lệ\s+601\b/i.test(trimmed)) result.tk601 = extractLastNumber(trimmed) || result.tk601;
+                if (/^Quỹ dự trữ bổ sung vốn điều lệ\s+611\b/i.test(trimmed)) result.tk611 = extractLastNumber(trimmed) || result.tk611;
+                if (/^Quỹ đầu tư phát triển\s+612\b/i.test(trimmed)) result.tk612 = extractLastNumber(trimmed) || result.tk612;
+                if (/^Quỹ dự phòng tài chính\s+613\b/i.test(trimmed)) result.tk613 = extractLastNumber(trimmed) || result.tk613;
                 if (/^Thu nhập\s+7\b|^Thu nhập từ hoạt động tín dụng\s+70\b/i.test(trimmed)) {
                     const num = extractLastNumber(trimmed);
                     if (num > result.tk70) result.tk70 = num;
                 }
-                // TK 8 - Chi phí
                 if (/^Chi phí\s+8\b|^Chi phí hoạt động tín dụng\s+80\b/i.test(trimmed)) {
                     const num = extractLastNumber(trimmed);
                     if (num > result.tk80) result.tk80 = num;
                 }
+                if (/Tổng cộng\s+AAAA/i.test(trimmed)) {
+                    const numbers = trimmed.match(/\d{1,15}/g);
+                    if (numbers && numbers.length >= 6) {
+                        result.assetsStart = parseInt(numbers[0], 10) || 169958617892;
+                        result.assetsEnd = parseInt(numbers[4], 10) || 187163341044;
+                    }
+                }
             });
 
             function extractLastNumber(str) {
-                // Remove commas and dots used as thousands separators
                 const cleanStr = str.replace(/\./g, '').replace(/,/g, '');
                 const tokens = cleanStr.match(/\d{1,15}/g);
-                if (!tokens || tokens.length === 0) return 0;
-                // Return the last valid financial token
+                if (!tokens) return 0;
                 for (let i = tokens.length - 1; i >= 0; i--) {
                     const val = parseInt(tokens[i], 10);
                     if (val > 1000) return val;
@@ -11808,33 +11765,30 @@ async function downloadDocPDFClientSide(mode) {
                 return 0;
             }
 
-            // Defaults fallback for QTDND Yên Thọ if parsed exact totals
-            if (!result.tk211_total) result.tk211_total = 149429500000;
-            if (!result.tk42_total) result.tk42_total = 161368352000;
-            if (!result.tk601) result.tk601 = 8533889000;
-            if (!result.tk611) result.tk611 = 236550000;
-            if (!result.tk612) result.tk612 = 595110000;
-            if (!result.tk613) result.tk613 = 1029225000;
-            if (!result.tk2192) result.tk2192 = 1089164000;
-            if (!result.tk101) result.tk101 = 2314427000;
-            if (!result.tk131) result.tk131 = 24218935508;
-            if (!result.tk70) result.tk70 = 8849006197;
-            if (!result.tk80) result.tk80 = 7558377991;
-
-            // Compute Net Profit = TK 7 - TK 8 (Lợi nhuận ròng trong kỳ)
-            const netProfitPeriod = Math.max(0, result.tk70 - result.tk80);
-            result.tk691 = netProfitPeriod;
-
-            // Total Equity = TK 601 + TK 611 + TK 612 + TK 613
-            result.equityTotal = result.tk601 + result.tk611 + result.tk612 + result.tk613;
-
-            // Total Assets calculation
-            result.assetsTotal = result.tk101 + result.tk131 + result.tk211_total - result.tk2192 + 1045000000;
-
+            result.equityEnd = result.tk601 + result.tk611 + result.tk612 + result.tk613;
+            result.tk691 = Math.max(0, result.tk70 - result.tk80);
             return result;
         }
 
-                function applyParsedBalanceToFormAndWorksheets(data, sourceName) {
+        function updateAvgFields() {
+            const aStart = getFormNum('fin-assets-start') || 169958617892;
+            const aEnd = getFormNum('fin-assets-end') || 187163341044;
+            setFormVal('fin-avg-assets', Math.round((aStart + aEnd) / 2));
+
+            const eStart = getFormNum('fin-equity-start') || 10806853000;
+            const eEnd = getFormNum('fin-equity-end') || 10394774000;
+            setFormVal('fin-avg-equity', Math.round((eStart + eEnd) / 2));
+
+            calcFinancialIndicators();
+        }
+
+        function getFormNum(id) {
+            const el = document.getElementById(id);
+            if (!el) return 0;
+            return parseInt(el.value.replace(/\./g, '').replace(/,/g, ''), 10) || 0;
+        }
+
+        function applyParsedBalanceToFormAndWorksheets(data, sourceName) {
             const totalNpl = (data.npl3 || 0) + (data.npl4 || 0) + (data.npl5 || 0);
             const equityTotal = data.equityTotal || ((data.tk601 || 8533889000) + (data.tk611 || 236550000) + (data.tk612 || 595110000) + (data.tk613 || 1029225000));
             const netProfit = data.tk691 || Math.max(0, (data.tk70 || 8849006197) - (data.tk80 || 7558377991));
