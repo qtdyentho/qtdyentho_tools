@@ -13,7 +13,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster Engine -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_VERSION = 'v2026.08.01-v6.2';
+            const CURRENT_VERSION = 'v2026.08.01-v6.3';
             const lastVersion = localStorage.getItem('pickleball_app_version');
 
             if (lastVersion !== CURRENT_VERSION) {
@@ -1369,65 +1369,150 @@
                 });
             }, [data.athletes, searchQuery, unitFilter]);
 
-            // EXCEL EXPORTERS FOR EACH TABLE
+            // EXCEL EXPORTERS FOR ALL TABS (PROFESSIONAL MULTI-SHEET EXCEL)
             const exportAthletesExcel = () => {
-                const exportData = data.athletes.map((a, idx) => ({
+                if (!window.XLSX) {
+                    alert("Đang tải thư viện Excel, vui lòng thử lại sau 2 giây...");
+                    return;
+                }
+                const targetList = filteredAthletes.length > 0 ? filteredAthletes : data.athletes;
+                const exportData = targetList.map((a, idx) => ({
                     "STT": idx + 1,
                     "Họ và Tên VĐV": a.name,
-                    "Đơn vị / CLB": a.unit,
+                    "Đơn vị / CLB": a.unit || 'Chưa xếp',
+                    "Phân loại VĐV": a.unit === 'CLB Yên Thọ' ? 'VĐV Yên Thọ' : 'Khách Mời',
                     "Giới tính": a.gender === 'male' ? 'Nam' : 'Nữ',
                     "Đăng ký Đôi Nam": a.eventMens ? 'Có' : 'Không',
                     "Đăng ký Đôi Nam Nữ": a.eventMixed ? 'Có' : 'Không',
-                    "Tham gia Tiệc Gala": a.joinDinner ? 'Có' : 'Không'
+                    "Tham gia Gala Dinner": a.joinDinner ? 'Có' : 'Không'
                 }));
-                exportArrayToExcel(exportData, "Danh_Sach_VDV_Pickleball_YenTho", "VĐV & Khách Mời");
+                const ws = XLSX.utils.json_to_sheet(exportData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Danh Sách VĐV & Khách Mời");
+                XLSX.writeFile(wb, `Danh_Sach_VDV_Pickleball_YenTho_${new Date().toISOString().slice(0,10)}.xlsx`);
             };
 
-            const exportIncomeExcel = () => {
-                const exportData = data.income.map((item, idx) => ({
+            const exportBudgetExcel = () => {
+                if (!window.XLSX) {
+                    alert("Đang tải thư viện Excel, vui lòng thử lại sau 2 giây...");
+                    return;
+                }
+                const wb = XLSX.utils.book_new();
+
+                // Sheet 1: Income
+                const incomeData = data.income.map((item, idx) => ({
                     "STT": idx + 1,
                     "Tên Hạng Mục Thu": item.name,
                     "Số Lượng": item.quantity,
                     "Mức Thu (VNĐ)": item.price,
                     "Thành Tiền (VNĐ)": item.quantity * item.price,
-                    "Trạng Thái": item.status ? 'Đã Thu' : 'Chưa Thu',
-                    "Ghi Chú": item.note
+                    "Trạng Thái Thu": item.status ? 'Đã Thu' : 'Chưa Thu',
+                    "Ghi Chú Căn Cứ": item.note || ''
                 }));
-                exportArrayToExcel(exportData, "Danh_Muc_Khoan_Thu_Pickleball", "Dự Kiến Khoản Thu");
-            };
+                const wsIncome = XLSX.utils.json_to_sheet(incomeData);
+                XLSX.utils.book_append_sheet(wb, wsIncome, "1. Dự Kiến Khoản Thu");
 
-            const exportExpenseExcel = () => {
-                const list = [];
+                // Sheet 2: Expense
+                const expenseData = [];
                 let stt = 1;
                 data.expenseCategories.forEach(cat => {
                     cat.items.forEach(item => {
-                        list.push({
+                        expenseData.push({
                             "STT": stt++,
                             "Danh Mục Chi": cat.name,
                             "Tên Hạng Mục Chi": item.name,
                             "SL / Mâm": item.quantity,
                             "Đơn Giá (VNĐ)": item.price,
                             "Thành Tiền (VNĐ)": item.quantity * item.price,
-                            "Người chi": item.payer || 'BTC',
-                            "Trạng Thái": item.status ? 'Đã Thanh Toán' : 'Chưa Thanh Toán'
+                            "Người Chi / Ứng Chi": item.payer || 'BTC',
+                            "Trạng Thái Thanh Toán": item.status ? 'Đã Thanh Toán' : 'Chưa Thanh Toán'
                         });
                     });
                 });
-                exportArrayToExcel(list, "Danh_Muc_Khoan_Chi_Pickleball", "Dự Kiến Khoản Chi");
+                const wsExpense = XLSX.utils.json_to_sheet(expenseData);
+                XLSX.utils.book_append_sheet(wb, wsExpense, "2. Dự Kiến Khoản Chi");
+
+                XLSX.writeFile(wb, `Du_Tru_Thu_Chi_Pickleball_YenTho_${new Date().toISOString().slice(0,10)}.xlsx`);
+            };
+
+            const exportSummaryExcel = () => {
+                if (!window.XLSX) {
+                    alert("Đang tải thư viện Excel, vui lòng thử lại sau 2 giây...");
+                    return;
+                }
+                const wb = XLSX.utils.book_new();
+
+                // Sheet 1: Unit Personnel Stats
+                const unitStatsData = personnelStats.units.map((u, idx) => ({
+                    "STT": idx + 1,
+                    "Tên Đơn Vị / CLB": u.name,
+                    "Tổng Số VĐV": u.total,
+                    "VĐV Nam": u.male,
+                    "VĐV Nữ": u.female,
+                    "Đôi Nam": u.mensEvent,
+                    "Đôi Nam Nữ": u.mixedEvent,
+                    "Gala Dinner": u.dinner
+                }));
+                unitStatsData.push({
+                    "STT": "TỔNG CỘNG",
+                    "Tên Đơn Vị / CLB": "Toàn Giải Đấu",
+                    "Tổng Số VĐV": personnelStats.total,
+                    "VĐV Nam": personnelStats.totalMale,
+                    "VĐV Nữ": personnelStats.totalFemale,
+                    "Đôi Nam": personnelStats.totalMensEvent,
+                    "Đôi Nam Nữ": personnelStats.totalMixedEvent,
+                    "Gala Dinner": personnelStats.totalDinner
+                });
+                const wsUnits = XLSX.utils.json_to_sheet(unitStatsData);
+                XLSX.utils.book_append_sheet(wb, wsUnits, "Thống Kê Nhân Sự Đơn Vị");
+
+                // Sheet 2: Financial Balance Summary
+                const balanceData = [
+                    { "Hạng Mục Báo Cáo": "1. Tổng Dự Kiến Thu", "Mức Dư Trù Báo Cáo (VNĐ)": totalIncome, "Thực Tế Đã Thu (VNĐ)": totalActualIncome, "Ghi Chú": "Đóng góp VĐV & Tài trợ" },
+                    { "Hạng Mục Báo Cáo": "2. Tổng Dự Kiến Chi", "Mức Dư Trù Báo Cáo (VNĐ)": totalExpense, "Thực Tế Đã Chi (VNĐ)": data.expenseCategories.reduce((s, cat) => s + cat.items.reduce((ss, i) => i.status ? ss + (i.quantity*i.price) : ss, 0), 0), "Ghi Chú": "Kinh phí giải đấu & Gala dinner" },
+                    { "Hạng Mục Báo Cáo": "3. Cân Đối Thu - Chi", "Mức Dư Trù Báo Cáo (VNĐ)": netBalance, "Thực Tế Đã Chi (VNĐ)": totalActualIncome - data.expenseCategories.reduce((s, cat) => s + cat.items.reduce((ss, i) => i.status ? ss + (i.quantity*i.price) : ss, 0), 0), "Ghi Chú": netBalance >= 0 ? "Dư kinh phí" : "Bội chi kinh phí" }
+                ];
+                const wsBalance = XLSX.utils.json_to_sheet(balanceData);
+                XLSX.utils.book_append_sheet(wb, wsBalance, "Tổng Hợp Cân Đối Kinh Phí");
+
+                XLSX.writeFile(wb, `Bao_Cao_Tong_Hop_Pickleball_YenTho_${new Date().toISOString().slice(0,10)}.xlsx`);
             };
 
             const exportSettlementExcel = () => {
-                const list = flatExpenseItems.map((item, idx) => ({
+                if (!window.XLSX) {
+                    alert("Đang tải thư viện Excel, vui lòng thử lại sau 2 giây...");
+                    return;
+                }
+                const wb = XLSX.utils.book_new();
+
+                // Sheet 1: Items Detail
+                const detailList = flatExpenseItems.map((item, idx) => ({
                     "STT": idx + 1,
-                    "Hạng Mục Chi": item.name,
-                    "Danh Mục": item.catName,
-                    "Người chi": item.payer || 'BTC',
-                    "Tổng Chi (VNĐ)": item.total,
-                    "Đã Thanh Toán (VNĐ)": item.paidAmount,
-                    "Còn Thiếu / Nợ (VNĐ)": item.unpaidAmount,
-                    "Trạng Thái": item.status ? 'Đã Tất Toán' : 'Chưa Tất Toán'
+                    "Tên Hạng Mục Chi": item.name,
+                    "Danh Mục Chi": item.catName,
+                    "Người Chi / Ứng Chi": item.payer || 'BTC',
+                    "Tổng Tiền Ứng Chi (VNĐ)": item.total,
+                    "Đã Nhận Hoàn Trả (VNĐ)": item.paidAmount,
+                    "Số Tiền Còn Được Nhận (VNĐ)": item.unpaidAmount,
+                    "Trạng Thái Quyết Toán": item.status ? 'Đã Tất Toán' : 'Chưa Tất Toán'
                 }));
-                exportArrayToExcel(list, "Bang_Quyet_Toan_Thanh_Toan_Pickleball", "Quyết Toán Thanh Toán");
+                const wsDetail = XLSX.utils.json_to_sheet(detailList);
+                XLSX.utils.book_append_sheet(wb, wsDetail, "I. Chi Tiết Quyết Toán");
+
+                // Sheet 2: Payer Summary
+                const payerList = Object.entries(payerSummary).map(([payer, info], idx) => ({
+                    "STT": idx + 1,
+                    "Người Chi / Ứng Chi": payer,
+                    "Số Mục Đã Chi": `${info.count} hạng mục`,
+                    "Tổng Tiền Ứng Chi (VNĐ)": info.total,
+                    "Đã Nhận Hoàn Trả (VNĐ)": info.paid,
+                    "Số Tiền Còn Được Nhận (VNĐ)": info.unpaid,
+                    "Trạng Thái Tất Toán": info.unpaid === 0 ? 'Đã tất toán hoàn toàn' : `Còn nợ ${info.unpaid.toLocaleString('vi-VN')} VNĐ`
+                }));
+                const wsPayer = XLSX.utils.json_to_sheet(payerList);
+                XLSX.utils.book_append_sheet(wb, wsPayer, "II. Tổng Hợp Theo Người Chi");
+
+                XLSX.writeFile(wb, `Bang_Quyet_Toan_Thanh_Toan_Pickleball_${new Date().toISOString().slice(0,10)}.xlsx`);
             };
 
             // Unit Color Badge Map
@@ -1442,6 +1527,27 @@
             // RENDER TAB 1: DANH SÁCH VĐV VÀ KHÁCH MỜI
             const renderAthletesTab = () => (
                 <div className="space-y-6">
+                    {/* PRINT REPORT OFFICIAL HEADER (ONLY VISIBLE WHEN PRINTING ATHLETES LIST) */}
+                    <div className="hidden print:block text-center border-b-2 border-black pb-4 mb-4">
+                        <table className="w-full text-center" style={{ border: 'none' }}>
+                            <tbody>
+                                <tr style={{ border: 'none' }}>
+                                    <td style={{ border: 'none', width: '50%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>CLB PICKLEBALL YÊN THỌ</p>
+                                        <p style={{ fontSize: '9pt', italic: 'italic' }}>Yên Thọ, Như Thanh, Thanh Hóa</p>
+                                    </td>
+                                    <td style={{ border: 'none', width: '50%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>Độc lập - Tự do - Hạnh phúc</p>
+                                        <p style={{ fontSize: '9pt' }}>--------------------</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h1 className="print-header-title">DANH SÁCH VẬN ĐỘNG VIÊN & KHÁCH MỜI THAM GIA GIẢI ĐẤU</h1>
+                        <p className="print-subtitle">Giải Pickleball kỷ niệm 1 năm thành lập CLB Yên Thọ (08/08/2025 - 08/08/2026)</p>
+                    </div>
+
                     {/* ATHLETES SUMMARY METRICS */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div className="glass-card p-4 rounded-3xl border border-blue-500/20 bg-blue-950/20 light:bg-white light:border-sky-200 flex flex-col justify-between shadow-lg">
@@ -1671,7 +1777,7 @@
 
                         {/* DESKTOP DATA TABLE */}
                         <div className="hidden md:block overflow-x-auto rounded-2xl border border-slate-700/60 light:border-sky-200 shadow-md">
-                            <table className="w-full text-left text-xs">
+                            <table className="w-full text-left text-xs print-table">
                                 <thead className="bg-slate-900/90 light:bg-sky-100/80 text-slate-300 light:text-sky-900 font-bold border-b border-slate-700/80 light:border-sky-200">
                                     <tr>
                                         <th className="py-3 px-3 text-center w-12">STT</th>
@@ -1680,7 +1786,7 @@
                                         <th className="py-3 px-3 w-28 text-center">Giới tính</th>
                                         <th className="py-3 px-2 text-center bg-indigo-950/40 light:bg-indigo-50 border-l border-r border-slate-700/50 light:border-sky-200" colSpan="2">Đăng Ký Thi Đấu</th>
                                         <th className="py-3 px-3 text-center w-32">Dự Tiệc Gala</th>
-                                        <th className="py-3 px-2 text-center w-12">Xóa</th>
+                                        <th className="py-3 px-2 text-center w-12 no-print">Xóa</th>
                                     </tr>
                                     <tr className="bg-slate-900/60 light:bg-sky-50 text-[10px] text-slate-400 light:text-sky-700 border-b border-slate-800 light:border-sky-200">
                                         <th colSpan="4"></th>
@@ -1693,57 +1799,63 @@
                                     {filteredAthletes.map((a, idx) => (
                                         <tr key={a.id} className="hover:bg-slate-800/40 light:hover:bg-sky-50/60 transition">
                                             <td className="py-2.5 px-3 text-center text-slate-400 light:text-slate-500 font-bold">{idx + 1}</td>
-                                            <td className="py-1.5 px-3">
+                                            <td className="py-1.5 px-3 font-extrabold text-white light:text-slate-900 print:text-black">
+                                                <span className="hidden print:inline">{a.name}</span>
                                                 <input 
                                                     type="text" 
                                                     value={a.name}
                                                     onChange={e => handleAthleteChange(a.id, 'name', e.target.value)}
-                                                    className="w-full px-2.5 py-1.5 bg-slate-900/50 light:bg-white border border-slate-700/50 light:border-sky-200 focus:border-blue-500 rounded-xl text-white light:text-slate-900 font-extrabold text-xs focus:outline-none"
+                                                    className="w-full px-2.5 py-1.5 bg-slate-900/50 light:bg-white border border-slate-700/50 light:border-sky-200 focus:border-blue-500 rounded-xl text-white light:text-slate-900 font-extrabold text-xs focus:outline-none no-print"
                                                 />
                                             </td>
                                             <td className="py-1.5 px-3">
+                                                <span className="hidden print:inline font-semibold">{a.unit || 'CLB Yên Thọ'}</span>
                                                 <input 
                                                     type="text" 
                                                     value={a.unit}
                                                     onChange={e => handleAthleteChange(a.id, 'unit', e.target.value)}
-                                                    className="w-full px-2.5 py-1.5 bg-slate-900/50 light:bg-white border border-slate-700/50 light:border-sky-200 focus:border-blue-500 rounded-xl text-slate-300 light:text-slate-700 text-xs focus:outline-none font-medium"
+                                                    className="w-full px-2.5 py-1.5 bg-slate-900/50 light:bg-white border border-slate-700/50 light:border-sky-200 focus:border-blue-500 rounded-xl text-slate-300 light:text-slate-700 text-xs focus:outline-none font-medium no-print"
                                                 />
                                             </td>
                                             <td className="py-1.5 px-2 text-center">
+                                                <span className="hidden print:inline">{a.gender === 'male' ? 'Nam' : 'Nữ'}</span>
                                                 <select 
                                                     value={a.gender}
                                                     onChange={e => handleAthleteChange(a.id, 'gender', e.target.value)}
-                                                    className="px-2.5 py-1.5 bg-slate-800 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-200 light:text-slate-900 text-xs focus:outline-none font-medium">
+                                                    className="px-2.5 py-1.5 bg-slate-800 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-200 light:text-slate-900 text-xs focus:outline-none font-medium no-print">
                                                     <option value="male">♂ Nam</option>
                                                     <option value="female">♀ Nữ</option>
                                                 </select>
                                             </td>
                                             <td className="py-1.5 px-2 text-center bg-indigo-950/20 light:bg-indigo-50/50 border-l border-slate-800 light:border-sky-200">
+                                                <span className="hidden print:inline">{a.eventMens ? '✓' : '-'}</span>
                                                 <input 
                                                     type="checkbox" 
                                                     checked={a.eventMens}
                                                     onChange={e => handleAthleteChange(a.id, 'eventMens', e.target.checked)}
                                                     disabled={a.gender === 'female'}
-                                                    className="w-4 h-4 rounded accent-indigo-500 cursor-pointer disabled:opacity-30"
+                                                    className="w-4 h-4 rounded accent-indigo-500 cursor-pointer disabled:opacity-30 no-print"
                                                 />
                                             </td>
                                             <td className="py-1.5 px-2 text-center bg-purple-950/20 light:bg-purple-50/50 border-r border-slate-800 light:border-sky-200">
+                                                <span className="hidden print:inline">{a.eventMixed ? '✓' : '-'}</span>
                                                 <input 
                                                     type="checkbox" 
                                                     checked={a.eventMixed}
                                                     onChange={e => handleAthleteChange(a.id, 'eventMixed', e.target.checked)}
-                                                    className="w-4 h-4 rounded accent-purple-500 cursor-pointer"
+                                                    className="w-4 h-4 rounded accent-purple-500 cursor-pointer no-print"
                                                 />
                                             </td>
                                             <td className="py-1.5 px-3 text-center">
+                                                <span className="hidden print:inline">{a.joinDinner ? '✓' : '-'}</span>
                                                 <input 
                                                     type="checkbox" 
                                                     checked={a.joinDinner}
                                                     onChange={e => handleAthleteChange(a.id, 'joinDinner', e.target.checked)}
-                                                    className="w-4 h-4 rounded accent-emerald-500 cursor-pointer"
+                                                    className="w-4 h-4 rounded accent-emerald-500 cursor-pointer no-print"
                                                 />
                                             </td>
-                                            <td className="py-1.5 px-2 text-center">
+                                            <td className="py-1.5 px-2 text-center no-print">
                                                 <button onClick={() => removeAthlete(a.id)} className="text-slate-500 hover:text-rose-400 p-1.5 transition">
                                                     <i className="fa-solid fa-trash-can text-xs"></i>
                                                 </button>
@@ -1754,12 +1866,62 @@
                             </table>
                         </div>
                     </div>
+
+                    {/* OFFICIAL SIGNATURE BOX FOR PRINTING ATHLETES LIST */}
+                    <div className="hidden print:block print-signature-box pt-6">
+                        <table className="w-full text-center" style={{ border: 'none' }}>
+                            <tbody>
+                                <tr style={{ border: 'none' }}>
+                                    <td style={{ border: 'none', width: '33%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>NGƯỜI LẬP BẢNG</p>
+                                        <p style={{ fontSize: '9pt', italic: 'italic' }}>(Ký & ghi rõ họ tên)</p>
+                                        <br/><br/><br/><br/>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>Trịnh Đức Anh</p>
+                                    </td>
+                                    <td style={{ border: 'none', width: '33%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>THỦ QUỸ / HẬU CẦN</p>
+                                        <p style={{ fontSize: '9pt', italic: 'italic' }}>(Ký & ghi rõ họ tên)</p>
+                                        <br/><br/><br/><br/>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>Trịnh Thị Hiền</p>
+                                    </td>
+                                    <td style={{ border: 'none', width: '34%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '9pt', italic: 'italic' }}>Yên Thọ, ngày.....tháng.....năm 2026</p>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>CHỦ NHIỆM CLB DUYỆT</p>
+                                        <p style={{ fontSize: '9pt', italic: 'italic' }}>(Dấu & chữ ký)</p>
+                                        <br/><br/><br/>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>Lê Trọng Quân</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
 
             // RENDER TAB 2: DỰ TRÙ THU - CHI
             const renderBudgetTab = () => (
                 <div className="space-y-6">
+                    {/* PRINT REPORT OFFICIAL HEADER (ONLY VISIBLE WHEN PRINTING BUDGET) */}
+                    <div className="hidden print:block text-center border-b-2 border-black pb-4 mb-4">
+                        <table className="w-full text-center" style={{ border: 'none' }}>
+                            <tbody>
+                                <tr style={{ border: 'none' }}>
+                                    <td style={{ border: 'none', width: '50%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>CLB PICKLEBALL YÊN THỌ</p>
+                                        <p style={{ fontSize: '9pt', italic: 'italic' }}>Yên Thọ, Như Thanh, Thanh Hóa</p>
+                                    </td>
+                                    <td style={{ border: 'none', width: '50%', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                                        <p style={{ fontSize: '10pt', fontWeight: 'bold' }}>Độc lập - Tự do - Hạnh phúc</p>
+                                        <p style={{ fontSize: '9pt' }}>--------------------</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h1 className="print-header-title">BẢNG DỰ TRÙ CHI TIẾT THU - CHI KINH PHÍ GIẢI ĐẤU</h1>
+                        <p className="print-subtitle">Giải Pickleball kỷ niệm 1 năm thành lập CLB Yên Thọ (08/08/2025 - 08/08/2026)</p>
+                    </div>
+
                     {/* FINANCIAL OVERVIEW CARDS */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="glass-card p-5 rounded-3xl border border-emerald-500/30 bg-emerald-950/20 light:bg-white light:border-emerald-200 shadow-lg">
@@ -2176,7 +2338,7 @@
 
                         <div className="flex flex-wrap items-center gap-2">
                             <button 
-                                onClick={exportIncomeExcel}
+                                onClick={exportSummaryExcel}
                                 className="px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-2xl font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
                                 <i className="fa-solid fa-file-excel text-emerald-200"></i>
                                 <span>Xuất Excel Báo Cáo</span>
@@ -2827,10 +2989,10 @@
                         onTouchStart={handleTouchStart}
                         onTouchEnd={handleTouchEnd}
                     >
-                        <div key={tabAnimKey} className={activeTab === 'athletes' ? 'block print:hidden tab-content-enter' : 'hidden print:hidden'}>
+                        <div key={tabAnimKey} className={activeTab === 'athletes' ? 'block print:block tab-content-enter' : 'hidden print:hidden'}>
                             {renderAthletesTab()}
                         </div>
-                        <div className={activeTab === 'budget' ? 'block print:hidden tab-content-enter' : 'hidden print:hidden'}>
+                        <div className={activeTab === 'budget' ? 'block print:block tab-content-enter' : 'hidden print:hidden'}>
                             {renderBudgetTab()}
                         </div>
                         <div className={activeTab === 'summary' ? 'block print:block tab-content-enter' : 'hidden print:hidden'}>
