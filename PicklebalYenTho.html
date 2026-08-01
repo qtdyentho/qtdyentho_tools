@@ -783,16 +783,22 @@
                 }
             }, [isDarkMode]);
 
-            // Restore Data
+            // Restore Data with smart merge to support new code updates
             const [data, setData] = useState(() => {
                 const saved = localStorage.getItem('budgetApp_pickleball_v4');
                 if (saved) {
                     try {
                         const parsed = JSON.parse(saved);
                         if (parsed && parsed.athletes) {
-                            if (!parsed.matches) parsed.matches = defaultData.matches;
-                            if (!parsed.champions) parsed.champions = defaultData.champions;
-                            return parsed;
+                            return {
+                                ...defaultData,
+                                ...parsed,
+                                athletes: (parsed.athletes && parsed.athletes.length > 0) ? parsed.athletes : defaultData.athletes,
+                                income: (parsed.income && parsed.income.length > 0) ? parsed.income : defaultData.income,
+                                expenseCategories: (parsed.expenseCategories && parsed.expenseCategories.length > 0) ? parsed.expenseCategories : defaultData.expenseCategories,
+                                matches: (parsed.matches && parsed.matches.length > 0) ? parsed.matches : defaultData.matches,
+                                champions: parsed.champions || defaultData.champions
+                            };
                         }
                     } catch(e) {}
                 }
@@ -3043,8 +3049,17 @@
                                 </div>
                             </div>
 
-                            {/* MINIMAL CONTROL ACTIONS: ONLY REALTIME SYNC + THEME TOGGLE */}
+                            {/* CONTROL ACTIONS: UPDATE APP + REALTIME SYNC + THEME TOGGLE */}
                             <div className="flex items-center gap-2">
+                                {/* Button Cập Nhật App & Reset Cache */}
+                                <button 
+                                    onClick={triggerAutoUpdate}
+                                    className="px-3 py-2 bg-emerald-800/90 hover:bg-emerald-700 light:bg-emerald-100 light:hover:bg-emerald-200 text-white light:text-emerald-900 rounded-2xl text-xs font-extrabold border border-emerald-500/50 light:border-emerald-300 shadow-sm transition flex items-center gap-1.5 active:scale-95"
+                                    title="Cập nhật phiên bản mới nhất từ mã nguồn & làm mới dữ liệu">
+                                    <i className="fa-solid fa-rotate text-emerald-200 light:text-emerald-700 text-xs"></i>
+                                    <span>Cập nhật</span>
+                                </button>
+
                                 {/* Realtime Sync Button / Indicator */}
                                 <button
                                     onClick={handleHeaderSyncClick}
@@ -3111,12 +3126,8 @@
                         </div>
                     </div>
 
-                    {/* MAIN CONTENT CONTAINERS - with swipe support */}
-                    <div
-                        className="print:block"
-                        onTouchStart={handleTouchStart}
-                        onTouchEnd={handleTouchEnd}
-                    >
+                    {/* MAIN CONTENT CONTAINERS */}
+                    <div className="print:block">
                         <div key={tabAnimKey} className={activeTab === 'athletes' ? 'block print:block tab-content-enter' : 'hidden print:hidden'}>
                             {renderAthletesTab()}
                         </div>
