@@ -1856,12 +1856,12 @@
                                     {/* Header: Number Badge, Name Input, Delete */}
                                     <div className="flex justify-between items-center pb-2 border-b border-slate-800/80 light:border-slate-100">
                                         <div className="flex items-center gap-2.5 flex-1 mr-2">
-                                            <span className="w-7 h-7 bg-blue-500/20 text-blue-300 light:bg-sky-100 light:text-sky-800 border border-blue-500/30 light:border-sky-200 rounded-xl flex items-center justify-center text-xs font-black shadow-sm">{idx + 1}</span>
+                                            <span className="w-7 h-7 bg-blue-500/20 text-blue-300 light:bg-sky-100 light:text-sky-800 border border-blue-500/30 light:border-sky-200 rounded-xl flex items-center justify-center text-xs font-semibold shadow-sm">{idx + 1}</span>
                                             <input 
                                                 type="text" 
                                                 value={a.name}
                                                 onChange={e => handleAthleteChange(a.id, 'name', e.target.value)}
-                                                className="font-black text-white light:text-slate-900 bg-transparent border-b border-slate-700/60 focus:border-emerald-400 text-base sm:text-lg focus:outline-none w-full py-0.5 tracking-tight"
+                                                className="font-semibold text-white light:text-slate-900 bg-transparent border-b border-slate-700/60 focus:border-emerald-400 text-base sm:text-lg focus:outline-none w-full py-0.5 tracking-tight"
                                                 placeholder="Họ và tên VĐV..."
                                             />
                                         </div>
@@ -1873,21 +1873,21 @@
                                     {/* Inputs Grid: Unit & Gender */}
                                     <div className="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Đơn vị / CLB</label>
+                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Đơn vị / CLB</label>
                                             <input 
                                                 type="text"
                                                 value={a.unit}
                                                 onChange={e => handleAthleteChange(a.id, 'unit', e.target.value)}
-                                                className="w-full px-3.5 py-2 bg-slate-800/90 light:bg-slate-50 border border-slate-700/80 light:border-slate-300 rounded-xl text-slate-100 light:text-slate-900 text-sm focus:outline-none focus:border-blue-500 font-bold shadow-inner"
+                                                className="w-full px-3.5 py-2 bg-slate-800/90 light:bg-slate-50 border border-slate-700/80 light:border-slate-300 rounded-xl text-slate-100 light:text-slate-900 text-sm focus:outline-none focus:border-blue-500 font-normal shadow-sm"
                                             />
                                         </div>
 
                                         <div>
-                                            <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Giới tính</label>
+                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Giới tính</label>
                                             <select 
                                                 value={a.gender}
                                                 onChange={e => handleAthleteChange(a.id, 'gender', e.target.value)}
-                                                className="w-full px-3.5 py-2 bg-slate-800/90 light:bg-slate-50 border border-slate-700/80 light:border-slate-300 rounded-xl text-slate-100 light:text-slate-900 text-sm focus:outline-none focus:border-blue-500 font-bold shadow-inner">
+                                                className="w-full px-3.5 py-2 bg-slate-800/90 light:bg-slate-50 border border-slate-700/80 light:border-slate-300 rounded-xl text-slate-100 light:text-slate-900 text-sm focus:outline-none focus:border-blue-500 font-normal shadow-sm">
                                                 <option value="male">♂ Nam</option>
                                                 <option value="female">♀ Nữ</option>
                                             </select>
@@ -1900,7 +1900,7 @@
                                             type="button"
                                             onClick={() => a.gender === 'male' && handleAthleteChange(a.id, 'eventMens', !a.eventMens)}
                                             disabled={a.gender === 'female'}
-                                            className={`py-2 px-1.5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-1 border ${
+                                            className={`py-2 px-1.5 rounded-xl font-medium text-xs transition-all flex items-center justify-center gap-1 border ${
                                                 a.eventMens 
                                                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-blue-400/50 shadow-md shadow-blue-500/30' 
                                                 : 'bg-slate-800/90 light:bg-slate-100 text-slate-300 light:text-slate-600 border-slate-700/80 light:border-slate-300 opacity-60'
@@ -1911,7 +1911,7 @@
                                         <button 
                                             type="button"
                                             onClick={() => handleAthleteChange(a.id, 'eventMixed', !a.eventMixed)}
-                                            className={`py-2 px-1.5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-1 border ${
+                                            className={`py-2 px-1.5 rounded-xl font-medium text-xs transition-all flex items-center justify-center gap-1 border ${
                                                 a.eventMixed 
                                                 ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white border-purple-400/50 shadow-md shadow-purple-500/30' 
                                                 : 'bg-slate-800/90 light:bg-slate-100 text-slate-300 light:text-slate-600 border-slate-700/80 light:border-slate-300 opacity-60'
@@ -1922,7 +1922,7 @@
                                         <button 
                                             type="button"
                                             onClick={() => handleAthleteChange(a.id, 'joinDinner', !a.joinDinner)}
-                                            className={`py-2 px-1.5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-1 border ${
+                                            className={`py-2 px-1.5 rounded-xl font-medium text-xs transition-all flex items-center justify-center gap-1 border ${
                                                 a.joinDinner 
                                                 ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-emerald-400/50 shadow-md shadow-emerald-500/30' 
                                                 : 'bg-slate-800/90 light:bg-slate-100 text-slate-300 light:text-slate-600 border-slate-700/80 light:border-slate-300 opacity-60'
@@ -2211,7 +2211,7 @@
                                             type="text" 
                                             value={item.name}
                                             onChange={e => handleIncomeChange(item.id, 'name', e.target.value)}
-                                            className="font-black text-white light:text-slate-900 bg-transparent border-b border-slate-700/60 focus:border-emerald-500 w-full focus:outline-none text-base tracking-tight"
+                                            className="font-semibold text-white light:text-slate-900 bg-transparent border-b border-slate-700/60 focus:border-emerald-500 w-full focus:outline-none text-base tracking-tight"
                                         />
                                         <button onClick={() => removeIncomeRow(item.id)} className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center flex-shrink-0">
                                             <i className="fa-solid fa-xmark text-xs"></i>
@@ -2220,26 +2220,26 @@
 
                                     <div className="grid grid-cols-3 gap-2.5">
                                         <div>
-                                            <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Số lượng</label>
+                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Số lượng</label>
                                             <input 
                                                 type="text"
                                                 value={formatNumber(item.quantity)}
                                                 onChange={e => handleIncomeChange(item.id, 'quantity', parseNumber(e.target.value))}
-                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-mono font-black text-sm"
+                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-mono font-medium text-sm"
                                             />
                                         </div>
                                         <div>
-                                            <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Mức thu (VNĐ)</label>
+                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Mức thu (VNĐ)</label>
                                             <input 
                                                 type="text"
                                                 value={formatNumber(item.price)}
                                                 onChange={e => handleIncomeChange(item.id, 'price', parseNumber(e.target.value))}
-                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-mono font-black text-sm"
+                                                className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-mono font-medium text-sm"
                                             />
                                         </div>
                                         <div>
-                                            <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thành tiền</label>
-                                            <div className="px-2.5 py-2 bg-emerald-950/80 light:bg-emerald-50 border border-emerald-500/40 light:border-emerald-200 rounded-xl text-emerald-400 light:text-emerald-700 font-black text-right font-mono text-sm truncate shadow-inner">
+                                            <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thành tiền</label>
+                                            <div className="px-2.5 py-2 bg-emerald-950/80 light:bg-emerald-50 border border-emerald-500/40 light:border-emerald-200 rounded-xl text-emerald-400 light:text-emerald-700 font-semibold text-right font-mono text-sm truncate shadow-inner">
                                                 {formatCurrency(item.quantity * item.price)}
                                             </div>
                                         </div>
@@ -2256,7 +2256,7 @@
                                         <button 
                                             type="button"
                                             onClick={() => handleIncomeChange(item.id, 'status', !item.status)}
-                                            className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition shadow-md ${item.status ? 'bg-emerald-600 text-white shadow-emerald-500/30' : 'bg-slate-800 light:bg-slate-200 text-slate-400 light:text-slate-600 border border-slate-700'}`}>
+                                            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shadow-sm ${item.status ? 'bg-emerald-600 text-white shadow-emerald-500/30' : 'bg-slate-800 light:bg-slate-200 text-slate-400 light:text-slate-600 border border-slate-700'}`}>
                                             {item.status ? '✓ Đã Thu' : 'Chưa Thu'}
                                         </button>
                                     </div>
@@ -2387,7 +2387,7 @@
                                                         type="text" 
                                                         value={item.name}
                                                         onChange={e => handleExpenseChange(cat.id, item.id, 'name', e.target.value)}
-                                                        className="font-black text-white light:text-slate-900 bg-transparent border-b border-slate-700/60 focus:border-rose-500 w-full focus:outline-none text-base tracking-tight"
+                                                        className="font-semibold text-white light:text-slate-900 bg-transparent border-b border-slate-700/60 focus:border-rose-500 w-full focus:outline-none text-base tracking-tight"
                                                     />
                                                     <button onClick={() => removeExpenseRow(cat.id, item.id)} className="w-7 h-7 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center flex-shrink-0">
                                                         <i className="fa-solid fa-xmark text-xs"></i>
@@ -2396,26 +2396,26 @@
 
                                                 <div className="grid grid-cols-3 gap-2.5">
                                                     <div>
-                                                        <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">SL / Mâm</label>
+                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">SL / Mâm</label>
                                                         <input 
                                                             type="text"
                                                             value={formatNumber(item.quantity)}
                                                             onChange={e => handleExpenseChange(cat.id, item.id, 'quantity', parseNumber(e.target.value))}
-                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-mono font-black text-sm"
+                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-center font-mono font-medium text-sm"
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Đơn giá (VNĐ)</label>
+                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Đơn giá (VNĐ)</label>
                                                         <input 
                                                             type="text"
                                                             value={formatNumber(item.price)}
                                                             onChange={e => handleExpenseChange(cat.id, item.id, 'price', parseNumber(e.target.value))}
-                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-mono font-black text-sm"
+                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-slate-100 light:text-slate-900 text-right font-mono font-medium text-sm"
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thành tiền</label>
-                                                        <div className="px-2.5 py-2 bg-rose-950/80 light:bg-rose-50 border border-rose-500/40 light:border-rose-200 rounded-xl text-rose-300 light:text-rose-700 font-black text-right font-mono text-sm truncate shadow-inner">
+                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thành tiền</label>
+                                                        <div className="px-2.5 py-2 bg-rose-950/80 light:bg-rose-50 border border-rose-500/40 light:border-rose-200 rounded-xl text-rose-300 light:text-rose-700 font-semibold text-right font-mono text-sm truncate shadow-inner">
                                                             {formatCurrency(item.quantity * item.price)}
                                                         </div>
                                                     </div>
@@ -2423,11 +2423,11 @@
 
                                                 <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-800/80 light:border-slate-100 text-xs">
                                                     <div>
-                                                        <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Người chi</label>
+                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Người chi</label>
                                                         <select 
                                                             value={item.payer || 'BTC'}
                                                             onChange={e => handleExpenseChange(cat.id, item.id, 'payer', e.target.value)}
-                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-amber-300 light:text-sky-900 font-bold focus:outline-none text-xs">
+                                                            className="w-full px-3 py-2 bg-slate-800/90 light:bg-sky-50 border border-slate-700 light:border-sky-200 rounded-xl text-amber-300 light:text-sky-900 font-semibold focus:outline-none text-xs">
                                                             {yenThoMembersList.map(member => (
                                                                 <option key={member} value={member}>👤 {member}</option>
                                                             ))}
@@ -2435,11 +2435,11 @@
                                                     </div>
 
                                                     <div>
-                                                        <label className="text-xs font-bold text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thanh toán</label>
+                                                        <label className="text-xs font-medium text-slate-300 light:text-slate-600 uppercase tracking-wider block mb-1">Thanh toán</label>
                                                         <button 
                                                             type="button"
                                                             onClick={() => handleExpenseChange(cat.id, item.id, 'status', !item.status)}
-                                                            className={`w-full px-3 py-2 rounded-xl font-extrabold transition text-xs shadow-md ${item.status ? 'bg-rose-600 text-white shadow-rose-500/30' : 'bg-slate-800 light:bg-slate-200 text-slate-400 light:text-slate-600 border border-slate-700'}`}>
+                                                            className={`w-full px-3 py-2 rounded-xl font-semibold transition text-xs shadow-sm ${item.status ? 'bg-rose-600 text-white shadow-rose-500/30' : 'bg-slate-800 light:bg-slate-200 text-slate-400 light:text-slate-600 border border-slate-700'}`}>
                                                             {item.status ? '✓ Đã Chi' : 'Chưa Chi'}
                                                         </button>
                                                     </div>
