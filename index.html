@@ -2004,7 +2004,11 @@
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng dư nợ cho vay</label>
-                                <input type="text" id="fin-total-loans" value="180.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-total-loans" value="149.429.500.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-600 mb-0.5">DN cho vay BĐS/Nhà ở (50% rủi ro — Phụ lục 02 TT 13/2024) <span class="text-teal-600 text-[10px] font-bold ml-1">[Nhập từ hồ sơ nội bộ]</span></label>
+                                <input type="text" id="fin-res-land-loans" value="104.600.650.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-teal-300 rounded font-bold text-teal-950 bg-teal-50">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Vốn tự có (Vốn cấp 1 + Vốn cấp 2)</label>
@@ -8413,6 +8417,29 @@ async function downloadDocPDFClientSide(mode) {
             const totalLoans = parseVND(document.getElementById('fin-total-loans')?.value || '1');
             const capitalEquity = parseVND(document.getElementById('fin-capital-equity')?.value || '0');
             const riskAssets = parseVND(document.getElementById('fin-risk-assets')?.value || '1');
+            // Dynamic RWA recalculation using live input fields
+            const totalLoansInput = parseVND(document.getElementById('fin-total-loans')?.value || '0');
+            const nplInput = parseVND(document.getElementById('fin-npl-loans')?.value || '0');
+            const resLandInput = parseVND(document.getElementById('fin-res-land-loans')?.value || '0');
+            // fin-nhtm-deposits = Tiền gửi tại NHTM (TK 132). QTDND Yên Thọ chỉ gửi tại Co-opBank (0% rủi ro), nên mặc định = 0
+            const nhtmDepositsInput = 0;
+            // Recompute live RWA based on filled-in form values
+            if (totalLoansInput > 0 || resLandInput > 0) {
+                const normalLoansCalc = Math.max(0, totalLoansInput - nplInput - resLandInput);
+                const liveRwa = Math.round(nhtmDepositsInput * 0.2) + Math.round(resLandInput * 0.5) + normalLoansCalc + Math.round(nplInput * 1.5);
+                const capEl = document.getElementById('fin-risk-assets');
+                if (capEl && liveRwa > 0) capEl.value = formatVND(liveRwa);
+                // Update worksheet live
+                setElTxt('ws-rwa-raw-50', formatVND(resLandInput));
+                setElTxt('ws-rwa-val-50', formatVND(Math.round(resLandInput * 0.5)));
+                setElTxt('ws-rwa-raw-100', formatVND(normalLoansCalc));
+                setElTxt('ws-rwa-val-100', formatVND(normalLoansCalc));
+                setElTxt('ws-rwa-raw-150', formatVND(nplInput));
+                setElTxt('ws-rwa-val-150', formatVND(Math.round(nplInput * 1.5)));
+                setElTxt('ws-rwa-final', formatVND(liveRwa));
+                const rwaBadge2 = document.getElementById('ws-rwa-total-badge');
+                if (rwaBadge2) rwaBadge2.textContent = `Tổng RWA: ${(liveRwa / 1e9).toFixed(2).replace('.', ',')} tỷ`;
+            }
             const opExpenses = parseVND(document.getElementById('fin-operating-expenses')?.value || '0');
             const opIncome = parseVND(document.getElementById('fin-operating-income')?.value || '1');
             // TT 32/2015 Điều 7: Tỷ lệ nguồn vốn ngắn hạn cho vay trung dài hạn (max 30%)
@@ -11791,7 +11818,8 @@ async function downloadDocPDFClientSide(mode) {
                 assetsEnd: 187163341044,
                 equityStart: 10806853000,
                 equityEnd: 10394774000,
-                stFundUsedForLt: 0
+                stFundUsedForLt: 0,
+                resLandLoans: 104600650000  // ~70% dư nợ QTDND YT có tài sản đảm bảo QSDĐ/Nhà ở
             };
             applyParsedBalanceToFormAndWorksheets(sampleData, "Bộ số liệu B02-QTD Mẫu (CV 1687)");
         }
@@ -11980,8 +12008,17 @@ async function downloadDocPDFClientSide(mode) {
             const netProfit = data.tk691 || Math.max(0, (data.tk70 || 8849006197) - (data.tk80 || 7558377991));
 
             setFormVal('fin-net-profit', netProfit);
-            setFormVal('fin-avg-assets', data.assetsTotal || 177004047353);
-            setFormVal('fin-avg-equity', equityTotal);
+            // Use start/end values for accurate average calculations (ROA, ROE)
+            const assetsStart = data.assetsStart || 169958617892;
+            const assetsEnd = data.assetsEnd || 187163341044;
+            setFormVal('fin-assets-start', assetsStart);
+            setFormVal('fin-assets-end', assetsEnd);
+            setFormVal('fin-avg-assets', Math.round((assetsStart + assetsEnd) / 2));
+
+            const equityStart = data.equityStart || 10806853000;
+            const equityEnd2 = data.equityEnd || equityTotal;
+            setFormVal('fin-equity-start', equityStart);
+            setFormVal('fin-avg-equity', Math.round((equityStart + equityEnd2) / 2));
             setFormVal('fin-operating-expenses', data.tk80 || 7558377991);
             setFormVal('fin-operating-income', data.tk70 || 8849006197);
 
@@ -12026,9 +12063,11 @@ async function downloadDocPDFClientSide(mode) {
             setElTxt('ws-rwa-raw-20', formatVND(nhtmDeposits));
             setElTxt('ws-rwa-val-20', formatVND(Math.round(nhtmDeposits * 0.2)));
             
-            // Cho vay bảo đảm bằng nhà ở, QSDĐ ở (Phụ lục 02 TT 13/2024 - 50% rủi ro, ước tính 70% dư nợ QTD)
+            // Cho vay bảo đảm bằng nhà ở, QSDĐ ở (Phụ lục 02 TT 13/2024 - 50% rủi ro)
             const totalLoansAll = data.tk211_total || 149429500000;
-            const resLandLoans = Math.round(totalLoansAll * 0.7);
+            // Use explicitly provided real estate secured loans, default 0 if not known
+            const resLandLoans = data.resLandLoans || 0;
+            setFormVal('fin-res-land-loans', resLandLoans);
             const normalLoans = Math.max(0, totalLoansAll - totalNpl - resLandLoans);
 
             setElTxt('ws-rwa-raw-50', formatVND(resLandLoans));
