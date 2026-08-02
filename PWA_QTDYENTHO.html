@@ -2019,11 +2019,11 @@
                             <div class="pt-1"><span class="text-[10px] font-bold text-blue-700 uppercase tracking-wide">💧 Thanh khoản (TT 13/2024)</span></div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Nguồn vốn ngắn hạn sử dụng cho vay TDH</label>
-                                <input type="text" id="fin-st-funds-used-for-lt" value="15.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-blue-300 rounded font-bold text-blue-950 bg-blue-50">
+                                <input type="text" id="fin-st-funds-used-for-lt" value="0" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-blue-300 rounded font-bold text-blue-950 bg-blue-50">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng nguồn vốn ngắn hạn</label>
-                                <input type="text" id="fin-total-st-funds" value="120.000.000.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
+                                <input type="text" id="fin-total-st-funds" value="25.731.888.000" oninput="formatVNDInput(this); calcFinancialIndicators();" class="w-full px-2.5 py-1.5 border border-slate-300 rounded font-bold text-slate-800 bg-white">
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-600 mb-0.5">Tổng mức nhận tiền gửi</label>
@@ -3719,20 +3719,7 @@
                                 </div>
                             </div>
 
-                            <!-- Toàn văn 8 khoản của Điều 136 -->
-                            <div class="space-y-2 text-xs text-slate-700 pt-1">
-                                <h4 class="font-bold text-amber-950">📜 NỘI DUNG CHI TIẾT 8 KHOẢN ĐIỀU 136 LUẬT CÁC TCTD 2024:</h4>
-                                <div class="p-3 bg-white/80 rounded-xl border border-amber-200/80 space-y-2 text-[11px] leading-relaxed">
-                                    <p><b>(1) Giới hạn cấp tín dụng QTDND, NHTM, NHHTX:</b> Áp dụng theo lộ trình giảm dần từ 14% xuống 10% đối với 1 khách hàng và từ 23% xuống 15% đối với nhóm người có liên quan.</p>
-                                    <p><b>(2) Đối với TCTD phi ngân hàng:</b> Không vượt quá 15% vốn tự có đối với 1 khách hàng và không quá 25% đối với nhóm người có liên quan.</p>
-                                    <p><b>(3) Các khoản không bao gồm:</b> Khoản cho vay từ nguồn vốn ủy thác của Chính phủ, tổ chức, cá nhân mà TCTD không chịu rủi ro hoặc cho vay TCTD khác.</p>
-                                    <p><b>(4) Khái niệm cấp tín dụng:</b> Bao gồm cả tổng mức mua, nắm giữ, đầu tư vào trái phiếu do khách hàng hoặc người có liên quan phát hành.</p>
-                                    <p><b>(5) Đầu tư cổ phiếu, trái phiếu doanh nghiệp:</b> Thực hiện theo quy định của Thống đốc NHNN.</p>
-                                    <p><b>(6) Cấp tín dụng hợp vốn:</b> Trường hợp nhu cầu vốn vượt giới hạn tại khoản (1), TCTD được cấp tín dụng hợp vốn theo quy định của Thống đốc NHNN.</p>
-                                    <p><b>(7) Trường hợp đặc biệt:</b> Khả năng hợp vốn chưa đáp ứng được nhu cầu thực hiện nhiệm vụ kinh tế - xã hội, Thủ tướng Chính phủ quyết định mức cấp tín dụng tối đa cho từng trường hợp cụ thể.</p>
-                                    <p><b>(8) Trần tổng mức vượt giới hạn:</b> Tổng các khoản cấp tín dụng vượt giới hạn theo quyết định của Thủ tướng Chính phủ không được vượt quá <b>4 lần Vốn tự có</b> của TCTD.</p>
-                                </div>
-                            </div>
+
                         </div>
 </div>
                 </div>
@@ -11720,22 +11707,30 @@ async function downloadDocPDFClientSide(mode) {
 
         function loadSampleBalanceCV1687() {
             const sampleData = {
-                tk101: 15000000000,
-                tk111: 5000000000,
-                tk131: 55000000000,
-                tk211_total: 180000000000,
-                npl3: 500000000,
-                npl4: 600000000,
-                npl5: 700000000,
-                tk42_total: 220000000000,
-                tk601: 15000000000,
-                tk6021: 2000000000,
-                tk6022: 3500000000,
-                tk691: 2500000000,
-                tk70: 10000000000,
-                tk80: 4000000000,
-                assetsTotal: 250000000000,
-                stFundUsedForLt: 15000000000
+                tk101: 2314427000,
+                tk111: 0,
+                tk131: 24218935508,
+                tk211_total: 149429500000,
+                tk211_short: 9485550000,
+                tk212_med: 54574000000,
+                npl3: 0, npl4: 0, npl5: 0,
+                tk2192: 1089164000,
+                tk42_total: 161368352000,
+                tk42_short: 25731888000,
+                tk42_long: 135636464000,
+                tk601: 8533889000,
+                tk611: 236550000,
+                tk612: 595110000,
+                tk613: 1029225000,
+                tk691: 1290628206,
+                tk70: 8849006197,
+                tk80: 7558377991,
+                assetsTotal: 177004047353,
+                assetsStart: 169958617892,
+                assetsEnd: 187163341044,
+                equityStart: 10806853000,
+                equityEnd: 10394774000,
+                stFundUsedForLt: 0
             };
             applyParsedBalanceToFormAndWorksheets(sampleData, "Bộ số liệu B02-QTD Mẫu (CV 1687)");
         }
@@ -11939,6 +11934,15 @@ async function downloadDocPDFClientSide(mode) {
             
             setFormVal('fin-total-deposits', data.tk42_total || 161368352000);
             setFormVal('fin-equity-end', equityTotal);
+
+            // Short-term vs Long-term liquidity ratios
+            const totalStFunds = data.tk42_short || 25731888000;
+            const ltFunds = (data.tk42_long || 135636464000) + equityTotal;
+            const medLtLoans = data.tk212_med || 54574000000;
+            const stFundsUsedForLt = Math.max(0, medLtLoans - ltFunds);
+
+            setFormVal('fin-total-st-funds', totalStFunds);
+            setFormVal('fin-st-funds-used-for-lt', stFundsUsedForLt);
 
             // Update Worksheets
             setElTxt('ws-tk-601', formatVND(data.tk601 || 8533889000));
