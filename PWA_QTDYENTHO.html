@@ -2052,26 +2052,73 @@
                     <!-- Indicators Display Cards -->
                     <div class="lg:col-span-2 space-y-4">
                         <!-- Nhóm 1: Hiệu quả tài chính -->
-                        <div>
-                            <p class="text-[10px] font-bold text-teal-700 uppercase tracking-wide mb-2">📊 Hiệu quả tài chính — (TT 42/2016/TT-NHNN, Tiêu chí Kết quả HĐKD)</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between border-b border-teal-100 pb-1.5">
+                                <p class="text-xs font-extrabold text-teal-900 uppercase tracking-wide flex items-center gap-1.5">
+                                    <span>📊 HIỆU QUẢ TÀI CHÍNH (TT 42/2016/TT-NHNN — TIÊU CHÍ KẾT QUẢ HĐKD)</span>
+                                </p>
+                                <span class="text-[10px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">QTDND Yên Thọ</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <!-- ROA -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">ROA (Lợi nhuận/TS)</span><span id="badge-roa" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Đạt</span></div>
-                                    <p id="res-roa" class="text-xl font-black text-emerald-800">1.00 %</p>
-                                    <p class="text-[10px] text-slate-500">Chuẩn QTDND: ≥ 0,8%/năm. Đo lường hiệu quả quản lý tổng tài sản.</p>
+                                <div class="p-4 bg-gradient-to-br from-white to-emerald-50/50 border border-emerald-200 rounded-2xl space-y-2 shadow-xs">
+                                    <div class="flex justify-between items-center border-b border-emerald-100 pb-1.5">
+                                        <span class="font-extrabold text-slate-800 text-xs flex items-center gap-1">📈 ROA (Tỷ suất sinh lời/TSBQ)</span>
+                                        <span id="badge-roa" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Đạt chuẩn</span>
+                                    </div>
+                                    <div class="flex items-baseline justify-between">
+                                        <p id="res-roa" class="text-2xl font-black text-emerald-800">0,72 %</p>
+                                        <span id="score-roa-badge" class="text-[11px] font-extrabold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded">10/20 điểm</span>
+                                    </div>
+                                    <div class="p-2.5 bg-white/90 border border-emerald-200/80 rounded-xl space-y-1 text-[11px]">
+                                        <p class="font-bold text-emerald-950">📐 Công thức tính toán:</p>
+                                        <p class="text-slate-600 font-mono text-[10px]">$ROA = \frac{\text{Lợi nhuận ST (TK 691)}}{\text{Tổng TS BQ (ĐK+CK)/2}} \times 100\%$</p>
+                                        <p class="text-slate-700 text-[10px] pt-0.5 border-t border-slate-100">
+                                            <b>Số liệu thực tế:</b> $\frac{1,29 \text{ tỷ}}{178,56 \text{ tỷ}} = \mathbf{0,72\%}$
+                                        </p>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 italic">Thang điểm TT 42: $\ge 1.2\%: 20đ | \ge 0.8\%: 15đ | \ge 0.5\%: 10đ$.</p>
                                 </div>
+
                                 <!-- ROE -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">ROE (Lợi nhuận/VCSH)</span><span id="badge-roe" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Tốt</span></div>
-                                    <p id="res-roe" class="text-xl font-black text-emerald-800">10.00 %</p>
-                                    <p class="text-[10px] text-slate-500">Chuẩn tham chiếu QTDND: ≥ 8%. Sinh lời trên vốn góp thành viên.</p>
+                                <div class="p-4 bg-gradient-to-br from-white to-blue-50/50 border border-blue-200 rounded-2xl space-y-2 shadow-xs">
+                                    <div class="flex justify-between items-center border-b border-blue-100 pb-1.5">
+                                        <span class="font-extrabold text-slate-800 text-xs flex items-center gap-1">💎 ROE (Tỷ suất sinh lời/VCSH)</span>
+                                        <span id="badge-roe" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Tốt xuất sắc</span>
+                                    </div>
+                                    <div class="flex items-baseline justify-between">
+                                        <p id="res-roe" class="text-2xl font-black text-blue-800">12,17 %</p>
+                                        <span id="score-roe-badge" class="text-[11px] font-extrabold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded">20/20 điểm</span>
+                                    </div>
+                                    <div class="p-2.5 bg-white/90 border border-blue-200/80 rounded-xl space-y-1 text-[11px]">
+                                        <p class="font-bold text-blue-950">📐 Công thức tính toán:</p>
+                                        <p class="text-slate-600 font-mono text-[10px]">$ROE = \frac{\text{Lợi nhuận ST (TK 691)}}{\text{VCSH BQ (ĐK+CK)/2}} \times 100\%$</p>
+                                        <p class="text-slate-700 text-[10px] pt-0.5 border-t border-slate-100">
+                                            <b>Số liệu thực tế:</b> $\frac{1,29 \text{ tỷ}}{10,60 \text{ tỷ}} = \mathbf{12,17\%}$
+                                        </p>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 italic">Thang điểm TT 42: $\ge 10\%: 20đ | \ge 8\%: 15đ | \ge 5\%: 10đ$.</p>
                                 </div>
+
                                 <!-- CIR -->
-                                <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                    <div class="flex justify-between items-center"><span class="font-bold text-slate-700 text-xs">CIR (Chi phí/Thu nhập)</span><span id="badge-cir" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">✅ Tốt</span></div>
-                                    <p id="res-cir" class="text-xl font-black text-teal-800">40.00 %</p>
-                                    <p class="text-[10px] text-slate-500">Chuẩn tham chiếu QTDND: ≤ 55%. Tỷ lệ chi phí / thu nhập hoạt động.</p>
+                                <div class="p-4 bg-gradient-to-br from-white to-amber-50/50 border border-amber-200 rounded-2xl space-y-2 shadow-xs">
+                                    <div class="flex justify-between items-center border-b border-amber-100 pb-1.5">
+                                        <span class="font-extrabold text-slate-800 text-xs flex items-center gap-1">📊 CIR (Tỷ lệ Chi phí/Thu nhập)</span>
+                                        <span id="badge-cir" class="px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold rounded">⚠️ Cần tối ưu</span>
+                                    </div>
+                                    <div class="flex items-baseline justify-between">
+                                        <p id="res-cir" class="text-2xl font-black text-amber-900">85,41 %</p>
+                                        <span id="score-cir-badge" class="text-[11px] font-extrabold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded">5/20 điểm</span>
+                                    </div>
+                                    <div class="p-2.5 bg-white/90 border border-amber-200/80 rounded-xl space-y-1 text-[11px]">
+                                        <p class="font-bold text-amber-950">📐 Công thức tính toán:</p>
+                                        <p class="text-slate-600 font-mono text-[10px]">$CIR = \frac{\text{Chi phí hoạt động (TK 80)}}{\text{Thu nhập hoạt động (TK 70)}} \times 100\%$</p>
+                                        <p class="text-slate-700 text-[10px] pt-0.5 border-t border-slate-100">
+                                            <b>Số liệu thực tế:</b> $\frac{7,56 \text{ tỷ}}{8,85 \text{ tỷ}} = \mathbf{85,41\%}$
+                                        </p>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 italic">Thang điểm TT 42: $\le 55\%: 20đ | \le 70\%: 15đ | \le 85\%: 10đ$.</p>
                                 </div>
                             </div>
                         </div>
@@ -8408,11 +8455,20 @@ async function downloadDocPDFClientSide(mode) {
                 }
             };
 
-            updateBadge('badge-roa', roa >= 0.8 ? '✅ Đạt chuẩn' : '⚠️ Thấp', roa >= 0.8, false);
-            updateBadge('badge-roe', roe >= 8.0 ? '✅ Tốt' : roe >= 5.0 ? '⚠️ Trung bình' : '❌ Thấp', roe >= 8.0, roe >= 5.0 && roe < 8.0);
-            updateBadge('badge-npl', npl <= 3.0 ? '✅ An toàn' : npl <= 5.0 ? '⚠️ Chú ý' : '❌ Vượt 5%', npl <= 3.0, npl > 3.0 && npl <= 5.0);
-            updateBadge('badge-car', car >= 8.0 ? '✅ Vượt chuẩn' : '❌ Dưới 8% — Vi phạm TT32', car >= 8.0, false);
-            updateBadge('badge-cir', cir <= 55.0 ? '✅ Tốt' : cir <= 70.0 ? '⚠️ Chú ý' : '❌ Cao', cir <= 55.0, cir > 55.0 && cir <= 70.0);
+            updateBadge('badge-roa', roa >= 0.8 ? '✅ Đạt chuẩn' : roa >= 0.5 ? '⚠️ Đạt mức trung bình' : '❌ Thấp', roa >= 0.8, roa >= 0.5 && roa < 0.8);
+            updateBadge('badge-roe', roe >= 10.0 ? '✅ Tốt xuất sắc' : roe >= 8.0 ? '✅ Tốt' : roe >= 5.0 ? '⚠️ Trung bình' : '❌ Thấp', roe >= 8.0, roe >= 5.0 && roe < 8.0);
+            updateBadge('badge-npl', npl <= 3.0 ? '✅ An toàn' : npl <= 5.0 ? '⚠️ Chú ý' : '❌ Vượt 3%', npl <= 3.0, npl > 3.0 && npl <= 5.0);
+            updateBadge('badge-car', car >= 8.0 ? '✅ Đạt chuẩn an toàn (≥ 8%)' : '❌ Vi phạm TT32 (< 8%)', car >= 8.0, false);
+            updateBadge('badge-cir', cir <= 55.0 ? '✅ Tốt' : cir <= 70.0 ? '⚠️ Khá' : cir <= 85.0 ? '⚠️ Trung bình' : '❌ Cao', cir <= 55.0, cir > 55.0 && cir <= 85.0);
+
+            // Update TT42 score badges
+            const roaScore = roa >= 1.2 ? 20 : roa >= 0.8 ? 15 : roa >= 0.5 ? 10 : 5;
+            const roeScore = roe >= 10.0 ? 20 : roe >= 8.0 ? 15 : roe >= 5.0 ? 10 : 5;
+            const cirScore = cir <= 55.0 ? 20 : cir <= 70.0 ? 15 : cir <= 85.0 ? 10 : 5;
+
+            setElTxt('score-roa-badge', `${roaScore}/20 điểm`);
+            setElTxt('score-roe-badge', `${roeScore}/20 điểm`);
+            setElTxt('score-cir-badge', `${cirScore}/20 điểm`);
             // TT 32/2015 Điều 7: max 30%
             updateBadge('badge-stlt', stlt <= 30.0 ? '✅ An toàn' : '❌ Vi phạm TT32 Điều 7', stlt <= 30.0, false);
             // TT 13/2024: cảnh báo nếu tiền gửi > 20 lần VCSH (ngưỡng nguy cơ mất khả năng chi trả)
@@ -11927,9 +11983,12 @@ async function downloadDocPDFClientSide(mode) {
             setFormVal('fin-npl-loans', totalNpl);
             setFormVal('fin-total-loans', data.tk211_total || 149429500000);
             
-            // Tier 1 + Tier 2 Capital (Vốn tự có)
+            // Vốn Cấp 1 = Vốn góp (601) + Các Quỹ (611,612,613) + Lợi nhuận chưa phân phối (691)
+            const Tier1Capital = (data.tk601 || 8533889000) + (data.tk611 || 236550000) + (data.tk612 || 595110000) + (data.tk613 || 1029225000) + netProfit;
+            // Vốn Cấp 2 = Dự phòng chung (2192) được công nhận (max 1.25% RWA)
             const Tier2Capital = data.tk2192 || 1089164000;
-            const CapitalEquity = equityTotal + Tier2Capital;
+            // Vốn Tự Có = Vốn Cấp 1 + Vốn Cấp 2
+            const CapitalEquity = Tier1Capital + Tier2Capital;
             setFormVal('fin-capital-equity', CapitalEquity);
             
             setFormVal('fin-total-deposits', data.tk42_total || 161368352000);
