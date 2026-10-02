@@ -1,6 +1,6 @@
-# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.07.30-v23.00)
+# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.08.01-v33.00)
 
-> **Bộ Công Cụ Nghiệp Vụ Tín Dụng & Tiền Gửi Ngoại Tuyến (Offline PWA WebApp)**  
+> **Bộ Công Cụ Nghiệp Vụ Tín Dụng, Tiền Gửi & Giám Sát Tài Chính Ngoại Tuyến (Offline PWA WebApp)**  
 > **Repository chính thức:** [https://github.com/qtdyentho/qtdyentho_tools.git](https://github.com/qtdyentho/qtdyentho_tools.git)  
 > **Trang WebApp (Vercel Production):** [https://qtdyentho-tools.vercel.app/](https://qtdyentho-tools.vercel.app/)  
 > **Tài liệu Kỹ thuật & Bảng Rà Soát Lỗi Tận Gốc:** [SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)  
@@ -10,11 +10,11 @@
 
 ## 📖 GIỚI THIỆU TỔNG QUAN
 
-`QTD_Tools` là bộ ứng dụng Web Đơn (Single-file PWA) được phát triển riêng cho cán bộ nghiệp vụ **Quỹ Tín Dụng Nhân Dân Yên Thọ**. Ứng dụng hoạt động **Offline 100%** không cần kết nối Internet sau khi cài đặt, giúp tối ưu hóa tốc độ và tính chính xác trong công tác tư vấn tài chính, quy đổi lãi suất, lập lịch trả nợ, tạo mã VietQR thanh toán và quét/nắn/nén tài liệu hồ sơ tín dụng.
+`QTD_Tools` là bộ ứng dụng Web Đơn (Single-file PWA) được phát triển riêng cho cán bộ nghiệp vụ **Quỹ Tín Dụng Nhân Dân Yên Thọ**. Ứng dụng hoạt động **Offline 100%** không cần kết nối Internet sau khi cài đặt, giúp tối ưu hóa tốc độ và tính chính xác trong công tác tư vấn tài chính, quy đổi lãi suất, lập lịch trả nợ, tạo mã VietQR thanh toán, quét/nắn/nén tài liệu hồ sơ tín dụng và giám sát phân tích chỉ số an toàn tài chính Quỹ.
 
 ---
 
-## 🌟 CÁC PHÂN HỆ VÀ TÍNH NĂNG CHÍNH (v2026.07.30-v23.00)
+## 🌟 CÁC PHÂN HỆ VÀ TÍNH NĂNG CHÍNH (v2026.08.01-v33.00)
 
 ### 1. 📸 Phân Hệ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO (Scan & ZIP PRO Engine)
 * **Nắn phẳng 3D Homography Matrix (Perspective Warp)**: Tự động/thủ công kéo thả 4 chốt góc neon Emerald nắn tài liệu nghiêng thành trang A4 vuông vắn trong **55ms**.
@@ -40,16 +40,22 @@
 * **QR Trả Lãi & Gốc vay**: `[HỌ TÊN] [CCCD] TRA LAI VA GOC HDTD SO [SO HD]`
 * **QR Gửi Tiết Kiệm**: `[HỌ TÊN] [CCCD] GUITK [Kỳ hạn]T [Hình thức nhận lãi] Địa chỉ`
 
-### 5. 🔄 Cài Đặt PWA Màn Hình Chính & Tự Động Cập Nhật
-* Hằng số phiên bản duy nhất `CURRENT_APP_VERSION = 'v2026.07.30-v23.00'` kết nối đa nguồn GitHub Raw và Vercel Production.
+### 5. 🏛️ Phân Hệ Phân Tích & Giám Sát Chỉ Số An Toàn Tài Chính QTDND (CAMELS & B02-QTD)
+* **Đọc Bảng cân đối tài khoản kế toán (CV 1687/NHNN-KTTC & TT 13/2024/TT-NHNN)**: Tự động trích xuất số dư tài khoản kế toán từ tệp PDF, Excel (.xlsx/.xls) hoặc văn bản.
+* **Giám sát An toàn vốn & Rủi ro**: Tự động tính Tỷ lệ an toàn vốn (CAR), Tài sản có rủi ro (RWA), tỷ lệ dư nợ/huy động (LDR), tỷ lệ nợ xấu (NPL).
+* **Đánh giá hiệu quả kinh doanh & Xếp hạng**: Tự động tính toán ROA, ROE, CIR (Chi phí hoạt động/Tổng thu nhập) và chấm điểm xếp hạng an toàn QTDND theo TT 42/2016/TT-NHNN (sửa đổi bởi TT 05/2021/TT-NHNN).
+
+### 6. 🔄 Cài Đặt PWA Màn Hình Chính & Tự Động Cập Nhật
+* Hằng số phiên bản duy nhất `CURRENT_APP_VERSION = 'v2026.08.01-v33.00'` kết nối đa nguồn GitHub Raw và Vercel Production.
 
 ---
 
 ## 🛠️ BẢNG TÀI LIỆU QUẢN LÝ VÀ CHỈ DẪN KỸ THUẬT
 
-1. 📄 **[DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md](DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md)**: Cẩm nang chỉ dẫn kỹ thuật, quy tắc kiến trúc và quy trình 4 bước kiểm thử trước khi release để tuyệt đối không tái diễn lại các lỗi đã khắc phục.
-2. 📄 **[SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)**: Bộ tài liệu ghi nhớ kỹ thuật hệ thống và bảng rà soát chi tiết 8 lỗi đã khắc phục tận gốc.
-3. 📄 **[DOC_PICKLEBALL_YENTHO.md](DOC_PICKLEBALL_YENTHO.md)**: Tài liệu hướng dẫn tính năng, kiến trúc công nghệ và giải đáp đồng bộ cho ứng dụng CLB Pickleball Yên Thọ Pro v6.0.
+1. 📄 **[DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md](DEVELOPMENT_GUIDELINES_AND_BEST_PRACTICES.md)**: Cẩm nang chỉ dẫn kỹ thuật, quy tắc kiến trúc và quy trình kiểm thử.
+2. 📄 **[SYSTEM_TECHNICAL_MEMORY.md](SYSTEM_TECHNICAL_MEMORY.md)**: Bộ tài liệu ghi nhớ kỹ thuật hệ thống và bảng rà soát lỗi tận gốc.
+3. 📄 **[DOC_VIETQR_ENGINE.md](DOC_VIETQR_ENGINE.md)**: Đặc tả thuật toán tạo mã VietQR theo chuẩn EMVCo và Co-opBank.
+4. 📄 **[DOC_WEBAPP_PWA.md](DOC_WEBAPP_PWA.md)**: Đặc tả kiến trúc WebApp PWA ngoại tuyến.
 
 ---
 
