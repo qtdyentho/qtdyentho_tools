@@ -3322,31 +3322,81 @@
                                         </svg>
                                         Tuỳ chỉnh Màu chữ hiển thị lên Thẻ Standee:
                                     </span>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Màu Tên
-                                                Chủ Tài Khoản:</label>
-                                            <select id="std-color-name" onchange="updateStandeePreview()"
-                                                class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white">
-                                                <option value="#003b7a" selected>🔷 Xanh Navy Chuyên Nghiệp (#003b7a)
-                                                </option>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                        <!-- Cột 1: Màu Tên Chủ Tài Khoản -->
+                                        <div class="space-y-1.5 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+                                            <label class="block text-[11px] font-bold text-slate-700 flex items-center justify-between">
+                                                <span>Màu Tên Chủ Tài Khoản:</span>
+                                                <span id="std-color-name-preview-badge" class="font-mono text-[10px] px-1.5 py-0.2 rounded font-bold border" style="background-color: #003b7a15; color: #003b7a; border-color: #003b7a40;">#003B7A</span>
+                                            </label>
+                                            <select id="std-color-name" onchange="onStandeeColorSelectChange('std-color-name')"
+                                                class="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-1 focus:ring-emerald-500">
+                                                <option value="#003b7a" selected>🔷 Xanh Navy Chuyên Nghiệp (#003b7a)</option>
                                                 <option value="#047857">🟢 Xanh Lá Đậm Thương Hiệu (#047857)</option>
                                                 <option value="#991b1b">🔴 Đỏ Đậm Nổi Bật (#991b1b)</option>
                                                 <option value="#0f172a">⚫ Đen Sang Trọng (#0f172a)</option>
                                                 <option value="#c2410c">🟠 Cam Đậm Chấn Hưng (#c2410c)</option>
+                                                <option value="#7c3aed">🟣 Tím Thạch Anh Hiện Đại (#7c3aed)</option>
+                                                <option value="#0284c7">🌐 Xanh Biển Tươi Sáng (#0284c7)</option>
+                                                <option value="custom">🎨 Nhập mã màu tuỳ chỉnh (HEX)...</option>
                                             </select>
+                                            <div class="flex items-center gap-1.5 pt-0.5">
+                                                <div class="relative flex items-center" title="Bấm mở bảng chọn màu trực quan">
+                                                    <input type="color" id="std-color-name-picker" value="#003b7a"
+                                                        oninput="onStandeeColorPickerInput('std-color-name', this.value)"
+                                                        class="w-7 h-7 p-0.5 rounded border border-slate-300 cursor-pointer bg-white">
+                                                </div>
+                                                <div class="relative flex-1">
+                                                    <input type="text" id="std-color-name-custom" value="#003B7A" maxlength="7" placeholder="#003B7A"
+                                                        oninput="onStandeeColorTextInput('std-color-name', this.value)"
+                                                        class="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono font-bold uppercase text-slate-800 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-emerald-500" title="Nhập hoặc dán mã màu HEX">
+                                                </div>
+                                                <!-- Quick Palette Dots -->
+                                                <div class="flex items-center gap-1 pl-0.5">
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-name', '#003B7A')" class="w-4 h-4 rounded-full bg-[#003B7A] border border-white shadow-xs hover:scale-125 transition" title="Xanh Navy"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-name', '#047857')" class="w-4 h-4 rounded-full bg-[#047857] border border-white shadow-xs hover:scale-125 transition" title="Xanh Lá"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-name', '#991B1B')" class="w-4 h-4 rounded-full bg-[#991B1B] border border-white shadow-xs hover:scale-125 transition" title="Đỏ Đậm"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-name', '#0F172A')" class="w-4 h-4 rounded-full bg-[#0F172A] border border-white shadow-xs hover:scale-125 transition" title="Đen"></button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Màu Số
-                                                Alias & TK Nguồn:</label>
-                                            <select id="std-color-info" onchange="updateStandeePreview()"
-                                                class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white">
+
+                                        <!-- Cột 2: Màu Số Alias & TK Nguồn -->
+                                        <div class="space-y-1.5 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+                                            <label class="block text-[11px] font-bold text-slate-700 flex items-center justify-between">
+                                                <span>Màu Số Alias & TK Nguồn:</span>
+                                                <span id="std-color-info-preview-badge" class="font-mono text-[10px] px-1.5 py-0.2 rounded font-bold border" style="background-color: #d9770615; color: #d97706; border-color: #d9770640;">#D97706</span>
+                                            </label>
+                                            <select id="std-color-info" onchange="onStandeeColorSelectChange('std-color-info')"
+                                                class="w-full px-2 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-1 focus:ring-emerald-500">
                                                 <option value="#d97706" selected>🟠 Cam Đỏ Mặc Định (#d97706)</option>
                                                 <option value="#0f172a">⚫ Đen Tự Nhiên (#0f172a)</option>
                                                 <option value="#047857">🟢 Xanh Lá Bảo Vệ (#047857)</option>
                                                 <option value="#b45309">🟤 Nâu Hổ Phách (#b45309)</option>
                                                 <option value="#003b7a">🔷 Xanh Dương Đậm (#003b7a)</option>
+                                                <option value="#c2410c">🔥 Cam Đậm (#c2410c)</option>
+                                                <option value="#991b1b">🔴 Đỏ Đậm (#991b1b)</option>
+                                                <option value="custom">🎨 Nhập mã màu tuỳ chỉnh (HEX)...</option>
                                             </select>
+                                            <div class="flex items-center gap-1.5 pt-0.5">
+                                                <div class="relative flex items-center" title="Bấm mở bảng chọn màu trực quan">
+                                                    <input type="color" id="std-color-info-picker" value="#d97706"
+                                                        oninput="onStandeeColorPickerInput('std-color-info', this.value)"
+                                                        class="w-7 h-7 p-0.5 rounded border border-slate-300 cursor-pointer bg-white">
+                                                </div>
+                                                <div class="relative flex-1">
+                                                    <input type="text" id="std-color-info-custom" value="#D97706" maxlength="7" placeholder="#D97706"
+                                                        oninput="onStandeeColorTextInput('std-color-info', this.value)"
+                                                        class="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono font-bold uppercase text-slate-800 bg-slate-50 focus:bg-white focus:ring-1 focus:ring-emerald-500" title="Nhập hoặc dán mã màu HEX">
+                                                </div>
+                                                <!-- Quick Palette Dots -->
+                                                <div class="flex items-center gap-1 pl-0.5">
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-info', '#D97706')" class="w-4 h-4 rounded-full bg-[#D97706] border border-white shadow-xs hover:scale-125 transition" title="Cam Đỏ"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-info', '#0F172A')" class="w-4 h-4 rounded-full bg-[#0F172A] border border-white shadow-xs hover:scale-125 transition" title="Đen"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-info', '#047857')" class="w-4 h-4 rounded-full bg-[#047857] border border-white shadow-xs hover:scale-125 transition" title="Xanh Lá"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('std-color-info', '#003B7A')" class="w-4 h-4 rounded-full bg-[#003B7A] border border-white shadow-xs hover:scale-125 transition" title="Xanh Navy"></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -3432,30 +3482,78 @@
                                         </svg>
                                         Tuỳ chỉnh Màu chữ hiển thị Thẻ QR LOA:
                                     </span>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Màu Tên
-                                                Chủ TK (Phía trên):</label>
-                                            <select id="loa-color-name" onchange="updateStandeePreview()"
-                                                class="w-full px-2.5 py-1.5 border border-purple-300 rounded-lg font-bold text-xs bg-white">
-                                                <option value="#003b7a" selected>🔷 Xanh Navy Chuyên Nghiệp (#003b7a)
-                                                </option>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                        <!-- Cột 1: Màu Tên Chủ TK (Phía trên) -->
+                                        <div class="space-y-1.5 bg-white p-2.5 rounded-lg border border-purple-200 shadow-2xs">
+                                            <label class="block text-[11px] font-bold text-slate-700 flex items-center justify-between">
+                                                <span>Màu Tên Chủ TK (Phía trên):</span>
+                                                <span id="loa-color-name-preview-badge" class="font-mono text-[10px] px-1.5 py-0.2 rounded font-bold border" style="background-color: #003b7a15; color: #003b7a; border-color: #003b7a40;">#003B7A</span>
+                                            </label>
+                                            <select id="loa-color-name" onchange="onStandeeColorSelectChange('loa-color-name')"
+                                                class="w-full px-2 py-1.5 border border-purple-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-1 focus:ring-purple-500">
+                                                <option value="#003b7a" selected>🔷 Xanh Navy Chuyên Nghiệp (#003b7a)</option>
                                                 <option value="#0f172a">⚫ Đen Tự Nhiên (#0f172a)</option>
                                                 <option value="#047857">🟢 Xanh Lá Thương Hiệu (#047857)</option>
                                                 <option value="#991b1b">🔴 Đỏ Đậm (#991b1b)</option>
                                                 <option value="#c2410c">🟠 Cam Đậm (#c2410c)</option>
+                                                <option value="#7c3aed">🟣 Tím QLApps (#7c3aed)</option>
+                                                <option value="custom">🎨 Nhập mã màu tuỳ chỉnh (HEX)...</option>
                                             </select>
+                                            <div class="flex items-center gap-1.5 pt-0.5">
+                                                <div class="relative flex items-center" title="Bấm mở bảng chọn màu trực quan">
+                                                    <input type="color" id="loa-color-name-picker" value="#003b7a"
+                                                        oninput="onStandeeColorPickerInput('loa-color-name', this.value)"
+                                                        class="w-7 h-7 p-0.5 rounded border border-purple-300 cursor-pointer bg-white">
+                                                </div>
+                                                <div class="relative flex-1">
+                                                    <input type="text" id="loa-color-name-custom" value="#003B7A" maxlength="7" placeholder="#003B7A"
+                                                        oninput="onStandeeColorTextInput('loa-color-name', this.value)"
+                                                        class="w-full px-2 py-1 border border-purple-300 rounded text-xs font-mono font-bold uppercase text-slate-800 bg-purple-50/50 focus:bg-white focus:ring-1 focus:ring-purple-500" title="Nhập hoặc dán mã màu HEX">
+                                                </div>
+                                                <!-- Quick Palette Dots -->
+                                                <div class="flex items-center gap-1 pl-0.5">
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-name', '#003B7A')" class="w-4 h-4 rounded-full bg-[#003B7A] border border-white shadow-xs hover:scale-125 transition" title="Xanh Navy"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-name', '#0F172A')" class="w-4 h-4 rounded-full bg-[#0F172A] border border-white shadow-xs hover:scale-125 transition" title="Đen"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-name', '#047857')" class="w-4 h-4 rounded-full bg-[#047857] border border-white shadow-xs hover:scale-125 transition" title="Xanh Lá"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-name', '#7C3AED')" class="w-4 h-4 rounded-full bg-[#7C3AED] border border-white shadow-xs hover:scale-125 transition" title="Tím"></button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Màu Số
-                                                Tài Khoản (Phía dưới):</label>
-                                            <select id="loa-color-acc" onchange="updateStandeePreview()"
-                                                class="w-full px-2.5 py-1.5 border border-purple-300 rounded-lg font-bold text-xs bg-white">
+
+                                        <!-- Cột 2: Màu Số Tài Khoản (Phía dưới) -->
+                                        <div class="space-y-1.5 bg-white p-2.5 rounded-lg border border-purple-200 shadow-2xs">
+                                            <label class="block text-[11px] font-bold text-slate-700 flex items-center justify-between">
+                                                <span>Màu Số Tài Khoản (Phía dưới):</span>
+                                                <span id="loa-color-acc-preview-badge" class="font-mono text-[10px] px-1.5 py-0.2 rounded font-bold border" style="background-color: #0f172a15; color: #0f172a; border-color: #0f172a40;">#0F172A</span>
+                                            </label>
+                                            <select id="loa-color-acc" onchange="onStandeeColorSelectChange('loa-color-acc')"
+                                                class="w-full px-2 py-1.5 border border-purple-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-1 focus:ring-purple-500">
                                                 <option value="#0f172a" selected>⚫ Đen Sang Trọng (#0f172a)</option>
                                                 <option value="#003b7a">🔷 Xanh Navy (#003b7a)</option>
                                                 <option value="#d97706">🟠 Cam Đỏ (#d97706)</option>
                                                 <option value="#047857">🟢 Xanh Lá (#047857)</option>
+                                                <option value="#991b1b">🔴 Đỏ Đậm (#991b1b)</option>
+                                                <option value="custom">🎨 Nhập mã màu tuỳ chỉnh (HEX)...</option>
                                             </select>
+                                            <div class="flex items-center gap-1.5 pt-0.5">
+                                                <div class="relative flex items-center" title="Bấm mở bảng chọn màu trực quan">
+                                                    <input type="color" id="loa-color-acc-picker" value="#0f172a"
+                                                        oninput="onStandeeColorPickerInput('loa-color-acc', this.value)"
+                                                        class="w-7 h-7 p-0.5 rounded border border-purple-300 cursor-pointer bg-white">
+                                                </div>
+                                                <div class="relative flex-1">
+                                                    <input type="text" id="loa-color-acc-custom" value="#0F172A" maxlength="7" placeholder="#0F172A"
+                                                        oninput="onStandeeColorTextInput('loa-color-acc', this.value)"
+                                                        class="w-full px-2 py-1 border border-purple-300 rounded text-xs font-mono font-bold uppercase text-slate-800 bg-purple-50/50 focus:bg-white focus:ring-1 focus:ring-purple-500" title="Nhập hoặc dán mã màu HEX">
+                                                </div>
+                                                <!-- Quick Palette Dots -->
+                                                <div class="flex items-center gap-1 pl-0.5">
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-acc', '#0F172A')" class="w-4 h-4 rounded-full bg-[#0F172A] border border-white shadow-xs hover:scale-125 transition" title="Đen"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-acc', '#003B7A')" class="w-4 h-4 rounded-full bg-[#003B7A] border border-white shadow-xs hover:scale-125 transition" title="Xanh Navy"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-acc', '#D97706')" class="w-4 h-4 rounded-full bg-[#D97706] border border-white shadow-xs hover:scale-125 transition" title="Cam Đỏ"></button>
+                                                    <button type="button" onclick="setStandeeQuickColor('loa-color-acc', '#047857')" class="w-4 h-4 rounded-full bg-[#047857] border border-white shadow-xs hover:scale-125 transition" title="Xanh Lá"></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -10130,6 +10228,102 @@ async function downloadDocPDFClientSide(mode) {
             updateStandeePreview();
         }
 
+        /* --- Quản Lý & Đồng Bộ Màu Chữ Tuỳ Chỉnh Thẻ Standee & QR Loa (Preset / HEX / Color Picker) --- */
+        function getEffectiveStandeeColor(controlId, defaultHex) {
+            const sel = document.getElementById(controlId);
+            const custom = document.getElementById(controlId + '-custom');
+            const picker = document.getElementById(controlId + '-picker');
+            let hex = (sel?.value || '').trim();
+            if (!hex || hex === 'custom' || !hex.startsWith('#')) {
+                hex = (custom?.value || picker?.value || defaultHex || '#003b7a').trim();
+            }
+            if (!hex.startsWith('#')) hex = '#' + hex;
+            return /^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : (defaultHex || '#003b7a');
+        }
+
+        function syncStandeeColorControl(controlId, hexValue) {
+            if (!hexValue) return;
+            let hex = hexValue.trim();
+            if (!hex.startsWith('#')) hex = '#' + hex;
+            if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return;
+            hex = hex.toUpperCase();
+
+            const sel = document.getElementById(controlId);
+            const picker = document.getElementById(controlId + '-picker');
+            const custom = document.getElementById(controlId + '-custom');
+            const badge = document.getElementById(controlId + '-preview-badge');
+
+            if (badge) {
+                badge.textContent = hex;
+                badge.style.color = hex;
+                badge.style.backgroundColor = hex + '18';
+                badge.style.borderColor = hex + '40';
+            }
+            if (picker && picker.value.toLowerCase() !== hex.toLowerCase()) {
+                picker.value = hex.toLowerCase();
+            }
+            if (custom && custom.value.toUpperCase() !== hex) {
+                custom.value = hex;
+            }
+
+            if (sel) {
+                let matched = false;
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value && sel.options[i].value.toUpperCase() === hex) {
+                        sel.selectedIndex = i;
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) {
+                    let customOpt = sel.querySelector('option[data-custom-opt="true"]');
+                    if (!customOpt) {
+                        customOpt = sel.querySelector('option[value="custom"]');
+                        if (customOpt) customOpt.setAttribute('data-custom-opt', 'true');
+                    }
+                    if (customOpt) {
+                        customOpt.value = hex;
+                        customOpt.textContent = `🎨 Tuỳ chỉnh (${hex})`;
+                        customOpt.selected = true;
+                    }
+                }
+            }
+        }
+
+        function onStandeeColorSelectChange(controlId) {
+            const sel = document.getElementById(controlId);
+            if (!sel) return;
+            if (sel.value === 'custom') {
+                const picker = document.getElementById(controlId + '-picker');
+                const custom = document.getElementById(controlId + '-custom');
+                const hex = (custom?.value || picker?.value || '#003B7A').toUpperCase();
+                syncStandeeColorControl(controlId, hex);
+                if (custom) custom.focus();
+            } else {
+                syncStandeeColorControl(controlId, sel.value);
+            }
+            updateStandeePreview();
+        }
+
+        function onStandeeColorPickerInput(controlId, val) {
+            syncStandeeColorControl(controlId, val);
+            updateStandeePreview();
+        }
+
+        function onStandeeColorTextInput(controlId, val) {
+            let clean = (val || '').trim();
+            if (clean && !clean.startsWith('#')) clean = '#' + clean;
+            if (/^#[0-9A-Fa-f]{6}$/.test(clean)) {
+                syncStandeeColorControl(controlId, clean);
+                updateStandeePreview();
+            }
+        }
+
+        function setStandeeQuickColor(controlId, hex) {
+            syncStandeeColorControl(controlId, hex);
+            updateStandeePreview();
+        }
+
         let currentStandeeRenderId = 0;
 
         function updateStandeePreview() {
@@ -10154,8 +10348,8 @@ async function downloadDocPDFClientSide(mode) {
                 const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
                 const accEl = document.getElementById('loa-acc');
                 const acc = accEl?.value || "380020";
-                const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
-                const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+                const colorName = getEffectiveStandeeColor('loa-color-name', '#003b7a');
+                const colorAcc = getEffectiveStandeeColor('loa-color-acc', '#0f172a');
 
                 const cleanDigits = acc.replace(/[^0-9]/g, '');
                 const warnEl = document.getElementById('loa-acc-warn');
@@ -10181,8 +10375,8 @@ async function downloadDocPDFClientSide(mode) {
                 const alias = aliasEl?.value ? aliasEl.value.trim() : "";
                 const accEl = document.getElementById('std-acc');
                 const acc = accEl?.value || "380020";
-                const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
-                const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+                const colorName = getEffectiveStandeeColor('std-color-name', '#003b7a');
+                const colorInfo = getEffectiveStandeeColor('std-color-info', '#d97706');
 
                 const cleanDigits = acc.replace(/[^0-9]/g, '');
                 const warnEl = document.getElementById('std-acc-warn');
@@ -11433,8 +11627,8 @@ async function downloadDocPDFClientSide(mode) {
                 const name = document.getElementById('std-name')?.value || '';
                 const alias = (document.getElementById('std-alias')?.value || '').trim();
                 const acc = formatCoopbankAccount((document.getElementById('std-acc')?.value || '380020').trim());
-                const colorName = document.getElementById('std-color-name')?.value || '#003b7a';
-                const colorInfo = document.getElementById('std-color-info')?.value || '#d97706';
+                const colorName = getEffectiveStandeeColor('std-color-name', '#003b7a');
+                const colorInfo = getEffectiveStandeeColor('std-color-info', '#d97706');
                 renderStandeeCanvasToTarget(c, name, alias, acc, colorName, colorInfo, function () {
                     if (callback) callback(c);
                 });
@@ -11442,8 +11636,8 @@ async function downloadDocPDFClientSide(mode) {
             } else if (isLoa) {
                 const name = document.getElementById('loa-name')?.value || '';
                 const acc = formatCoopbankAccount((document.getElementById('loa-acc')?.value || '380020').trim());
-                const colorName = document.getElementById('loa-color-name')?.value || '#003b7a';
-                const colorAcc = document.getElementById('loa-color-acc')?.value || '#0f172a';
+                const colorName = getEffectiveStandeeColor('loa-color-name', '#003b7a');
+                const colorAcc = getEffectiveStandeeColor('loa-color-acc', '#0f172a');
                 renderQRLoaCanvasToTarget(c, name, acc, colorName, colorAcc, function () {
                     if (callback) callback(c);
                 });
@@ -11709,8 +11903,8 @@ async function downloadDocPDFClientSide(mode) {
             } else {
                 const alias = document.getElementById('std-alias')?.value || "0348741868";
                 const acc = document.getElementById('std-acc')?.value || "3800200138221012";
-                const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
-                const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+                const colorName = getEffectiveStandeeColor('std-color-name', '#003b7a');
+                const colorInfo = getEffectiveStandeeColor('std-color-info', '#d97706');
                 const tempCanvas = document.createElement('canvas');
                 renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function (c) {
                     directDownloadCanvas(c, fileName, comp.mimeType, comp.quality);
@@ -11730,8 +11924,8 @@ async function downloadDocPDFClientSide(mode) {
                 directDownloadCanvas(previewCanvas, fileName, comp.mimeType, comp.quality);
             } else {
                 const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
-                const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
-                const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+                const colorName = getEffectiveStandeeColor('loa-color-name', '#003b7a');
+                const colorAcc = getEffectiveStandeeColor('loa-color-acc', '#0f172a');
                 const tempCanvas = document.createElement('canvas');
                 renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function (c) {
                     directDownloadCanvas(c, fileName, comp.mimeType, comp.quality);
@@ -11751,8 +11945,8 @@ async function downloadDocPDFClientSide(mode) {
             } else {
                 const alias = document.getElementById('std-alias')?.value || "0348741868";
                 const acc = document.getElementById('std-acc')?.value || "3800200138221012";
-                const colorName = document.getElementById('std-color-name')?.value || "#003b7a";
-                const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
+                const colorName = getEffectiveStandeeColor('std-color-name', '#003b7a');
+                const colorInfo = getEffectiveStandeeColor('std-color-info', '#d97706');
                 const tempCanvas = document.createElement('canvas');
                 renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function (c) {
                     directShareCanvas(c, fileName, title, comp.mimeType, comp.quality);
@@ -11771,8 +11965,8 @@ async function downloadDocPDFClientSide(mode) {
                 directShareCanvas(previewCanvas, fileName, title, comp.mimeType, comp.quality);
             } else {
                 const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
-                const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
-                const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
+                const colorName = getEffectiveStandeeColor('loa-color-name', '#003b7a');
+                const colorAcc = getEffectiveStandeeColor('loa-color-acc', '#0f172a');
                 const tempCanvas = document.createElement('canvas');
                 renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function (c) {
                     directShareCanvas(c, fileName, title, comp.mimeType, comp.quality);
