@@ -9,7 +9,10 @@
 
 Phân hệ VietQR trong bộ ứng dụng `QTD_Tools` cung cấp giải pháp tạo mã QR thanh toán chuẩn **EMVCo 247 / VietQR / NAPAS** cho **Ngân hàng Hợp tác xã Việt Nam (Co-opBank)**. 
 
-Hệ thống cho phép sinh mã QR vector 100% offline ngay trên trình duyệt mà không cần kết nối mạng hay gọi API bên ngoài, đảm bảo tính bảo mật, tốc độ tức thì và tương thích 100% với tất cả ứng dụng ngân hàng (Co-opBank Mobile, Vietcombank, BIDV, Agribank, VietinBank, MB, Techcombank,...).
+Hệ thống hoạt động theo cơ chế **Đa tầng bền vững (Multi-tier Resilient Engine)**:
+1. **Tầng 1 (Ưu tiên chuẩn mực số 1)**: Gọi trực tiếp **VietQR API chính thức (`img.vietqr.io`)** — đảm bảo 100% chuẩn định dạng EMVCo, tỷ lệ khung hình, khoảng viền an toàn (Quiet Zone) và kích thước chuẩn xác từng pixel trên phôi Standee, QR Loa và QR Card, tương thích hoàn hảo với tất cả ứng dụng ngân hàng (Co-opBank Mobile, Vietcombank, BIDV, Agribank, VietinBank, MB, Techcombank,...).
+2. **Tầng 2 (Dự phòng đối tác)**: Tự động chuyển tiếp sang **Sepay API (`qr.sepay.vn`)** nếu kết nối tới cổng VietQR bị chậm hoặc gián đoạn.
+3. **Tầng 3 (Dự phòng Offline thuần túy)**: Tự động chuyển đổi sang bộ sinh vector QR nội bộ (`QRCodeLib.drawQR`) khi thiết bị hoàn toàn không có kết nối Internet, đảm bảo ứng dụng không bao giờ bị gián đoạn hoạt động.
 
 ---
 
