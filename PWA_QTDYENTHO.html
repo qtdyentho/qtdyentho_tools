@@ -10647,30 +10647,45 @@ async function downloadDocPDFClientSide(mode) {
                 const qrY = 173;
                 const qrSize = 818;
 
-                // 100% Offline Vector QR Generation (Tức thì 0ms, không phụ thuộc API mạng)
-                let qrSuccess = false;
-                try {
-                    const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean, amountVal);
-                    qrSuccess = QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
-                } catch (e) {
-                    console.error("Lỗi tạo mã QR Standee vector:", e);
-                }
+                const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${targetAccForQR}-qr_only.png?amount=${amountVal}&addInfo=${encodeURIComponent(memoClean)}`;
+                const sepayUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${targetAccForQR}&amount=${amountVal}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
 
-                if (!qrSuccess) {
+                const qrImg = new Image();
+                qrImg.crossOrigin = 'Anonymous';
+                qrImg.onload = function () {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                    drawQRAndLogo(qrImg);
+                };
+                qrImg.onerror = function () {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     const fallbackQR = new Image();
                     fallbackQR.crossOrigin = 'Anonymous';
                     fallbackQR.onload = function () {
                         if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
-                        try { ctx.drawImage(fallbackQR, qrX, qrY, qrSize, qrSize); } catch (e) { }
-                        drawLogoAndFinish();
+                        drawQRAndLogo(fallbackQR);
                     };
                     fallbackQR.onerror = function () {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        // Offline Vector QR Generation Fallback
+                        try {
+                            const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean, amountVal);
+                            QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                        } catch (e) {
+                            console.error("Lỗi tạo mã QR Standee:", e);
+                        }
                         drawLogoAndFinish();
                     };
-                    fallbackQR.src = `https://img.vietqr.io/image/COOPBANK-${targetAccForQR}-qr_only.png?amount=${amountVal}&addInfo=${encodeURIComponent(memoClean)}`;
-                    return;
+                    fallbackQR.src = sepayUrl;
+                };
+                qrImg.src = vietQrUrl;
+
+                function drawQRAndLogo(qrImageObj) {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                    try {
+                        ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
+                    } catch (e) { }
+                    drawLogoAndFinish();
                 }
-                drawLogoAndFinish();
 
                 function drawLogoAndFinish() {
                     if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
@@ -10815,30 +10830,45 @@ async function downloadDocPDFClientSide(mode) {
                 const qrX = 189;
                 const qrY = 191;
 
-                // 100% Offline Vector QR Generation (Tức thì 0ms, không phụ thuộc API mạng)
-                let qrSuccess = false;
-                try {
-                    const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean);
-                    qrSuccess = QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
-                } catch (e) {
-                    console.error("Lỗi tạo mã QR LOA vector:", e);
-                }
+                const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${targetAccForQR}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+                const sepayUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${targetAccForQR}&des=${encodeURIComponent(memoClean)}&template=qr_only`;
 
-                if (!qrSuccess) {
+                const qrImg = new Image();
+                qrImg.crossOrigin = 'Anonymous';
+                qrImg.onload = function () {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                    drawQRAndLogo(qrImg);
+                };
+                qrImg.onerror = function () {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
                     const fallbackQR = new Image();
                     fallbackQR.crossOrigin = 'Anonymous';
                     fallbackQR.onload = function () {
                         if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
-                        try { ctx.drawImage(fallbackQR, qrX, qrY, qrSize, qrSize); } catch (e) { }
-                        drawLogoAndFinish();
+                        drawQRAndLogo(fallbackQR);
                     };
                     fallbackQR.onerror = function () {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        // Offline Vector QR Generation Fallback
+                        try {
+                            const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean);
+                            QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                        } catch (e) {
+                            console.error("Lỗi tạo mã QR LOA:", e);
+                        }
                         drawLogoAndFinish();
                     };
-                    fallbackQR.src = `https://img.vietqr.io/image/COOPBANK-${targetAccForQR}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
-                    return;
+                    fallbackQR.src = sepayUrl;
+                };
+                qrImg.src = vietQrUrl;
+
+                function drawQRAndLogo(qrImageObj) {
+                    if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                    try {
+                        ctx.drawImage(qrImageObj, qrX, qrY, qrSize, qrSize);
+                    } catch (e) { }
+                    drawLogoAndFinish();
                 }
-                drawLogoAndFinish();
 
                 function drawLogoAndFinish() {
                     if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
@@ -10991,27 +11021,34 @@ async function downloadDocPDFClientSide(mode) {
                 ? parseVND(document.getElementById('qr-final-amount')?.value || '0')
                 : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
 
-            // 100% Offline Vector QR Generation (Tức thì 0ms, không phụ thuộc API mạng)
-            let qrSuccess = false;
-            try {
-                const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
-                qrSuccess = QRCodeLib.drawQR(ctx, payload, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20);
-            } catch (e) {
-                console.error("Lỗi vẽ QR Card Canvas:", e);
-            }
+            const vietQrUrl = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoFull)}`;
+            const sepayUrl = `https://qr.sepay.vn/img?bank=COOPBANK&acc=${FIXED_ACC_NUMBER}&amount=${amount}&des=${encodeURIComponent(memoFull)}&template=qr_only`;
 
-            if (!qrSuccess) {
+            const cardQrImg = new Image();
+            cardQrImg.crossOrigin = 'Anonymous';
+            cardQrImg.onload = function () {
+                try { ctx.drawImage(cardQrImg, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20, qrBox.h - 20); } catch (e) { }
+                drawLogoAndInfo();
+            };
+            cardQrImg.onerror = function () {
                 const fallbackQR = new Image();
                 fallbackQR.crossOrigin = 'Anonymous';
                 fallbackQR.onload = function () {
                     try { ctx.drawImage(fallbackQR, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20, qrBox.h - 20); } catch (e) { }
                     drawLogoAndInfo();
                 };
-                fallbackQR.onerror = drawLogoAndInfo;
-                fallbackQR.src = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoFull)}`;
-                return;
-            }
-            drawLogoAndInfo();
+                fallbackQR.onerror = function () {
+                    try {
+                        const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
+                        QRCodeLib.drawQR(ctx, payload, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20);
+                    } catch (e) {
+                        console.error("Lỗi vẽ QR Card Canvas:", e);
+                    }
+                    drawLogoAndInfo();
+                };
+                fallbackQR.src = sepayUrl;
+            };
+            cardQrImg.src = vietQrUrl;
 
             function drawLogoAndInfo() {
                 // Draw Base64 Logo in Center
