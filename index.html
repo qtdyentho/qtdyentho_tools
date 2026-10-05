@@ -10350,7 +10350,10 @@ async function downloadDocPDFClientSide(mode) {
                 }
                 var totalDataCount = 0;
                 for (var i = 0; i < rsBlocks.length; i++) totalDataCount += rsBlocks[i].dataCount;
-                if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) buffer.put(0, 4);
+                if (buffer.getLengthInBits() + 4 > totalDataCount * 8) {
+                    throw new Error("code length overflow. (" + (buffer.getLengthInBits() + 4) + ">" + (totalDataCount * 8) + ")");
+                }
+                buffer.put(0, 4);
                 while (buffer.getLengthInBits() % 8 != 0) buffer.putBit(false);
                 while (true) {
                     if (buffer.getLengthInBits() >= totalDataCount * 8) break;
@@ -10498,12 +10501,12 @@ async function downloadDocPDFClientSide(mode) {
             };
             return {
                 drawQR: function (ctx, text, x, y, size) {
-                    // Tự động chọn Cấp độ sửa lỗi Level H (30%) trước để đảm bảo chèn logo quét nhạy 100% trên app ngân hàng
                     var qr = null;
-                    var levelsToTry = [2, 3, 0, 1]; // 2=Level H (30%), 3=Level Q (25%), 0=Level M (15%), 1=Level L (7%)
+                    // Chuẩn VietQR / NAPAS quy định cấp độ sửa lỗi Level M (15%) và Level Q (25%)
+                    var levelsToTry = [0, 3, 1]; // 0=Level M (15% VietQR chuẩn), 3=Level Q (25%), 1=Level L (7%)
                     for (var lIdx = 0; lIdx < levelsToTry.length; lIdx++) {
                         var lvl = levelsToTry[lIdx];
-                        for (var t = 1; t <= 10; t++) {
+                        for (var t = 1; t <= 9; t++) {
                             try {
                                 var attempt = new QRCode(t, lvl);
                                 attempt.addData(text);
@@ -10515,14 +10518,7 @@ async function downloadDocPDFClientSide(mode) {
                         if (qr) break;
                     }
                     if (!qr) {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillRect(x, y, size, size);
-                        ctx.fillStyle = '#ef4444';
-                        ctx.font = 'bold 14px Arial, sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText('QR quá dài', x + size / 2, y + size / 2);
-                        return;
+                        return false;
                     }
                     var count = qr.getModuleCount();
                     // Quiet zone 4 module theo chuẩn ISO 18004
@@ -10548,6 +10544,7 @@ async function downloadDocPDFClientSide(mode) {
                         }
                     }
                     ctx.restore();
+                    return true;
                 }
             };
         })();
@@ -10651,11 +10648,27 @@ async function downloadDocPDFClientSide(mode) {
                 const qrSize = 818;
 
                 // 100% Offline Vector QR Generation (Tức thì 0ms, không phụ thuộc API mạng)
+                let qrSuccess = false;
                 try {
                     const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean, amountVal);
-                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                    qrSuccess = QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
                 } catch (e) {
-                    console.error("Lỗi tạo mã QR Standee:", e);
+                    console.error("Lỗi tạo mã QR Standee vector:", e);
+                }
+
+                if (!qrSuccess) {
+                    const fallbackQR = new Image();
+                    fallbackQR.crossOrigin = 'Anonymous';
+                    fallbackQR.onload = function () {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        try { ctx.drawImage(fallbackQR, qrX, qrY, qrSize, qrSize); } catch (e) { }
+                        drawLogoAndFinish();
+                    };
+                    fallbackQR.onerror = function () {
+                        drawLogoAndFinish();
+                    };
+                    fallbackQR.src = `https://img.vietqr.io/image/COOPBANK-${targetAccForQR}-qr_only.png?amount=${amountVal}&addInfo=${encodeURIComponent(memoClean)}`;
+                    return;
                 }
                 drawLogoAndFinish();
 
@@ -10803,11 +10816,27 @@ async function downloadDocPDFClientSide(mode) {
                 const qrY = 191;
 
                 // 100% Offline Vector QR Generation (Tức thì 0ms, không phụ thuộc API mạng)
+                let qrSuccess = false;
                 try {
                     const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean);
-                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                    qrSuccess = QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
                 } catch (e) {
-                    console.error("Lỗi tạo mã QR LOA:", e);
+                    console.error("Lỗi tạo mã QR LOA vector:", e);
+                }
+
+                if (!qrSuccess) {
+                    const fallbackQR = new Image();
+                    fallbackQR.crossOrigin = 'Anonymous';
+                    fallbackQR.onload = function () {
+                        if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
+                        try { ctx.drawImage(fallbackQR, qrX, qrY, qrSize, qrSize); } catch (e) { }
+                        drawLogoAndFinish();
+                    };
+                    fallbackQR.onerror = function () {
+                        drawLogoAndFinish();
+                    };
+                    fallbackQR.src = `https://img.vietqr.io/image/COOPBANK-${targetAccForQR}-qr_only.png?addInfo=${encodeURIComponent(memoClean)}`;
+                    return;
                 }
                 drawLogoAndFinish();
 
@@ -10963,11 +10992,24 @@ async function downloadDocPDFClientSide(mode) {
                 : parseVND(document.getElementById('qr-sav-amount')?.value || '0');
 
             // 100% Offline Vector QR Generation (Tức thì 0ms, không phụ thuộc API mạng)
+            let qrSuccess = false;
             try {
                 const payload = generateVietQREMVCoPayload("970446", FIXED_ACC_NUMBER, memoFull, amount);
-                QRCodeLib.drawQR(ctx, payload, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20);
+                qrSuccess = QRCodeLib.drawQR(ctx, payload, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20);
             } catch (e) {
                 console.error("Lỗi vẽ QR Card Canvas:", e);
+            }
+
+            if (!qrSuccess) {
+                const fallbackQR = new Image();
+                fallbackQR.crossOrigin = 'Anonymous';
+                fallbackQR.onload = function () {
+                    try { ctx.drawImage(fallbackQR, qrBox.x + 10, qrBox.y + 10, qrBox.w - 20, qrBox.h - 20); } catch (e) { }
+                    drawLogoAndInfo();
+                };
+                fallbackQR.onerror = drawLogoAndInfo;
+                fallbackQR.src = `https://img.vietqr.io/image/COOPBANK-${FIXED_ACC_NUMBER}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(memoFull)}`;
+                return;
             }
             drawLogoAndInfo();
 
@@ -11867,7 +11909,7 @@ async function downloadDocPDFClientSide(mode) {
                 </div>
             ` : '';
 
-            const printHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>In Standee QR A4 - QTDND Yen Tho</title><style>@page{size:A4 ' + orient + ';margin:7mm;}*{box-sizing:border-box;margin:0;padding:0;}html,body{width:100%;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#ffffff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-container{margin:0 auto;display:flex;box-sizing:border-box;overflow:hidden;background:#ffffff;position:relative;page-break-after:avoid;page-break-inside:avoid;break-inside:avoid;break-after:avoid;}.page-container.portrait{width:196mm;height:283mm;max-height:283mm;}.page-container.landscape{width:283mm;height:196mm;max-height:196mm;}.card-wrap{display:flex;align-items:center;justify-content:center;position:relative;box-sizing:border-box;}.qr-img{display:block;object-fit:contain;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;border-radius:3px;box-sizing:border-box;}.page-1{align-items:center;justify-content:center;}.card-1{width:100%;height:100%;}.page-1.portrait .img-1{max-width:190mm;max-height:275mm;}.page-1.landscape .img-1{max-width:275mm;max-height:185mm;}.page-2.portrait{flex-direction:column;justify-content:space-between;}.card-2{width:100%;height:136mm;}.img-2{max-width:190mm;max-height:133mm;}.cut-guide-h{width:100%;height:6mm;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-2.landscape{flex-direction:row;justify-content:space-between;}.card-2-land{width:138mm;height:100%;}.img-2-land{max-width:135mm;max-height:185mm;}.cut-guide-v{width:6mm;height:100%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-4.portrait{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:196mm;height:283mm;max-height:283mm;position:relative;box-sizing:border-box;}.page-4.portrait .card-4{width:100%;height:100%;}.page-4.portrait .img-4{width:90mm !important;max-width:90mm !important;height:auto !important;max-height:136mm !important;}.page-4.landscape{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4mm;width:283mm;height:196mm;max-height:196mm;position:relative;box-sizing:border-box;}.page-4.landscape .card-4{width:100%;height:94mm;}.page-4.landscape .img-4{width:90mm !important;max-width:90mm !important;height:auto !important;max-height:92mm !important;}.cut-cross-v{position:absolute;left:50%;top:0;bottom:0;width:0;border-left:1px dashed #94a3b8;transform:translateX(-50%);pointer-events:none;z-index:10;}.cut-cross-h{position:absolute;top:50%;left:0;right:0;height:0;border-top:1px dashed #94a3b8;transform:translateY(-50%);pointer-events:none;z-index:10;}.print-footer{position:absolute;bottom:0.5mm;left:0;right:0;display:flex;justify-content:space-between;font-size:7.5px;color:#94a3b8;font-family:Arial,sans-serif;border-top:1px solid #e2e8f0;padding-top:0.5mm;line-height:1;box-sizing:border-box;}</style></head><body>' + bodyContent + footerHtml + '</body></html>';
+            const printHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>In Standee QR A4 - QTDND Yen Tho</title><style>@page{size:A4 ' + orient + ';margin:7mm;}*{box-sizing:border-box;margin:0;padding:0;}html,body{width:100%;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#ffffff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-container{margin:0 auto;display:flex;box-sizing:border-box;overflow:hidden;background:#ffffff;position:relative;page-break-after:avoid;page-break-inside:avoid;break-inside:avoid;break-after:avoid;}.page-container.portrait{width:196mm;height:283mm;max-height:283mm;}.page-container.landscape{width:283mm;height:196mm;max-height:196mm;}.card-wrap{display:flex;align-items:center;justify-content:center;position:relative;box-sizing:border-box;overflow:hidden;}.qr-img{display:block;width:auto !important;height:auto !important;object-fit:contain !important;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;border-radius:3px;box-sizing:border-box;}.page-1{align-items:center;justify-content:center;}.card-1{width:100%;height:100%;}.page-1.portrait .img-1{max-width:190mm !important;max-height:274mm !important;}.page-1.landscape .img-1{max-width:274mm !important;max-height:184mm !important;}.page-2.portrait{flex-direction:column;justify-content:space-between;}.card-2{width:100%;height:136mm;}.img-2{max-width:190mm !important;max-height:133mm !important;}.cut-guide-h{width:100%;height:6mm;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-2.landscape{flex-direction:row;justify-content:space-between;}.card-2-land{width:138mm;height:100%;}.img-2-land{max-width:135mm !important;max-height:184mm !important;}.cut-guide-v{width:6mm;height:100%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-4.portrait{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:196mm;height:283mm;max-height:283mm;position:relative;box-sizing:border-box;}.page-4.portrait .card-4{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}.page-4.portrait .img-4{max-width:92mm !important;max-height:135mm !important;}.page-4.landscape{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4mm;width:283mm;height:196mm;max-height:196mm;position:relative;box-sizing:border-box;}.page-4.landscape .card-4{width:100%;height:94mm;display:flex;align-items:center;justify-content:center;}.page-4.landscape .img-4{max-width:135mm !important;max-height:92mm !important;}.cut-cross-v{position:absolute;left:50%;top:0;bottom:0;width:0;border-left:1px dashed #94a3b8;transform:translateX(-50%);pointer-events:none;z-index:10;}.cut-cross-h{position:absolute;top:50%;left:0;right:0;height:0;border-top:1px dashed #94a3b8;transform:translateY(-50%);pointer-events:none;z-index:10;}.print-footer{position:absolute;bottom:0.5mm;left:0;right:0;display:flex;justify-content:space-between;font-size:7.5px;color:#94a3b8;font-family:Arial,sans-serif;border-top:1px solid #e2e8f0;padding-top:0.5mm;line-height:1;box-sizing:border-box;}</style></head><body>' + bodyContent + footerHtml + '</body></html>';
 
             let iframe = document.getElementById('doc-print-iframe');
             if (!iframe) {
