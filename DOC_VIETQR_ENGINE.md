@@ -70,14 +70,18 @@ Mã VietQR tuân thủ chuẩn EMVCo QRCode Specification. Chuỗi payload đư�
 
 ### 4.1. Cơ Chế In Ấn Khổ A4 Chuẩn (1, 2, 4 Thẻ / Trang A4)
 - **Tùy chọn dàn trang linh hoạt**:
-  - **1 Ảnh / Tờ A4**: Cỡ lớn tối đa chuẩn đặt bàn tại quầy giao dịch (`max-width: 180mm`, `max-height: 260mm`).
-  - **2 Ảnh / Tờ A4**: Cỡ vừa tiết kiệm giấy, xếp dọc (Portrait) hoặc xếp ngang (Landscape) (`height: 130mm` mỗi thẻ).
-  - **4 Ảnh / Tờ A4**: Cỡ mini tiện lợi, phân bố 2x2 trên 1 tờ A4, phục vụ dán 4 góc quầy hoặc phân phát cho thành viên.
+  - **1 Ảnh / Tờ A4**: Cỡ lớn tối đa chuẩn đặt bàn tại quầy giao dịch (`max-width: 190mm`, `max-height: 275mm`).
+  - **2 Ảnh / Tờ A4**: Cỡ vừa tiết kiệm giấy, xếp dọc (Portrait) hoặc xếp ngang (Landscape) (`height: 136mm` mỗi thẻ).
+  - **4 Ảnh / Tờ A4 (Chuẩn Standee & QR Loa)**:
+    + **Lề trang (Page Margin)**: Chuẩn **7mm** cả 4 cạnh (`@page { size: A4; margin: 7mm; }`). Vùng in khả dụng đạt kích thước tối ưu **196mm x 283mm**.
+    + **Kích thước chiều ngang ảnh**: Cố định chính xác **90mm** (`width: 90mm; max-width: 90mm;`).
+    + **Bảo toàn tỷ lệ ảnh (Aspect Ratio)**: Thẻ Standee (1087x1643) tự động có chiều cao tương ứng ~136mm. Hai hàng ảnh (2 x 136mm = 272mm) hoàn toàn nằm gọn trong chiều cao 283mm mà không tràn trang.
+    + **Bố cục 4 góc (2x2)**: Phân bố thành 4 góc phần tư đối xứng (mỗi phần tư 98mm x 141.5mm), tạo thành 4 thẻ A6 hoàn chỉnh sau khi cắt dọc đường chữ thập trung tâm.
 - **Giữ nguyên 100% tỷ lệ ảnh (Aspect Ratio)**:
   - Khắc phục triệt để hiện tượng co giãn, méo hình khi in nhờ thuộc tính `object-fit: contain` và dynamic CSS sizing.
   - Phôi Standee (1087x1643) và Phôi QR Loa (1088x1092) hiển thị cân đối hoàn hảo trong từng ô khung in.
 - **Tuỳ chọn in ấn thông minh**:
-  - Tùy chọn bật/tắt **Đường nét đứt hướng dẫn cắt kéo (✂)** giúp cắt thẻ chuẩn xác sau khi in.
+  - Tùy chọn bật/tắt **Đường nét đứt hướng dẫn cắt kéo (✂)** (gồm viền ảnh và đường cắt chữ thập phân đôi trang) giúp cắt thẻ chuẩn xác sau khi in.
   - Tùy chọn **Thông tin chân trang**: Nhãn Quỹ Tín Dụng Nhân Dân Yên Thọ và thời gian in tự động.
   - Hướng giấy **Khổ dọc (Portrait)** hoặc **Khổ ngang (Landscape)**.
   - Cửa sổ mô phỏng trang in A4 trực quan thời gian thực (Live Miniature A4 Preview).

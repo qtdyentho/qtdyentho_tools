@@ -507,7 +507,7 @@
                                 class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold">
                                 <span class="text-lg">🗂️</span>
                                 <span class="text-xs font-extrabold">4 Ảnh / Tờ</span>
-                                <span class="text-[10px] text-slate-500 font-normal">Cỡ mini • 4 góc quầy</span>
+                                <span class="text-[10px] text-amber-700 font-semibold">Ngang 90mm • Lề 7mm</span>
                             </button>
                         </div>
                     </div>
@@ -11786,14 +11786,15 @@ async function downloadDocPDFClientSide(mode) {
                 if (desc) desc.textContent = "Bố cục: 2 ảnh / trang A4 (Giữ nguyên tỷ lệ, tiết kiệm giấy)";
             } else if (activeStandeePrintLayout === 4) {
                 container.innerHTML = `
-                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1">
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1 relative" style="place-items: center;">
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        ${showCut ? '<div class="absolute left-1/2 top-0 bottom-0 border-l border-dashed border-slate-300 pointer-events-none"></div><div class="absolute top-1/2 left-0 right-0 border-t border-dashed border-slate-300 pointer-events-none"></div>' : ''}
                     </div>
                 `;
-                if (desc) desc.textContent = "Bố cục: 4 ảnh / trang A4 (Thẻ mini tiện lợi, chia 4 góc quầy)";
+                if (desc) desc.textContent = "Bố cục: 4 ảnh / trang A4 (Ngang chuẩn 90mm, lề 7mm, chuẩn Standee)";
             }
         }
 
@@ -11854,6 +11855,7 @@ async function downloadDocPDFClientSide(mode) {
                         <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
                         <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
                         <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
+                        ${showCut ? '<div class="cut-cross-v"></div><div class="cut-cross-h"></div>' : ''}
                     </div>
                 `;
             }
@@ -11865,7 +11867,7 @@ async function downloadDocPDFClientSide(mode) {
                 </div>
             ` : '';
 
-            const printHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>In Standee QR A4 - QTDND Yen Tho</title><style>@page{size:A4 ' + orient + ';margin:8mm 10mm;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#ffffff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-container{margin:0 auto;display:flex;box-sizing:border-box;overflow:hidden;background:#ffffff;position:relative;}.page-container.portrait{width:190mm;height:270mm;}.page-container.landscape{width:277mm;height:185mm;}.card-wrap{display:flex;align-items:center;justify-content:center;position:relative;}.qr-img{display:block;object-fit:contain;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;border-radius:4px;}.page-1{align-items:center;justify-content:center;}.card-1{width:100%;height:100%;}.page-1.portrait .img-1{max-width:180mm;max-height:260mm;}.page-1.landscape .img-1{max-width:260mm;max-height:175mm;}.page-2.portrait{flex-direction:column;justify-content:space-between;}.card-2{width:100%;height:130mm;}.img-2{max-width:180mm;max-height:126mm;}.cut-guide-h{width:100%;height:6mm;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-2.landscape{flex-direction:row;justify-content:space-between;}.card-2-land{width:132mm;height:100%;}.img-2-land{max-width:128mm;max-height:175mm;}.cut-guide-v{width:6mm;height:100%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5mm;align-content:stretch;justify-content:stretch;}.page-4.portrait .card-4{width:100%;height:130mm;}.page-4.portrait .img-4{max-width:88mm;max-height:126mm;}.page-4.landscape .card-4{width:100%;height:88mm;}.page-4.landscape .img-4{max-width:130mm;max-height:84mm;}.print-footer{position:fixed;bottom:2mm;left:10mm;right:10mm;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;font-family:Arial,sans-serif;border-top:1px solid #e2e8f0;padding-top:1mm;}</style></head><body>' + bodyContent + footerHtml + '</body></html>';
+            const printHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>In Standee QR A4 - QTDND Yen Tho</title><style>@page{size:A4 ' + orient + ';margin:7mm;}*{box-sizing:border-box;margin:0;padding:0;}html,body{width:100%;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#ffffff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-container{margin:0 auto;display:flex;box-sizing:border-box;overflow:hidden;background:#ffffff;position:relative;page-break-after:avoid;page-break-inside:avoid;break-inside:avoid;break-after:avoid;}.page-container.portrait{width:196mm;height:283mm;max-height:283mm;}.page-container.landscape{width:283mm;height:196mm;max-height:196mm;}.card-wrap{display:flex;align-items:center;justify-content:center;position:relative;box-sizing:border-box;}.qr-img{display:block;object-fit:contain;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;border-radius:3px;box-sizing:border-box;}.page-1{align-items:center;justify-content:center;}.card-1{width:100%;height:100%;}.page-1.portrait .img-1{max-width:190mm;max-height:275mm;}.page-1.landscape .img-1{max-width:275mm;max-height:185mm;}.page-2.portrait{flex-direction:column;justify-content:space-between;}.card-2{width:100%;height:136mm;}.img-2{max-width:190mm;max-height:133mm;}.cut-guide-h{width:100%;height:6mm;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-2.landscape{flex-direction:row;justify-content:space-between;}.card-2-land{width:138mm;height:100%;}.img-2-land{max-width:135mm;max-height:185mm;}.cut-guide-v{width:6mm;height:100%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-4.portrait{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:196mm;height:283mm;max-height:283mm;position:relative;box-sizing:border-box;}.page-4.portrait .card-4{width:100%;height:100%;}.page-4.portrait .img-4{width:90mm !important;max-width:90mm !important;height:auto !important;max-height:136mm !important;}.page-4.landscape{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4mm;width:283mm;height:196mm;max-height:196mm;position:relative;box-sizing:border-box;}.page-4.landscape .card-4{width:100%;height:94mm;}.page-4.landscape .img-4{width:90mm !important;max-width:90mm !important;height:auto !important;max-height:92mm !important;}.cut-cross-v{position:absolute;left:50%;top:0;bottom:0;width:0;border-left:1px dashed #94a3b8;transform:translateX(-50%);pointer-events:none;z-index:10;}.cut-cross-h{position:absolute;top:50%;left:0;right:0;height:0;border-top:1px dashed #94a3b8;transform:translateY(-50%);pointer-events:none;z-index:10;}.print-footer{position:absolute;bottom:0.5mm;left:0;right:0;display:flex;justify-content:space-between;font-size:7.5px;color:#94a3b8;font-family:Arial,sans-serif;border-top:1px solid #e2e8f0;padding-top:0.5mm;line-height:1;box-sizing:border-box;}</style></head><body>' + bodyContent + footerHtml + '</body></html>';
 
             let iframe = document.getElementById('doc-print-iframe');
             if (!iframe) {
