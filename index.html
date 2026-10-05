@@ -10640,7 +10640,8 @@ async function downloadDocPDFClientSide(mode) {
             const bgImg = new Image();
             bgImg.onload = function () {
                 if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
-                ctx.clearRect(0, 0, W, H);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, W, H);
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
                 const qrX = 135;
@@ -10823,7 +10824,8 @@ async function downloadDocPDFClientSide(mode) {
             const bgImg = new Image();
             bgImg.onload = function () {
                 if (reqRenderId && reqRenderId !== currentStandeeRenderId) return;
-                ctx.clearRect(0, 0, W, H);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, W, H);
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
                 const qrSize = 710;
