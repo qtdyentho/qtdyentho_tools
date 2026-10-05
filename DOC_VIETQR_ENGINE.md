@@ -66,16 +66,46 @@ Mã VietQR tuân thủ chuẩn EMVCo QRCode Specification. Chuỗi payload đư�
 
 ---
 
-## 🎨 4. ĐỘNG CƠ VẼ CANVAS & XUẤT ẢNH HD (OFFLINE ENGINE)
+## 🖨️ 4. CƠ CHẾ XUẤT BẢN IN KHỔ A4 CHUẨN & NÉN ẢNH TẢI VỀ
+
+### 4.1. Cơ Chế In Ấn Khổ A4 Chuẩn (1, 2, 4 Thẻ / Trang A4)
+- **Tùy chọn dàn trang linh hoạt**:
+  - **1 Ảnh / Tờ A4**: Cỡ lớn tối đa chuẩn đặt bàn tại quầy giao dịch (`max-width: 180mm`, `max-height: 260mm`).
+  - **2 Ảnh / Tờ A4**: Cỡ vừa tiết kiệm giấy, xếp dọc (Portrait) hoặc xếp ngang (Landscape) (`height: 130mm` mỗi thẻ).
+  - **4 Ảnh / Tờ A4**: Cỡ mini tiện lợi, phân bố 2x2 trên 1 tờ A4, phục vụ dán 4 góc quầy hoặc phân phát cho thành viên.
+- **Giữ nguyên 100% tỷ lệ ảnh (Aspect Ratio)**:
+  - Khắc phục triệt để hiện tượng co giãn, méo hình khi in nhờ thuộc tính `object-fit: contain` và dynamic CSS sizing.
+  - Phôi Standee (1087x1643) và Phôi QR Loa (1088x1092) hiển thị cân đối hoàn hảo trong từng ô khung in.
+- **Tuỳ chọn in ấn thông minh**:
+  - Tùy chọn bật/tắt **Đường nét đứt hướng dẫn cắt kéo (✂)** giúp cắt thẻ chuẩn xác sau khi in.
+  - Tùy chọn **Thông tin chân trang**: Nhãn Quỹ Tín Dụng Nhân Dân Yên Thọ và thời gian in tự động.
+  - Hướng giấy **Khổ dọc (Portrait)** hoặc **Khổ ngang (Landscape)**.
+  - Cửa sổ mô phỏng trang in A4 trực quan thời gian thực (Live Miniature A4 Preview).
+- **Kỹ thuật in cách ly (Isolated Hidden Iframe)**:
+  - Sử dụng `#doc-print-iframe` để xuất bản in trực tiếp mà không bị trình duyệt chặn Popup (Popup Blocker).
+  - Hoạt động 100% Offline, hỗ trợ in ra máy in vật lý hoặc chọn **"Lưu dưới dạng PDF" (Save as PDF)**.
+
+### 4.2. Tùy Chọn Nén Ảnh Tải Về & Chia Sẻ Zalo
+- **4 mức nén tối ưu hóa**:
+  1. **PNG Gốc HD (Không nén)**: Giữ nguyên chất lượng đồ họa tối đa (`~1.6 - 2.1 MB`), thích hợp in ấn quảng cáo khổ lớn.
+  2. **JPEG Chất lượng cao (90%)**: Hình ảnh sắc nét cao, dung lượng giảm mạnh (`~320 - 450 KB`).
+  3. **JPEG Tiết kiệm - Gửi Zalo (75%)** *(Mặc định khuyên dùng)*: Tối ưu dung lượng siêu nhẹ (`~180 - 250 KB`), gửi qua Zalo / Messenger tức thì mà mã QR vẫn quét cực nhạy.
+  4. **JPEG Nén cao (60%)**: Dung lượng tối thiểu (`~95 - 140 KB`), tiết kiệm tối đa bộ nhớ điện thoại.
+- **Ước tính dung lượng thời gian thực**: Huy hiệu hiển thị dung lượng file dự kiến ngay cạnh nút tải về.
+
+---
+
+## 🎨 5. ĐỘNG CƠ VẼ CANVAS & XUẤT ẢNH HD (OFFLINE ENGINE)
 
 - **Thư viện vector `QRCodeLib`**: Tự động thử cấp độ sửa lỗi **Level H (30%)** giúp mã QR có khả năng khôi phục dữ liệu cao nhất, quét nhạy 100% kể cả khi có logo chèn giữa.
-- **Canvas 2D Rendering**:
+- **Canvas 2D Rendering 0ms Offline**:
+  - Loại bỏ hoàn toàn sự phụ thuộc vào các API mạng bên ngoài (`img.vietqr.io`, `qr.sepay.vn`), tạo mã QR hoàn toàn nội bộ trong bộ nhớ RAM trình duyệt.
   - Thẻ Standee: Render kích thước HD 1087x1643px trên phôi phông nền `ASSET_BG_STANDEE`.
   - Thẻ QR LOA: Render kích thước HD 1088x1092px trên phôi phông nền `ASSET_BG_QRLOA`.
   - Thẻ Tiền vay / Tiết kiệm: Render khung HD 700x860px tối màu sang trọng.
 - **Tải ảnh & Chia sẻ (Web Share API)**:
-  - Xuất ảnh PNG blob chất lượng cao.
-  - Tích hợp `navigator.share({ files: [file] })` cho phép chia sẻ thẳng qua Zalo, Messenger, Telegram trên điện thoại.
+  - Xuất ảnh Blob theo định dạng và độ nén đã chọn (`image/png` hoặc `image/jpeg`).
+  - Tích hợp `navigator.share({ files: [file] })` cho phép chia sẻ thẳng qua Zalo, Messenger, Telegram trên điện thoại di động.
 
 ---
 © 2026 **QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ** — Tất cả quyền được bảo lưu.

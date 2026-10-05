@@ -453,6 +453,130 @@
         </div>
     </div>
 
+    <!-- Modal In Khổ A4 Chuẩn Cho Standee QR / QR Loa -->
+    <div id="modal-standee-print-a4"
+        class="fixed inset-0 bg-slate-900/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-5">
+        <div
+            class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 text-slate-800 space-y-4 shadow-2xl relative border border-slate-200 max-h-[95vh] overflow-y-auto">
+            <button onclick="closeStandeePrintModal()"
+                class="absolute top-3 right-3 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                <div class="p-2.5 bg-amber-100 text-amber-800 rounded-xl font-bold flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                        </path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-base text-slate-900 flex items-center gap-2">
+                        <span>🖨️ Xuất Bản In Khổ A4 Chuẩn</span>
+                        <span id="print-modal-type-badge" class="text-xs px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Thẻ Standee</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 font-medium">Tự động căn chỉnh chuẩn A4 • Giữ nguyên tỷ lệ ảnh • In trực tiếp hoặc Lưu PDF</p>
+                </div>
+            </div>
+
+            <!-- Main Content Grid: Settings (Left) + Miniature A4 Live Preview (Right) -->
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 pt-1">
+                <!-- Left Controls: Layout Selector & Options (7 Cols) -->
+                <div class="sm:col-span-7 space-y-4">
+                    <div>
+                        <label class="block font-bold text-xs text-slate-700 mb-2">1. Chọn Số Lượng Thẻ Trên 1 Tờ A4:</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- Card 1: 1 Ảnh -->
+                            <button type="button" id="btn-print-layout-1" onclick="setStandeePrintLayout(1)"
+                                class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-amber-600 bg-amber-50/70 text-amber-900 shadow-sm font-bold">
+                                <span class="text-lg">📄</span>
+                                <span class="text-xs font-extrabold">1 Ảnh / Tờ</span>
+                                <span class="text-[10px] text-slate-500 font-normal">Cỡ lớn để bàn</span>
+                            </button>
+                            <!-- Card 2: 2 Ảnh -->
+                            <button type="button" id="btn-print-layout-2" onclick="setStandeePrintLayout(2)"
+                                class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold">
+                                <span class="text-lg">📑</span>
+                                <span class="text-xs font-extrabold">2 Ảnh / Tờ</span>
+                                <span class="text-[10px] text-slate-500 font-normal">Cỡ vừa • Tiết kiệm</span>
+                            </button>
+                            <!-- Card 3: 4 Ảnh -->
+                            <button type="button" id="btn-print-layout-4" onclick="setStandeePrintLayout(4)"
+                                class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold">
+                                <span class="text-lg">🗂️</span>
+                                <span class="text-xs font-extrabold">4 Ảnh / Tờ</span>
+                                <span class="text-[10px] text-slate-500 font-normal">Cỡ mini • 4 góc quầy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Additional Options -->
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5 text-xs">
+                        <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">2. Tuỳ chọn in ấn nâng cao:</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="print-opt-cut-lines" checked onchange="updateStandeeMiniPreview()"
+                                class="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500">
+                            <label for="print-opt-cut-lines" class="font-semibold text-slate-700 cursor-pointer select-none">
+                                ✂️ Kèm đường nét đứt hướng dẫn cắt kéo
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="print-opt-header-footer" checked
+                                class="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500">
+                            <label for="print-opt-header-footer" class="font-semibold text-slate-700 cursor-pointer select-none">
+                                🏛️ Kèm thông tin Quỹ & thời gian lập ở chân trang
+                            </label>
+                        </div>
+                        <div class="pt-1">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Hướng giấy in ấn:</label>
+                            <select id="print-opt-orientation" onchange="updateStandeeMiniPreview()"
+                                class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800">
+                                <option value="portrait" selected>📄 Khổ dọc tiêu chuẩn (Portrait) - Khuyên dùng</option>
+                                <option value="landscape">📃 Khổ ngang (Landscape)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-2.5 bg-blue-50 border border-blue-200/80 rounded-xl text-xs text-blue-900 flex items-start gap-2">
+                        <span class="text-base flex-shrink-0">💡</span>
+                        <p class="leading-relaxed">Khi cửa sổ in xuất hiện, chọn máy in vật lý để in giấy A4, hoặc chọn mục <b>"Lưu dưới dạng PDF" (Save as PDF)</b> để xuất tệp tài liệu PDF gửi đi.</p>
+                    </div>
+                </div>
+
+                <!-- Right Mini Preview: Live Visual representation of A4 page (5 Cols) -->
+                <div class="sm:col-span-5 flex flex-col items-center justify-center p-3 bg-slate-100 rounded-xl border border-slate-200">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Mô Phỏng Trang In A4:</span>
+                    <div id="mini-a4-sheet"
+                        class="w-[150px] h-[212px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col p-1.5 box-border overflow-hidden transition-all duration-200">
+                        <div id="mini-a4-content" class="w-full h-full relative flex items-center justify-center">
+                            <!-- Injected by updateStandeeMiniPreview() -->
+                        </div>
+                    </div>
+                    <span id="mini-a4-desc" class="text-[11px] font-bold text-slate-600 mt-2 text-center">Bố cục: 1 ảnh / trang A4</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeStandeePrintModal()"
+                    class="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+                    ❌ Hủy & Đóng
+                </button>
+                <button type="button" onclick="executeStandeePrintA4()"
+                    class="py-2.5 px-5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-extrabold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                        </path>
+                    </svg>
+                    <span>🖨️ Tiến Hành In / Lưu PDF</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <header
         class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-emerald-700/30">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3">
@@ -3227,26 +3351,37 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-2 pt-2 lg:hidden">
-                                    <button onclick="downloadSingleStandeePNG()"
-                                        class="py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <div class="space-y-2 pt-2 lg:hidden">
+                                    <button type="button" onclick="openStandeePrintModal()"
+                                        class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white rounded-xl font-extrabold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
+                                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
                                             </path>
                                         </svg>
-                                        <span>📥 Tải Mã QR</span>
+                                        <span>🖨️ In Khổ A4 Chuẩn / Xuất PDF (1, 2, 4 Ảnh)</span>
                                     </button>
-                                    <button onclick="shareSingleStandee()"
-                                        class="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                            </path>
-                                        </svg>
-                                        <span>📲 Chia Sẻ Mã QR</span>
-                                    </button>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button onclick="downloadSingleStandeePNG()"
+                                            class="py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
+                                                </path>
+                                            </svg>
+                                            <span>📥 Tải Mã QR</span>
+                                        </button>
+                                        <button onclick="shareSingleStandee()"
+                                            class="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
+                                                </path>
+                                            </svg>
+                                            <span>📲 Chia Sẻ Mã QR</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -3325,26 +3460,37 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-2 pt-2">
-                                    <button onclick="downloadQRLoaPNG()"
-                                        class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <div class="space-y-2 pt-2">
+                                    <button type="button" onclick="openStandeePrintModal()"
+                                        class="w-full py-2.5 px-3 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white rounded-xl font-extrabold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
+                                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
                                             </path>
                                         </svg>
-                                        <span>📥 Tải Mã QR</span>
+                                        <span>🖨️ In Khổ A4 Chuẩn / Xuất PDF (1, 2, 4 Ảnh)</span>
                                     </button>
-                                    <button onclick="shareQRLoa()"
-                                        class="py-2.5 px-3 bg-purple-900 hover:bg-purple-950 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                                        <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                            </path>
-                                        </svg>
-                                        <span>📲 Chia Sẻ Mã QR</span>
-                                    </button>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button onclick="downloadQRLoaPNG()"
+                                            class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
+                                                </path>
+                                            </svg>
+                                            <span>📥 Tải Mã QR</span>
+                                        </button>
+                                        <button onclick="shareQRLoa()"
+                                            class="py-2.5 px-3 bg-purple-900 hover:bg-purple-950 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                            <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
+                                                </path>
+                                            </svg>
+                                            <span>📲 Chia Sẻ Mã QR</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3365,25 +3511,58 @@
                                 class="w-full max-w-[400px] h-auto object-contain rounded-lg shadow-sm transition-all duration-300"></canvas>
                         </div>
 
+                        <!-- Tuỳ chọn Nén ảnh tải về -->
+                        <div class="w-full bg-slate-800/90 p-3 rounded-xl border border-slate-700/80 space-y-2 text-xs">
+                            <div class="flex items-center justify-between text-slate-300 font-bold">
+                                <span class="flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                    </svg>
+                                    Tuỳ chọn Nén ảnh tải về:
+                                </span>
+                                <span id="standee-filesize-estimate"
+                                    class="text-[11px] text-emerald-400 font-mono font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">~250 KB</span>
+                            </div>
+                            <select id="standee-compress-select" onchange="updateStandeeFileSizeEstimate()"
+                                class="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-600 rounded-lg text-xs font-bold text-white focus:ring-2 focus:ring-emerald-500">
+                                <option value="png">🌟 PNG Gốc HD (Không nén ~2.0 MB - Nét chuẩn in)</option>
+                                <option value="jpg-90">💎 JPEG Chất lượng cao 90% (~450 KB - Sắc nét)</option>
+                                <option value="jpg-75" selected>⚡ JPEG Tiết kiệm Zalo 75% (~250 KB - Khuyên dùng)</option>
+                                <option value="jpg-60">📦 JPEG Siêu nén 60% (~140 KB - Nhẹ nhất)</option>
+                            </select>
+                        </div>
+
                         <!-- Action buttons - full width like QR panels -->
-                        <div class="grid grid-cols-2 gap-2 w-full">
-                            <button id="standee-download-btn" onclick="downloadSingleStandeePNG()"
-                                class="py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                        <div class="w-full space-y-2">
+                            <button id="standee-print-btn" onclick="openStandeePrintModal()"
+                                class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-md">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                </svg>
-                                <span>Tải Mã QR</span>
-                            </button>
-                            <button id="standee-share-btn" onclick="shareSingleStandee()"
-                                class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
+                                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
                                     </path>
                                 </svg>
-                                <span>Chia Sẻ</span>
+                                <span>🖨️ In Khổ A4 Chuẩn / Xuất PDF (1, 2, 4 Ảnh)</span>
                             </button>
+                            <div class="grid grid-cols-2 gap-2 w-full">
+                                <button id="standee-download-btn" onclick="downloadSingleStandeePNG()"
+                                    class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                    </svg>
+                                    <span>📥 Tải Mã QR</span>
+                                </button>
+                                <button id="standee-share-btn" onclick="shareSingleStandee()"
+                                    class="py-2.5 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
+                                        </path>
+                                    </svg>
+                                    <span>📲 Chia Sẻ</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -9918,6 +10097,15 @@ async function downloadDocPDFClientSide(mode) {
                     ? "py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1"
                     : "py-2 px-3 bg-purple-800 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1";
             }
+            const printBtn = document.getElementById('standee-print-btn');
+            if (printBtn) {
+                printBtn.className = mode === 'single'
+                    ? "w-full py-2.5 px-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-md"
+                    : "w-full py-2.5 px-3 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-600 hover:to-indigo-600 text-white rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-md";
+            }
+            if (typeof updateStandeeFileSizeEstimate === 'function') {
+                updateStandeeFileSizeEstimate();
+            }
             currentStandeeMode = mode;
             const singleForm = document.getElementById('standee-form-single');
             const qrloaForm = document.getElementById('standee-form-qrloa');
@@ -10026,6 +10214,9 @@ async function downloadDocPDFClientSide(mode) {
                 }
 
                 renderStandeeCanvasToTarget('standee-preview-canvas', name, alias, acc, colorName, colorInfo, null, reqRenderId);
+            }
+            if (typeof updateStandeeFileSizeEstimate === 'function') {
+                updateStandeeFileSizeEstimate();
             }
         }
 
@@ -10873,8 +11064,10 @@ async function downloadDocPDFClientSide(mode) {
             }
         }
 
-        function directDownloadCanvas(canvas, fileName) {
+        function directDownloadCanvas(canvas, fileName, mimeType, quality) {
             if (!canvas) return;
+            const type = mimeType || 'image/png';
+            const q = typeof quality === 'number' ? quality : 0.92;
             try {
                 if (typeof canvas.toBlob === 'function') {
                     canvas.toBlob(function (blob) {
@@ -10891,7 +11084,7 @@ async function downloadDocPDFClientSide(mode) {
                         } else {
                             fallbackDataUrl();
                         }
-                    }, 'image/png');
+                    }, type, q);
                 } else {
                     fallbackDataUrl();
                 }
@@ -10901,7 +11094,7 @@ async function downloadDocPDFClientSide(mode) {
 
             function fallbackDataUrl() {
                 try {
-                    const dataUrl = canvas.toDataURL('image/png');
+                    const dataUrl = canvas.toDataURL(type, q);
                     const a = document.createElement('a');
                     a.href = dataUrl;
                     a.download = fileName;
@@ -10915,14 +11108,16 @@ async function downloadDocPDFClientSide(mode) {
             }
         }
 
-        function directShareCanvas(canvas, fileName, shareText) {
+        function directShareCanvas(canvas, fileName, shareText, mimeType, quality) {
             if (!canvas) return;
+            const type = mimeType || 'image/png';
+            const q = typeof quality === 'number' ? quality : 0.92;
             showToast("Đang chuẩn bị Chia sẻ mã QR...");
             try {
                 if (typeof canvas.toBlob === 'function') {
                     canvas.toBlob(function (blob) {
                         if (blob) {
-                            const file = new File([blob], fileName, { type: 'image/png' });
+                            const file = new File([blob], fileName, { type: type });
                             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                                 navigator.share({
                                     files: [file],
@@ -10931,20 +11126,20 @@ async function downloadDocPDFClientSide(mode) {
                                 }).then(() => {
                                     showToast("Đã chia sẻ mã QR thành công!");
                                 }).catch((err) => {
-                                    if (err.name !== 'AbortError') directDownloadCanvas(canvas, fileName);
+                                    if (err.name !== 'AbortError') directDownloadCanvas(canvas, fileName, type, q);
                                 });
                             } else {
-                                directDownloadCanvas(canvas, fileName);
+                                directDownloadCanvas(canvas, fileName, type, q);
                             }
                         } else {
-                            directDownloadCanvas(canvas, fileName);
+                            directDownloadCanvas(canvas, fileName, type, q);
                         }
-                    }, 'image/png');
+                    }, type, q);
                 } else {
-                    directDownloadCanvas(canvas, fileName);
+                    directDownloadCanvas(canvas, fileName, type, q);
                 }
             } catch (e) {
-                directDownloadCanvas(canvas, fileName);
+                directDownloadCanvas(canvas, fileName, type, q);
             }
         }
 
@@ -11387,15 +11582,49 @@ async function downloadDocPDFClientSide(mode) {
             showToast("Desktop Chrome: Vui lòng nhấp chuột phải chọn 'Sao chép hình ảnh' hoặc bấm '📥 Tải Mã QR'!");
         }
 
+        function getStandeeCompressionSettings() {
+            const sel = document.getElementById('standee-compress-select')?.value || 'jpg-75';
+            switch (sel) {
+                case 'png':
+                    return { mimeType: 'image/png', quality: 1.0, ext: 'png', label: 'PNG HD' };
+                case 'jpg-90':
+                    return { mimeType: 'image/jpeg', quality: 0.90, ext: 'jpg', label: 'JPEG 90%' };
+                case 'jpg-60':
+                    return { mimeType: 'image/jpeg', quality: 0.60, ext: 'jpg', label: 'JPEG 60%' };
+                case 'jpg-75':
+                default:
+                    return { mimeType: 'image/jpeg', quality: 0.75, ext: 'jpg', label: 'JPEG 75%' };
+            }
+        }
+
+        function updateStandeeFileSizeEstimate() {
+            const badge = document.getElementById('standee-filesize-estimate');
+            if (!badge) return;
+            const sel = document.getElementById('standee-compress-select')?.value || 'jpg-75';
+            const isSingle = (typeof currentStandeeMode === 'undefined' || currentStandeeMode === 'single');
+            let estText = '~250 KB';
+            if (sel === 'png') {
+                estText = isSingle ? '~2.1 MB' : '~1.6 MB';
+            } else if (sel === 'jpg-90') {
+                estText = isSingle ? '~450 KB' : '~320 KB';
+            } else if (sel === 'jpg-75') {
+                estText = isSingle ? '~250 KB' : '~180 KB';
+            } else if (sel === 'jpg-60') {
+                estText = isSingle ? '~140 KB' : '~95 KB';
+            }
+            badge.textContent = estText;
+        }
+
         function downloadSingleStandeePNG() {
             const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
-            const fileName = `QR_Standee_${name.replace(/\s+/g, '_')}.png`;
+            const comp = getStandeeCompressionSettings();
+            const fileName = `QR_Standee_${name.replace(/\s+/g, '_')}.${comp.ext}`;
             const previewCanvas = document.getElementById('standee-preview-canvas');
 
-            showToast("Đang tải ảnh mã QR Standee...");
+            showToast(`Đang tải ảnh mã QR Standee (${comp.label})...`);
 
             if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
-                directDownloadCanvas(previewCanvas, fileName);
+                directDownloadCanvas(previewCanvas, fileName, comp.mimeType, comp.quality);
             } else {
                 const alias = document.getElementById('std-alias')?.value || "0348741868";
                 const acc = document.getElementById('std-acc')?.value || "3800200138221012";
@@ -11403,39 +11632,41 @@ async function downloadDocPDFClientSide(mode) {
                 const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
                 const tempCanvas = document.createElement('canvas');
                 renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function (c) {
-                    directDownloadCanvas(c, fileName);
+                    directDownloadCanvas(c, fileName, comp.mimeType, comp.quality);
                 });
             }
         }
 
         function downloadQRLoaPNG() {
             const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
-            const fileName = `QR_LOA_${name.replace(/\s+/g, '_')}.png`;
+            const comp = getStandeeCompressionSettings();
+            const fileName = `QR_LOA_${name.replace(/\s+/g, '_')}.${comp.ext}`;
             const previewCanvas = document.getElementById('standee-preview-canvas');
 
-            showToast("Đang tải ảnh mã QR LOA...");
+            showToast(`Đang tải ảnh mã QR LOA (${comp.label})...`);
 
             if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
-                directDownloadCanvas(previewCanvas, fileName);
+                directDownloadCanvas(previewCanvas, fileName, comp.mimeType, comp.quality);
             } else {
                 const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
                 const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
                 const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
                 const tempCanvas = document.createElement('canvas');
                 renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function (c) {
-                    directDownloadCanvas(c, fileName);
+                    directDownloadCanvas(c, fileName, comp.mimeType, comp.quality);
                 });
             }
         }
 
         function shareSingleStandee() {
             const name = document.getElementById('std-name')?.value || "NGUYEN THI NGUYET";
-            const fileName = `QR_Standee_${name.replace(/\s+/g, '_')}.png`;
+            const comp = getStandeeCompressionSettings();
+            const fileName = `QR_Standee_${name.replace(/\s+/g, '_')}.${comp.ext}`;
             const title = `Mã VietQR Standee QTDND Yên Thọ - ${name}`;
             const previewCanvas = document.getElementById('standee-preview-canvas');
 
             if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
-                directShareCanvas(previewCanvas, fileName, title);
+                directShareCanvas(previewCanvas, fileName, title, comp.mimeType, comp.quality);
             } else {
                 const alias = document.getElementById('std-alias')?.value || "0348741868";
                 const acc = document.getElementById('std-acc')?.value || "3800200138221012";
@@ -11443,29 +11674,241 @@ async function downloadDocPDFClientSide(mode) {
                 const colorInfo = document.getElementById('std-color-info')?.value || "#d97706";
                 const tempCanvas = document.createElement('canvas');
                 renderStandeeCanvasToTarget(tempCanvas, name, alias, acc, colorName, colorInfo, function (c) {
-                    directShareCanvas(c, fileName, title);
+                    directShareCanvas(c, fileName, title, comp.mimeType, comp.quality);
                 });
             }
         }
 
         function shareQRLoa() {
             const name = document.getElementById('loa-name')?.value || "NGUYEN THI NGUYET";
-            const fileName = `QR_LOA_${name.replace(/\s+/g, '_')}.png`;
+            const comp = getStandeeCompressionSettings();
+            const fileName = `QR_LOA_${name.replace(/\s+/g, '_')}.${comp.ext}`;
             const title = `Mã VietQR LOA QTDND Yên Thọ - ${name}`;
             const previewCanvas = document.getElementById('standee-preview-canvas');
 
             if (previewCanvas && previewCanvas.width > 0 && previewCanvas.height > 0) {
-                directShareCanvas(previewCanvas, fileName, title);
+                directShareCanvas(previewCanvas, fileName, title, comp.mimeType, comp.quality);
             } else {
                 const acc = document.getElementById('loa-acc')?.value || "3800200138221012";
                 const colorName = document.getElementById('loa-color-name')?.value || "#003b7a";
                 const colorAcc = document.getElementById('loa-color-acc')?.value || "#0f172a";
                 const tempCanvas = document.createElement('canvas');
                 renderQRLoaCanvasToTarget(tempCanvas, name, acc, colorName, colorAcc, function (c) {
-                    directShareCanvas(c, fileName, title);
+                    directShareCanvas(c, fileName, title, comp.mimeType, comp.quality);
                 });
             }
         }
+
+        /* --- Hệ Thống In Ấn Khổ A4 Chuẩn Cho Standee & QR Loa (1, 2, 4 Ảnh Giữ Nguyên Tỷ Lệ) --- */
+        let activeStandeePrintLayout = 1;
+
+        function openStandeePrintModal() {
+            const modal = document.getElementById('modal-standee-print-a4') || document.getElementById('standee-print-modal');
+            if (!modal) return;
+            const badge = document.getElementById('print-modal-type-badge');
+            if (badge) {
+                const isSingle = (typeof currentStandeeMode === 'undefined' || currentStandeeMode === 'single');
+                badge.textContent = isSingle ? 'Thẻ Standee' : 'Thẻ QR Loa';
+                badge.className = isSingle 
+                    ? "text-xs px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 border border-emerald-300"
+                    : "text-xs px-2 py-0.5 rounded-full font-bold bg-purple-100 text-purple-800 border border-purple-300";
+            }
+            modal.classList.remove('hidden');
+            setStandeePrintLayout(activeStandeePrintLayout || 1);
+            updateStandeeMiniPreview();
+        }
+
+        function closeStandeePrintModal() {
+            const modal = document.getElementById('modal-standee-print-a4') || document.getElementById('standee-print-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function setStandeePrintLayout(layout) {
+            activeStandeePrintLayout = layout;
+            [1, 2, 4].forEach(n => {
+                const btn = document.getElementById(`btn-print-layout-${n}`) || document.getElementById(`print-layout-btn-${n}`);
+                if (btn) {
+                    if (n === layout) {
+                        btn.className = "p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-amber-600 bg-amber-50/80 text-amber-900 shadow-sm font-bold cursor-pointer";
+                    } else {
+                        btn.className = "p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold cursor-pointer";
+                    }
+                }
+            });
+            updateStandeeMiniPreview();
+        }
+
+        function updateStandeeMiniPreview() {
+            const container = document.getElementById('mini-a4-content');
+            const sheet = document.getElementById('mini-a4-sheet');
+            const desc = document.getElementById('mini-a4-desc');
+            const previewCanvas = document.getElementById('standee-preview-canvas');
+            if (!container || !previewCanvas) return;
+
+            const dataUrl = previewCanvas.toDataURL('image/jpeg', 0.85);
+            const showCut = document.getElementById('print-opt-cut-lines')?.checked ?? true;
+            const orient = document.getElementById('print-opt-orientation')?.value || 'portrait';
+            const cutStyle = showCut ? 'border: 1px dashed #94a3b8;' : 'border: 1px solid #e2e8f0;';
+
+            if (sheet) {
+                if (orient === 'landscape') {
+                    sheet.className = "w-[212px] h-[150px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col p-1.5 box-border overflow-hidden transition-all duration-200";
+                } else {
+                    sheet.className = "w-[150px] h-[212px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col p-1.5 box-border overflow-hidden transition-all duration-200";
+                }
+            }
+
+            if (activeStandeePrintLayout === 1) {
+                container.innerHTML = `
+                    <div class="w-full h-full flex items-center justify-center p-1">
+                        <img src="${dataUrl}" class="max-h-[190px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}">
+                    </div>
+                `;
+                if (desc) desc.textContent = "Bố cục: 1 ảnh lớn / trang A4 (Cỡ chuẩn đặt bàn)";
+            } else if (activeStandeePrintLayout === 2) {
+                if (orient === 'landscape') {
+                    container.innerHTML = `
+                        <div class="w-full h-full flex items-center justify-around p-1 gap-1">
+                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                            ${showCut ? '<div class="h-full border-l border-dashed border-slate-400 mx-0.5 select-none"></div>' : ''}
+                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="w-full h-full flex flex-col items-center justify-around p-1 gap-0.5">
+                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                            ${showCut ? '<div class="w-full border-t border-dashed border-slate-400 my-0.5 text-[8px] text-center text-slate-400 font-mono select-none">✂ - - - - - ✂</div>' : ''}
+                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        </div>
+                    `;
+                }
+                if (desc) desc.textContent = "Bố cục: 2 ảnh / trang A4 (Giữ nguyên tỷ lệ, tiết kiệm giấy)";
+            } else if (activeStandeePrintLayout === 4) {
+                container.innerHTML = `
+                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1">
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                    </div>
+                `;
+                if (desc) desc.textContent = "Bố cục: 4 ảnh / trang A4 (Thẻ mini tiện lợi, chia 4 góc quầy)";
+            }
+        }
+
+        function executeStandeePrintA4() {
+            const previewCanvas = document.getElementById('standee-preview-canvas');
+            if (!previewCanvas || previewCanvas.width === 0) {
+                showToast("⚠️ Vui lòng chờ mã QR tạo xong trước khi in.");
+                return;
+            }
+
+            const imgData = previewCanvas.toDataURL('image/jpeg', 0.96);
+            const showCut = document.getElementById('print-opt-cut-lines')?.checked ?? true;
+            const showHeaderFooter = document.getElementById('print-opt-header-footer')?.checked ?? true;
+            const orient = document.getElementById('print-opt-orientation')?.value || 'portrait';
+            const cutLineStyle = showCut 
+                ? 'border: 1px dashed #94a3b8;' 
+                : 'border: none;';
+
+            let bodyContent = '';
+            if (activeStandeePrintLayout === 1) {
+                bodyContent = `
+                    <div class="page-container page-1 ${orient}">
+                        <div class="card-wrap card-1">
+                            <img src="${imgData}" class="qr-img img-1" style="${cutLineStyle}">
+                        </div>
+                    </div>
+                `;
+            } else if (activeStandeePrintLayout === 2) {
+                if (orient === 'landscape') {
+                    bodyContent = `
+                        <div class="page-container page-2 landscape">
+                            <div class="card-wrap card-2-land">
+                                <img src="${imgData}" class="qr-img img-2-land" style="${cutLineStyle}">
+                            </div>
+                            ${showCut ? '<div class="cut-guide-v"><span>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</span></div>' : ''}
+                            <div class="card-wrap card-2-land">
+                                <img src="${imgData}" class="qr-img img-2-land" style="${cutLineStyle}">
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    bodyContent = `
+                        <div class="page-container page-2 portrait">
+                            <div class="card-wrap card-2">
+                                <img src="${imgData}" class="qr-img img-2" style="${cutLineStyle}">
+                            </div>
+                            ${showCut ? '<div class="cut-guide-h"><span>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</span></div>' : ''}
+                            <div class="card-wrap card-2">
+                                <img src="${imgData}" class="qr-img img-2" style="${cutLineStyle}">
+                            </div>
+                        </div>
+                    `;
+                }
+            } else if (activeStandeePrintLayout === 4) {
+                bodyContent = `
+                    <div class="page-container page-4 ${orient}">
+                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
+                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
+                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
+                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
+                    </div>
+                `;
+            }
+
+            const footerHtml = showHeaderFooter ? `
+                <div class="print-footer">
+                    <span>QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ • Dịch Vụ Tài Chính QLApps</span>
+                    <span>Khổ A4 Chuẩn • In lúc: ${new Date().toLocaleString('vi-VN')}</span>
+                </div>
+            ` : '';
+
+            const printHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>In Standee QR A4 - QTDND Yen Tho</title><style>@page{size:A4 ' + orient + ';margin:8mm 10mm;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#ffffff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-container{margin:0 auto;display:flex;box-sizing:border-box;overflow:hidden;background:#ffffff;position:relative;}.page-container.portrait{width:190mm;height:270mm;}.page-container.landscape{width:277mm;height:185mm;}.card-wrap{display:flex;align-items:center;justify-content:center;position:relative;}.qr-img{display:block;object-fit:contain;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;border-radius:4px;}.page-1{align-items:center;justify-content:center;}.card-1{width:100%;height:100%;}.page-1.portrait .img-1{max-width:180mm;max-height:260mm;}.page-1.landscape .img-1{max-width:260mm;max-height:175mm;}.page-2.portrait{flex-direction:column;justify-content:space-between;}.card-2{width:100%;height:130mm;}.img-2{max-width:180mm;max-height:126mm;}.cut-guide-h{width:100%;height:6mm;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-2.landscape{flex-direction:row;justify-content:space-between;}.card-2-land{width:132mm;height:100%;}.img-2-land{max-width:128mm;max-height:175mm;}.cut-guide-v{width:6mm;height:100%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5mm;align-content:stretch;justify-content:stretch;}.page-4.portrait .card-4{width:100%;height:130mm;}.page-4.portrait .img-4{max-width:88mm;max-height:126mm;}.page-4.landscape .card-4{width:100%;height:88mm;}.page-4.landscape .img-4{max-width:130mm;max-height:84mm;}.print-footer{position:fixed;bottom:2mm;left:10mm;right:10mm;display:flex;justify-content:space-between;font-size:8px;color:#94a3b8;font-family:Arial,sans-serif;border-top:1px solid #e2e8f0;padding-top:1mm;}</style></head><body>' + bodyContent + footerHtml + '</body></html>';
+
+            let iframe = document.getElementById('doc-print-iframe');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'doc-print-iframe';
+                iframe.style.position = 'fixed';
+                iframe.style.right = '0';
+                iframe.style.bottom = '0';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = '0';
+                document.body.appendChild(iframe);
+            }
+
+            showToast("🖨️ Đang nạp trang in chuẩn khổ A4...");
+            closeStandeePrintModal();
+
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(printHtml);
+            doc.close();
+
+            iframe.onload = function () {
+                setTimeout(() => {
+                    try {
+                        iframe.contentWindow.focus();
+                        iframe.contentWindow.print();
+                    } catch (e) {
+                        console.error("Print error:", e);
+                    }
+                }, 300);
+            };
+            setTimeout(() => {
+                try {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                } catch (e) {}
+            }, 600);
+        }
+
+        // Backward compatibility aliases
+        const executeStandeeA4Print = executeStandeePrintA4;
+        const selectStandeePrintLayout = setStandeePrintLayout;
 
         function tryShareOrModal(canvas, fileName, shareText) {
             try {
