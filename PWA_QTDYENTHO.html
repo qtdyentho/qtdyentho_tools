@@ -23,7 +23,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_APP_VERSION = 'v2026.08.02-v34.00';
+            const CURRENT_APP_VERSION = 'v2026.08.03-v35.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             if (lastVersion !== CURRENT_APP_VERSION) {
@@ -486,35 +486,98 @@
                 <!-- Left Controls: Layout Selector & Options (7 Cols) -->
                 <div class="sm:col-span-7 space-y-4">
                     <div>
-                        <label class="block font-bold text-xs text-slate-700 mb-2">1. Chọn Số Lượng Thẻ Trên 1 Tờ A4:</label>
-                        <div class="grid grid-cols-3 gap-2">
+                        <label class="block font-bold text-xs text-slate-700 mb-2">1. Chọn Số Lượng Thẻ & Bố Cục Trang A4:</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                             <!-- Card 1: 1 Ảnh -->
                             <button type="button" id="btn-print-layout-1" onclick="setStandeePrintLayout(1)"
-                                class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-amber-600 bg-amber-50/70 text-amber-900 shadow-sm font-bold">
-                                <span class="text-lg">📄</span>
+                                class="p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-amber-600 bg-amber-50/70 text-amber-900 shadow-sm font-bold cursor-pointer">
+                                <span class="text-base">📄</span>
                                 <span class="text-xs font-extrabold">1 Ảnh / Tờ</span>
-                                <span class="text-[10px] text-slate-500 font-normal">Cỡ lớn để bàn</span>
+                                <span class="text-[10px] text-slate-500 font-normal">Cỡ lớn</span>
                             </button>
                             <!-- Card 2: 2 Ảnh -->
                             <button type="button" id="btn-print-layout-2" onclick="setStandeePrintLayout(2)"
-                                class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold">
-                                <span class="text-lg">📑</span>
+                                class="p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold cursor-pointer">
+                                <span class="text-base">📑</span>
                                 <span class="text-xs font-extrabold">2 Ảnh / Tờ</span>
-                                <span class="text-[10px] text-slate-500 font-normal">Cỡ vừa • Tiết kiệm</span>
+                                <span class="text-[10px] text-slate-500 font-normal">Cỡ vừa</span>
                             </button>
-                            <!-- Card 3: 4 Ảnh -->
+                            <!-- Card 3: 4 Ảnh Cùng Loại -->
                             <button type="button" id="btn-print-layout-4" onclick="setStandeePrintLayout(4)"
-                                class="p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold">
-                                <span class="text-lg">🗂️</span>
-                                <span class="text-xs font-extrabold">4 Ảnh / Tờ</span>
-                                <span class="text-[10px] text-amber-700 font-semibold">Ngang 90mm • Lề 7mm</span>
+                                class="p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold cursor-pointer">
+                                <span class="text-base">🗂️</span>
+                                <span class="text-xs font-extrabold">4 Cùng Loại</span>
+                                <span class="text-[10px] text-slate-500 font-normal">4 Standee/Loa</span>
                             </button>
+                            <!-- Card 4: 4 Ảnh Hỗn Hợp (2 Standee trên + 2 Loa dưới) -->
+                            <button type="button" id="btn-print-layout-4-mix" onclick="setStandeePrintLayout('4-mix')"
+                                class="p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-emerald-500 bg-emerald-50/80 text-emerald-900 shadow-sm font-bold cursor-pointer relative overflow-hidden">
+                                <span class="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[8px] font-extrabold px-1.5 py-0.2 rounded-bl shadow-xs">HOT</span>
+                                <span class="text-base">⭐</span>
+                                <span class="text-xs font-extrabold">4 Hỗn Hợp</span>
+                                <span class="text-[10px] text-emerald-700 font-semibold">2 Standee + 2 Loa</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Card Dimensions & Margins (Section 2) -->
+                    <div class="p-3 bg-gradient-to-br from-amber-50/50 via-slate-50 to-emerald-50/40 rounded-xl border border-amber-200/80 space-y-3 text-xs">
+                        <div class="flex items-center justify-between">
+                            <label class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+                                <span>📐</span> 2. Kích Thước In & Lề Giấy (cm):
+                            </label>
+                            <span id="print-calc-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                                <span>✅</span> <span>Vừa vặn 1 trang A4</span>
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Chiều Rộng Thẻ (cm) -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <label for="print-opt-width-cm" class="font-bold text-slate-700 text-[11px]">Rộng thẻ (cm):</label>
+                                    <span id="print-opt-width-display" class="font-extrabold text-amber-700 font-mono text-[11px]">9.0 cm</span>
+                                </div>
+                                <input type="number" id="print-opt-width-cm" value="9.0" min="5.0" max="19.5" step="0.1"
+                                    oninput="onPrintDimensionChange()" onchange="onPrintDimensionChange()"
+                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-2 focus:ring-amber-500">
+                                <div class="flex flex-wrap items-center gap-1 pt-0.5">
+                                    <span class="text-[10px] text-slate-400 font-medium">Nhanh:</span>
+                                    <button type="button" onclick="setPrintWidthPreset(8.0)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">8.0</button>
+                                    <button type="button" onclick="setPrintWidthPreset(8.5)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">8.5</button>
+                                    <button type="button" onclick="setPrintWidthPreset(9.0)" class="px-1.5 py-0.5 bg-amber-100 border border-amber-300 rounded text-[10px] font-bold text-amber-900 hover:bg-amber-200 cursor-pointer">9.0</button>
+                                    <button type="button" onclick="setPrintWidthPreset(9.5)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">9.5</button>
+                                    <button type="button" onclick="setPrintWidthPreset('max')" class="px-1.5 py-0.5 bg-emerald-100 border border-emerald-300 rounded text-[10px] font-bold text-emerald-800 hover:bg-emerald-200 cursor-pointer">Tối đa</button>
+                                </div>
+                            </div>
+
+                            <!-- Lề Giấy (cm) -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <label for="print-opt-margin-cm" class="font-bold text-slate-700 text-[11px]">Lề in (cm):</label>
+                                    <span id="print-opt-margin-display" class="font-extrabold text-blue-700 font-mono text-[11px]">0.7 cm</span>
+                                </div>
+                                <input type="number" id="print-opt-margin-cm" value="0.7" min="0.3" max="3.0" step="0.1"
+                                    oninput="onPrintDimensionChange()" onchange="onPrintDimensionChange()"
+                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500">
+                                <div class="flex flex-wrap items-center gap-1 pt-0.5">
+                                    <span class="text-[10px] text-slate-400 font-medium">Lề:</span>
+                                    <button type="button" onclick="setPrintMarginPreset(0.5)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">0.5</button>
+                                    <button type="button" onclick="setPrintMarginPreset(0.7)" class="px-1.5 py-0.5 bg-blue-100 border border-blue-300 rounded text-[10px] font-bold text-blue-900 hover:bg-blue-200 cursor-pointer">0.7</button>
+                                    <button type="button" onclick="setPrintMarginPreset(1.0)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">1.0</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Realtime Calculated Dimension Feedback -->
+                        <div id="print-calc-info" class="p-2 bg-white/95 rounded-lg border border-slate-200 text-[11px] text-slate-600 space-y-0.5 font-mono leading-relaxed">
+                            <!-- Populated dynamically by updateStandeeMiniPreview -->
                         </div>
                     </div>
 
                     <!-- Additional Options -->
                     <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5 text-xs">
-                        <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">2. Tuỳ chọn in ấn nâng cao:</label>
+                        <label class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider">3. Tuỳ chọn in ấn nâng cao:</label>
                         <div class="flex items-center gap-2">
                             <input type="checkbox" id="print-opt-cut-lines" checked onchange="updateStandeeMiniPreview()"
                                 class="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500">
@@ -523,7 +586,7 @@
                             </label>
                         </div>
                         <div class="flex items-center gap-2">
-                            <input type="checkbox" id="print-opt-header-footer" checked
+                            <input type="checkbox" id="print-opt-header-footer" checked onchange="updateStandeeMiniPreview()"
                                 class="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500">
                             <label for="print-opt-header-footer" class="font-semibold text-slate-700 cursor-pointer select-none">
                                 🏛️ Kèm thông tin Quỹ & thời gian lập ở chân trang
@@ -4970,7 +5033,7 @@
             <p class="text-slate-500 text-[10px] flex items-center justify-center gap-2">
                 <span>Công cụ hỗ trợ công việc nội bộ</span>
                 <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
-                <span id="app-version-badge" class=" text-emerald-400 font-bold">v2026.08.02-v34.00</span>
+                <span id="app-version-badge" class=" text-emerald-400 font-bold">v2026.08.03-v35.00</span>
             </p>
         </div>
     </footer>
@@ -5010,7 +5073,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.08.02-v34.00';
+        const CURRENT_APP_VERSION = 'v2026.08.03-v35.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -5057,7 +5120,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2026.08.02-v34.00';
+                        const CACHE_NAME = 'qtd-tools-cache-v2026.08.03-v35.00';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -11891,8 +11954,10 @@ async function downloadDocPDFClientSide(mode) {
             }
         }
 
-        /* --- Hệ Thống In Ấn Khổ A4 Chuẩn Cho Standee & QR Loa (1, 2, 4 Ảnh Giữ Nguyên Tỷ Lệ) --- */
+        /* --- Hệ Thống In Ấn Khổ A4 Chuẩn: Tùy Chỉnh cm, Lề Giấy & In Hỗn Hợp Standee + QR Loa (Bảo Toàn Tỷ Lệ & Tuyệt Đối Không Tràn Trang) --- */
         let activeStandeePrintLayout = 1;
+        const STANDEE_ASPECT_RATIO = 1643 / 1087; // 1.5115
+        const QRLOA_ASPECT_RATIO = 1092 / 1088;   // 1.0037
 
         function openStandeePrintModal() {
             const modal = document.getElementById('modal-standee-print-a4') || document.getElementById('standee-print-modal');
@@ -11907,7 +11972,7 @@ async function downloadDocPDFClientSide(mode) {
             }
             modal.classList.remove('hidden');
             setStandeePrintLayout(activeStandeePrintLayout || 1);
-            updateStandeeMiniPreview();
+            onPrintDimensionChange();
         }
 
         function closeStandeePrintModal() {
@@ -11917,30 +11982,243 @@ async function downloadDocPDFClientSide(mode) {
 
         function setStandeePrintLayout(layout) {
             activeStandeePrintLayout = layout;
-            [1, 2, 4].forEach(n => {
-                const btn = document.getElementById(`btn-print-layout-${n}`) || document.getElementById(`print-layout-btn-${n}`);
+            const layoutKeys = [1, 2, 4, '4-mix'];
+            layoutKeys.forEach(key => {
+                const btn = document.getElementById(`btn-print-layout-${key}`);
                 if (btn) {
-                    if (n === layout) {
-                        btn.className = "p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-amber-600 bg-amber-50/80 text-amber-900 shadow-sm font-bold cursor-pointer";
+                    if (key === layout) {
+                        if (key === '4-mix') {
+                            btn.className = "p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-emerald-600 bg-emerald-100/90 text-emerald-950 shadow-md font-bold cursor-pointer relative overflow-hidden";
+                        } else {
+                            btn.className = "p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-amber-600 bg-amber-50/90 text-amber-950 shadow-sm font-bold cursor-pointer relative";
+                        }
                     } else {
-                        btn.className = "p-2.5 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold cursor-pointer";
+                        btn.className = "p-2 rounded-xl border-2 text-center transition flex flex-col items-center justify-center gap-1 border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold cursor-pointer relative";
                     }
                 }
             });
+
+            // Gợi ý kích thước mặc định tối ưu theo từng bố cục
+            const widthInput = document.getElementById('print-opt-width-cm');
+            if (widthInput) {
+                const curVal = parseFloat(widthInput.value) || 9.0;
+                if (layout === 1 && curVal <= 9.5) {
+                    widthInput.value = "14.0";
+                } else if (layout === 2 && (curVal < 8.0 || curVal > 14.0)) {
+                    widthInput.value = "11.0";
+                } else if ((layout === 4 || layout === '4-mix') && curVal > 9.5) {
+                    widthInput.value = "9.0";
+                }
+            }
+
+            onPrintDimensionChange();
+        }
+
+        function setPrintWidthPreset(val) {
+            const widthInput = document.getElementById('print-opt-width-cm');
+            if (!widthInput) return;
+            if (val === 'max') {
+                const geom = calculatePrintGeometry(999);
+                widthInput.value = geom.maxSafeWidthCm.toFixed(1);
+            } else {
+                widthInput.value = Number(val).toFixed(1);
+            }
+            onPrintDimensionChange();
+        }
+
+        function setPrintMarginPreset(val) {
+            const marginInput = document.getElementById('print-opt-margin-cm');
+            if (!marginInput) return;
+            marginInput.value = Number(val).toFixed(1);
+            onPrintDimensionChange();
+        }
+
+        function onPrintDimensionChange() {
+            const widthInput = document.getElementById('print-opt-width-cm');
+            const marginInput = document.getElementById('print-opt-margin-cm');
+            const widthDisplay = document.getElementById('print-opt-width-display');
+            const marginDisplay = document.getElementById('print-opt-margin-display');
+
+            const reqWidth = parseFloat(widthInput?.value) || 9.0;
+            const reqMargin = parseFloat(marginInput?.value) || 0.7;
+
+            if (widthDisplay) widthDisplay.textContent = reqWidth.toFixed(1) + ' cm';
+            if (marginDisplay) marginDisplay.textContent = reqMargin.toFixed(1) + ' cm';
+
             updateStandeeMiniPreview();
         }
 
-        function updateStandeeMiniPreview() {
+        // Tính toán hình học A4 chính xác & cơ chế tự động khống chế không bao giờ tràn trang
+        function calculatePrintGeometry(userWidthCm) {
+            const orient = document.getElementById('print-opt-orientation')?.value || 'portrait';
+            const marginInput = document.getElementById('print-opt-margin-cm');
+            const showFooter = document.getElementById('print-opt-header-footer')?.checked ?? true;
+
+            const marginCm = Math.max(0.3, Math.min(3.0, parseFloat(marginInput?.value) || 0.7));
+            const isLand = (orient === 'landscape');
+
+            const pageW = isLand ? 29.7 : 21.0;
+            const pageH = isLand ? 21.0 : 29.7;
+            const footerH = showFooter ? 0.45 : 0.05;
+
+            const availW = Math.max(5.0, pageW - (marginCm * 2));
+            const availH = Math.max(5.0, pageH - (marginCm * 2) - footerH);
+
+            const isCurrentSingle = (typeof currentStandeeMode === 'undefined' || currentStandeeMode === 'single');
+            const activeRatio = isCurrentSingle ? STANDEE_ASPECT_RATIO : QRLOA_ASPECT_RATIO;
+
+            let maxSafeW = availW;
+            let effW = Math.max(4.0, userWidthCm || 9.0);
+            let effH1 = 0;
+            let effH2 = 0;
+            let totalContentH = 0;
+            let totalContentW = 0;
+            const gap = 0.5; // cm
+
+            if (activeStandeePrintLayout === 1) {
+                const maxByHeight = availH / activeRatio;
+                maxSafeW = Math.min(availW, maxByHeight);
+                effW = Math.min(effW, maxSafeW);
+                effH1 = effW * activeRatio;
+                totalContentH = effH1;
+                totalContentW = effW;
+            } else if (activeStandeePrintLayout === 2) {
+                if (isLand) {
+                    const maxByHeight = availH / activeRatio;
+                    const maxByWidth = (availW - gap) / 2;
+                    maxSafeW = Math.min(maxByWidth, maxByHeight);
+                    effW = Math.min(effW, maxSafeW);
+                    effH1 = effW * activeRatio;
+                    totalContentH = effH1;
+                    totalContentW = (effW * 2) + gap;
+                } else {
+                    const maxByWidth = availW;
+                    const maxByHeight = (availH - gap) / (2 * activeRatio);
+                    maxSafeW = Math.min(maxByWidth, maxByHeight);
+                    effW = Math.min(effW, maxSafeW);
+                    effH1 = effW * activeRatio;
+                    totalContentH = (effH1 * 2) + gap;
+                    totalContentW = effW;
+                }
+            } else if (activeStandeePrintLayout === 4) {
+                const maxByWidth = (availW - gap) / 2;
+                const maxByHeight = (availH - gap) / (2 * activeRatio);
+                maxSafeW = Math.min(maxByWidth, maxByHeight);
+                effW = Math.min(effW, maxSafeW);
+                effH1 = effW * activeRatio;
+                totalContentH = (effH1 * 2) + gap;
+                totalContentW = (effW * 2) + gap;
+            } else if (activeStandeePrintLayout === '4-mix') {
+                // 2 Standee trên + 2 QR Loa dưới
+                const maxByWidth = (availW - gap) / 2;
+                const maxByHeight = (availH - gap) / (STANDEE_ASPECT_RATIO + QRLOA_ASPECT_RATIO);
+                maxSafeW = Math.min(maxByWidth, maxByHeight);
+                effW = Math.min(effW, maxSafeW);
+                effH1 = effW * STANDEE_ASPECT_RATIO;
+                effH2 = effW * QRLOA_ASPECT_RATIO;
+                totalContentH = effH1 + effH2 + gap;
+                totalContentW = (effW * 2) + gap;
+            }
+
+            const isOverflow = (effW > maxSafeW + 0.05);
+
+            return {
+                marginCm,
+                availW,
+                availH,
+                pageW,
+                pageH,
+                effW,
+                effH1,
+                effH2,
+                maxSafeWidthCm: maxSafeW,
+                totalContentW,
+                totalContentH,
+                isOverflow,
+                isLand,
+                activeRatio
+            };
+        }
+
+        // Tạo hoặc lấy ảnh chất lượng cao của cả Standee và QR Loa
+        async function getCardImageData(mode) {
+            return new Promise((resolve) => {
+                const isSingle = (mode === 'standee' || mode === 'single');
+                const canvas = isSingle 
+                    ? document.getElementById('standee-preview-canvas')
+                    : document.getElementById('standee-loa-preview-canvas');
+
+                if (canvas && canvas.width > 0) {
+                    try {
+                        const url = canvas.toDataURL('image/jpeg', 0.94);
+                        if (url && url.length > 500) return resolve(url);
+                    } catch (e) { }
+                }
+
+                // Render offscreen canvas nếu chưa sẵn sàng
+                const offscreen = document.createElement('canvas');
+                if (isSingle) {
+                    const name = document.getElementById('std-name')?.value || '';
+                    const alias = (document.getElementById('std-alias')?.value || '').trim();
+                    const acc = formatCoopbankAccount((document.getElementById('std-acc')?.value || '380020').trim());
+                    const colorName = getEffectiveStandeeColor('std-color-name', '#003b7a');
+                    const colorInfo = getEffectiveStandeeColor('std-color-info', '#d97706');
+                    renderStandeeCanvasToTarget(offscreen, name, alias, acc, colorName, colorInfo, function (resC) {
+                        try { resolve(resC.toDataURL('image/jpeg', 0.94)); } catch (e) { resolve(''); }
+                    });
+                } else {
+                    const name = document.getElementById('loa-name')?.value || '';
+                    const alias = (document.getElementById('loa-alias')?.value || '').trim();
+                    const acc = formatCoopbankAccount((document.getElementById('loa-acc')?.value || '380020').trim());
+                    const colorName = getEffectiveStandeeColor('loa-color-name', '#003b7a');
+                    const colorAcc = getEffectiveStandeeColor('loa-color-acc', '#0f172a');
+                    renderQRLoaCanvasToTarget(offscreen, name, alias, acc, colorName, colorAcc, function (resC) {
+                        try { resolve(resC.toDataURL('image/jpeg', 0.94)); } catch (e) { resolve(''); }
+                    });
+                }
+            });
+        }
+
+        async function updateStandeeMiniPreview() {
             const container = document.getElementById('mini-a4-content');
             const sheet = document.getElementById('mini-a4-sheet');
             const desc = document.getElementById('mini-a4-desc');
-            const previewCanvas = document.getElementById('standee-preview-canvas');
-            if (!container || !previewCanvas) return;
+            const calcInfo = document.getElementById('print-calc-info');
+            const statusBadge = document.getElementById('print-calc-status-badge');
+            const widthInput = document.getElementById('print-opt-width-cm');
 
-            const dataUrl = previewCanvas.toDataURL('image/jpeg', 0.85);
-            const showCut = document.getElementById('print-opt-cut-lines')?.checked ?? true;
-            const orient = document.getElementById('print-opt-orientation')?.value || 'portrait';
-            const cutStyle = showCut ? 'border: 1px dashed #94a3b8;' : 'border: 1px solid #e2e8f0;';
+            if (!container) return;
+
+            const userW = parseFloat(widthInput?.value) || 9.0;
+            const geom = calculatePrintGeometry(userW);
+            const orient = geom.isLand ? 'landscape' : 'portrait';
+
+            // Cập nhật huy hiệu trạng thái & thông tin kích thước tính toán
+            if (statusBadge) {
+                if (geom.isOverflow) {
+                    statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1";
+                    statusBadge.innerHTML = "<span>⚠️</span> <span>Vượt khổ A4 (Tự động co về " + geom.maxSafeWidthCm.toFixed(1) + "cm)</span>";
+                } else {
+                    statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1";
+                    statusBadge.innerHTML = "<span>✅</span> <span>Vừa vặn 100% trong 1 trang A4</span>";
+                }
+            }
+
+            if (calcInfo) {
+                if (activeStandeePrintLayout === '4-mix') {
+                    calcInfo.innerHTML = `
+                        <div class="flex justify-between"><span>• Rộng thẻ thực in:</span><b>${geom.effW.toFixed(1)} cm</b> (Tối đa: ${geom.maxSafeWidthCm.toFixed(1)} cm)</div>
+                        <div class="flex justify-between"><span>• Cao Standee trên:</span><b>${geom.effH1.toFixed(1)} cm</b> | Cao Loa dưới: <b>${geom.effH2.toFixed(1)} cm</b></div>
+                        <div class="flex justify-between text-slate-500"><span>• Kích thước in khả dụng:</span><span>${geom.availW.toFixed(1)} × ${geom.availH.toFixed(1)} cm</span></div>
+                    `;
+                } else {
+                    calcInfo.innerHTML = `
+                        <div class="flex justify-between"><span>• Rộng thẻ thực in:</span><b>${geom.effW.toFixed(1)} cm</b> (Tối đa: ${geom.maxSafeWidthCm.toFixed(1)} cm)</div>
+                        <div class="flex justify-between"><span>• Chiều cao thẻ:</span><b>${geom.effH1.toFixed(1)} cm</b> (Bảo toàn tỷ lệ)</div>
+                        <div class="flex justify-between text-slate-500"><span>• Kích thước in khả dụng:</span><span>${geom.availW.toFixed(1)} × ${geom.availH.toFixed(1)} cm</span></div>
+                    `;
+                }
+            }
 
             if (sheet) {
                 if (orient === 'landscape') {
@@ -11950,57 +12228,101 @@ async function downloadDocPDFClientSide(mode) {
                 }
             }
 
+            const showCut = document.getElementById('print-opt-cut-lines')?.checked ?? true;
+            const cutStyle = showCut ? 'border: 1px dashed #94a3b8;' : 'border: 1px solid #e2e8f0;';
+
+            const isCurrentSingle = (typeof currentStandeeMode === 'undefined' || currentStandeeMode === 'single');
+            const standeeData = await getCardImageData('standee');
+            const loaData = (activeStandeePrintLayout === '4-mix') ? await getCardImageData('loa') : (isCurrentSingle ? standeeData : await getCardImageData('loa'));
+
+            const primaryImg = isCurrentSingle ? standeeData : loaData;
+
             if (activeStandeePrintLayout === 1) {
                 container.innerHTML = `
                     <div class="w-full h-full flex items-center justify-center p-1">
-                        <img src="${dataUrl}" class="max-h-[190px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}">
+                        <img src="${primaryImg}" class="max-h-[190px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}">
                     </div>
                 `;
-                if (desc) desc.textContent = "Bố cục: 1 ảnh lớn / trang A4 (Cỡ chuẩn đặt bàn)";
+                if (desc) desc.textContent = `Bố cục: 1 ảnh lớn / A4 (Rộng ${geom.effW.toFixed(1)}cm • Cao ${geom.effH1.toFixed(1)}cm)`;
             } else if (activeStandeePrintLayout === 2) {
                 if (orient === 'landscape') {
                     container.innerHTML = `
                         <div class="w-full h-full flex items-center justify-around p-1 gap-1">
-                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
                             ${showCut ? '<div class="h-full border-l border-dashed border-slate-400 mx-0.5 select-none"></div>' : ''}
-                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
                         </div>
                     `;
                 } else {
                     container.innerHTML = `
                         <div class="w-full h-full flex flex-col items-center justify-around p-1 gap-0.5">
-                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
                             ${showCut ? '<div class="w-full border-t border-dashed border-slate-400 my-0.5 text-[8px] text-center text-slate-400 font-mono select-none">✂ - - - - - ✂</div>' : ''}
-                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
                         </div>
                     `;
                 }
-                if (desc) desc.textContent = "Bố cục: 2 ảnh / trang A4 (Giữ nguyên tỷ lệ, tiết kiệm giấy)";
+                if (desc) desc.textContent = `Bố cục: 2 ảnh / A4 (Rộng ${geom.effW.toFixed(1)}cm • Tiết kiệm giấy)`;
             } else if (activeStandeePrintLayout === 4) {
                 container.innerHTML = `
                     <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1 relative" style="place-items: center;">
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${dataUrl}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
                         ${showCut ? '<div class="absolute left-1/2 top-0 bottom-0 border-l border-dashed border-slate-300 pointer-events-none"></div><div class="absolute top-1/2 left-0 right-0 border-t border-dashed border-slate-300 pointer-events-none"></div>' : ''}
                     </div>
                 `;
-                if (desc) desc.textContent = "Bố cục: 4 ảnh / trang A4 (Ngang chuẩn 90mm, lề 7mm, chuẩn Standee)";
+                if (desc) desc.textContent = `Bố cục: 4 ảnh cùng loại / A4 (Rộng ${geom.effW.toFixed(1)}cm)`;
+            } else if (activeStandeePrintLayout === '4-mix') {
+                container.innerHTML = `
+                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1 relative" style="place-items: center;">
+                        <!-- Top 2 Standee -->
+                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
+                            <span class="text-[7px] text-amber-800 font-bold leading-none mb-0.5">Standee 1</span>
+                            <img src="${standeeData}" class="max-h-[80px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
+                            <span class="text-[7px] text-amber-800 font-bold leading-none mb-0.5">Standee 2</span>
+                            <img src="${standeeData}" class="max-h-[80px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
+                        </div>
+                        <!-- Bottom 2 QR Loa -->
+                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
+                            <span class="text-[7px] text-purple-800 font-bold leading-none mb-0.5">QR Loa 1</span>
+                            <img src="${loaData}" class="max-h-[70px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
+                            <span class="text-[7px] text-purple-800 font-bold leading-none mb-0.5">QR Loa 2</span>
+                            <img src="${loaData}" class="max-h-[70px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
+                        </div>
+                        ${showCut ? '<div class="absolute left-1/2 top-0 bottom-0 border-l border-dashed border-slate-300 pointer-events-none"></div><div class="absolute top-1/2 left-0 right-0 border-t border-dashed border-slate-300 pointer-events-none"></div>' : ''}
+                    </div>
+                `;
+                if (desc) desc.textContent = `Hỗn hợp: 2 Standee trên (${geom.effH1.toFixed(1)}cm) + 2 Loa dưới (${geom.effH2.toFixed(1)}cm)`;
             }
         }
 
-        function executeStandeePrintA4() {
-            const previewCanvas = document.getElementById('standee-preview-canvas');
-            if (!previewCanvas || previewCanvas.width === 0) {
-                showToast("⚠️ Vui lòng chờ mã QR tạo xong trước khi in.");
+        async function executeStandeePrintA4() {
+            showToast("⏳ Đang chuẩn bị tệp in ấn chất lượng cao...");
+
+            const widthInput = document.getElementById('print-opt-width-cm');
+            const userW = parseFloat(widthInput?.value) || 9.0;
+            const geom = calculatePrintGeometry(userW);
+
+            const isCurrentSingle = (typeof currentStandeeMode === 'undefined' || currentStandeeMode === 'single');
+            const standeeImg = await getCardImageData('standee');
+            const loaImg = (activeStandeePrintLayout === '4-mix') ? await getCardImageData('loa') : (isCurrentSingle ? standeeImg : await getCardImageData('loa'));
+
+            const primaryImg = isCurrentSingle ? standeeImg : loaImg;
+
+            if (!primaryImg) {
+                showToast("⚠️ Vui lòng chờ mã QR tải xong trước khi in.");
                 return;
             }
 
-            const imgData = previewCanvas.toDataURL('image/jpeg', 0.96);
             const showCut = document.getElementById('print-opt-cut-lines')?.checked ?? true;
             const showHeaderFooter = document.getElementById('print-opt-header-footer')?.checked ?? true;
-            const orient = document.getElementById('print-opt-orientation')?.value || 'portrait';
+            const orient = geom.isLand ? 'landscape' : 'portrait';
             const cutLineStyle = showCut 
                 ? 'border: 1px dashed #94a3b8;' 
                 : 'border: none;';
@@ -12009,33 +12331,33 @@ async function downloadDocPDFClientSide(mode) {
             if (activeStandeePrintLayout === 1) {
                 bodyContent = `
                     <div class="page-container page-1 ${orient}">
-                        <div class="card-wrap card-1">
-                            <img src="${imgData}" class="qr-img img-1" style="${cutLineStyle}">
+                        <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                            <img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
                         </div>
                     </div>
                 `;
             } else if (activeStandeePrintLayout === 2) {
-                if (orient === 'landscape') {
+                if (geom.isLand) {
                     bodyContent = `
                         <div class="page-container page-2 landscape">
-                            <div class="card-wrap card-2-land">
-                                <img src="${imgData}" class="qr-img img-2-land" style="${cutLineStyle}">
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                                <img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
                             </div>
                             ${showCut ? '<div class="cut-guide-v"><span>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</span></div>' : ''}
-                            <div class="card-wrap card-2-land">
-                                <img src="${imgData}" class="qr-img img-2-land" style="${cutLineStyle}">
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                                <img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
                             </div>
                         </div>
                     `;
                 } else {
                     bodyContent = `
                         <div class="page-container page-2 portrait">
-                            <div class="card-wrap card-2">
-                                <img src="${imgData}" class="qr-img img-2" style="${cutLineStyle}">
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                                <img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
                             </div>
                             ${showCut ? '<div class="cut-guide-h"><span>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</span></div>' : ''}
-                            <div class="card-wrap card-2">
-                                <img src="${imgData}" class="qr-img img-2" style="${cutLineStyle}">
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                                <img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
                             </div>
                         </div>
                     `;
@@ -12043,23 +12365,214 @@ async function downloadDocPDFClientSide(mode) {
             } else if (activeStandeePrintLayout === 4) {
                 bodyContent = `
                     <div class="page-container page-4 ${orient}">
-                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
-                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
-                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
-                        <div class="card-wrap card-4"><img src="${imgData}" class="qr-img img-4" style="${cutLineStyle}"></div>
+                        <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;"><img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}"></div>
+                        <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;"><img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}"></div>
+                        <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;"><img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}"></div>
+                        <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;"><img src="${primaryImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}"></div>
                         ${showCut ? '<div class="cut-cross-v"></div><div class="cut-cross-h"></div>' : ''}
+                    </div>
+                `;
+            } else if (activeStandeePrintLayout === '4-mix') {
+                // 2 Standee trên + 2 QR Loa dưới
+                bodyContent = `
+                    <div class="page-container page-4-mix portrait">
+                        <!-- Hàng 1: 2 Standee -->
+                        <div class="mix-row mix-row-standee">
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                                <img src="${standeeImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
+                            </div>
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH1}cm;">
+                                <img src="${standeeImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
+                            </div>
+                        </div>
+
+                        <!-- Hàng 2: 2 QR Loa -->
+                        <div class="mix-row mix-row-loa">
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH2}cm;">
+                                <img src="${loaImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
+                            </div>
+                            <div class="card-wrap" style="width: ${geom.effW}cm; height: ${geom.effH2}cm;">
+                                <img src="${loaImg}" class="qr-img" style="width: 100%; height: 100%; ${cutLineStyle}">
+                            </div>
+                        </div>
+
+                        ${showCut ? '<div class="cut-cross-v"></div><div class="cut-cross-h-mix" style="top: ' + (geom.effH1 + 0.25) + 'cm;"></div>' : ''}
                     </div>
                 `;
             }
 
             const footerHtml = showHeaderFooter ? `
                 <div class="print-footer">
-                    <span>QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ • Dịch Vụ Tài Chính QLApps</span>
+                    <span>QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ • Cổng Dịch Vụ QLApps (Bản in: ${geom.effW.toFixed(1)}cm • Lề: ${geom.marginCm.toFixed(1)}cm)</span>
                     <span>Khổ A4 Chuẩn • In lúc: ${new Date().toLocaleString('vi-VN')}</span>
                 </div>
             ` : '';
 
-            const printHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>In Standee QR A4 - QTDND Yen Tho</title><style>@page{size:A4 ' + orient + ';margin:7mm;}*{box-sizing:border-box;margin:0;padding:0;}html,body{width:100%;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#ffffff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-container{margin:0 auto;display:flex;box-sizing:border-box;overflow:hidden;background:#ffffff;position:relative;page-break-after:avoid;page-break-inside:avoid;break-inside:avoid;break-after:avoid;}.page-container.portrait{width:196mm;height:283mm;max-height:283mm;}.page-container.landscape{width:283mm;height:196mm;max-height:196mm;}.card-wrap{display:flex;align-items:center;justify-content:center;position:relative;box-sizing:border-box;overflow:hidden;}.qr-img{display:block;width:auto !important;height:auto !important;object-fit:contain !important;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;border-radius:3px;box-sizing:border-box;}.page-1{align-items:center;justify-content:center;}.card-1{width:100%;height:100%;}.page-1.portrait .img-1{max-width:190mm !important;max-height:274mm !important;}.page-1.landscape .img-1{max-width:274mm !important;max-height:184mm !important;}.page-2.portrait{flex-direction:column;justify-content:space-between;}.card-2{width:100%;height:136mm;}.img-2{max-width:190mm !important;max-height:133mm !important;}.cut-guide-h{width:100%;height:6mm;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-2.landscape{flex-direction:row;justify-content:space-between;}.card-2-land{width:138mm;height:100%;}.img-2-land{max-width:135mm !important;max-height:184mm !important;}.cut-guide-v{width:6mm;height:100%;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:10px;color:#94a3b8;font-family:monospace;user-select:none;}.page-4.portrait{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:196mm;height:283mm;max-height:283mm;position:relative;box-sizing:border-box;}.page-4.portrait .card-4{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}.page-4.portrait .img-4{max-width:92mm !important;max-height:135mm !important;}.page-4.landscape{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4mm;width:283mm;height:196mm;max-height:196mm;position:relative;box-sizing:border-box;}.page-4.landscape .card-4{width:100%;height:94mm;display:flex;align-items:center;justify-content:center;}.page-4.landscape .img-4{max-width:135mm !important;max-height:92mm !important;}.cut-cross-v{position:absolute;left:50%;top:0;bottom:0;width:0;border-left:1px dashed #94a3b8;transform:translateX(-50%);pointer-events:none;z-index:10;}.cut-cross-h{position:absolute;top:50%;left:0;right:0;height:0;border-top:1px dashed #94a3b8;transform:translateY(-50%);pointer-events:none;z-index:10;}.print-footer{position:absolute;bottom:0.5mm;left:0;right:0;display:flex;justify-content:space-between;font-size:7.5px;color:#94a3b8;font-family:Arial,sans-serif;border-top:1px solid #e2e8f0;padding-top:0.5mm;line-height:1;box-sizing:border-box;}</style></head><body>' + bodyContent + footerHtml + '</body></html>';
+            const printHtml = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>In Standee & QR Loa A4 Chuẩn - QTDND Yên Thọ</title>
+    <style>
+        @page {
+            size: A4 ${orient};
+            margin: ${geom.marginCm}cm;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .page-container {
+            width: ${geom.availW}cm;
+            height: ${geom.availH}cm;
+            max-width: ${geom.availW}cm;
+            max-height: ${geom.availH}cm;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+            background: #ffffff;
+            display: flex;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            break-after: avoid;
+        }
+        .card-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .qr-img {
+            display: block;
+            object-fit: contain !important;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        .page-1 {
+            align-items: center;
+            justify-content: center;
+        }
+        .page-2.portrait {
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .page-2.landscape {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .cut-guide-h {
+            width: 100%;
+            height: 5mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #94a3b8;
+            font-family: monospace;
+            user-select: none;
+        }
+        .cut-guide-v {
+            width: 5mm;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            font-size: 10px;
+            color: #94a3b8;
+            font-family: monospace;
+            user-select: none;
+        }
+        .page-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            place-items: center;
+            align-content: space-around;
+            justify-content: space-around;
+        }
+        .page-4-mix {
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .mix-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .cut-cross-v {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            border-left: 1px dashed #94a3b8;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 10;
+        }
+        .cut-cross-h {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-top: 1px dashed #94a3b8;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 10;
+        }
+        .cut-cross-h-mix {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-top: 1px dashed #94a3b8;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .print-footer {
+            position: absolute;
+            bottom: 0.5mm;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 7.5px;
+            color: #94a3b8;
+            font-family: Arial, sans-serif;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 0.5mm;
+            line-height: 1;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    ${bodyContent}
+    ${footerHtml}
+</body>
+</html>`;
 
             let iframe = document.getElementById('doc-print-iframe');
             if (!iframe) {
@@ -12074,7 +12587,7 @@ async function downloadDocPDFClientSide(mode) {
                 document.body.appendChild(iframe);
             }
 
-            showToast("🖨️ Đang nạp trang in chuẩn khổ A4...");
+            showToast("🖨️ Đang mở lệnh in khổ A4...");
             closeStandeePrintModal();
 
             const doc = iframe.contentWindow.document;
