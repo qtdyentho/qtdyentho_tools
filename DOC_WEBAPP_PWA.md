@@ -1,6 +1,6 @@
 # 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ — BỘ CÔNG CỤ NGHIỆP VỤ QTD_TOOLS
 > **Tài Liệu Chi Tiết Chức Năng WebApp Offline (PWA)**  
-> **Phiên bản:** `v2026.07.30-v22.00`  
+> **Phiên bản:** `v2026.08.02-v34.00`  
 > **Phát triển cho:** Cán bộ nghiệp vụ Quỹ Tín Dụng Nhân Dân Yên Thọ
 
 ---

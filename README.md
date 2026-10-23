@@ -1,4 +1,4 @@
-# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.08.01-v33.00)
+# 🏢 QUỸ TÍN DỤNG NHÂN DÂN YÊN THỌ - DỰ ÁN QTD_TOOLS (v2026.08.02-v34.00)
 
 > **Bộ Công Cụ Nghiệp Vụ Tín Dụng, Tiền Gửi & Giám Sát Tài Chính Ngoại Tuyến (Offline PWA WebApp)**  
 > **Repository chính thức:** [https://github.com/qtdyentho/qtdyentho_tools.git](https://github.com/qtdyentho/qtdyentho_tools.git)  
@@ -14,7 +14,7 @@
 
 ---
 
-## 🌟 CÁC PHÂN HỆ VÀ TÍNH NĂNG CHÍNH (v2026.08.01-v33.00)
+## 🌟 CÁC PHÂN HỆ VÀ TÍNH NĂNG CHÍNH (v2026.08.02-v34.00)
 
 ### 1. 📸 Phân Hệ Quét, Căn Chỉnh 4 Góc & Nén Tài Liệu Hồ Sơ PRO (Scan & ZIP PRO Engine)
 * **Nắn phẳng 3D Homography Matrix (Perspective Warp)**: Tự động/thủ công kéo thả 4 chốt góc neon Emerald nắn tài liệu nghiêng thành trang A4 vuông vắn trong **55ms**.
@@ -46,7 +46,7 @@
 * **Đánh giá hiệu quả kinh doanh & Xếp hạng**: Tự động tính toán ROA, ROE, CIR (Chi phí hoạt động/Tổng thu nhập) và chấm điểm xếp hạng an toàn QTDND theo TT 42/2016/TT-NHNN (sửa đổi bởi TT 05/2021/TT-NHNN).
 
 ### 6. 🔄 Cài Đặt PWA Màn Hình Chính & Tự Động Cập Nhật
-* Hằng số phiên bản duy nhất `CURRENT_APP_VERSION = 'v2026.08.01-v33.00'` kết nối đa nguồn GitHub Raw và Vercel Production.
+* Hằng số phiên bản duy nhất `CURRENT_APP_VERSION = 'v2026.08.02-v34.00'` kết nối đa nguồn GitHub Raw và Vercel Production.
 
 ---
 

@@ -2,7 +2,7 @@
 *(DEVELOPMENT GUIDELINES & BEST PRACTICES PREVENTING RECURRING BUGS)*
 
 **Tên dự án**: `QTD_Tools` (Quỹ Tín Dụng Nhân Dân Yên Thọ)  
-**Phiên bản đồng bộ hiện tại**: `v2026.07.30-v23.00`  
+**Phiên bản đồng bộ hiện tại**: `v2026.08.02-v34.00`  
 **Môi trường Production Vercel**: [https://qtdyentho-tools.vercel.app/](https://qtdyentho-tools.vercel.app/)  
 **Môi trường Cục bộ chính**: `file:///D:/MrTiger/L%C6%B0%C6%A1ng%20BHXH/QTD_Tools/PWA_QTDYENTHO.html`  
 
@@ -19,7 +19,7 @@ Tài liệu này tổng hợp toàn bộ các bài học kinh nghiệm, quy tắ
 ### 1.1. Hằng số phiên bản duy nhất (Single Version Constant)
 * **Quy tắc**: Mọi tệp trong dự án phải sử dụng duy nhất một chuỗi định danh phiên bản toàn cục:
   ```javascript
-  const CURRENT_APP_VERSION = 'v2026.07.30-v23.00';
+  const CURRENT_APP_VERSION = 'v2026.08.02-v34.00';
   ```
 * **Không được phép**: Thay đổi số phiên bản ở một tệp mà quên cập nhật ở tệp còn lại (ví dụ: `PWA_QTDYENTHO.html` sửa phiên bản nhưng `index.html` hay Service Worker giữ nguyên bản cũ).
 * **Đồng bộ tự động**: Khi ứng dụng khởi chạy (`DOMContentLoaded`), tự động gán `CURRENT_APP_VERSION` vào nhãn `.app-version-lbl` và `#app-version-badge`. Service Worker cache bắt buộc dùng hằng số `qtd-tools-cache-` ghép với phiên bản này.

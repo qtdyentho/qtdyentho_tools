@@ -1,7 +1,7 @@
 # 📚 BỘ GHI NHỚ NĂNG LỰC TÍNH NĂNG VÀ BẢNG RÀ SOÁT LỖI TẬN GỐC (SYSTEM TECHNICAL MEMORY & BUGFIXES MATRIX)
 
 **Tên dự án**: `QTD_Tools` (Quỹ Tín Dụng Nhân Dân Yên Thọ)  
-**Phiên bản đồng bộ toàn hệ thống**: `v2026.07.30-v23.00`  
+**Phiên bản đồng bộ toàn hệ thống**: `v2026.08.02-v34.00`  
 **Địa chỉ Vercel Production**: [https://qtdyentho-tools.vercel.app/](https://qtdyentho-tools.vercel.app/)  
 **Môi trường chạy cục bộ**: `file:///D:/MrTiger/L%C6%B0%C6%A1ng%20BHXH/QTD_Tools/PWA_QTDYENTHO.html`  
 **Kiến trúc hệ thống**: Single-File Offline PWA (HTML5, Vanilla CSS3, JavaScript ES6+ pure client-side)  
@@ -57,7 +57,7 @@
 
 ### 5. 🔄 Phân Hệ Cập Nhật Tự Động PWA & Đồng Bộ Version
 * **Nguồn sự thật duy nhất (Single Source of Truth)**:  
-  Hằng số phiên bản `CURRENT_APP_VERSION = 'v2026.07.30-v23.00'` được đồng bộ 100% giữa thẻ UI badge, Service Worker cache (`qtd-tools-cache-v2026.07.30-v23.00`), và kết quả trả về khi kiểm tra update.
+  Hằng số phiên bản `CURRENT_APP_VERSION = 'v2026.08.02-v34.00'` được đồng bộ 100% giữa thẻ UI badge, Service Worker cache (`qtd-tools-cache-v2026.08.02-v34.00`), và kết quả trả về khi kiểm tra update.
 * Tự động kiểm tra bản cập nhật đa nguồn (`fetchLatestHtmlFromGitHub()`, Vercel Production, GitHub Raw).
 
 ---
@@ -72,7 +72,7 @@
 | **4** | **Kính lúp phóng to bị đen xì / vỡ ảnh ở góc trên-trái** | Khi kéo chốt góc sát lề trên-trái, phép tính `pos.x - srcW / 2` cho ra **tọa độ âm** (`srcX < 0`). Lệnh `ctx.drawImage` bị trình duyệt hủy bỏ. | Bổ sung hàm chặn tọa độ an toàn `Math.max(0, Math.min(imgW - srcW, pos.x - srcW / 2))`. Kính lúp nay phóng to **x2.5 lần** sắc nét ở mọi tọa độ góc. |
 | **5** | **Bị Popup Blocker chặn cửa sổ in/xuất PDF A4** | Hàm xuất PDF cũ dùng `window.open('')` sau khi chạy `await` bất đồng bộ, bị cơ chế bảo mật trình duyệt chặn vì không phải hành vi click trực tiếp. | Thêm khung in ẩn tĩnh `<iframe id="doc-print-iframe"></iframe>`. Truyền HTML vào iframe và gọi `iframe.contentWindow.print()` trực tiếp, bypassing 100% Popup Blocker. |
 | **6** | **Khung nắn 4 góc bị đen xì toàn bộ (Black Canvas)** | Đối tượng `Image` chưa tải xong dữ liệu bitmap (`img.complete === false`) khi canvas gọi `drawImage`. | Tạo hàm `getLoadedDocImage(callback)` chờ giải mã ảnh xong mới vẽ. Tô nền trắng `ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h)` làm lớp base đầu tiên. |
-| **7** | **Hệ thống báo cập nhật phiên bản sai lệch (`v22.00` vs `v23.00`)** | Mã nguồn tồn tại 3 chuỗi hằng số phiên bản khác nhau ở các dòng HTML và Service Worker. | Thống nhất 1 hằng số duy nhất `CURRENT_APP_VERSION = 'v2026.07.30-v23.00'` trên toàn bộ tệp `PWA_QTDYENTHO.html`, `index.html` và Service Worker cache. |
+| **7** | **Hệ thống báo cập nhật phiên bản sai lệch (`v22.00` vs `v23.00`)** | Mã nguồn tồn tại 3 chuỗi hằng số phiên bản khác nhau ở các dòng HTML và Service Worker. | Thống nhất 1 hằng số duy nhất `CURRENT_APP_VERSION = 'v2026.08.02-v34.00'` trên toàn bộ tệp `PWA_QTDYENTHO.html`, `index.html` và Service Worker cache. |
 | **8** | **Nội dung Memo VietQR bị dư từ `CCCD`, `KH`** | Chuỗi template memo VietQR cũ chứa tiền tố cứng `CCCD KH GUITK...`. | Loại bỏ từ thừa `CCCD`, `KH`. Chuẩn hóa định dạng memo: `[HỌ TÊN] [CCCD] GUITK [Kỳ hạn]T [Hình thức nhận lãi] Địa chỉ`. |
 
 ---
