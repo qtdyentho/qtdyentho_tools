@@ -23,7 +23,7 @@
     <!-- Automatic Version Purger & Service Worker Cache-Buster -->
     <script>
         (function autoPurgeStaleCaches() {
-            const CURRENT_APP_VERSION = 'v2026.08.03-v35.00';
+            const CURRENT_APP_VERSION = 'v2026.08.04-v36.00';
             const lastVersion = localStorage.getItem('qtdnd_app_version');
 
             if (lastVersion !== CURRENT_APP_VERSION) {
@@ -531,16 +531,33 @@
                             </span>
                         </div>
 
+                        <!-- Prominent Overflow Warning Banner -->
+                        <div id="print-overflow-banner" class="hidden p-2.5 bg-rose-50 border border-rose-300 rounded-xl text-rose-900 space-y-1.5 transition-all">
+                            <div class="flex items-start gap-2">
+                                <span class="text-base flex-shrink-0">⚠️</span>
+                                <div class="text-[11px] leading-snug">
+                                    <p class="font-bold text-rose-800">CẢNH BÁO: Kích thước vượt quá khổ giấy A4!</p>
+                                    <p class="text-rose-700 text-[10px] mt-0.5" id="print-overflow-msg">Chiều rộng đã chọn sẽ làm tài liệu bị nhảy sang trang thứ 2. Hệ thống đã tự động khóa ở mức an toàn tối đa.</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end pt-1">
+                                <button type="button" id="btn-fix-overflow" onclick="fixPrintOverflow()"
+                                    class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-extrabold shadow-sm flex items-center gap-1 cursor-pointer transition">
+                                    <span>🛡️</span> <span id="btn-fix-overflow-label">Tự động chỉnh về mức an toàn</span>
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="grid grid-cols-2 gap-3">
                             <!-- Chiều Rộng Thẻ (cm) -->
                             <div class="space-y-1.5">
                                 <div class="flex items-center justify-between">
                                     <label for="print-opt-width-cm" class="font-bold text-slate-700 text-[11px]">Rộng thẻ (cm):</label>
-                                    <span id="print-opt-width-display" class="font-extrabold text-amber-700 font-mono text-[11px]">9.0 cm</span>
+                                    <span id="print-opt-width-display" class="font-extrabold text-amber-800 text-[11px] tabular-nums">9.0 cm</span>
                                 </div>
                                 <input type="number" id="print-opt-width-cm" value="9.0" min="5.0" max="19.5" step="0.1"
                                     oninput="onPrintDimensionChange()" onchange="onPrintDimensionChange()"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-2 focus:ring-amber-500">
+                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-2 focus:ring-amber-500 tabular-nums">
                                 <div class="flex flex-wrap items-center gap-1 pt-0.5">
                                     <span class="text-[10px] text-slate-400 font-medium">Nhanh:</span>
                                     <button type="button" onclick="setPrintWidthPreset(8.0)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">8.0</button>
@@ -555,11 +572,11 @@
                             <div class="space-y-1.5">
                                 <div class="flex items-center justify-between">
                                     <label for="print-opt-margin-cm" class="font-bold text-slate-700 text-[11px]">Lề in (cm):</label>
-                                    <span id="print-opt-margin-display" class="font-extrabold text-blue-700 font-mono text-[11px]">0.7 cm</span>
+                                    <span id="print-opt-margin-display" class="font-extrabold text-blue-800 text-[11px] tabular-nums">0.7 cm</span>
                                 </div>
                                 <input type="number" id="print-opt-margin-cm" value="0.7" min="0.3" max="3.0" step="0.1"
                                     oninput="onPrintDimensionChange()" onchange="onPrintDimensionChange()"
-                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500">
+                                    class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg font-bold text-xs bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 tabular-nums">
                                 <div class="flex flex-wrap items-center gap-1 pt-0.5">
                                     <span class="text-[10px] text-slate-400 font-medium">Lề:</span>
                                     <button type="button" onclick="setPrintMarginPreset(0.5)" class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">0.5</button>
@@ -569,8 +586,8 @@
                             </div>
                         </div>
 
-                        <!-- Realtime Calculated Dimension Feedback -->
-                        <div id="print-calc-info" class="p-2 bg-white/95 rounded-lg border border-slate-200 text-[11px] text-slate-600 space-y-0.5 font-mono leading-relaxed">
+                        <!-- Realtime Calculated Dimension Feedback (100% Be Vietnam Pro + tabular-nums) -->
+                        <div id="print-calc-info" class="p-2.5 bg-white/95 rounded-lg border border-slate-200 text-[11px] text-slate-700 space-y-1 leading-relaxed tabular-nums">
                             <!-- Populated dynamically by updateStandeeMiniPreview -->
                         </div>
                     </div>
@@ -5033,7 +5050,7 @@
             <p class="text-slate-500 text-[10px] flex items-center justify-center gap-2">
                 <span>Công cụ hỗ trợ công việc nội bộ</span>
                 <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
-                <span id="app-version-badge" class=" text-emerald-400 font-bold">v2026.08.03-v35.00</span>
+                <span id="app-version-badge" class=" text-emerald-400 font-bold">v2026.08.04-v36.00</span>
             </p>
         </div>
     </footer>
@@ -5073,7 +5090,7 @@
         // Purge any legacy localStorage HTML cache to prevent duplicate DOM rendering or stale code execution
         try { localStorage.removeItem('qtdnd_cached_app_html'); } catch (e) { }
 
-        const CURRENT_APP_VERSION = 'v2026.08.03-v35.00';
+        const CURRENT_APP_VERSION = 'v2026.08.04-v36.00';
         const FIXED_ACC_NUMBER = "3800001234567899";
         const FIXED_ACC_NAME = "QUY TIN DUNG NHAN DAN YEN THO";
 
@@ -5120,7 +5137,7 @@
                 // 2. Đăng ký Inline Service Worker (Cache-First Offline Strategy)
                 if ('serviceWorker' in navigator) {
                     const swScript = `
-                        const CACHE_NAME = 'qtd-tools-cache-v2026.08.03-v35.00';
+                        const CACHE_NAME = 'qtd-tools-cache-v2026.08.04-v36.00';
                         self.addEventListener('install', e => {
                             self.skipWaiting();
                         });
@@ -10753,7 +10770,7 @@ async function downloadDocPDFClientSide(mode) {
                 }
             };
             return {
-                drawQR: function (ctx, text, x, y, size) {
+                drawQR: function (ctx, text, x, y, size, customQuietModules, customRadius) {
                     var qr = null;
                     // Chuẩn VietQR / NAPAS quy định cấp độ sửa lỗi Level M (15%) và Level Q (25%)
                     var levelsToTry = [0, 3, 1]; // 0=Level M (15% VietQR chuẩn), 3=Level Q (25%), 1=Level L (7%)
@@ -10774,13 +10791,23 @@ async function downloadDocPDFClientSide(mode) {
                         return false;
                     }
                     var count = qr.getModuleCount();
-                    // Quiet zone 4 module theo chuẩn ISO 18004
-                    var quietModules = 4;
+                    // Tối ưu quietModules: mặc định 1 module để giảm triệt để khoảng trắng lề ngoài
+                    var quietModules = (typeof customQuietModules === 'number') ? customQuietModules : 1;
                     var totalModules = count + quietModules * 2;
                     var cellSize = size / totalModules;
                     var offsetX = x + quietModules * cellSize;
                     var offsetY = y + quietModules * cellSize;
                     ctx.save();
+
+                    // Bo góc tổng thể cụm mã QR theo khung viền nếu có boRadius
+                    var radius = (typeof customRadius === 'number') ? customRadius : 0;
+                    if (radius > 0) {
+                        ctx.beginPath();
+                        if (ctx.roundRect) ctx.roundRect(x, y, size, size, radius);
+                        else ctx.rect(x, y, size, size);
+                        ctx.clip();
+                    }
+
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(x, y, size, size);
                     ctx.fillStyle = '#000000';
@@ -10897,14 +10924,15 @@ async function downloadDocPDFClientSide(mode) {
                 ctx.fillRect(0, 0, W, H);
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
-                const qrX = 135;
-                const qrY = 173;
-                const qrSize = 818;
+                // Tối ưu kích thước QR Standee: tăng độ phủ, giảm khoảng trắng, bo góc 24px
+                const qrX = 118;
+                const qrY = 156;
+                const qrSize = 852;
 
                 // 100% Offline Vector QR Generation chuẩn EMVCo 247 Co-opBank thuần túy (Chỉ hiện duy nhất Logo Quỹ ở giữa)
                 try {
                     const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean, amountVal);
-                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize, 1, 24);
                 } catch (e) {
                     console.error("Lỗi tạo mã QR Standee vector:", e);
                 }
@@ -11052,14 +11080,15 @@ async function downloadDocPDFClientSide(mode) {
                 ctx.fillRect(0, 0, W, H);
                 ctx.drawImage(bgImg, 0, 0, W, H);
 
-                const qrSize = 710;
-                const qrX = 189;
-                const qrY = 191;
+                // Tối ưu kích thước QR Loa: tăng phủ rộng sát viền xanh, giảm khoảng trắng, bo góc 32px
+                const qrSize = 816;
+                const qrX = 136;
+                const qrY = 138;
 
                 // 100% Offline Vector QR Generation chuẩn EMVCo 247 Co-opBank thuần túy (Chỉ hiện duy nhất Logo Quỹ ở giữa)
                 try {
                     const payload = generateVietQREMVCoPayload("970446", targetAccForQR, memoClean);
-                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize);
+                    QRCodeLib.drawQR(ctx, payload, qrX, qrY, qrSize, 1, 32);
                 } catch (e) {
                     console.error("Lỗi tạo mã QR LOA vector:", e);
                 }
@@ -12048,6 +12077,16 @@ async function downloadDocPDFClientSide(mode) {
             updateStandeeMiniPreview();
         }
 
+        // Tự động điều chỉnh kích thước về mức an toàn tối đa khi người dùng bấm nút cảnh báo
+        function fixPrintOverflow() {
+            const widthInput = document.getElementById('print-opt-width-cm');
+            if (!widthInput) return;
+            const geom = calculatePrintGeometry(999);
+            widthInput.value = geom.maxSafeWidthCm.toFixed(1);
+            showToast("✅ Đã tự động chỉnh kích thước về mức vừa vặn tối đa: " + geom.maxSafeWidthCm.toFixed(1) + " cm");
+            onPrintDimensionChange();
+        }
+
         // Tính toán hình học A4 chính xác & cơ chế tự động khống chế không bao giờ tràn trang
         function calculatePrintGeometry(userWidthCm) {
             const orient = document.getElementById('print-opt-orientation')?.value || 'portrait';
@@ -12068,7 +12107,8 @@ async function downloadDocPDFClientSide(mode) {
             const activeRatio = isCurrentSingle ? STANDEE_ASPECT_RATIO : QRLOA_ASPECT_RATIO;
 
             let maxSafeW = availW;
-            let effW = Math.max(4.0, userWidthCm || 9.0);
+            const rawReqW = Math.max(4.0, userWidthCm || 9.0);
+            let effW = rawReqW;
             let effH1 = 0;
             let effH2 = 0;
             let totalContentH = 0;
@@ -12078,7 +12118,7 @@ async function downloadDocPDFClientSide(mode) {
             if (activeStandeePrintLayout === 1) {
                 const maxByHeight = availH / activeRatio;
                 maxSafeW = Math.min(availW, maxByHeight);
-                effW = Math.min(effW, maxSafeW);
+                effW = Math.min(rawReqW, maxSafeW);
                 effH1 = effW * activeRatio;
                 totalContentH = effH1;
                 totalContentW = effW;
@@ -12087,7 +12127,7 @@ async function downloadDocPDFClientSide(mode) {
                     const maxByHeight = availH / activeRatio;
                     const maxByWidth = (availW - gap) / 2;
                     maxSafeW = Math.min(maxByWidth, maxByHeight);
-                    effW = Math.min(effW, maxSafeW);
+                    effW = Math.min(rawReqW, maxSafeW);
                     effH1 = effW * activeRatio;
                     totalContentH = effH1;
                     totalContentW = (effW * 2) + gap;
@@ -12095,7 +12135,7 @@ async function downloadDocPDFClientSide(mode) {
                     const maxByWidth = availW;
                     const maxByHeight = (availH - gap) / (2 * activeRatio);
                     maxSafeW = Math.min(maxByWidth, maxByHeight);
-                    effW = Math.min(effW, maxSafeW);
+                    effW = Math.min(rawReqW, maxSafeW);
                     effH1 = effW * activeRatio;
                     totalContentH = (effH1 * 2) + gap;
                     totalContentW = effW;
@@ -12104,7 +12144,7 @@ async function downloadDocPDFClientSide(mode) {
                 const maxByWidth = (availW - gap) / 2;
                 const maxByHeight = (availH - gap) / (2 * activeRatio);
                 maxSafeW = Math.min(maxByWidth, maxByHeight);
-                effW = Math.min(effW, maxSafeW);
+                effW = Math.min(rawReqW, maxSafeW);
                 effH1 = effW * activeRatio;
                 totalContentH = (effH1 * 2) + gap;
                 totalContentW = (effW * 2) + gap;
@@ -12113,14 +12153,14 @@ async function downloadDocPDFClientSide(mode) {
                 const maxByWidth = (availW - gap) / 2;
                 const maxByHeight = (availH - gap) / (STANDEE_ASPECT_RATIO + QRLOA_ASPECT_RATIO);
                 maxSafeW = Math.min(maxByWidth, maxByHeight);
-                effW = Math.min(effW, maxSafeW);
+                effW = Math.min(rawReqW, maxSafeW);
                 effH1 = effW * STANDEE_ASPECT_RATIO;
                 effH2 = effW * QRLOA_ASPECT_RATIO;
                 totalContentH = effH1 + effH2 + gap;
                 totalContentW = (effW * 2) + gap;
             }
 
-            const isOverflow = (effW > maxSafeW + 0.05);
+            const isOverflow = (rawReqW > maxSafeW + 0.05);
 
             return {
                 marginCm,
@@ -12128,6 +12168,7 @@ async function downloadDocPDFClientSide(mode) {
                 availH,
                 pageW,
                 pageH,
+                rawReqW,
                 effW,
                 effH1,
                 effH2,
@@ -12186,6 +12227,9 @@ async function downloadDocPDFClientSide(mode) {
             const calcInfo = document.getElementById('print-calc-info');
             const statusBadge = document.getElementById('print-calc-status-badge');
             const widthInput = document.getElementById('print-opt-width-cm');
+            const overflowBanner = document.getElementById('print-overflow-banner');
+            const overflowMsg = document.getElementById('print-overflow-msg');
+            const btnFixLabel = document.getElementById('btn-fix-overflow-label');
 
             if (!container) return;
 
@@ -12193,39 +12237,77 @@ async function downloadDocPDFClientSide(mode) {
             const geom = calculatePrintGeometry(userW);
             const orient = geom.isLand ? 'landscape' : 'portrait';
 
-            // Cập nhật huy hiệu trạng thái & thông tin kích thước tính toán
-            if (statusBadge) {
-                if (geom.isOverflow) {
+            // 1. Cập nhật Banner Cảnh Báo & Huy hiệu Trạng thái
+            if (geom.isOverflow) {
+                if (statusBadge) {
                     statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1";
-                    statusBadge.innerHTML = "<span>⚠️</span> <span>Vượt khổ A4 (Tự động co về " + geom.maxSafeWidthCm.toFixed(1) + "cm)</span>";
-                } else {
+                    statusBadge.innerHTML = "<span>⚠️</span> <span>Vượt khổ A4 (Co về " + geom.maxSafeWidthCm.toFixed(1) + "cm)</span>";
+                }
+                if (overflowBanner) {
+                    overflowBanner.classList.remove('hidden');
+                    if (overflowMsg) {
+                        overflowMsg.innerHTML = 'Kích thước bạn nhập (<b>' + geom.rawReqW.toFixed(1) + ' cm</b>) sẽ làm tràn giấy sang trang thứ 2. Giới hạn tối đa của bố cục này là <b>' + geom.maxSafeWidthCm.toFixed(1) + ' cm</b>.';
+                    }
+                    if (btnFixLabel) {
+                        btnFixLabel.textContent = 'Tự động chỉnh về mức an toàn (' + geom.maxSafeWidthCm.toFixed(1) + ' cm)';
+                    }
+                }
+                if (widthInput) {
+                    widthInput.classList.add('border-rose-500', 'ring-2', 'ring-rose-200');
+                    widthInput.classList.remove('border-slate-300');
+                }
+                if (sheet) {
+                    sheet.classList.add('border-rose-400', 'ring-2', 'ring-rose-200');
+                    sheet.classList.remove('border-slate-300');
+                }
+            } else {
+                if (statusBadge) {
                     statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1";
                     statusBadge.innerHTML = "<span>✅</span> <span>Vừa vặn 100% trong 1 trang A4</span>";
                 }
+                if (overflowBanner) overflowBanner.classList.add('hidden');
+                if (widthInput) {
+                    widthInput.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
+                    widthInput.classList.add('border-slate-300');
+                }
+                if (sheet) {
+                    sheet.classList.remove('border-rose-400', 'ring-2', 'ring-rose-200');
+                    sheet.classList.add('border-slate-300');
+                }
             }
 
+            // 2. Bảng thông tin kích thước (Chuẩn Be Vietnam Pro + tabular-nums)
             if (calcInfo) {
                 if (activeStandeePrintLayout === '4-mix') {
                     calcInfo.innerHTML = `
-                        <div class="flex justify-between"><span>• Rộng thẻ thực in:</span><b>${geom.effW.toFixed(1)} cm</b> (Tối đa: ${geom.maxSafeWidthCm.toFixed(1)} cm)</div>
-                        <div class="flex justify-between"><span>• Cao Standee trên:</span><b>${geom.effH1.toFixed(1)} cm</b> | Cao Loa dưới: <b>${geom.effH2.toFixed(1)} cm</b></div>
-                        <div class="flex justify-between text-slate-500"><span>• Kích thước in khả dụng:</span><span>${geom.availW.toFixed(1)} × ${geom.availH.toFixed(1)} cm</span></div>
+                        <div class="flex justify-between"><span>• Rộng thẻ thực in:</span><b class="text-slate-900">${geom.effW.toFixed(1)} cm</b> <span class="text-slate-500">(Tối đa an toàn: ${geom.maxSafeWidthCm.toFixed(1)} cm)</span></div>
+                        <div class="flex justify-between"><span>• Chiều cao Standee trên:</span><b class="text-amber-800">${geom.effH1.toFixed(1)} cm</b> <span>| Cao Loa dưới:</span> <b class="text-purple-800">${geom.effH2.toFixed(1)} cm</b></div>
+                        <div class="flex justify-between text-slate-500"><span>• Kích thước vùng in A4:</span><span>${geom.availW.toFixed(1)} × ${geom.availH.toFixed(1)} cm (Lề ${geom.marginCm.toFixed(1)} cm)</span></div>
                     `;
                 } else {
                     calcInfo.innerHTML = `
-                        <div class="flex justify-between"><span>• Rộng thẻ thực in:</span><b>${geom.effW.toFixed(1)} cm</b> (Tối đa: ${geom.maxSafeWidthCm.toFixed(1)} cm)</div>
-                        <div class="flex justify-between"><span>• Chiều cao thẻ:</span><b>${geom.effH1.toFixed(1)} cm</b> (Bảo toàn tỷ lệ)</div>
-                        <div class="flex justify-between text-slate-500"><span>• Kích thước in khả dụng:</span><span>${geom.availW.toFixed(1)} × ${geom.availH.toFixed(1)} cm</span></div>
+                        <div class="flex justify-between"><span>• Rộng thẻ thực in:</span><b class="text-slate-900">${geom.effW.toFixed(1)} cm</b> <span class="text-slate-500">(Tối đa an toàn: ${geom.maxSafeWidthCm.toFixed(1)} cm)</span></div>
+                        <div class="flex justify-between"><span>• Chiều cao thẻ:</span><b class="text-emerald-800">${geom.effH1.toFixed(1)} cm</b> <span class="text-slate-500">(Bảo toàn tỷ lệ gốc)</span></div>
+                        <div class="flex justify-between text-slate-500"><span>• Kích thước vùng in A4:</span><span>${geom.availW.toFixed(1)} × ${geom.availH.toFixed(1)} cm (Lề ${geom.marginCm.toFixed(1)} cm)</span></div>
                     `;
                 }
             }
 
+            // 3. Hệ Thống Xem Trước Tỷ Lệ Thực (True-to-Scale Live Preview)
+            // Kích thước chuẩn khung A4: 160px x 226px (Portrait), tỷ lệ Scale S ≈ 7.62 px/cm
+            const scalePxPerCm = geom.isLand ? (226 / 29.7) : (160 / 21.0); // ≈ 7.62
+            const padPx = Math.round(geom.marginCm * scalePxPerCm);
+            const effWPx = Math.round(geom.effW * scalePxPerCm);
+            const effH1Px = Math.round(geom.effH1 * scalePxPerCm);
+            const effH2Px = Math.round(geom.effH2 * scalePxPerCm);
+
             if (sheet) {
                 if (orient === 'landscape') {
-                    sheet.className = "w-[212px] h-[150px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col p-1.5 box-border overflow-hidden transition-all duration-200";
+                    sheet.className = "w-[226px] h-[160px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col box-border overflow-hidden transition-all duration-200";
                 } else {
-                    sheet.className = "w-[150px] h-[212px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col p-1.5 box-border overflow-hidden transition-all duration-200";
+                    sheet.className = "w-[160px] h-[226px] bg-white rounded shadow-lg border border-slate-300 relative flex flex-col box-border overflow-hidden transition-all duration-200";
                 }
+                sheet.style.padding = padPx + 'px';
             }
 
             const showCut = document.getElementById('print-opt-cut-lines')?.checked ?? true;
@@ -12234,74 +12316,77 @@ async function downloadDocPDFClientSide(mode) {
             const isCurrentSingle = (typeof currentStandeeMode === 'undefined' || currentStandeeMode === 'single');
             const standeeData = await getCardImageData('standee');
             const loaData = (activeStandeePrintLayout === '4-mix') ? await getCardImageData('loa') : (isCurrentSingle ? standeeData : await getCardImageData('loa'));
-
             const primaryImg = isCurrentSingle ? standeeData : loaData;
 
             if (activeStandeePrintLayout === 1) {
                 container.innerHTML = `
-                    <div class="w-full h-full flex items-center justify-center p-1">
-                        <img src="${primaryImg}" class="max-h-[190px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}">
+                    <div class="w-full h-full flex items-center justify-center">
+                        <img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}">
                     </div>
                 `;
-                if (desc) desc.textContent = `Bố cục: 1 ảnh lớn / A4 (Rộng ${geom.effW.toFixed(1)}cm • Cao ${geom.effH1.toFixed(1)}cm)`;
+                if (desc) desc.textContent = `Bố cục: 1 ảnh / A4 (Rộng ${geom.effW.toFixed(1)}cm • Cao ${geom.effH1.toFixed(1)}cm)`;
             } else if (activeStandeePrintLayout === 2) {
                 if (orient === 'landscape') {
                     container.innerHTML = `
-                        <div class="w-full h-full flex items-center justify-around p-1 gap-1">
-                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                            ${showCut ? '<div class="h-full border-l border-dashed border-slate-400 mx-0.5 select-none"></div>' : ''}
-                            <div class="flex-1 h-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[135px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="w-full h-full flex items-center justify-around gap-1">
+                            <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
+                            ${showCut ? '<div class="h-full border-l border-dashed border-slate-400 select-none"></div>' : ''}
+                            <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
                         </div>
                     `;
                 } else {
                     container.innerHTML = `
-                        <div class="w-full h-full flex flex-col items-center justify-around p-1 gap-0.5">
-                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                            ${showCut ? '<div class="w-full border-t border-dashed border-slate-400 my-0.5 text-[8px] text-center text-slate-400 font-mono select-none">✂ - - - - - ✂</div>' : ''}
-                            <div class="flex-1 w-full flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[92px] max-w-full object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                        <div class="w-full h-full flex flex-col items-center justify-around gap-0.5">
+                            <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
+                            ${showCut ? '<div class="w-full border-t border-dashed border-slate-400 text-[8px] text-center text-slate-400 select-none">✂ - - - - - ✂</div>' : ''}
+                            <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
                         </div>
                     `;
                 }
                 if (desc) desc.textContent = `Bố cục: 2 ảnh / A4 (Rộng ${geom.effW.toFixed(1)}cm • Tiết kiệm giấy)`;
             } else if (activeStandeePrintLayout === 4) {
                 container.innerHTML = `
-                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1 relative" style="place-items: center;">
-                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
-                        <div class="flex items-center justify-center p-0.5"><img src="${primaryImg}" class="max-h-[88px] max-w-[58px] object-contain rounded shadow-xs" style="${cutStyle}"></div>
+                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 relative" style="place-items: center; align-content: space-around; justify-content: space-around;">
+                        <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
+                        <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
+                        <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
+                        <div class="flex items-center justify-center"><img src="${primaryImg}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}"></div>
                         ${showCut ? '<div class="absolute left-1/2 top-0 bottom-0 border-l border-dashed border-slate-300 pointer-events-none"></div><div class="absolute top-1/2 left-0 right-0 border-t border-dashed border-slate-300 pointer-events-none"></div>' : ''}
                     </div>
                 `;
                 if (desc) desc.textContent = `Bố cục: 4 ảnh cùng loại / A4 (Rộng ${geom.effW.toFixed(1)}cm)`;
             } else if (activeStandeePrintLayout === '4-mix') {
                 container.innerHTML = `
-                    <div class="w-full h-full grid grid-cols-2 grid-rows-2 p-1 gap-1 relative" style="place-items: center;">
+                    <div class="w-full h-full flex flex-col justify-around items-center relative">
                         <!-- Top 2 Standee -->
-                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
-                            <span class="text-[7px] text-amber-800 font-bold leading-none mb-0.5">Standee 1</span>
-                            <img src="${standeeData}" class="max-h-[80px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
-                            <span class="text-[7px] text-amber-800 font-bold leading-none mb-0.5">Standee 2</span>
-                            <img src="${standeeData}" class="max-h-[80px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
+                        <div class="w-full flex items-center justify-around">
+                            <div class="flex flex-col items-center">
+                                <span class="text-[7px] text-amber-800 font-bold leading-none mb-0.5">Standee 1</span>
+                                <img src="${standeeData}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}">
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-[7px] text-amber-800 font-bold leading-none mb-0.5">Standee 2</span>
+                                <img src="${standeeData}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH1Px}px; ${cutStyle}">
+                            </div>
                         </div>
                         <!-- Bottom 2 QR Loa -->
-                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
-                            <span class="text-[7px] text-purple-800 font-bold leading-none mb-0.5">QR Loa 1</span>
-                            <img src="${loaData}" class="max-h-[70px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
-                        </div>
-                        <div class="flex flex-col items-center justify-center p-0.5 w-full h-full">
-                            <span class="text-[7px] text-purple-800 font-bold leading-none mb-0.5">QR Loa 2</span>
-                            <img src="${loaData}" class="max-h-[70px] max-w-[55px] object-contain rounded shadow-xs" style="${cutStyle}">
+                        <div class="w-full flex items-center justify-around">
+                            <div class="flex flex-col items-center">
+                                <span class="text-[7px] text-purple-800 font-bold leading-none mb-0.5">QR Loa 1</span>
+                                <img src="${loaData}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH2Px}px; ${cutStyle}">
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-[7px] text-purple-800 font-bold leading-none mb-0.5">QR Loa 2</span>
+                                <img src="${loaData}" class="object-contain rounded shadow-xs" style="width: ${effWPx}px; height: ${effH2Px}px; ${cutStyle}">
+                            </div>
                         </div>
                         ${showCut ? '<div class="absolute left-1/2 top-0 bottom-0 border-l border-dashed border-slate-300 pointer-events-none"></div><div class="absolute top-1/2 left-0 right-0 border-t border-dashed border-slate-300 pointer-events-none"></div>' : ''}
                     </div>
                 `;
-                if (desc) desc.textContent = `Hỗn hợp: 2 Standee trên (${geom.effH1.toFixed(1)}cm) + 2 Loa dưới (${geom.effH2.toFixed(1)}cm)`;
+                if (desc) desc.textContent = `Hỗn hợp: 2 Standee (${geom.effH1.toFixed(1)}cm) + 2 Loa (${geom.effH2.toFixed(1)}cm)`;
             }
         }
-
+        
         async function executeStandeePrintA4() {
             showToast("⏳ Đang chuẩn bị tệp in ấn chất lượng cao...");
 
@@ -12414,6 +12499,7 @@ async function downloadDocPDFClientSide(mode) {
     <meta charset="utf-8">
     <title>In Standee & QR Loa A4 Chuẩn - QTDND Yên Thọ</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
         @page {
             size: A4 ${orient};
             margin: ${geom.marginCm}cm;
@@ -12427,7 +12513,8 @@ async function downloadDocPDFClientSide(mode) {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-variant-numeric: tabular-nums;
             background: #ffffff;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
@@ -12486,7 +12573,8 @@ async function downloadDocPDFClientSide(mode) {
             justify-content: center;
             font-size: 10px;
             color: #94a3b8;
-            font-family: monospace;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 600;
             user-select: none;
         }
         .cut-guide-v {
@@ -12498,7 +12586,8 @@ async function downloadDocPDFClientSide(mode) {
             writing-mode: vertical-rl;
             font-size: 10px;
             color: #94a3b8;
-            font-family: monospace;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 600;
             user-select: none;
         }
         .page-4 {
@@ -12558,12 +12647,13 @@ async function downloadDocPDFClientSide(mode) {
             right: 0;
             display: flex;
             justify-content: space-between;
-            font-size: 7.5px;
-            color: #94a3b8;
-            font-family: Arial, sans-serif;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 0.5mm;
-            line-height: 1;
+            font-size: 8px;
+            font-weight: 600;
+            color: #64748b;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 0.8mm;
+            line-height: 1.2;
             box-sizing: border-box;
         }
     </style>
